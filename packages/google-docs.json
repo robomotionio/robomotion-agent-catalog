@@ -4,7 +4,7 @@
   "description": "## Overview The Google Docs package enables RPA developers to programmatically create, read, modify, and export Google Docs documents. This package is ideal for automating report generation, document workflows, template-based document creation, and batch document processing.",
   "nodes": {
     "addfooter": {
-      "namespace": "Core.GoogleDocs.Addfooter",
+      "namespace": "Robomotion.GoogleDocs.AddFooter",
       "name": "Addfooter",
       "summary": "Adds a footer to a Google Docs document.",
       "howItWorks": "The Add Footer node integrates with Google Docs to add a footer to a document. When executed, the node: 1. Validates the provided inputs (Document Id, Text, Font Size, Font Name) 2. Connects to the specified Google Docs document 3. Optionally deletes any existing footer if Overwrite If Exists is enabled 4. Creates a new footer section in the document 5. Inserts the specified text into the footer 6. Applies the specified formatting options (font, size, alignment, styling)",
@@ -22,10 +22,84 @@
         "The Align option controls how the footer text is positioned within the footer",
         "Styling options (Bold, Italic, Underline) can be combined",
         "The footer will be added to the bottom of each page in the document"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For server automation and shared drives. Requires sharing documents with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Docs API",
+            "2. Go to 'IAM \u0026 Admin' -\u003e 'Service Accounts' -\u003e Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share the document with the service account email",
+            "6. Use the document URL or ID in the node"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal Google Docs. Authorize once via browser to access your own documents.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Docs API",
+            "3. Go to 'Credentials' -\u003e 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "addheader": {
-      "namespace": "Core.GoogleDocs.Addheader",
+      "namespace": "Robomotion.GoogleDocs.AddHeader",
       "name": "Addheader",
       "summary": "Adds a header to a Google Docs document.",
       "howItWorks": "The Add Header node integrates with Google Docs to add a header to a document. When executed, the node: 1. Validates the provided inputs (Document Id, Text, Font Size, Font Name) 2. Connects to the specified Google Docs document 3. Optionally deletes any existing header if Overwrite If Exists is enabled 4. Creates a new header section in the document 5. Inserts the specified text into the header 6. Applies the specified formatting options (font, size, alignment, styling)",
@@ -46,7 +120,7 @@
       ]
     },
     "addheading": {
-      "namespace": "Core.GoogleDocs.Addheading",
+      "namespace": "Robomotion.GoogleDocs.AddHeading",
       "name": "Addheading",
       "summary": "Adds a heading to a Google Docs document.",
       "howItWorks": "The Add Heading node integrates with Google Docs to add a heading to a document. When executed, the node: 1. Validates the provided inputs (Document Id, Text, Font Size, Font Name) 2. Connects to the specified Google Docs document 3. Inserts the specified text at the end of the document 4. Applies the specified heading style to the text 5. Applies additional formatting options (font, size, alignment, styling)",
@@ -63,10 +137,84 @@
         "The Align option controls how the heading text is positioned within the document",
         "Styling options (Bold, Italic, Underline) can be combined with the heading style",
         "The heading will be added at the end of the current document content"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For server automation and shared drives. Requires sharing documents with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Docs API",
+            "2. Go to 'IAM \u0026 Admin' -\u003e 'Service Accounts' -\u003e Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share the document with the service account email",
+            "6. Use the document URL or ID in the node"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal Google Docs. Authorize once via browser to access your own documents.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Docs API",
+            "3. Go to 'Credentials' -\u003e 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "addimage": {
-      "namespace": "Core.GoogleDocs.Addimage",
+      "namespace": "Robomotion.GoogleDocs.AddImage",
       "name": "Addimage",
       "summary": "Adds an image to a Google Docs document.",
       "howItWorks": "The Add Image node integrates with Google Docs to insert an image into a document. When executed, the node: 1. Validates the provided inputs (Document Id, Image URL) 2. Connects to the specified Google Docs document 3. Inserts the image from the provided URL at the end of the document 4. Optionally scales the image to the specified height or width",
@@ -83,10 +231,84 @@
         "If neither Height nor Width is specified, the image will be inserted at its original size",
         "The image will be added at the end of the current document content",
         "Supported image formats include JPG, PNG, GIF, and other web-friendly formats"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For server automation and shared drives. Requires sharing documents with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Docs API",
+            "2. Go to 'IAM \u0026 Admin' -\u003e 'Service Accounts' -\u003e Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share the document with the service account email",
+            "6. Use the document URL or ID in the node"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal Google Docs. Authorize once via browser to access your own documents.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Docs API",
+            "3. Go to 'Credentials' -\u003e 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "createdocument": {
-      "namespace": "Core.GoogleDocs.Createdocument",
+      "namespace": "Robomotion.GoogleDocs.CreateDocument",
       "name": "Createdocument",
       "summary": "Creates a new Google Docs document.",
       "howItWorks": "The Create Document node integrates with Google Docs to create a new document. When executed, the node: 1. Validates the provided inputs (Title) 2. Authenticates with Google Docs using the provided credentials 3. Creates a new Google Docs document with the specified title 4. Optionally shares the document with specified users 5. Optionally sends notification emails to shared users 6. Returns the document ID of the newly created document",
@@ -102,10 +324,84 @@
         "When sharing with users, make sure to specify the correct Role (writer, reader, etc.) and Type (user, group, etc.)",
         "If Send Notification Mail is enabled, users will receive email notifications about the shared document",
         "The created document will be owned by the account associated with the provided credentials"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For server automation and shared drives. Requires sharing documents with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Docs API",
+            "2. Go to 'IAM \u0026 Admin' -\u003e 'Service Accounts' -\u003e Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share the document with the service account email",
+            "6. Use the document URL or ID in the node"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal Google Docs. Authorize once via browser to access your own documents.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Docs API",
+            "3. Go to 'Credentials' -\u003e 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "deleterange": {
-      "namespace": "Core.GoogleDocs.Deleterange",
+      "namespace": "Robomotion.GoogleDocs.DeleteRange",
       "name": "Deleterange",
       "summary": "Deletes a specified range of content from a Google Docs document.",
       "howItWorks": "The Delete Range node integrates with Google Docs to remove a specified range of content from a document. When executed, the node: 1. Validates the provided inputs (Document Id, Start Index, End Index) 2. Connects to the specified Google Docs document 3. Deletes the content between the specified start and end indices 4. Updates the document with the deleted content",
@@ -122,10 +418,84 @@
         "Index positions can be determined by analyzing the document structure or using other Google Docs nodes",
         "Be careful when specifying indices to avoid accidentally deleting unintended content",
         "The indices refer to character positions in the document, including special characters and formatting"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For server automation and shared drives. Requires sharing documents with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Docs API",
+            "2. Go to 'IAM \u0026 Admin' -\u003e 'Service Accounts' -\u003e Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share the document with the service account email",
+            "6. Use the document URL or ID in the node"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal Google Docs. Authorize once via browser to access your own documents.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Docs API",
+            "3. Go to 'Credentials' -\u003e 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "insertlink": {
-      "namespace": "Core.GoogleDocs.Insertlink",
+      "namespace": "Robomotion.GoogleDocs.InsertLink",
       "name": "Insertlink",
       "summary": "Inserts a hyperlink into a Google Docs document.",
       "howItWorks": "The Insert Link node integrates with Google Docs to add a hyperlink to a document. When executed, the node: 1. Validates the provided inputs (Document Id, Link, Font Size, Font Name) 2. Connects to the specified Google Docs document 3. Inserts the link text at the end of the document 4. Applies the hyperlink to the inserted text 5. Applies the specified formatting options (font, size, alignment, styling, color)",
@@ -143,10 +513,84 @@
         "The default link color is a shade of blue (RGB: 0.067, 0.333, 0.800)",
         "The Underline option is enabled by default for links, which is standard web convention",
         "The link color values should be between 0.0 and 1.0"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For server automation and shared drives. Requires sharing documents with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Docs API",
+            "2. Go to 'IAM \u0026 Admin' -\u003e 'Service Accounts' -\u003e Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share the document with the service account email",
+            "6. Use the document URL or ID in the node"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal Google Docs. Authorize once via browser to access your own documents.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Docs API",
+            "3. Go to 'Credentials' -\u003e 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "inserttext": {
-      "namespace": "Core.GoogleDocs.Inserttext",
+      "namespace": "Robomotion.GoogleDocs.InsertText",
       "name": "Inserttext",
       "summary": "Inserts text into a Google Docs document.",
       "howItWorks": "The Insert Text node integrates with Google Docs to add text to a document. When executed, the node: 1. Validates the provided inputs (Document Id, Text, Font Size, Font Name) 2. Connects to the specified Google Docs document 3. Inserts the specified text at the end of the document 4. Applies the specified formatting options (font, size, alignment, styling)",
@@ -163,10 +607,84 @@
         "The Font Name should be a valid Google Docs font family",
         "The Align option controls how the inserted text is positioned within the document",
         "Styling options (Bold, Italic, Underline) can be combined"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For server automation and shared drives. Requires sharing documents with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Docs API",
+            "2. Go to 'IAM \u0026 Admin' -\u003e 'Service Accounts' -\u003e Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share the document with the service account email",
+            "6. Use the document URL or ID in the node"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal Google Docs. Authorize once via browser to access your own documents.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Docs API",
+            "3. Go to 'Credentials' -\u003e 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "opendocs": {
-      "namespace": "Core.GoogleDocs.Opendocs",
+      "namespace": "Robomotion.GoogleDocs.OpenDocs",
       "name": "Opendocs",
       "summary": "Opens an existing Google Docs document.",
       "howItWorks": "The Open Document node integrates with Google Docs to open an existing document. When executed, the node: 1. Validates the provided inputs (URL) 2. Authenticates with Google Docs using the provided credentials 3. Opens the Google Docs document specified by the URL 4. Returns the document ID of the opened document",
@@ -181,10 +699,84 @@
         "The node requires appropriate permissions to access the specified document",
         "The opened document will be accessible through the document ID in subsequent nodes",
         "This node is useful for working with existing documents rather than creating new ones"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For server automation and shared drives. Requires sharing documents with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Docs API",
+            "2. Go to 'IAM \u0026 Admin' -\u003e 'Service Accounts' -\u003e Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share the document with the service account email",
+            "6. Use the document URL or ID in the node"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal Google Docs. Authorize once via browser to access your own documents.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Docs API",
+            "3. Go to 'Credentials' -\u003e 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "pdfexport": {
-      "namespace": "Core.GoogleDocs.Pdfexport",
+      "namespace": "Robomotion.GoogleDocs.PDFExport",
       "name": "Pdfexport",
       "summary": "Exports a Google Docs document as a PDF file.",
       "howItWorks": "The PDF Export node integrates with Google Docs to export a document as a PDF file. When executed, the node: 1. Validates the provided inputs (Document Id, File Path) 2. Authenticates with Google Docs using the provided credentials 3. Exports the specified Google Docs document as a PDF 4. Saves the PDF file to the specified local file path",
@@ -202,10 +794,84 @@
         "The node requires appropriate permissions to access the specified document",
         "The exported PDF will maintain the formatting of the original Google Docs document",
         "This node is useful for creating PDF versions of Google Docs documents for sharing or archiving"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For server automation and shared drives. Requires sharing documents with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Docs API",
+            "2. Go to 'IAM \u0026 Admin' -\u003e 'Service Accounts' -\u003e Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share the document with the service account email",
+            "6. Use the document URL or ID in the node"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal Google Docs. Authorize once via browser to access your own documents.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Docs API",
+            "3. Go to 'Credentials' -\u003e 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "readdocument": {
-      "namespace": "Core.GoogleDocs.Readdocument",
+      "namespace": "Robomotion.GoogleDocs.ReadDocument",
       "name": "Readdocument",
       "summary": "Reads the text content of a Google Docs document.",
       "howItWorks": "The Read Document node integrates with Google Docs to extract the text content from a document. When executed, the node: 1. Validates the provided input (Document Id) 2. Connects to the specified Google Docs document 3. Reads the entire text content of the document 4. Returns the extracted text as output",
@@ -221,10 +887,84 @@
         "This node is useful for processing the content of existing Google Docs documents",
         "Complex formatting, tables, and images will not be included in the extracted text",
         "The text extraction preserves the order of content as it appears in the document"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For server automation and shared drives. Requires sharing documents with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Docs API",
+            "2. Go to 'IAM \u0026 Admin' -\u003e 'Service Accounts' -\u003e Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share the document with the service account email",
+            "6. Use the document URL or ID in the node"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal Google Docs. Authorize once via browser to access your own documents.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Docs API",
+            "3. Go to 'Credentials' -\u003e 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "replacetext": {
-      "namespace": "Core.GoogleDocs.Replacetext",
+      "namespace": "Robomotion.GoogleDocs.ReplaceText",
       "name": "Replacetext",
       "summary": "Replaces text in a Google Docs document.",
       "howItWorks": "The Replace Text node integrates with Google Docs to find and replace text within a document. When executed, the node: 1. Validates the provided inputs (Document Id, Text to Replace, Replacement) 2. Connects to the specified Google Docs document 3. Searches for all occurrences of the specified text 4. Replaces the found text with the replacement text or link 5. Updates the document with the replaced content",
@@ -241,6 +981,80 @@
         "All occurrences of the Text to Replace will be replaced with the Replacement text",
         "If no matches are found, an error will be returned",
         "The node supports both plain text replacement and hyperlink replacement"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For server automation and shared drives. Requires sharing documents with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Docs API",
+            "2. Go to 'IAM \u0026 Admin' -\u003e 'Service Accounts' -\u003e Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share the document with the service account email",
+            "6. Use the document URL or ID in the node"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal Google Docs. Authorize once via browser to access your own documents.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Docs API",
+            "3. Go to 'Credentials' -\u003e 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     }
   }

@@ -4,7 +4,7 @@
   "description": "## Overview The Google Sheets package provides comprehensive spreadsheet manipulation capabilities for Google Sheets. Use it when you need to read, write, or manage data in Google Sheets from your automation workflows.",
   "nodes": {
     "addsheet": {
-      "namespace": "Core.GoogleSheets.Addsheet",
+      "namespace": "Robomotion.GoogleSheets.AddSheet",
       "name": "Addsheet",
       "summary": "Adds a new sheet to a Google Spreadsheet.",
       "howItWorks": "The Add Sheet node creates a new sheet within an existing Google Spreadsheet. When executed, the node: 1. Validates the provided Spreadsheet Id and Sheet Name inputs 2. Checks if a sheet with the specified name already exists in the spreadsheet 3. Creates a new sheet with the specified name in the target spreadsheet 4. Returns any errors encountered during the process",
@@ -21,7 +21,7 @@
       ]
     },
     "append": {
-      "namespace": "Core.GoogleSheets.Append",
+      "namespace": "Robomotion.GoogleSheets.Append",
       "name": "Append",
       "summary": "Appends data from one Google Spreadsheet sheet to another sheet.",
       "howItWorks": "The Append node copies data from one Google Spreadsheet sheet and appends it to another sheet. When executed, the node: 1. Validates all four input parameters (both spreadsheet IDs and sheet names) 2. Connects to both Google Spreadsheets using their IDs 3. Retrieves data from the specified sheet in the first spreadsheet 4. Retrieves data from the specified sheet in the second spreadsheet 5. Appends the data from the first sheet (excluding the header row) to the second sheet 6. Returns any errors encountered during the process",
@@ -38,7 +38,7 @@
       ]
     },
     "appendrange": {
-      "namespace": "Core.GoogleSheets.Appendrange",
+      "namespace": "Robomotion.GoogleSheets.AppendRange",
       "name": "Appendrange",
       "summary": "Appends a range of data to a Google Spreadsheet.",
       "howItWorks": "The Append Range node adds a structured table of data to the end of a Google Spreadsheet. When executed, the node: 1. Validates all input parameters 2. Connects to the Google Spreadsheet using the provided ID 3. Processes the table data to convert it to the required format 4. Determines the appropriate location to append the data (typically at the end of the sheet) 5. Sends an append request to add the data to the spreadsheet 6. Automatically inserts new rows as needed to accommodate the appended data 7. Returns any errors encountered during the process",
@@ -57,7 +57,7 @@
       ]
     },
     "clearrange": {
-      "namespace": "Core.GoogleSheets.Clearrange",
+      "namespace": "Robomotion.GoogleSheets.ClearRange",
       "name": "Clearrange",
       "summary": "Clears a range of data in a Google Spreadsheet.",
       "howItWorks": "The Clear Range node removes all data from a specified range in a Google Spreadsheet. When executed, the node: 1. Validates all input parameters 2. Connects to the Google Spreadsheet using the provided ID 3. Constructs a range reference based on the Start Cell and End Cell inputs 4. Sends a clear values request to remove all data within the specified range 5. Returns any errors encountered during the process",
@@ -76,7 +76,7 @@
       ]
     },
     "createspreadsheet": {
-      "namespace": "Core.GoogleSheets.Createspreadsheet",
+      "namespace": "Robomotion.GoogleSheets.CreateSpreadsheet",
       "name": "Createspreadsheet",
       "summary": "Creates a new Google Spreadsheet.",
       "howItWorks": "The Create Spreadsheet node generates a new Google Spreadsheet with the specified title. When executed, the node: 1. Validates all input parameters 2. Authenticates with the Google Sheets API using the provided credentials 3. Creates a new spreadsheet with the specified title 4. Shares the spreadsheet with any specified users if the Share With option is used 5. Sends notification emails if the Send Notification Mail option is enabled 6. Returns the unique ID of the newly created spreadsheet 7. Handles token refresh if necessary 8. Returns any errors encountered during the process",
@@ -95,7 +95,7 @@
       ]
     },
     "deletecolumn": {
-      "namespace": "Core.GoogleSheets.Deletecolumn",
+      "namespace": "Robomotion.GoogleSheets.DeleteColumn",
       "name": "Deletecolumn",
       "summary": "Deletes a specific column from a Google Spreadsheet.",
       "howItWorks": "The Delete Column node removes a specific column from a Google Spreadsheet. When executed, the node: 1. Validates the provided Spreadsheet Id and Column inputs 2. Connects to the Google Spreadsheet using the provided ID 3. Converts the column letter to a numeric index 4. Constructs a delete dimension request for the specified column 5. Sends the delete request to the Google Sheets API 6. Returns any errors encountered during the process",
@@ -113,7 +113,7 @@
       ]
     },
     "deleterow": {
-      "namespace": "Core.GoogleSheets.Deleterow",
+      "namespace": "Robomotion.GoogleSheets.DeleteRow",
       "name": "Deleterow",
       "summary": "Deletes a specific row from a Google Spreadsheet.",
       "howItWorks": "The Delete Row node removes a specific row from a Google Spreadsheet. When executed, the node: 1. Validates the provided Spreadsheet Id and Row Number inputs 2. Connects to the Google Spreadsheet using the provided ID 3. Constructs a delete dimension request for the specified row 4. Sends the delete request to the Google Sheets API 5. Returns any errors encountered during the process",
@@ -131,7 +131,7 @@
       ]
     },
     "deletesheet": {
-      "namespace": "Core.GoogleSheets.Deletesheet",
+      "namespace": "Robomotion.GoogleSheets.DeleteSheet",
       "name": "Deletesheet",
       "summary": "Deletes a specific sheet from a Google Spreadsheet.",
       "howItWorks": "The Delete Sheet node removes a specific sheet from a Google Spreadsheet. When executed, the node: 1. Validates the provided Spreadsheet Id and Sheet Name inputs 2. Connects to the Google Spreadsheet using the provided ID 3. Checks if a sheet with the specified name exists in the spreadsheet 4. Gets the sheet ID for the sheet to be deleted 5. Constructs a delete sheet request 6. Sends the delete request to the Google Sheets API 7. Returns any errors encountered during the process",
@@ -149,7 +149,7 @@
       ]
     },
     "findreplace": {
-      "namespace": "Core.GoogleSheets.Findreplace",
+      "namespace": "Robomotion.GoogleSheets.FindReplace",
       "name": "Findreplace",
       "summary": "Finds and replaces text in a Google Spreadsheet.",
       "howItWorks": "The Find and Replace node searches for specific text in a Google Spreadsheet and replaces it with new text. When executed, the node: 1. Validates all input parameters 2. Connects to the Google Spreadsheet using the provided ID 3. Determines the search range based on the Target option 4. Constructs a find and replace request with the specified parameters 5. Sends the request to the Google Sheets API 6. Returns any errors encountered during the process",
@@ -168,7 +168,7 @@
       ]
     },
     "formatrange": {
-      "namespace": "Core.GoogleSheets.Formatrange",
+      "namespace": "Robomotion.GoogleSheets.FormatRange",
       "name": "Formatrange",
       "summary": "Formats a range of cells in a Google Spreadsheet with a specific number format.",
       "howItWorks": "The Format Range node applies a specific number format to a range of cells in a Google Spreadsheet. When executed, the node: 1. Validates all input parameters 2. Connects to the Google Spreadsheet using the provided ID 3. Converts the cell references to grid coordinates 4. Constructs a repeat cell request with the specified format 5. Sends the formatting request to the Google Sheets API 6. Returns any errors encountered during the process",
@@ -187,7 +187,7 @@
       ]
     },
     "getcellvalue": {
-      "namespace": "Core.GoogleSheets.Getcellvalue",
+      "namespace": "Robomotion.GoogleSheets.GetCellValue",
       "name": "Getcellvalue",
       "summary": "Retrieves the value of a specific cell from a Google Spreadsheet.",
       "howItWorks": "The Get Cell Value node retrieves the value of a specific cell from a Google Spreadsheet. When executed, the node: 1. Validates the provided Spreadsheet Id and Cell inputs 2. Connects to the Google Spreadsheet using the provided ID 3. Constructs a range reference for the specified cell 4. Retrieves the value of the specified cell using the Google Sheets API 5. Sets the retrieved value to the output variable 6. Returns any errors encountered during the process",
@@ -205,7 +205,7 @@
       ]
     },
     "getcolumn": {
-      "namespace": "Core.GoogleSheets.Getcolumn",
+      "namespace": "Robomotion.GoogleSheets.GetColumn",
       "name": "Getcolumn",
       "summary": "Retrieves a column of data from a Google Spreadsheet.",
       "howItWorks": "The Get Column node retrieves a column of data from a Google Spreadsheet starting from a specified cell. When executed, the node: 1. Validates the provided Spreadsheet Id and Start Cell inputs 2. Connects to the Google Spreadsheet using the provided ID 3. Converts the cell reference to grid coordinates 4. Retrieves all values from the specified sheet 5. Extracts the column data starting from the specified row 6. Sets the retrieved column data to the output variable 7. Returns any errors encountered during the process",
@@ -223,7 +223,7 @@
       ]
     },
     "getrange": {
-      "namespace": "Core.GoogleSheets.Getrange",
+      "namespace": "Robomotion.GoogleSheets.GetRange",
       "name": "Getrange",
       "summary": "Retrieves a range of data from a Google Spreadsheet.",
       "howItWorks": "The Get Range node retrieves a range of data from a Google Spreadsheet and formats it as a structured table. When executed, the node: 1. Validates all input parameters 2. Connects to the Google Spreadsheet using the provided ID 3. Determines the range to retrieve based on the Target option 4. Retrieves the specified data range from the spreadsheet 5. Processes the data to create a structured table with columns and rows 6. Applies header formatting if the Headers option is enabled 7. Converts to JSON format if the Jsonify option is enabled 8. Sets the processed data to the output variable 9. Returns any errors encountered during the process",
@@ -242,7 +242,7 @@
       ]
     },
     "getrow": {
-      "namespace": "Core.GoogleSheets.Getrow",
+      "namespace": "Robomotion.GoogleSheets.GetRow",
       "name": "Getrow",
       "summary": "Retrieves a specific row of data from a Google Spreadsheet.",
       "howItWorks": "The Get Row node retrieves a specific row of data from a Google Spreadsheet. When executed, the node: 1. Validates all input parameters 2. Connects to the Google Spreadsheet using the provided ID 3. Retrieves all data from the specified sheet 4. Extracts the specified row based on the Row Number input 5. Processes the row data based on the Headers option: - If Headers is enabled, uses the first row as column names - If Headers is disabled, uses column letters as keys 6. Converts to JSON format if the Jsonify option is enabled 7. Sets the processed data to the output variable 8. Returns any errors encountered during the process",
@@ -262,7 +262,7 @@
       ]
     },
     "getsheets": {
-      "namespace": "Core.GoogleSheets.Getsheets",
+      "namespace": "Robomotion.GoogleSheets.GetSheets",
       "name": "Getsheets",
       "summary": "Retrieves the list of sheets in a Google Spreadsheet.",
       "howItWorks": "The Get Sheets node retrieves metadata about all sheets in a Google Spreadsheet. When executed, the node: 1. Validates the Spreadsheet Id input 2. Connects to the Google Spreadsheet using the provided ID 3. Retrieves metadata for all sheets in the spreadsheet 4. Processes the metadata to extract sheet names and IDs 5. Formats the data as an array of objects with sheetName and sheetId properties 6. Sets the processed data to the output variable 7. Returns any errors encountered during the process",
@@ -279,7 +279,7 @@
       ]
     },
     "insertcolumn": {
-      "namespace": "Core.GoogleSheets.Insertcolumn",
+      "namespace": "Robomotion.GoogleSheets.InsertColumn",
       "name": "Insertcolumn",
       "summary": "Inserts a column of data into a Google Spreadsheet.",
       "howItWorks": "The Insert Column node adds a column of data to a Google Spreadsheet starting from a specified cell. When executed, the node: 1. Validates all input parameters 2. Connects to the Google Spreadsheet using the provided ID 3. Converts the cell reference to grid coordinates 4. Calculates the range for inserting the column data 5. Prepares the column data in the required format 6. Sends an append request to insert the column data 7. Returns any errors encountered during the process",
@@ -299,7 +299,7 @@
       ]
     },
     "insertrow": {
-      "namespace": "Core.GoogleSheets.Insertrow",
+      "namespace": "Robomotion.GoogleSheets.InsertRow",
       "name": "Insertrow",
       "summary": "Inserts a row of data into a Google Spreadsheet.",
       "howItWorks": "The Insert Row node adds a row of data to a Google Spreadsheet. When executed, the node: 1. Validates all input parameters 2. Connects to the Google Spreadsheet using the provided ID 3. Processes the row data based on the Headers option: - If Headers is enabled, maps the Row Data keys to column headers - If Headers is disabled, sorts the Row Data keys alphabetically 4. Calculates the range for inserting the row data 5. Prepares the row data in the required format 6. Sends an append request to insert the row data 7. Returns any errors encountered during the process",
@@ -319,7 +319,7 @@
       ]
     },
     "merge": {
-      "namespace": "Core.GoogleSheets.Merge",
+      "namespace": "Robomotion.GoogleSheets.Merge",
       "name": "Merge",
       "summary": "Merges data from one Google Spreadsheet sheet to another.",
       "howItWorks": "The Merge node combines data from two Google Spreadsheet sheets by appending data from the source sheet to the destination sheet. When executed, the node: 1. Validates all four input parameters (both spreadsheet IDs and sheet names) 2. Connects to both Google Spreadsheets using their IDs 3. Retrieves data from the specified sheet in the second (source) spreadsheet 4. Retrieves existing data from the specified sheet in the first (destination) spreadsheet 5. Calculates the appropriate range for inserting the source data next to the existing data 6. Updates the first spreadsheet with the merged data 7. Returns any errors encountered during the process",
@@ -337,7 +337,7 @@
       ]
     },
     "openspreadsheet": {
-      "namespace": "Core.GoogleSheets.Openspreadsheet",
+      "namespace": "Robomotion.GoogleSheets.OpenSpreadsheet",
       "name": "Openspreadsheet",
       "summary": "Opens a Google Spreadsheet and retrieves its ID for use in other nodes.",
       "howItWorks": "The Open Spreadsheet node establishes a connection to a Google Spreadsheet using its URL and retrieves the spreadsheet's unique ID. When executed, the node: 1. Validates the provided Spreadsheet URL and Credentials 2. Authenticates with the Google Sheets API using the provided credentials 3. Opens the spreadsheet specified by the URL 4. Extracts and returns the spreadsheet's unique ID 5. Handles token refresh if necessary 6. Returns any errors encountered during the process",
@@ -352,10 +352,90 @@
         "Credentials must have appropriate permissions to access the specified spreadsheet",
         "This node is typically used at the beginning of a workflow to obtain the spreadsheet ID",
         "The node handles credential token refresh automatically when needed"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For shared spreadsheets and server automation. Requires sharing the spreadsheet with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Sheets API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Click the service account → 'Keys' → 'Add Key' → 'Create new key' → JSON",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share your Google Sheet with the service account email (Editor access)"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            },
+            {
+              "label": "Service Account Guide",
+              "url": "https://developers.google.com/identity/protocols/oauth2/service-account"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal spreadsheets. Authorize once via browser, access your own sheets directly.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Sheets API",
+            "2. Go to 'APIs \u0026 Services' → 'Credentials' → 'Create Credentials' → 'OAuth client ID'",
+            "3. Select 'Desktop app' as application type",
+            "4. Copy the Client ID and Client Secret",
+            "5. On first run, a browser window opens for authorization"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console - Credentials",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            },
+            {
+              "label": "Robomotion OAuth2 Guide",
+              "url": "https://docs.robomotion.io/how-to-guides/authentication/google/oauth2/"
+            }
+          ]
+        }
       ]
     },
     "renamesheet": {
-      "namespace": "Core.GoogleSheets.Renamesheet",
+      "namespace": "Robomotion.GoogleSheets.RenameSheet",
       "name": "Renamesheet",
       "summary": "Renames a sheet within a Google Spreadsheet.",
       "howItWorks": "The Rename Sheet node changes the name of a specific sheet within a Google Spreadsheet. When executed, the node: 1. Validates all input parameters 2. Connects to the Google Spreadsheet using the provided ID 3. Locates the sheet with the specified current name 4. Gets the sheet ID for the sheet to be renamed 5. Constructs an update sheet properties request with the new name 6. Sends the rename request to the Google Sheets API 7. Returns any errors encountered during the process",
@@ -374,7 +454,7 @@
       ]
     },
     "setcellvalue": {
-      "namespace": "Core.GoogleSheets.Setcellvalue",
+      "namespace": "Robomotion.GoogleSheets.SetCellValue",
       "name": "Setcellvalue",
       "summary": "Sets the value of a specific cell in a Google Spreadsheet.",
       "howItWorks": "The Set Cell Value node updates the content of a specific cell in a Google Spreadsheet. When executed, the node: 1. Validates all input parameters 2. Connects to the Google Spreadsheet using the provided ID 3. Processes the cell value, converting strings to numbers when appropriate 4. Constructs a value range with the specified cell value 5. Determines the appropriate value input option based on the Set as Formula option 6. Sends an update request to set the cell value 7. Returns any errors encountered during the process",
@@ -395,7 +475,7 @@
       ]
     },
     "setrange": {
-      "namespace": "Core.GoogleSheets.Setrange",
+      "namespace": "Robomotion.GoogleSheets.SetRange",
       "name": "Setrange",
       "summary": "Sets a range of data in a Google Spreadsheet.",
       "howItWorks": "The Set Range node writes a structured table of data to a specified range in a Google Spreadsheet. When executed, the node: 1. Validates all input parameters 2. Connects to the Google Spreadsheet using the provided ID 3. Processes the table data based on the Headers option: - If Headers is enabled, includes column headers as the first row - If Headers is disabled, writes only the data rows 4. Constructs a value range with the processed table data 5. Determines the appropriate value input option based on the Set as Formula option 6. Sends an update request to write the data to the specified range 7. Returns any errors encountered during the process",
@@ -417,7 +497,7 @@
       ]
     },
     "switchsheet": {
-      "namespace": "Core.GoogleSheets.Switchsheet",
+      "namespace": "Robomotion.GoogleSheets.SwitchSheet",
       "name": "Switchsheet",
       "summary": "Switches the active sheet in a Google Spreadsheet.",
       "howItWorks": "The Switch Sheet node changes the active sheet within a Google Spreadsheet context. When executed, the node: 1. Validates all input parameters 2. Connects to the Google Spreadsheet using the provided ID 3. Verifies that the specified sheet exists in the spreadsheet 4. Gets the sheet ID for the target sheet 5. Updates the spreadsheet context to use the specified sheet as active 6. Returns any errors encountered during the process",
@@ -435,7 +515,7 @@
       ]
     },
     "trigger": {
-      "namespace": "Core.GoogleSheets.Trigger",
+      "namespace": "Robomotion.GoogleSheets.Trigger",
       "name": "Trigger",
       "summary": "Triggers automation based on changes in a Google Spreadsheet.",
       "howItWorks": "The Trigger node monitors a Google Spreadsheet for specified changes and initiates automation workflows when those changes occur. When configured, the node: 1. Validates all input parameters and credentials 2. Authenticates with the Google Sheets API using the provided credentials 3. Establishes a monitoring loop that periodically checks for changes 4. For \"New Row Added\" events: - Monitors the specified sheet (or first sheet if none specified) for new rows - Triggers automation when the row count increases 5. For \"Any Changes\" events: - Monitors the entire spreadsheet for any modifications - Triggers automation when the spreadsheet's revision history shows changes 6. Outputs the Spreadsheet Id when triggering conditions are met 7. Returns any errors encountered during the process",
@@ -453,6 +533,86 @@
         "The output Spreadsheet Id can be used in subsequent nodes in the workflow",
         "Credentials must have appropriate permissions to access the specified spreadsheet",
         "The node runs continuously while the flow is active"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For shared spreadsheets and server automation. Requires sharing the spreadsheet with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Sheets API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Click the service account → 'Keys' → 'Add Key' → 'Create new key' → JSON",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share your Google Sheet with the service account email (Editor access)"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            },
+            {
+              "label": "Service Account Guide",
+              "url": "https://developers.google.com/identity/protocols/oauth2/service-account"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal spreadsheets. Authorize once via browser, access your own sheets directly.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Sheets API",
+            "2. Go to 'APIs \u0026 Services' → 'Credentials' → 'Create Credentials' → 'OAuth client ID'",
+            "3. Select 'Desktop app' as application type",
+            "4. Copy the Client ID and Client Secret",
+            "5. On first run, a browser window opens for authorization"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console - Credentials",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            },
+            {
+              "label": "Robomotion OAuth2 Guide",
+              "url": "https://docs.robomotion.io/how-to-guides/authentication/google/oauth2/"
+            }
+          ]
+        }
       ]
     }
   }

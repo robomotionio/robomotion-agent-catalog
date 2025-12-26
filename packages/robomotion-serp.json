@@ -4,7 +4,7 @@
   "description": "## Overview The Robomotion SERP package provides search engine scraping capabilities. Use it when you need to search Google, get autocomplete suggestions, or extract content from web pages for SEO, research, or data gathering.",
   "nodes": {
     "auto_complete": {
-      "namespace": "Core.RobomotionSerp.Auto_complete",
+      "namespace": "Robomotion.SERP.AutoComplete",
       "name": "Auto_complete",
       "summary": "Generates search query suggestions using Google's autocomplete API with support for prefixes and suffixes.",
       "howItWorks": "The Auto Complete node generates search suggestions by: 1. Taking the main query and combining it with provided prefixes and suffixes to create expanded search terms 2. Sending requests to Google's autocomplete API for each expanded term 3. Collecting and formatting the suggestions returned by Google 4. Sorting all suggestions by relevance score in descending order 5. Returning the sorted results as the output",
@@ -17,10 +17,32 @@
         "Results are automatically sorted by relevance, with the most relevant suggestions appearing first",
         "The Proxy Settings option allows you to configure how requests are made, which can be useful for avoiding rate limits or accessing region-specific results",
         "When using Manual Proxy with Basic Authentication, both username and password must be provided in the Proxy Credentials"
+      ],
+      "credentials": [
+        {
+          "name": "Proxy Credentials",
+          "title": "Proxy Credentials",
+          "fields": [
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "string",
+              "required": true,
+              "description": "Proxy server username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "Proxy server password"
+            }
+          ]
+        }
       ]
     },
     "extract_content": {
-      "namespace": "Core.RobomotionSerp.Extract_content",
+      "namespace": "Robomotion.SERP.ExtractContent",
       "name": "Extract_content",
       "summary": "Extracts structured content and statistics from a web page, including headers, paragraphs, links, and images.",
       "howItWorks": "The Extract Content node analyzes a web page and extracts structured content by: 1. Visiting the specified URL and retrieving the HTML content 2. Parsing the HTML to identify relevant content elements (headers, paragraphs, lists, etc.) 3. Extracting text content, links, and images from these elements 4. Calculating statistics about the extracted content 5. Returning both the structured content and statistics as separate outputs",
@@ -41,7 +63,7 @@
       ]
     },
     "search": {
-      "namespace": "Core.RobomotionSerp.Search",
+      "namespace": "Robomotion.SERP.Search",
       "name": "Search",
       "summary": "Performs Google search queries and returns structured search results with various filtering and formatting options.",
       "howItWorks": "The Search node performs Google searches and extracts structured results by: 1. Taking the search term and applying any negative keywords to exclude certain results 2. Configuring the search with specified options like country, language, and proxy settings 3. Sending the search request to Google 4. Parsing the search results and extracting relevant information 5. Applying any limits or formatting options 6. Returning the structured results",
@@ -59,6 +81,28 @@
         "The Follow Next Page option can be used to retrieve more results by scraping multiple pages",
         "The Over Limit option can help ensure you get the exact number of results specified by Limit",
         "Skipping TLS verification should only be used in trusted environments as it reduces security"
+      ],
+      "credentials": [
+        {
+          "name": "Proxy Credentials",
+          "title": "Proxy Credentials",
+          "fields": [
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "string",
+              "required": true,
+              "description": "Proxy server username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "Proxy server password"
+            }
+          ]
+        }
       ]
     }
   }

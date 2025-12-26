@@ -4,7 +4,7 @@
   "description": "## Key Features - **Geocoding**: Convert street addresses to geographic coordinates (latitude/longitude)",
   "nodes": {
     "AddressToCoordinates": {
-      "namespace": "Core.GoogleMap.AddressToCoordinates",
+      "namespace": "Robomotion.GoogleMaps.Places.AddressToCoordinates",
       "name": "AddressToCoordinates",
       "summary": "Converts a textual address to geographic coordinates (latitude and longitude) using Google Maps API.",
       "howItWorks": "The Address to Coordinates node converts a textual address into geographic coordinates using Google Maps Geocoding API. When executed, the node: 1. Validates the provided address input 2. Retrieves the Google Maps API key from credentials 3. Creates a Geocoding request with the provided address 4. Sends the request to Google Maps Geocoding API 5. Returns the geocoding result which includes: * Latitude and longitude coordinates * Formatted address * Address components (street, city, state, etc.) * Place ID * Geometry information",
@@ -20,10 +20,46 @@
         "The node returns structured data that can be used with other map-related nodes",
         "Results include a `place_id` which uniquely identifies the location",
         "Coordinates are provided in WGS84 datum (standard for GPS)"
+      ],
+      "credentials": [
+        {
+          "name": "api_key",
+          "title": "API Key",
+          "description": "Google Maps Platform API key for geocoding and directions services.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "password",
+              "required": true,
+              "placeholder": "AIza...",
+              "description": "Your Google Maps Platform API key"
+            }
+          ],
+          "help": [
+            "1. Go to Google Cloud Console (console.cloud.google.com)",
+            "2. Create a new project or select an existing one",
+            "3. Enable the following APIs: Geocoding API, Directions API",
+            "4. Go to 'Credentials' and create an API key",
+            "5. (Optional) Restrict the API key to specific APIs for security",
+            "6. Copy and paste the API key here"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            },
+            {
+              "label": "Maps Platform Documentation",
+              "url": "https://developers.google.com/maps/documentation"
+            }
+          ]
+        }
       ]
     },
     "CalculateDistance": {
-      "namespace": "Core.GoogleMap.CalculateDistance",
+      "namespace": "Robomotion.GoogleMaps.Places.CalculateDistance",
       "name": "CalculateDistance",
       "summary": "Calculates the straight-line (as the crow flies) distance between two geographic coordinates using the Haversine formula.",
       "howItWorks": "The Calculate Distance node computes the straight-line distance between two geographic coordinates using the Haversine formula. When executed, the node: 1. Validates both coordinate inputs 2. Parses the latitude and longitude values from each coordinate string 3. Applies the Haversine formula to calculate the great-circle distance 4. Returns the distance in kilometers The Haversine formula accounts for the Earth's curvature, providing accurate distance calculations between any two points on the globe.",
@@ -45,7 +81,7 @@
       ]
     },
     "CoordinatesToAddress": {
-      "namespace": "Core.GoogleMap.CoordinatesToAddress",
+      "namespace": "Robomotion.GoogleMaps.Places.CoordinatesToAddress",
       "name": "CoordinatesToAddress",
       "summary": "Converts geographic coordinates (latitude and longitude) to a human-readable address using Google Maps API.",
       "howItWorks": "The Coordinates to Address node converts geographic coordinates into a human-readable address using Google Maps Reverse Geocoding API. When executed, the node: 1. Validates the provided latitude and longitude inputs 2. Retrieves the Google Maps API key from credentials 3. Creates a Reverse Geocoding request with the provided coordinates 4. Sends the request to Google Maps Reverse Geocoding API 5. Returns the reverse geocoding result which includes: * Formatted address * Address components (street, city, state, etc.) * Place ID * Address types and categories",
@@ -63,10 +99,46 @@
         "Results are provided in WGS84 datum (standard for GPS)",
         "Reverse geocoding accuracy depends on Google's map data coverage for the region",
         "Some coordinates (oceans, remote areas) may only return general location names"
+      ],
+      "credentials": [
+        {
+          "name": "api_key",
+          "title": "API Key",
+          "description": "Google Maps Platform API key for geocoding and directions services.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "password",
+              "required": true,
+              "placeholder": "AIza...",
+              "description": "Your Google Maps Platform API key"
+            }
+          ],
+          "help": [
+            "1. Go to Google Cloud Console (console.cloud.google.com)",
+            "2. Create a new project or select an existing one",
+            "3. Enable the following APIs: Geocoding API, Directions API",
+            "4. Go to 'Credentials' and create an API key",
+            "5. (Optional) Restrict the API key to specific APIs for security",
+            "6. Copy and paste the API key here"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            },
+            {
+              "label": "Maps Platform Documentation",
+              "url": "https://developers.google.com/maps/documentation"
+            }
+          ]
+        }
       ]
     },
     "GetRouteDistance": {
-      "namespace": "Core.GoogleMap.GetRouteDistance",
+      "namespace": "Robomotion.GoogleMaps.Places.GetRouteDistance",
       "name": "GetRouteDistance",
       "summary": "Calculates the driving distance between two geographic coordinates using Google Maps Directions API.",
       "howItWorks": "The Get Route Distance node calculates the actual driving distance between two geographic coordinates using Google Maps Directions API. When executed, the node: 1. Validates both coordinate inputs 2. Parses the latitude and longitude values from each coordinate string 3. Retrieves the Google Maps API key from credentials 4. Creates a Directions request with the provided coordinates 5. Sends the request to Google Maps Directions API 6. Calculates the total route distance by summing the distance of all route legs 7. Returns the distance in kilometers",
@@ -88,6 +160,42 @@
         "Does NOT account for real-time traffic (uses base road network)",
         "Ferry routes and toll preferences are not customizable",
         "Distance is the sum of all route legs in the journey"
+      ],
+      "credentials": [
+        {
+          "name": "api_key",
+          "title": "API Key",
+          "description": "Google Maps Platform API key for geocoding and directions services.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "password",
+              "required": true,
+              "placeholder": "AIza...",
+              "description": "Your Google Maps Platform API key"
+            }
+          ],
+          "help": [
+            "1. Go to Google Cloud Console (console.cloud.google.com)",
+            "2. Create a new project or select an existing one",
+            "3. Enable the following APIs: Geocoding API, Directions API",
+            "4. Go to 'Credentials' and create an API key",
+            "5. (Optional) Restrict the API key to specific APIs for security",
+            "6. Copy and paste the API key here"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            },
+            {
+              "label": "Maps Platform Documentation",
+              "url": "https://developers.google.com/maps/documentation"
+            }
+          ]
+        }
       ]
     }
   }

@@ -4,7 +4,7 @@
   "description": "## Key Features - Multiple browser support (Chrome, Firefox, Edge, Brave, Opera, Incogniton)",
   "nodes": {
     "Alert": {
-      "namespace": "Core.WebAutomation.Alert",
+      "namespace": "Robomotion.WebAutomation.Alert",
       "name": "Alert",
       "summary": "Handles browser alert dialogs, confirmations, and prompts. Can accept, cancel, or retrieve text from alert boxes.",
       "tips": [
@@ -16,7 +16,7 @@
       ]
     },
     "ClickElement": {
-      "namespace": "Core.WebAutomation.ClickElement",
+      "namespace": "Robomotion.WebAutomation.ClickElement",
       "name": "ClickElement",
       "summary": "Clicks on a web element using XPath or CSS selector. Supports different click types including left click, right click, double click, and more.",
       "tips": [
@@ -29,7 +29,7 @@
       ]
     },
     "CloseBrowser": {
-      "namespace": "Core.WebAutomation.CloseBrowser",
+      "namespace": "Robomotion.WebAutomation.CloseBrowser",
       "name": "CloseBrowser",
       "summary": "Closes an open browser session and terminates the browser process.",
       "tips": [
@@ -39,7 +39,7 @@
       ]
     },
     "DragAndDrop": {
-      "namespace": "Core.WebAutomation.DragAndDrop",
+      "namespace": "Robomotion.WebAutomation.DragAndDrop",
       "name": "DragAndDrop",
       "summary": "Performs drag and drop operations by dragging an element from one location and dropping it onto another element.",
       "tips": [
@@ -51,7 +51,7 @@
       ]
     },
     "FileUpload": {
-      "namespace": "Core.WebAutomation.FileUpload",
+      "namespace": "Robomotion.WebAutomation.FileUpload",
       "name": "FileUpload",
       "summary": "Uploads a file to a file input element by providing the file path.",
       "tips": [
@@ -65,7 +65,7 @@
       ]
     },
     "Focus": {
-      "namespace": "Core.WebAutomation.Focus",
+      "namespace": "Robomotion.WebAutomation.Focus",
       "name": "Focus",
       "summary": "Sets focus on a web element, making it the active element for keyboard input.",
       "tips": [
@@ -76,7 +76,7 @@
       ]
     },
     "GetCookies": {
-      "namespace": "Core.WebAutomation.GetCookies",
+      "namespace": "Robomotion.WebAutomation.GetCookies",
       "name": "GetCookies",
       "summary": "Retrieves all cookies from the current browser session as an array of cookie objects.",
       "tips": [
@@ -89,7 +89,7 @@
       ]
     },
     "GetPageSource": {
-      "namespace": "Core.WebAutomation.GetPageSource",
+      "namespace": "Robomotion.WebAutomation.GetPageSource",
       "name": "GetPageSource",
       "summary": "Retrieves the complete HTML source code of the current page.",
       "tips": [
@@ -102,7 +102,7 @@
       ]
     },
     "GetSelectOptions": {
-      "namespace": "Core.WebAutomation.GetSelectOptions",
+      "namespace": "Robomotion.WebAutomation.GetSelectOptions",
       "name": "GetSelectOptions",
       "summary": "Retrieves all available options from a dropdown (select) element as an array of text values.",
       "tips": [
@@ -115,7 +115,7 @@
       ]
     },
     "GetTitle": {
-      "namespace": "Core.WebAutomation.GetTitle",
+      "namespace": "Robomotion.WebAutomation.GetTitle",
       "name": "GetTitle",
       "summary": "Retrieves the title of the current browser page (the text shown in the browser tab).",
       "tips": [
@@ -127,7 +127,7 @@
       ]
     },
     "GetURL": {
-      "namespace": "Core.WebAutomation.GetURL",
+      "namespace": "Robomotion.WebAutomation.GetURL",
       "name": "GetURL",
       "summary": "Retrieves the current URL of the browser page.",
       "tips": [
@@ -139,7 +139,7 @@
       ]
     },
     "GetValue": {
-      "namespace": "Core.WebAutomation.GetValue",
+      "namespace": "Robomotion.WebAutomation.GetValue",
       "name": "GetValue",
       "summary": "Retrieves the value or attribute from a web element. Use this to extract data from input fields, get element attributes, or read element text.",
       "tips": [
@@ -151,7 +151,7 @@
       ]
     },
     "GoBack": {
-      "namespace": "Core.WebAutomation.GoBack",
+      "namespace": "Robomotion.WebAutomation.GoBack",
       "name": "GoBack",
       "summary": "Navigates to the previous page in the browser's history, similar to clicking the back button.",
       "tips": [
@@ -163,7 +163,7 @@
       ]
     },
     "GoForward": {
-      "namespace": "Core.WebAutomation.GoForward",
+      "namespace": "Robomotion.WebAutomation.GoForward",
       "name": "GoForward",
       "summary": "Navigates to the next page in the browser's history, similar to clicking the forward button.",
       "tips": [
@@ -175,7 +175,7 @@
       ]
     },
     "Highlight": {
-      "namespace": "Core.WebAutomation.Highlight",
+      "namespace": "Robomotion.WebAutomation.Highlight",
       "name": "Highlight",
       "summary": "Highlights a web element with a yellow background and red border for visual identification. Useful for debugging and demonstrations.",
       "tips": [
@@ -187,7 +187,7 @@
       ]
     },
     "Hover": {
-      "namespace": "Core.WebAutomation.Hover",
+      "namespace": "Robomotion.WebAutomation.Hover",
       "name": "Hover",
       "summary": "Moves the mouse cursor over a web element, triggering hover effects like dropdown menus, tooltips, or element state changes.",
       "tips": [
@@ -199,7 +199,7 @@
       ]
     },
     "ListWindows": {
-      "namespace": "Core.WebAutomation.ListWindows",
+      "namespace": "Robomotion.WebAutomation.ListWindows",
       "name": "ListWindows",
       "summary": "Retrieves the titles of all open browser windows and tabs as an array.",
       "tips": [
@@ -212,7 +212,7 @@
       ]
     },
     "OpenBrowser": {
-      "namespace": "Core.WebAutomation.OpenBrowser",
+      "namespace": "Robomotion.WebAutomation.OpenBrowser",
       "name": "OpenBrowser",
       "summary": "Opens a new browser session for web automation. This is the starting point for all web automation workflows.",
       "tips": [
@@ -224,7 +224,7 @@
       ]
     },
     "OpenLink": {
-      "namespace": "Core.WebAutomation.OpenLink",
+      "namespace": "Robomotion.WebAutomation.OpenLink",
       "name": "OpenLink",
       "summary": "Navigates the browser to a specified URL.",
       "tips": [
@@ -235,7 +235,7 @@
       ]
     },
     "Refresh": {
-      "namespace": "Core.WebAutomation.Refresh",
+      "namespace": "Robomotion.WebAutomation.Refresh",
       "name": "Refresh",
       "summary": "Reloads the current page in the browser, similar to pressing F5 or clicking the refresh button.",
       "tips": [
@@ -247,7 +247,7 @@
       ]
     },
     "RunScript": {
-      "namespace": "Core.WebAutomation.RunScript",
+      "namespace": "Robomotion.WebAutomation.RunScript",
       "name": "RunScript",
       "summary": "Executes custom JavaScript code in the browser context. Provides full access to the DOM and browser APIs for advanced automation scenarios.",
       "tips": [
@@ -261,7 +261,7 @@
       ]
     },
     "Screenshot": {
-      "namespace": "Core.WebAutomation.Screenshot",
+      "namespace": "Robomotion.WebAutomation.Screenshot",
       "name": "Screenshot",
       "summary": "Captures screenshots of the entire page or specific elements. Useful for documentation, debugging, and visual verification.",
       "tips": [
@@ -274,7 +274,7 @@
       ]
     },
     "Scroll": {
-      "namespace": "Core.WebAutomation.Scroll",
+      "namespace": "Robomotion.WebAutomation.Scroll",
       "name": "Scroll",
       "summary": "Scrolls the page vertically by a specified number of pixels.",
       "tips": [
@@ -287,7 +287,7 @@
       ]
     },
     "Select": {
-      "namespace": "Core.WebAutomation.Select",
+      "namespace": "Robomotion.WebAutomation.Select",
       "name": "Select",
       "summary": "Selects an option from a dropdown (select) element by its visible text.",
       "tips": [
@@ -300,7 +300,7 @@
       ]
     },
     "SendKeys": {
-      "namespace": "Core.WebAutomation.SendKeys",
+      "namespace": "Robomotion.WebAutomation.SendKeys",
       "name": "SendKeys",
       "summary": "Sends keyboard keys or shortcuts to a web element. Supports special keys and modifier combinations like Ctrl+C, Alt+Tab, etc.",
       "tips": [
@@ -312,7 +312,7 @@
       ]
     },
     "SetCookie": {
-      "namespace": "Core.WebAutomation.SetCookie",
+      "namespace": "Robomotion.WebAutomation.SetCookie",
       "name": "SetCookie",
       "summary": "Sets a cookie in the browser session with configurable name, value, expiration, and security options.",
       "tips": [
@@ -325,7 +325,7 @@
       ]
     },
     "SetValue": {
-      "namespace": "Core.WebAutomation.SetValue",
+      "namespace": "Robomotion.WebAutomation.SetValue",
       "name": "SetValue",
       "summary": "Sets the value of a web element directly using JavaScript. This is faster than typing and bypasses input events, making it ideal for filling forms programmatically.",
       "tips": [
@@ -337,7 +337,7 @@
       ]
     },
     "SwitchFrame": {
-      "namespace": "Core.WebAutomation.SwitchFrame",
+      "namespace": "Robomotion.WebAutomation.SwitchFrame",
       "name": "SwitchFrame",
       "summary": "Switches the browser context to an iframe element or back to the main document. Required before interacting with elements inside iframes.",
       "tips": [
@@ -350,7 +350,7 @@
       ]
     },
     "SwitchWindow": {
-      "namespace": "Core.WebAutomation.SwitchWindow",
+      "namespace": "Robomotion.WebAutomation.SwitchWindow",
       "name": "SwitchWindow",
       "summary": "Switches to another browser window or tab by matching the window title with a regex pattern.",
       "tips": [
@@ -363,7 +363,7 @@
       ]
     },
     "TypeText": {
-      "namespace": "Core.WebAutomation.TypeText",
+      "namespace": "Robomotion.WebAutomation.TypeText",
       "name": "TypeText",
       "summary": "Types text into a web element with optional human-like typing simulation. Ideal for filling form fields, search boxes, and text inputs.",
       "tips": [
@@ -376,7 +376,7 @@
       ]
     },
     "WaitElement": {
-      "namespace": "Core.WebAutomation.WaitElement",
+      "namespace": "Robomotion.WebAutomation.WaitElement",
       "name": "WaitElement",
       "summary": "Waits for a web element to appear, disappear, or both. Essential for handling dynamic content and ensuring elements are ready before interaction.",
       "tips": [

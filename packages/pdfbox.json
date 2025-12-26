@@ -4,7 +4,7 @@
   "description": "## Overview The PDFBox package provides comprehensive PDF manipulation capabilities using Apache PDFBox. Use it when you need to extract content from PDFs, merge or split documents, add security, or convert between PDF and other formats.",
   "nodes": {
     "Decrypt": {
-      "namespace": "Core.Pdfbox.Decrypt",
+      "namespace": "Robomotion.PDFBox.Decrypt",
       "name": "Decrypt",
       "summary": "Removes password protection from an encrypted PDF document.",
       "howItWorks": "The Decrypt node removes password protection from an existing PDF document. When executed, the node: 1. Validates that the input PDF path is not empty 2. Retrieves the password 3. Loads the encrypted PDF document using the provided password 4. Removes all security from the PDF document 5. Saves the decrypted PDF to the specified location or overwrites the original 6. Closes the document",
@@ -20,7 +20,7 @@
       ]
     },
     "Encrypt": {
-      "namespace": "Core.Pdfbox.Encrypt",
+      "namespace": "Robomotion.PDFBox.Encrypt",
       "name": "Encrypt",
       "summary": "Adds password protection to a PDF document.",
       "howItWorks": "The Encrypt node adds password protection to an existing PDF document. When executed, the node: 1. Validates that the input PDF path is not empty 2. Loads the PDF document 3. Sets access permissions (printing, content extraction, and modification are disabled) 4. Retrieves the password 5. Creates a StandardProtectionPolicy with the password 6. Sets encryption key length to 256 bits 7. Adds password protection to the PDF 8. Saves the encrypted PDF to the specified location or overwrites the original 9. Closes the document",
@@ -37,7 +37,7 @@
       ]
     },
     "ExtractImages": {
-      "namespace": "Core.Pdfbox.ExtractImages",
+      "namespace": "Robomotion.PDFBox.ExtractImages",
       "name": "ExtractImages",
       "summary": "Extracts images from a PDF document and saves them as image files.",
       "howItWorks": "The Extract Images node scans a PDF document and extracts all embedded images, saving them as separate image files. When executed, the node: 1. Validates that the input PDF path is not empty 2. Checks that the output directory exists 3. Validates that an export type is specified 4. Loads the PDF document (using the password if provided) 5. Iterates through all pages of the document 6. Extracts images from each page's resources 7. Saves each extracted image to the output directory with the specified format and prefix 8. Closes the document",
@@ -55,7 +55,7 @@
       ]
     },
     "ExtractText": {
-      "namespace": "Core.Pdfbox.ExtractText",
+      "namespace": "Robomotion.PDFBox.ExtractText",
       "name": "ExtractText",
       "summary": "Extracts text content from a PDF document.",
       "howItWorks": "The Extract Text node reads text content from a PDF document. When executed, the node: 1. Validates that the input PDF path is not empty 2. Loads the PDF document (using the password if provided) 3. If rectangle coordinates (X, Y, Width, Height) are provided: * Extracts text only from the specified rectangular area * Uses the Page Index if provided, otherwise uses the first page 4. If no rectangle coordinates are provided: * Extracts text from the entire document or specified page 5. If an output text file path is provided, saves the extracted text to that file 6. Returns the extracted text as output 7. Closes the document",
@@ -76,7 +76,7 @@
       ]
     },
     "Merge": {
-      "namespace": "Core.Pdfbox.Merge",
+      "namespace": "Robomotion.PDFBox.Merge",
       "name": "Merge",
       "summary": "Merges multiple PDF documents into a single PDF file.",
       "howItWorks": "The Merge node combines multiple PDF documents into a single PDF file in the order specified by the input paths. When executed, the node: 1. Validates that all input PDF paths are not empty and exist 2. Creates a PDFMergerUtility instance 3. Sets the destination file path for the merged PDF 4. Adds each source PDF to the merger in the order they appear in the input array 5. Merges all documents into a single PDF file 6. Saves the merged PDF to the specified output path",
@@ -94,7 +94,7 @@
       ]
     },
     "PDFToImage": {
-      "namespace": "Core.Pdfbox.PDFToImage",
+      "namespace": "Robomotion.PDFBox.PdfToImage",
       "name": "PDFToImage",
       "summary": "Converts PDF pages to image files.",
       "howItWorks": "The PDF to Image node converts each page of a PDF document to individual image files. When executed, the node: 1. Validates that the input PDF path is not empty 2. Checks that the output directory exists 3. Loads the PDF document (using the password if provided) 4. Splits the document according to the specified start and end pages 5. Renders each page as an image with 300 DPI resolution 6. Saves each rendered image to the output directory with the specified format and prefix 7. Closes all document resources",
@@ -113,7 +113,7 @@
       ]
     },
     "Split": {
-      "namespace": "Core.Pdfbox.Split",
+      "namespace": "Robomotion.PDFBox.Split",
       "name": "Split",
       "summary": "Splits a PDF document into multiple PDF files, one for each page or groups of pages.",
       "howItWorks": "The Split node divides a PDF document into multiple smaller PDF files. When executed, the node: 1. Validates that the input PDF path is not empty 2. Checks that the output directory exists 3. Loads the PDF document (using the password if provided) 4. Splits the document according to the specified start and end pages 5. Groups pages according to the \"Per Page\" setting 6. Saves each group of pages as a separate PDF file in the output directory 7. Closes all document resources",
@@ -132,7 +132,7 @@
       ]
     },
     "TextToPDF": {
-      "namespace": "Core.Pdfbox.TextToPDF",
+      "namespace": "Robomotion.PDFBox.TextToPdf",
       "name": "TextToPDF",
       "summary": "Converts a text file to a PDF document.",
       "howItWorks": "The Text to PDF node creates a PDF document from the content of a text file. When executed, the node: 1. Validates that the input text file path is not empty 2. Checks that a font family is specified 3. Reads the entire content of the text file 4. Creates a new PDF document 5. Sets up the page with appropriate margins 6. Processes the text content, wrapping lines to fit within page margins 7. Writes the text to the PDF using the specified font and size 8. Saves the PDF to the specified output path 9. Closes all document resources",

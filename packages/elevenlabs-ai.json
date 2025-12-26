@@ -4,7 +4,7 @@
   "description": "## Overview The ElevenLabs AI package provides advanced text-to-speech capabilities using artificial intelligence. Use it when you need to convert text to natural-sounding speech, clone voices, transcribe audio, or manage voice libraries.",
   "nodes": {
     "add-voice": {
-      "namespace": "Core.ElevenlabsAi.AddVoice",
+      "namespace": "Robomotion.ElevenLabsAI.Voices.AddVoice",
       "name": "AddVoice",
       "summary": "Creates a new custom voice in ElevenLabs using audio samples. This allows you to generate a unique voice from provided audio files.",
       "howItWorks": "The Add Voice node creates a custom voice from audio samples. When executed, the node: 1. Validates that name and audio files are provided 2. Parses labels if provided (must be valid JSON) 3. Either uses the provided connection or creates a new client with direct API key 4. Prepares the audio file paths 5. Calls the ElevenLabs API to create the voice with all parameters 6. Returns the created voice information including its unique voice_id",
@@ -30,10 +30,26 @@
         "The created voice can be used immediately in Text to Speech and other nodes",
         "Save the returned voice_id for future use",
         "Custom voices count toward your ElevenLabs account limits"
+      ],
+      "credentials": [
+        {
+          "name": "Token",
+          "title": "ElevenLabs AI API Key",
+          "description": "API key for authenticating with ElevenLabs AI services",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "String",
+              "required": true,
+              "description": "Your ElevenLabs AI API key from the ElevenLabs dashboard"
+            }
+          ]
+        }
       ]
     },
     "clone-voice": {
-      "namespace": "Core.ElevenlabsAi.CloneVoice",
+      "namespace": "Robomotion.ElevenLabsAI.Voices.CloneVoice",
       "name": "CloneVoice",
       "summary": "Creates a clone of a voice using audio samples. This creates a new voice that mimics the characteristics of the provided audio.",
       "howItWorks": "The Clone Voice node creates a voice clone from audio samples. When executed, the node: 1. Validates that voice name and audio files are provided 2. Either uses the provided connection or creates a new client with direct API key 3. Opens each audio file for processing 4. Calls the ElevenLabs voice cloning API 5. Closes all file handles 6. Returns the cloned voice information with its unique voice_id",
@@ -58,10 +74,26 @@
         "Save the returned voice_id for future use",
         "Cloned voices count toward your ElevenLabs account limits",
         "Ensure you have permission to clone the voice you're using"
+      ],
+      "credentials": [
+        {
+          "name": "Token",
+          "title": "ElevenLabs AI API Key",
+          "description": "API key for authenticating with ElevenLabs AI services",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "String",
+              "required": true,
+              "description": "Your ElevenLabs AI API key from the ElevenLabs dashboard"
+            }
+          ]
+        }
       ]
     },
     "connect": {
-      "namespace": "Core.ElevenlabsAi.Connect",
+      "namespace": "Robomotion.ElevenLabsAI.Connect",
       "name": "Connect",
       "summary": "Establishes a connection to ElevenLabs AI using API credentials. This node creates a connection session that can be reused across multiple operations.",
       "howItWorks": "The Connect node authenticates with ElevenLabs AI and creates a connection session. When executed, the node: 1. Retrieves the API key from the vault 2. Creates an authenticated ElevenLabs client 3. Stores the client internally with a unique connection ID 4. Returns the connection ID for use in subsequent nodes",
@@ -76,10 +108,26 @@
         "Using Connect is recommended when you need to perform multiple operations, as it reuses the same authenticated client",
         "Don't forget to use the Disconnect node at the end of your workflow to release resources",
         "Keep your API key secure by storing it in the Robomotion vault, not hardcoding it"
+      ],
+      "credentials": [
+        {
+          "name": "Token",
+          "title": "ElevenLabs AI API Key",
+          "description": "API key for authenticating with ElevenLabs AI services",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "String",
+              "required": true,
+              "description": "Your ElevenLabs AI API key from the ElevenLabs dashboard"
+            }
+          ]
+        }
       ]
     },
     "delete-history-item": {
-      "namespace": "Core.ElevenlabsAi.DeleteHistoryItem",
+      "namespace": "Robomotion.ElevenLabsAI.History.DeleteHistoryItem",
       "name": "DeleteHistoryItem",
       "summary": "Permanently deletes a history item from your ElevenLabs account.",
       "howItWorks": "The Delete History Item node removes a history entry. When executed, the node: 1. Validates that a history item ID is provided 2. Either uses the provided connection or creates a new client with direct API key 3. Calls the ElevenLabs API to delete the history item 4. Removes the item from your generation history",
@@ -96,10 +144,26 @@
         "Consider downloading the audio before deletion if you might need it later",
         "Deletion may help manage account storage limits",
         "Useful for cleaning up test or unwanted generations"
+      ],
+      "credentials": [
+        {
+          "name": "Token",
+          "title": "ElevenLabs AI API Key",
+          "description": "API key for authenticating with ElevenLabs AI services",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "String",
+              "required": true,
+              "description": "Your ElevenLabs AI API key from the ElevenLabs dashboard"
+            }
+          ]
+        }
       ]
     },
     "delete-voice": {
-      "namespace": "Core.ElevenlabsAi.DeleteVoice",
+      "namespace": "Robomotion.ElevenLabsAI.Voices.DeleteVoice",
       "name": "DeleteVoice",
       "summary": "Permanently deletes a custom voice from your ElevenLabs account by its ID.",
       "howItWorks": "The Delete Voice node permanently removes a voice. When executed, the node: 1. Validates that a voice ID is provided 2. Either uses the provided connection or creates a new client with direct API key 3. Calls the ElevenLabs API to delete the voice 4. Removes the voice from your account",
@@ -117,10 +181,26 @@
         "Consider backing up voice information before deletion",
         "Deleting a voice frees up space in your voice library",
         "Make sure no active workflows are using the voice before deletion"
+      ],
+      "credentials": [
+        {
+          "name": "Token",
+          "title": "ElevenLabs AI API Key",
+          "description": "API key for authenticating with ElevenLabs AI services",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "String",
+              "required": true,
+              "description": "Your ElevenLabs AI API key from the ElevenLabs dashboard"
+            }
+          ]
+        }
       ]
     },
     "disconnect": {
-      "namespace": "Core.ElevenlabsAi.Disconnect",
+      "namespace": "Robomotion.ElevenLabsAI.Disconnect",
       "name": "Disconnect",
       "summary": "Closes an existing ElevenLabs AI connection and releases resources. Use this node to properly clean up after completing your ElevenLabs operations.",
       "howItWorks": "The Disconnect node properly closes an ElevenLabs AI connection. When executed, the node: 1. Retrieves the connection ID 2. Locates the stored ElevenLabs client 3. Removes the client from internal storage 4. Releases any associated resources",
@@ -134,10 +214,26 @@
         "If you need to perform more operations, create a new connection",
         "It's good practice to always disconnect when you're done with ElevenLabs operations",
         "Consider using error handling to ensure disconnect runs even if earlier nodes fail"
+      ],
+      "credentials": [
+        {
+          "name": "Token",
+          "title": "ElevenLabs AI API Key",
+          "description": "API key for authenticating with ElevenLabs AI services",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "String",
+              "required": true,
+              "description": "Your ElevenLabs AI API key from the ElevenLabs dashboard"
+            }
+          ]
+        }
       ]
     },
     "edit-voice": {
-      "namespace": "Core.ElevenlabsAi.EditVoice",
+      "namespace": "Robomotion.ElevenLabsAI.Voices.EditVoice",
       "name": "EditVoice",
       "summary": "Updates an existing voice's properties including name, description, labels, and audio samples.",
       "howItWorks": "The Edit Voice node updates an existing voice. When executed, the node: 1. Validates that voice ID, name, and files are provided 2. Parses labels if provided (must be valid JSON) 3. Either uses the provided connection or creates a new client with direct API key 4. Prepares the audio file paths and parameters 5. Calls the ElevenLabs API to update the voice 6. Returns the updated voice information",
@@ -158,10 +254,26 @@
         "The voice_id remains the same after editing",
         "Any existing usage of the voice will use the updated version",
         "Consider the impact on existing automations when updating a voice"
+      ],
+      "credentials": [
+        {
+          "name": "Token",
+          "title": "ElevenLabs AI API Key",
+          "description": "API key for authenticating with ElevenLabs AI services",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "String",
+              "required": true,
+              "description": "Your ElevenLabs AI API key from the ElevenLabs dashboard"
+            }
+          ]
+        }
       ]
     },
     "edit-voice-settings": {
-      "namespace": "Core.ElevenlabsAi.EditVoiceSettings",
+      "namespace": "Robomotion.ElevenLabsAI.Voices.EditVoiceSettings",
       "name": "EditVoiceSettings",
       "summary": "Updates the default generation settings (stability and similarity boost) for a specific voice.",
       "howItWorks": "The Edit Voice Settings node updates a voice's default settings. When executed, the node: 1. Validates that voice ID, stability, and similarity boost are provided 2. Validates that both values are valid decimals between 0.0 and 1.0 3. Either uses the provided connection or creates a new client with direct API key 4. Calls the ElevenLabs API to update the voice settings 5. Updates the voice's default generation parameters",
@@ -185,10 +297,26 @@
         "You can still override these in individual Text to Speech calls",
         "Changes affect all future uses of the voice unless overridden",
         "Useful for standardizing voice output across workflows"
+      ],
+      "credentials": [
+        {
+          "name": "Token",
+          "title": "ElevenLabs AI API Key",
+          "description": "API key for authenticating with ElevenLabs AI services",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "String",
+              "required": true,
+              "description": "Your ElevenLabs AI API key from the ElevenLabs dashboard"
+            }
+          ]
+        }
       ]
     },
     "get-audio-from-history-item": {
-      "namespace": "Core.ElevenlabsAi.GetAudioFromHistoryItem",
+      "namespace": "Robomotion.ElevenLabsAI.History.GetAudiofromHistoryItem",
       "name": "GetAudioFromHistoryItem",
       "summary": "Downloads the audio file from a previously generated history item and saves it to disk.",
       "howItWorks": "The Get Audio from History Item node retrieves and saves audio. When executed, the node: 1. Validates that save path and history item ID are provided 2. Either uses the provided connection or creates a new client with direct API key 3. Calls the ElevenLabs API to retrieve the audio 4. Streams the audio chunks to the specified file path 5. Saves the complete audio file to disk",
@@ -208,10 +336,26 @@
         "Audio is streamed in chunks, making it memory-efficient",
         "Make sure the history item generation completed successfully",
         "Failed generations won't have audio available"
+      ],
+      "credentials": [
+        {
+          "name": "Token",
+          "title": "ElevenLabs AI API Key",
+          "description": "API key for authenticating with ElevenLabs AI services",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "String",
+              "required": true,
+              "description": "Your ElevenLabs AI API key from the ElevenLabs dashboard"
+            }
+          ]
+        }
       ]
     },
     "get-history": {
-      "namespace": "Core.ElevenlabsAi.GetHistory",
+      "namespace": "Robomotion.ElevenLabsAI.History.GetHistory",
       "name": "GetHistory",
       "summary": "Retrieves the generation history from your ElevenLabs account, showing all previously generated audio items.",
       "howItWorks": "The Get History node retrieves your generation history. When executed, the node: 1. Validates that page size is a valid integer 2. Either uses the provided connection or creates a new client with direct API key 3. Calls the ElevenLabs API to retrieve history items 4. Handles pagination automatically if there are more items 5. Returns the complete list of history items",
@@ -228,10 +372,26 @@
         "History items can be used to download previously generated audio",
         "The node automatically handles pagination if needed",
         "Use the history_item_id with Get History Item or Get Audio from History Item nodes"
+      ],
+      "credentials": [
+        {
+          "name": "Token",
+          "title": "ElevenLabs AI API Key",
+          "description": "API key for authenticating with ElevenLabs AI services",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "String",
+              "required": true,
+              "description": "Your ElevenLabs AI API key from the ElevenLabs dashboard"
+            }
+          ]
+        }
       ]
     },
     "get-history-item": {
-      "namespace": "Core.ElevenlabsAi.GetHistoryItem",
+      "namespace": "Robomotion.ElevenLabsAI.History.GetHistoryItem",
       "name": "GetHistoryItem",
       "summary": "Retrieves detailed information about a specific history item by its ID.",
       "howItWorks": "The Get History Item node retrieves detailed information about a specific generation. When executed, the node: 1. Validates that a history item ID is provided 2. Either uses the provided connection or creates a new client with direct API key 3. Calls the ElevenLabs API to retrieve the history item 4. Returns the complete history item details including generation settings",
@@ -247,10 +407,26 @@
         "History item IDs come from the Get History node",
         "Use this to inspect the parameters of past generations",
         "The voice_settings show what stability and similarity boost were used"
+      ],
+      "credentials": [
+        {
+          "name": "Token",
+          "title": "ElevenLabs AI API Key",
+          "description": "API key for authenticating with ElevenLabs AI services",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "String",
+              "required": true,
+              "description": "Your ElevenLabs AI API key from the ElevenLabs dashboard"
+            }
+          ]
+        }
       ]
     },
     "get-models": {
-      "namespace": "Core.ElevenlabsAi.GetModels",
+      "namespace": "Robomotion.ElevenLabsAI.Models.GetModels",
       "name": "GetModels",
       "summary": "Retrieves the list of available ElevenLabs AI speech synthesis models.",
       "howItWorks": "The Get Models node retrieves available models. When executed, the node: 1. Either uses the provided connection or creates a new client with direct API key 2. Calls the ElevenLabs API to retrieve all available models 3. Returns the complete list of models with their capabilities",
@@ -268,10 +444,26 @@
         "Use model_id when calling Text to Speech or other generation nodes",
         "Models may be added or updated by ElevenLabs over time",
         "Check language support to ensure the model handles your content"
+      ],
+      "credentials": [
+        {
+          "name": "Token",
+          "title": "ElevenLabs AI API Key",
+          "description": "API key for authenticating with ElevenLabs AI services",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "String",
+              "required": true,
+              "description": "Your ElevenLabs AI API key from the ElevenLabs dashboard"
+            }
+          ]
+        }
       ]
     },
     "get-user-info": {
-      "namespace": "Core.ElevenlabsAi.GetUserInfo",
+      "namespace": "Robomotion.ElevenLabsAI.User.GetUserInfo",
       "name": "GetUserInfo",
       "summary": "Retrieves the current user's ElevenLabs account information.",
       "howItWorks": "The Get User Info node retrieves account information. When executed, the node: 1. Either uses the provided connection or creates a new client with direct API key 2. Calls the ElevenLabs API to retrieve user information 3. Returns the complete user account details",
@@ -286,10 +478,26 @@
         "The user_id is unique to your account",
         "API key validity is confirmed by successful retrieval",
         "Can be used to check account status before operations"
+      ],
+      "credentials": [
+        {
+          "name": "Token",
+          "title": "ElevenLabs AI API Key",
+          "description": "API key for authenticating with ElevenLabs AI services",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "String",
+              "required": true,
+              "description": "Your ElevenLabs AI API key from the ElevenLabs dashboard"
+            }
+          ]
+        }
       ]
     },
     "get-user-subscription-info": {
-      "namespace": "Core.ElevenlabsAi.GetUserSubscriptionInfo",
+      "namespace": "Robomotion.ElevenLabsAI.User.GetUserSubscriptionInfo",
       "name": "GetUserSubscriptionInfo",
       "summary": "Retrieves detailed subscription information including usage limits, character quotas, and plan details.",
       "howItWorks": "The Get User Subscription Info node retrieves subscription details. When executed, the node: 1. Either uses the provided connection or creates a new client with direct API key 2. Calls the ElevenLabs API to retrieve subscription information 3. Returns detailed quota, usage, and plan information",
@@ -306,10 +514,26 @@
         "Check this before large batch operations",
         "Different tiers have different capabilities and limits",
         "Can use this to implement usage-based logic in automations"
+      ],
+      "credentials": [
+        {
+          "name": "Token",
+          "title": "ElevenLabs AI API Key",
+          "description": "API key for authenticating with ElevenLabs AI services",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "String",
+              "required": true,
+              "description": "Your ElevenLabs AI API key from the ElevenLabs dashboard"
+            }
+          ]
+        }
       ]
     },
     "get-voice": {
-      "namespace": "Core.ElevenlabsAi.GetVoice",
+      "namespace": "Robomotion.ElevenLabsAI.Voices.GetVoice",
       "name": "GetVoice",
       "summary": "Retrieves detailed information for a specific voice by its ID, including settings and metadata.",
       "howItWorks": "The Get Voice node retrieves detailed information about a specific voice. When executed, the node: 1. Validates that a voice ID is provided 2. Either uses the provided connection or creates a new client with direct API key 3. Calls the ElevenLabs API to retrieve the voice with settings 4. Returns the complete voice details including generation settings",
@@ -325,10 +549,26 @@
         "For pre-made ElevenLabs voices, samples may not be available",
         "Voice IDs can be obtained from the Get Voices node",
         "Use this to verify a voice exists before using it in speech generation"
+      ],
+      "credentials": [
+        {
+          "name": "Token",
+          "title": "ElevenLabs AI API Key",
+          "description": "API key for authenticating with ElevenLabs AI services",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "String",
+              "required": true,
+              "description": "Your ElevenLabs AI API key from the ElevenLabs dashboard"
+            }
+          ]
+        }
       ]
     },
     "get-voice-settings": {
-      "namespace": "Core.ElevenlabsAi.GetVoiceSettings",
+      "namespace": "Robomotion.ElevenLabsAI.Voices.GetVoiceSettings",
       "name": "GetVoiceSettings",
       "summary": "Retrieves the current settings (stability and similarity boost) for a specific voice.",
       "howItWorks": "The Get Voice Settings node retrieves a voice's generation settings. When executed, the node: 1. Validates that a voice ID is provided 2. Either uses the provided connection or creates a new client with direct API key 3. Calls the ElevenLabs API to retrieve the voice settings 4. Returns the stability and similarity boost values",
@@ -344,10 +584,26 @@
         "You can override these settings in Text to Speech and Speech to Speech nodes",
         "Useful for understanding current voice configuration",
         "Pre-made voices have optimized default settings"
+      ],
+      "credentials": [
+        {
+          "name": "Token",
+          "title": "ElevenLabs AI API Key",
+          "description": "API key for authenticating with ElevenLabs AI services",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "String",
+              "required": true,
+              "description": "Your ElevenLabs AI API key from the ElevenLabs dashboard"
+            }
+          ]
+        }
       ]
     },
     "get-voices": {
-      "namespace": "Core.ElevenlabsAi.GetVoices",
+      "namespace": "Robomotion.ElevenLabsAI.Voices.GetVoices",
       "name": "GetVoices",
       "summary": "Retrieves all available voices from your ElevenLabs AI account, including both pre-made and custom voices.",
       "howItWorks": "The Get Voices node retrieves your voice library. When executed, the node: 1. Either uses the provided connection or creates a new client with direct API key 2. Calls the ElevenLabs API to retrieve all voices 3. Returns the complete list of voices with their metadata",
@@ -362,10 +618,26 @@
         "Labels can indicate voice characteristics like age, gender, accent, use case, etc.",
         "Preview URLs allow you to listen to voice samples before using them",
         "This is useful for dynamically selecting voices based on requirements"
+      ],
+      "credentials": [
+        {
+          "name": "Token",
+          "title": "ElevenLabs AI API Key",
+          "description": "API key for authenticating with ElevenLabs AI services",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "String",
+              "required": true,
+              "description": "Your ElevenLabs AI API key from the ElevenLabs dashboard"
+            }
+          ]
+        }
       ]
     },
     "speech-to-speech": {
-      "namespace": "Core.ElevenlabsAi.SpeechToSpeech",
+      "namespace": "Robomotion.ElevenLabsAI.SpeechToSpeech.SpeechToSpeech",
       "name": "SpeechToSpeech",
       "summary": "Converts speech from one voice to another using ElevenLabs AI's voice conversion technology. This node transforms the voice in an audio file while preserving the content and timing.",
       "howItWorks": "The Speech to Speech node converts audio from one voice to another. When executed, the node: 1. Validates all required inputs (source path, output path, target voice ID) 2. Checks that stability and similarity boost values are valid decimals between 0.0 and 1.0 3. Either uses the provided connection or creates a new client with direct API key 4. Opens the source audio file 5. Calls the ElevenLabs speech-to-speech API with voice settings 6. Streams the converted audio chunks and saves them to the output path",
@@ -386,10 +658,26 @@
         "Audio quality of the source file affects the quality of the output",
         "Make sure the output path directory exists before running the node",
         "The converted audio format depends on the ElevenLabs API default (typically MP3)"
+      ],
+      "credentials": [
+        {
+          "name": "Token",
+          "title": "ElevenLabs AI API Key",
+          "description": "API key for authenticating with ElevenLabs AI services",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "String",
+              "required": true,
+              "description": "Your ElevenLabs AI API key from the ElevenLabs dashboard"
+            }
+          ]
+        }
       ]
     },
     "speech-to-text": {
-      "namespace": "Core.ElevenlabsAi.SpeechToText",
+      "namespace": "Robomotion.ElevenLabsAI.SpeechToText.SpeechToText",
       "name": "SpeechToText",
       "summary": "Transcribes audio files to text using ElevenLabs AI's speech recognition powered by OpenAI Whisper.",
       "howItWorks": "The Speech to Text node transcribes audio to text using AI. When executed, the node: 1. Validates that the audio file path is provided 2. Validates temperature if specified (must be between 0.0 and 1.0) 3. Either uses the provided connection or creates a new client with direct API key 4. Opens the audio file and prepares transcription parameters 5. Calls the ElevenLabs speech-to-text API with optional language, prompt, and temperature 6. Returns the transcribed text and metadata",
@@ -411,10 +699,26 @@
         "Longer audio files may take more time to process",
         "The model handles various accents and speaking styles",
         "Supports various audio formats - common formats like MP3, WAV work well"
+      ],
+      "credentials": [
+        {
+          "name": "Token",
+          "title": "ElevenLabs AI API Key",
+          "description": "API key for authenticating with ElevenLabs AI services",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "String",
+              "required": true,
+              "description": "Your ElevenLabs AI API key from the ElevenLabs dashboard"
+            }
+          ]
+        }
       ]
     },
     "text-to-speech": {
-      "namespace": "Core.ElevenlabsAi.TextToSpeech",
+      "namespace": "Robomotion.ElevenLabsAI.TextToSpeech.TextToSpeech",
       "name": "TextToSpeech",
       "summary": "Converts text to natural-sounding speech audio using ElevenLabs AI's advanced voice synthesis technology.",
       "howItWorks": "The Text to Speech node generates audio from text using ElevenLabs AI. When executed, the node: 1. Validates all required inputs (save path, voice ID, text) 2. Checks that stability and similarity boost values are valid decimals between 0.0 and 1.0 3. Either uses the provided connection or creates a new client with direct API key 4. Calls the ElevenLabs text-to-speech API with the specified parameters 5. Streams the generated audio chunks and saves them to the specified file path",
@@ -434,6 +738,22 @@
         "The generated audio format depends on the ElevenLabs API default (typically MP3)",
         "Make sure the save path directory exists before running the node",
         "Voice IDs can be obtained from the Get Voices or Get Voice nodes"
+      ],
+      "credentials": [
+        {
+          "name": "Token",
+          "title": "ElevenLabs AI API Key",
+          "description": "API key for authenticating with ElevenLabs AI services",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "String",
+              "required": true,
+              "description": "Your ElevenLabs AI API key from the ElevenLabs dashboard"
+            }
+          ]
+        }
       ]
     }
   }

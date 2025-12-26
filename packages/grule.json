@@ -4,12 +4,12 @@
   "description": "The Grule package is ideal for implementing complex decision logic, business rule automation, and conditional workflows without hardcoding logic into your automation flows. It supports both GRL (Grule Rule Language) and JSON formats for defining rules. ## Key Features",
   "nodes": {
     "build": {
-      "namespace": "Core.Grule.Build",
+      "namespace": "Robomotion.Grule.Build",
       "name": "Build",
       "summary": "Compiles rule definitions from JSON or GRL format into a binary Knowledge Base file (.grb) that can be efficiently executed by the Execute node."
     },
     "execute": {
-      "namespace": "Core.Grule.Execute",
+      "namespace": "Robomotion.Grule.Execute",
       "name": "Execute",
       "summary": "Executes a compiled rule set (Knowledge Base) against provided facts and returns the decision result. Facts represent objects in the rule engine's working memory that are evaluated against the rules."
     }

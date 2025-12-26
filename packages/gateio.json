@@ -4,7 +4,7 @@
   "description": "## Overview The Gate.io package allows you to:",
   "nodes": {
     "buy-order": {
-      "namespace": "Core.Gateio.BuyOrder",
+      "namespace": "Robomotion.GateIO.BuyOrder",
       "name": "BuyOrder",
       "summary": "Places a limit buy order on Gate.io exchange to purchase cryptocurrency at a specified price. The node automatically checks balance and validates the order before submission.",
       "howItWorks": "The Buy Order node executes the following steps: 1. Authenticates using either Client Id or direct credentials 2. Validates and parses the Currency Pair (e.g., `BTC_USDT` splits into base=BTC, quote=USDT) 3. Fetches current ticker data to get the last price 4. Retrieves your account balance for the quote currency (e.g., USDT) 5. Uses the provided Order Price, or defaults to last market price if empty 6. Verifies you have sufficient balance to complete the purchase 7. Creates a limit buy order on Gate.io spot market 8. Returns the order details including order ID and fees",
@@ -35,7 +35,7 @@
       ]
     },
     "cancel-order": {
-      "namespace": "Core.Gateio.CancelOrder",
+      "namespace": "Robomotion.GateIO.CancelOrder",
       "name": "CancelOrder",
       "summary": "Cancels an existing open order on Gate.io exchange. This node is useful for managing your active orders and implementing dynamic trading strategies.",
       "howItWorks": "The Cancel Order node executes the following steps: 1. Authenticates using either Client Id or direct credentials 2. Validates that Order ID is not empty 3. Validates that Currency Pair is not empty 4. Sends a cancellation request to Gate.io API for the specified order 5. Returns the complete order details after cancellation",
@@ -60,7 +60,7 @@
       ]
     },
     "connect": {
-      "namespace": "Core.Gateio.Connect",
+      "namespace": "Robomotion.GateIO.Connect",
       "name": "Connect",
       "summary": "Establishes a connection to the Gate.io cryptocurrency exchange using API credentials, creating a reusable client session for subsequent trading and data operations.",
       "howItWorks": "The Connect node is the first step in any Gate.io automation workflow. It establishes a secure connection to Gate.io and creates a client session. When executed, the node: 1. Retrieves the API Key and Secret Key from the provided credentials 2. Validates that both credentials are not empty 3. Creates a new Gate.io client instance with the provided credentials 4. Configures the base URL (defaults to https://api.gateio.ws/api/v4) 5. Generates a unique client ID for the session 6. Stores the client in memory for use by other nodes 7. Returns the client ID for subsequent operations",
@@ -81,10 +81,33 @@
       "errorCodes": [
         "ErrCredentials",
         "ErrInvalidArg"
+      ],
+      "credentials": [
+        {
+          "name": "Gate.io API Key",
+          "title": "apikey",
+          "description": "API key credentials for Gate.io cryptocurrency exchange",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "string",
+              "required": true,
+              "description": "Your Gate.io API key"
+            },
+            {
+              "name": "secret",
+              "title": "Secret Key",
+              "type": "string",
+              "required": true,
+              "description": "Your Gate.io API secret key"
+            }
+          ]
+        }
       ]
     },
     "disconnect": {
-      "namespace": "Core.Gateio.Disconnect",
+      "namespace": "Robomotion.GateIO.Disconnect",
       "name": "Disconnect",
       "summary": "Closes the connection to Gate.io exchange and releases associated resources. This node should be used at the end of your Gate.io automation workflow to properly clean up the client session.",
       "howItWorks": "The Disconnect node cleans up the Gate.io client session when your automation workflow is complete. When executed, the node: 1. Retrieves the Client Id from the input 2. Validates that the Client Id is not empty 3. Looks up the corresponding client session in memory 4. Removes the client session from memory 5. Releases all associated resources",
@@ -106,7 +129,7 @@
       ]
     },
     "get-balance": {
-      "namespace": "Core.Gateio.GetBalance",
+      "namespace": "Robomotion.GateIO.GetBalance",
       "name": "GetBalance",
       "summary": "Retrieves the available balance for a specific cryptocurrency in your Gate.io spot trading account. Essential for checking funds before placing orders or monitoring your portfolio.",
       "howItWorks": "The Get Balance node executes the following steps: 1. Authenticates using either Client Id or direct credentials 2. Validates that the Currency is not empty 3. Queries Gate.io spot account API for the specified currency 4. Extracts the available balance (not locked in orders) 5. Returns the balance as a string",
@@ -130,7 +153,7 @@
       ]
     },
     "get-deposit-address": {
-      "namespace": "Core.Gateio.GetDepositAddress",
+      "namespace": "Robomotion.GateIO.GetDepositAddress",
       "name": "GetDepositAddress",
       "summary": "Retrieves the deposit address for a specific cryptocurrency on Gate.io. Essential for automating cryptocurrency deposits and building wallet management systems.",
       "howItWorks": "The Get Deposit Address node executes the following steps: 1. Authenticates using either Client Id or direct credentials 2. Validates that Currency is not empty 3. Queries Gate.io Wallet API for deposit address 4. Returns deposit address information including multi-chain addresses if available",
@@ -155,7 +178,7 @@
       ]
     },
     "get-fee": {
-      "namespace": "Core.Gateio.GetFee",
+      "namespace": "Robomotion.GateIO.GetFee",
       "name": "GetFee",
       "summary": "Retrieves trading fee information for a specific currency pair on Gate.io. Essential for calculating total trading costs and optimizing trading strategies.",
       "howItWorks": "The Get Fee node executes the following steps: 1. Authenticates using either Client Id or direct credentials 2. Validates that Currency Pair is not empty 3. Queries Gate.io API for fee information for the specified pair 4. Returns the complete fee structure including discounts",
@@ -179,7 +202,7 @@
       ]
     },
     "get-order": {
-      "namespace": "Core.Gateio.GetOrder",
+      "namespace": "Robomotion.GateIO.GetOrder",
       "name": "GetOrder",
       "summary": "Retrieves detailed information about a specific order on Gate.io using its order ID. Essential for monitoring order status, tracking fills, and managing individual orders.",
       "howItWorks": "The Get Order node executes the following steps: 1. Authenticates using either Client Id or direct credentials 2. Validates that Currency Pair is not empty and in correct format 3. Validates that Order ID is not empty 4. Queries Gate.io API for the specific order 5. Returns complete order details including current status and fills",
@@ -205,7 +228,7 @@
       ]
     },
     "get-price": {
-      "namespace": "Core.Gateio.GetPrice",
+      "namespace": "Robomotion.GateIO.GetPrice",
       "name": "GetPrice",
       "summary": "Retrieves current price and ticker information for a specific cryptocurrency trading pair on Gate.io. Essential for price monitoring, trading decisions, and market analysis.",
       "howItWorks": "The Get Price node executes the following steps: 1. Authenticates using either Client Id or direct credentials 2. Validates and parses the Currency Pair (e.g., `BTC_USDT` splits into base=BTC, quote=USDT) 3. Fetches the currency pair details from Gate.io 4. Retrieves the current ticker data for the trading pair 5. Returns the complete ticker object with all market information",
@@ -230,7 +253,7 @@
       ]
     },
     "list-my-orders": {
-      "namespace": "Core.Gateio.ListMyOrders",
+      "namespace": "Robomotion.GateIO.ListMyOrders",
       "name": "ListMyOrders",
       "summary": "Retrieves all open orders across all trading pairs for your Gate.io account. Essential for monitoring active orders and implementing order management strategies.",
       "howItWorks": "The List My Orders node executes the following steps: 1. Authenticates using either Client Id or direct credentials 2. Queries Gate.io API for all open orders across all trading pairs 3. Groups orders by currency pair 4. Returns an array with orders organized by trading pair",
@@ -252,7 +275,7 @@
       ]
     },
     "list-orders": {
-      "namespace": "Core.Gateio.ListOrders",
+      "namespace": "Robomotion.GateIO.ListOrders",
       "name": "ListOrders",
       "summary": "Retrieves the order book (list of buy and sell orders) for a specific trading pair on Gate.io. Essential for analyzing market depth, liquidity, and finding the best execution prices.",
       "howItWorks": "The List Orders node executes the following steps: 1. Validates that Currency Pair is not empty 2. Sets default limit to 10 if not specified or invalid 3. Creates a new Gate.io client (no authentication required for public data) 4. Fetches the order book for the specified trading pair 5. Filters for either buy (bids) or sell (asks) orders based on Order Type option 6. Returns the specified number of price levels",
@@ -277,7 +300,7 @@
       ]
     },
     "list-pairs": {
-      "namespace": "Core.Gateio.ListPairs",
+      "namespace": "Robomotion.GateIO.ListPairs",
       "name": "ListPairs",
       "summary": "Retrieves all available cryptocurrency trading pairs on Gate.io exchange. Essential for discovering tradeable pairs, validating pair names, and building multi-pair trading strategies.",
       "howItWorks": "The List Pairs node executes the following steps: 1. Creates a new Gate.io client (no authentication required) 2. Queries the Gate.io API for all currency pairs 3. Returns the complete list of trading pair configurations",
@@ -299,7 +322,7 @@
       ]
     },
     "sell-order": {
-      "namespace": "Core.Gateio.SellOrder",
+      "namespace": "Robomotion.GateIO.SellOrder",
       "name": "SellOrder",
       "summary": "Places a limit sell order on Gate.io exchange to sell cryptocurrency at a specified price. The node automatically checks balance and validates the order before submission.",
       "howItWorks": "The Sell Order node executes the following steps: 1. Authenticates using either Client Id or direct credentials 2. Validates and parses the Currency Pair (e.g., `BTC_USDT` splits into base=BTC, quote=USDT) 3. Fetches current ticker data to get the last price 4. Retrieves your account balance for the base currency (e.g., BTC) 5. Uses the provided Order Price, or defaults to last market price if empty 6. Verifies you have sufficient balance of the cryptocurrency to sell 7. Creates a limit sell order on Gate.io spot market 8. Returns the order details including order ID and fees",

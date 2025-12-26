@@ -4,27 +4,27 @@
   "description": "```mdx-code-block import DocCardList from '@theme/DocCardList';",
   "nodes": {
     "get-mail": {
-      "namespace": "Core.MicrosoftOutlook.GetMail",
+      "namespace": "Robomotion.MicrosoftOutlook.GetMail",
       "name": "GetMail",
       "summary": "Retrieves emails from a specified Microsoft Outlook folder. This node allows you to fetch messages from any Outlook folder such as Inbox, Sent Items, or custom folders, with options to filter by read status and automatically mark messages as read."
     },
     "move-mail": {
-      "namespace": "Core.MicrosoftOutlook.MoveMail",
+      "namespace": "Robomotion.MicrosoftOutlook.MoveMail",
       "name": "MoveMail",
       "summary": "Moves emails between Microsoft Outlook folders. This node can move emails based on a filter expression or move a specific email using its Entry ID. Useful for organizing emails, archiving, or implementing automated email routing workflows."
     },
     "save-attachments": {
-      "namespace": "Core.MicrosoftOutlook.SaveAttachments",
+      "namespace": "Robomotion.MicrosoftOutlook.SaveAttachments",
       "name": "SaveAttachments",
       "summary": "Saves email attachments from a specified Microsoft Outlook email to a local directory. This node is essential for extracting documents, images, and files from emails for further processing in your automation workflows."
     },
     "search-mail": {
-      "namespace": "Core.MicrosoftOutlook.SearchMail",
+      "namespace": "Robomotion.MicrosoftOutlook.SearchMail",
       "name": "SearchMail",
       "summary": "Searches for emails in a specified Microsoft Outlook folder using Outlook's powerful filter syntax. This node allows you to perform advanced searches based on subject, sender, date, and other email properties."
     },
     "send-mail": {
-      "namespace": "Core.MicrosoftOutlook.SendMail",
+      "namespace": "Robomotion.MicrosoftOutlook.SendMail",
       "name": "SendMail",
       "summary": "Sends an email via Microsoft Outlook with support for multiple recipients, attachments, HTML content, and Reply All functionality. This node can either send a new email or create a Reply All response to an existing email."
     }

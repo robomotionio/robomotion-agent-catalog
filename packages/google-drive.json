@@ -4,7 +4,7 @@
   "description": "## Overview The Google Drive package provides comprehensive file management capabilities for Google Drive. Use it when you need to upload, download, organize, or share files stored in Google Drive.",
   "nodes": {
     "connect": {
-      "namespace": "Core.GoogleDrive.Connect",
+      "namespace": "Robomotion.GoogleDrive.Connect",
       "name": "Connect",
       "summary": "Establishes a connection to Google Drive using either user credentials or service account credentials.",
       "howItWorks": "The Connect node establishes a connection to Google Drive using the provided credentials. When executed, the node: 1. Retrieves the credential information from the vault 2. Determines the authentication type (user or service account) based on the credential content 3. For user credentials: - If a refresh token exists, it uses it to create an authenticated client - If no refresh token exists, it initiates the OAuth flow to obtain new tokens - Updates the credential in the vault with the new tokens after OAuth flow 4. For service account credentials: - Uses the service account JSON directly to authenticate 5. Creates a Google Drive service client 6. Stores the service client for use by other Google Drive nodes 7. Returns a drive_id that can be used to reference this connection in subsequent nodes",
@@ -19,10 +19,84 @@
         "Service account credentials don't require OAuth flow and can be used directly",
         "The drive_id output should be passed to other Google Drive nodes to perform operations on the connected drive",
         "Make sure your credentials have the necessary permissions for the operations you plan to perform"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For server automation and shared drives. Requires sharing folders/files with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Drive API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share the Drive folder/file with the service account email",
+            "6. Use the folder/file ID from the Drive URL in the node"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal Google Drive. Authorize once via browser to access your own files and folders.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Drive API",
+            "3. Go to 'Credentials' → 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "copy": {
-      "namespace": "Core.GoogleDrive.Copy",
+      "namespace": "Robomotion.GoogleDrive.Copy",
       "name": "Copy",
       "summary": "Copies a file in Google Drive to a new location or with a new name.",
       "howItWorks": "The Copy File node creates a copy of an existing file in Google Drive. When executed, the node: 1. Validates the required inputs (Drive Id and File Id) 2. Retrieves the Google Drive service client using the provided Drive Id 3. Creates a new File object with the specified name and MIME type 4. Uses the Google Drive API to copy the file with the Files.Copy method 5. If a Parent Folder Id is specified, moves the copied file to that folder 6. Returns the ID of the newly created file",
@@ -37,10 +111,84 @@
         "The MIME type determines how Google Drive handles the file (e.g., converting to Google Docs format)",
         "If a Parent Folder Id is specified, the copied file will be placed in that folder",
         "The original file remains unchanged after the copy operation"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For server automation and shared drives. Requires sharing folders/files with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Drive API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share the Drive folder/file with the service account email",
+            "6. Use the folder/file ID from the Drive URL in the node"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal Google Drive. Authorize once via browser to access your own files and folders.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Drive API",
+            "3. Go to 'Credentials' → 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "create": {
-      "namespace": "Core.GoogleDrive.Create",
+      "namespace": "Robomotion.GoogleDrive.CreateFolder",
       "name": "Create",
       "summary": "Creates a new folder in Google Drive.",
       "howItWorks": "The Create Folder node creates a new folder in Google Drive. When executed, the node: 1. Validates the required inputs (Drive Id and Folder Name) 2. Retrieves the Google Drive service client using the provided Drive Id 3. Creates a new File object with the specified name and folder MIME type 4. If a Parent Folder Id is specified, sets it as the parent of the new folder 5. Uses the Google Drive API to create the folder with the Files.Create method 6. Returns the ID of the newly created folder",
@@ -54,10 +202,84 @@
         "If a Parent Folder Id is specified, the new folder will be created as a subfolder of that folder",
         "The returned folder_id can be used in subsequent operations to create files or subfolders within this folder",
         "Folder names do not need to be unique - Google Drive allows multiple folders with the same name"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For server automation and shared drives. Requires sharing folders/files with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Drive API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share the Drive folder/file with the service account email",
+            "6. Use the folder/file ID from the Drive URL in the node"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal Google Drive. Authorize once via browser to access your own files and folders.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Drive API",
+            "3. Go to 'Credentials' → 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "createfilepermission": {
-      "namespace": "Core.GoogleDrive.Createfilepermission",
+      "namespace": "Robomotion.GoogleDrive.CreateFilePermission",
       "name": "Createfilepermission",
       "summary": "Creates a new permission for a file in Google Drive, allowing you to share files with specific users or groups.",
       "howItWorks": "The Create File Permission node adds a new permission to a file in Google Drive, effectively sharing the file with the specified user or group. When executed, the node: 1. Validates the required inputs (Drive Id, File Id, Role, Type, and Email Address) 2. Retrieves the Google Drive service client using the provided Drive Id 3. Creates a Permission object with the specified role, type, and email address 4. If an Email Message is provided, includes it in the permission creation request 5. Uses the Google Drive API to create the permission with the Permissions.Create method 6. Returns the created permission object",
@@ -77,10 +299,84 @@
         "For type \"anyone\", no email address is needed",
         "If an Email Message is provided, it will be sent to the user or group along with the notification about the shared file",
         "The returned result contains the complete permission object with details like permission ID and timestamps"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For server automation and shared drives. Requires sharing folders/files with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Drive API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share the Drive folder/file with the service account email",
+            "6. Use the folder/file ID from the Drive URL in the node"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal Google Drive. Authorize once via browser to access your own files and folders.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Drive API",
+            "3. Go to 'Credentials' → 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "delete": {
-      "namespace": "Core.GoogleDrive.Delete",
+      "namespace": "Robomotion.GoogleDrive.Delete",
       "name": "Delete",
       "summary": "Deletes a file or folder from Google Drive.",
       "howItWorks": "The Delete File/Folder node permanently removes a file or folder from Google Drive. When executed, the node: 1. Validates the required inputs (Drive Id and File Id) 2. Retrieves the Google Drive service client using the provided Drive Id 3. Uses the Google Drive API to delete the file or folder with the Files.Delete method 4. The deletion is permanent and cannot be undone through the API",
@@ -95,10 +391,84 @@
         "Make sure you have the necessary permissions to delete the file or folder",
         "Consider using caution with this node, especially in production environments",
         "The node does not return any output as the file or folder is completely removed"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For server automation and shared drives. Requires sharing folders/files with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Drive API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share the Drive folder/file with the service account email",
+            "6. Use the folder/file ID from the Drive URL in the node"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal Google Drive. Authorize once via browser to access your own files and folders.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Drive API",
+            "3. Go to 'Credentials' → 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "deletefilepermission": {
-      "namespace": "Core.GoogleDrive.Deletefilepermission",
+      "namespace": "Robomotion.GoogleDrive.DeleteFilePermission",
       "name": "Deletefilepermission",
       "summary": "Removes a permission from a file in Google Drive, effectively revoking access for a user or group.",
       "howItWorks": "The Delete File Permission node removes an existing permission from a file in Google Drive, revoking access for the associated user or group. When executed, the node: 1. Validates the required inputs (Drive Id, File Id, and Permission Id) 2. Retrieves the Google Drive service client using the provided Drive Id 3. Uses the Google Drive API to delete the permission with the Permissions.Delete method 4. The permission is permanently removed and cannot be recovered through the API",
@@ -118,7 +488,7 @@
       ]
     },
     "disconnect": {
-      "namespace": "Core.GoogleDrive.Disconnect",
+      "namespace": "Robomotion.GoogleDrive.Disconnect",
       "name": "Disconnect",
       "summary": "Disconnects from a Google Drive service, releasing the connection resources.",
       "howItWorks": "The Disconnect node releases the connection to a Google Drive service, freeing up resources. When executed, the node: 1. Validates the required input (Drive Id) 2. Removes the stored Google Drive service client associated with the provided Drive Id 3. Cleans up any resources associated with the connection",
@@ -131,10 +501,84 @@
         "It's a good practice to disconnect when you're finished with Google Drive operations to free up resources",
         "After disconnecting, the Drive Id becomes invalid and cannot be used for further Google Drive operations",
         "The node does not return any output as it simply removes the connection"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For server automation and shared drives. Requires sharing folders/files with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Drive API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share the Drive folder/file with the service account email",
+            "6. Use the folder/file ID from the Drive URL in the node"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal Google Drive. Authorize once via browser to access your own files and folders.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Drive API",
+            "3. Go to 'Credentials' → 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "download": {
-      "namespace": "Core.GoogleDrive.Download",
+      "namespace": "Robomotion.GoogleDrive.Download",
       "name": "Download",
       "summary": "Downloads a file from Google Drive to the local file system.",
       "howItWorks": "The Download File node retrieves a file from Google Drive and saves it to the local file system. When executed, the node: 1. Validates the required inputs (Drive Id, File Id, and File Path) 2. Retrieves the Google Drive service client using the provided Drive Id 3. Uses the Google Drive API to download the file with the Files.Get.Download method 4. Creates or opens the specified local file path 5. Copies the downloaded file content to the local file 6. Returns the path to the downloaded file",
@@ -151,10 +595,84 @@
         "Large files may take longer to download depending on network conditions",
         "The returned file_path can be used in subsequent nodes that process the downloaded file",
         "Make sure the specified directory exists and is writable"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For server automation and shared drives. Requires sharing folders/files with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Drive API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share the Drive folder/file with the service account email",
+            "6. Use the folder/file ID from the Drive URL in the node"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal Google Drive. Authorize once via browser to access your own files and folders.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Drive API",
+            "3. Go to 'Credentials' → 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "export": {
-      "namespace": "Core.GoogleDrive.Export",
+      "namespace": "Robomotion.GoogleDrive.Export",
       "name": "Export",
       "summary": "Exports a Google Workspace file (Docs, Sheets, Slides) to a different format and saves it to the local file system.",
       "howItWorks": "The Export File node converts a Google Workspace file to a different format and saves it to the local file system. When executed, the node: 1. Validates the required inputs (Drive Id, File Id, and File Path) 2. Validates the selected Mime Type option 3. Retrieves the Google Drive service client using the provided Drive Id 4. Uses the Google Drive API to export the file with the Files.Export.Download method 5. Creates or opens the specified local file path 6. Copies the exported file content to the local file",
@@ -172,10 +690,84 @@
         "Large files may take longer to export depending on the complexity and network conditions",
         "Make sure the specified directory exists and is writable",
         "The exported file is saved locally and is no longer connected to the original Google Workspace file"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For server automation and shared drives. Requires sharing folders/files with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Drive API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share the Drive folder/file with the service account email",
+            "6. Use the folder/file ID from the Drive URL in the node"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal Google Drive. Authorize once via browser to access your own files and folders.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Drive API",
+            "3. Go to 'Credentials' → 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "list": {
-      "namespace": "Core.GoogleDrive.List",
+      "namespace": "Robomotion.GoogleDrive.List",
       "name": "List",
       "summary": "Lists the contents of a folder in Google Drive.",
       "howItWorks": "The List Folder node retrieves the contents of a specified folder in Google Drive. When executed, the node: 1. Validates the required inputs (Drive Id and Folder Id) 2. Retrieves the Google Drive service client using the provided Drive Id 3. Constructs a query to list files in the specified folder 4. If Include Folders is disabled, adds a filter to exclude folders from the results 5. Uses the Google Drive API to list the files with the Files.List method 6. Processes the results into a standardized format 7. Returns the array of file objects",
@@ -191,10 +783,84 @@
         "The Include Folders option allows you to control whether subfolders appear in the results",
         "The returned file objects can be used in subsequent nodes to process individual files",
         "Large folders may take longer to list depending on the number of items"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For server automation and shared drives. Requires sharing folders/files with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Drive API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share the Drive folder/file with the service account email",
+            "6. Use the folder/file ID from the Drive URL in the node"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal Google Drive. Authorize once via browser to access your own files and folders.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Drive API",
+            "3. Go to 'Credentials' → 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "listfilepermissions": {
-      "namespace": "Core.GoogleDrive.Listfilepermissions",
+      "namespace": "Robomotion.GoogleDrive.ListFilePermissions",
       "name": "Listfilepermissions",
       "summary": "Lists all permissions for a file in Google Drive.",
       "howItWorks": "The List File Permissions node retrieves all permissions for a specified file in Google Drive. When executed, the node: 1. Validates the required inputs (Drive Id and File Id) 2. Retrieves the Google Drive service client using the provided Drive Id 3. Uses the Google Drive API to list permissions with the Permissions.List method 4. Returns the array of permission objects",
@@ -210,10 +876,84 @@
         "The role field indicates what level of access each entity has to the file",
         "The type field indicates what kind of entity has been granted permission",
         "This node does not modify any permissions - it only retrieves them for viewing"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For server automation and shared drives. Requires sharing folders/files with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Drive API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share the Drive folder/file with the service account email",
+            "6. Use the folder/file ID from the Drive URL in the node"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal Google Drive. Authorize once via browser to access your own files and folders.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Drive API",
+            "3. Go to 'Credentials' → 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "move": {
-      "namespace": "Core.GoogleDrive.Move",
+      "namespace": "Robomotion.GoogleDrive.Move",
       "name": "Move",
       "summary": "Moves a file or folder in Google Drive from one parent folder to another.",
       "howItWorks": "The Move File/Folder node changes the parent folder of a file or folder in Google Drive. When executed, the node: 1. Validates the required inputs (Drive Id and File Id) 2. Ensures that at least one of From Parent Id or To Parent Id is provided 3. Retrieves the Google Drive service client using the provided Drive Id 4. Depending on the provided parent IDs: - If both From and To Parent Ids are provided, removes the file from the From parent and adds it to the To parent - If only To Parent Id is provided, adds the file to the new parent (without removing from current parents) - If only From Parent Id is provided, removes the file from the specified parent (without adding to a new parent) 5. Uses the Google Drive API to update the file's parent relationships with the Files.Update method",
@@ -231,10 +971,84 @@
         "When only From Parent Id is provided, the file is removed from the specified parent folder but retains other parent relationships",
         "Moving a folder also moves all of its contents",
         "The node does not return any output as it only modifies the file's location"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For server automation and shared drives. Requires sharing folders/files with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Drive API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share the Drive folder/file with the service account email",
+            "6. Use the folder/file ID from the Drive URL in the node"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal Google Drive. Authorize once via browser to access your own files and folders.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Drive API",
+            "3. Go to 'Credentials' → 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "search": {
-      "namespace": "Core.GoogleDrive.Search",
+      "namespace": "Robomotion.GoogleDrive.Search",
       "name": "Search",
       "summary": "Searches for files and folders in Google Drive using a query string.",
       "howItWorks": "The Search node finds files and folders in Google Drive that match a specified query. When executed, the node: 1. Validates the required inputs (Drive Id and Query) 2. Retrieves the Google Drive service client using the provided Drive Id 3. Uses the Google Drive API to search files with the Files.List method and Q parameter 4. Processes the results into a standardized format 5. Returns the array of matching file objects",
@@ -255,10 +1069,84 @@
         "To get file content, use the Download or Export nodes after searching",
         "The returned file objects can be used in subsequent nodes to process individual files",
         "Large result sets may take longer to retrieve"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For server automation and shared drives. Requires sharing folders/files with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Drive API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share the Drive folder/file with the service account email",
+            "6. Use the folder/file ID from the Drive URL in the node"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal Google Drive. Authorize once via browser to access your own files and folders.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Drive API",
+            "3. Go to 'Credentials' → 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "updatefilepermission": {
-      "namespace": "Core.GoogleDrive.Updatefilepermission",
+      "namespace": "Robomotion.GoogleDrive.UpdatefilePermissions",
       "name": "Updatefilepermission",
       "summary": "Updates an existing permission for a file in Google Drive.",
       "howItWorks": "The Update File Permissions node modifies an existing permission for a file in Google Drive. When executed, the node: 1. Validates the required inputs (Drive Id, File Id, Permission Id, Role, Type, and Email Address) 2. Retrieves the Google Drive service client using the provided Drive Id 3. Creates a Permission object with the specified role, type, and email address 4. Uses the Google Drive API to update the permission with the Permissions.Update method 5. Returns the updated permission object",
@@ -280,10 +1168,84 @@
         "For type \"anyone\", no email address is needed",
         "The returned result contains the complete updated permission object with details like permission ID and timestamps",
         "You can use the List File Permissions node to find the Permission Id before updating it"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For server automation and shared drives. Requires sharing folders/files with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Drive API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share the Drive folder/file with the service account email",
+            "6. Use the folder/file ID from the Drive URL in the node"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal Google Drive. Authorize once via browser to access your own files and folders.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Drive API",
+            "3. Go to 'Credentials' → 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "upload": {
-      "namespace": "Core.GoogleDrive.Upload",
+      "namespace": "Robomotion.GoogleDrive.Upload",
       "name": "Upload",
       "summary": "Uploads a file from the local file system to Google Drive.",
       "howItWorks": "The Upload File node transfers a file from the local file system to Google Drive. When executed, the node: 1. Validates the required inputs (Drive Id, File Path, and Parent Folder Id) 2. Retrieves the Google Drive service client using the provided Drive Id 3. Opens the specified local file for reading 4. Determines the MIME type of the file based on its extension 5. Creates a File object with the file name and parent folder ID 6. Uses the Google Drive API to upload the file with the Files.Create method and Media parameter 7. Returns the ID of the newly created file in Google Drive",
@@ -304,6 +1266,80 @@
         "The returned file_id can be used in subsequent nodes to manipulate the uploaded file",
         "Make sure the specified local file exists and is readable",
         "The uploaded file will be placed directly in the specified parent folder"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For server automation and shared drives. Requires sharing folders/files with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Drive API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share the Drive folder/file with the service account email",
+            "6. Use the folder/file ID from the Drive URL in the node"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal Google Drive. Authorize once via browser to access your own files and folders.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Drive API",
+            "3. Go to 'Credentials' → 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     }
   }

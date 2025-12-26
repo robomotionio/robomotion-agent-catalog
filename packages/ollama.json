@@ -4,7 +4,7 @@
   "description": "## Features - Run local AI models for text generation and chat completions",
   "nodes": {
     "connect": {
-      "namespace": "Core.Ollama.Connect",
+      "namespace": "Robomotion.Ollama.Connect",
       "name": "Connect",
       "summary": "Establishes a connection to your local Ollama server and creates a client session for interacting with AI models.",
       "howItWorks": "The Connect node: 1. Creates a new Ollama client instance 2. Establishes connection to the Ollama server (local or remote) 3. Generates a unique client ID 4. Returns the client ID for use in subsequent Ollama operations",
@@ -23,10 +23,42 @@
         "If you only need to perform a single operation, consider using the Host URL option directly in the operation node instead of using Connect/Disconnect",
         "For local installations, the default settings usually work without configuration",
         "Use Disconnect at the end of your workflow to properly clean up resources"
+      ],
+      "credentials": [
+        {
+          "name": "Ollama Host",
+          "title": "Ollama Host",
+          "description": "Ollama server host URL for API connections",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Host URL",
+              "type": "text",
+              "placeholder": "http://localhost:11434",
+              "description": "Ollama server URL (defaults to http://localhost:11434 if not specified)"
+            }
+          ],
+          "help": [
+            "1. Install Ollama on your local machine or server",
+            "2. Start the Ollama service",
+            "3. The default URL is http://localhost:11434",
+            "4. For remote servers, provide the full URL"
+          ],
+          "resources": [
+            {
+              "label": "Ollama Documentation",
+              "url": "https://ollama.ai/docs"
+            },
+            {
+              "label": "Ollama GitHub",
+              "url": "https://github.com/ollama/ollama"
+            }
+          ]
+        }
       ]
     },
     "delete-model": {
-      "namespace": "Core.Ollama.DeleteModel",
+      "namespace": "Robomotion.Ollama.DeleteModel",
       "name": "DeleteModel",
       "summary": "Removes a specific AI model from your local Ollama server to free up disk space. This is useful for managing storage and removing models you no longer need.",
       "howItWorks": "The Delete Model node: 1. Connects to the Ollama server (via Client ID or Host URL) 2. Sends a delete request for the specified model 3. Ollama removes the model files from disk 4. Returns a success or failure message",
@@ -41,10 +73,42 @@
         "Show Model Info",
         "Pull Model",
         "Connect"
+      ],
+      "credentials": [
+        {
+          "name": "Ollama Host",
+          "title": "Ollama Host",
+          "description": "Ollama server host URL for API connections",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Host URL",
+              "type": "text",
+              "placeholder": "http://localhost:11434",
+              "description": "Ollama server URL (defaults to http://localhost:11434 if not specified)"
+            }
+          ],
+          "help": [
+            "1. Install Ollama on your local machine or server",
+            "2. Start the Ollama service",
+            "3. The default URL is http://localhost:11434",
+            "4. For remote servers, provide the full URL"
+          ],
+          "resources": [
+            {
+              "label": "Ollama Documentation",
+              "url": "https://ollama.ai/docs"
+            },
+            {
+              "label": "Ollama GitHub",
+              "url": "https://github.com/ollama/ollama"
+            }
+          ]
+        }
       ]
     },
     "disconnect": {
-      "namespace": "Core.Ollama.Disconnect",
+      "namespace": "Robomotion.Ollama.Disconnect",
       "name": "Disconnect",
       "summary": "Closes the connection to the Ollama server and releases the client session resources.",
       "howItWorks": "The Disconnect node: 1. Receives the Client ID from the Connect node 2. Locates the corresponding client session in memory 3. Removes the client from the session store 4. Releases associated resources",
@@ -62,10 +126,42 @@
         "Use Continue On Error if you want the workflow to continue even if disconnect fails",
         "If you're using Host URL directly in nodes (without Connect), you don't need Disconnect",
         "The same Client ID cannot be used after disconnection"
+      ],
+      "credentials": [
+        {
+          "name": "Ollama Host",
+          "title": "Ollama Host",
+          "description": "Ollama server host URL for API connections",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Host URL",
+              "type": "text",
+              "placeholder": "http://localhost:11434",
+              "description": "Ollama server URL (defaults to http://localhost:11434 if not specified)"
+            }
+          ],
+          "help": [
+            "1. Install Ollama on your local machine or server",
+            "2. Start the Ollama service",
+            "3. The default URL is http://localhost:11434",
+            "4. For remote servers, provide the full URL"
+          ],
+          "resources": [
+            {
+              "label": "Ollama Documentation",
+              "url": "https://ollama.ai/docs"
+            },
+            {
+              "label": "Ollama GitHub",
+              "url": "https://github.com/ollama/ollama"
+            }
+          ]
+        }
       ]
     },
     "generate-chat-completion": {
-      "namespace": "Core.Ollama.GenerateChatCompletion",
+      "namespace": "Robomotion.Ollama.GenerateChatCompletion",
       "name": "GenerateChatCompletion",
       "summary": "Generates conversational AI responses using a local Ollama model with support for message history and context. This node is designed for building chatbots, interactive assistants, and multi-turn conversations.",
       "howItWorks": "The Generate Chat Completion node: 1. Connects to the Ollama server (via Client ID or Host URL) 2. Processes the conversation history from the Messages array 3. Sends the complete context to the model 4. Receives the AI-generated response 5. Returns the response text",
@@ -80,10 +176,42 @@
         "Pull Model",
         "List Models",
         "Connect"
+      ],
+      "credentials": [
+        {
+          "name": "Ollama Host",
+          "title": "Ollama Host",
+          "description": "Ollama server host URL for API connections",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Host URL",
+              "type": "text",
+              "placeholder": "http://localhost:11434",
+              "description": "Ollama server URL (defaults to http://localhost:11434 if not specified)"
+            }
+          ],
+          "help": [
+            "1. Install Ollama on your local machine or server",
+            "2. Start the Ollama service",
+            "3. The default URL is http://localhost:11434",
+            "4. For remote servers, provide the full URL"
+          ],
+          "resources": [
+            {
+              "label": "Ollama Documentation",
+              "url": "https://ollama.ai/docs"
+            },
+            {
+              "label": "Ollama GitHub",
+              "url": "https://github.com/ollama/ollama"
+            }
+          ]
+        }
       ]
     },
     "generate-completion": {
-      "namespace": "Core.Ollama.GenerateCompletion",
+      "namespace": "Robomotion.Ollama.GenerateCompletion",
       "name": "GenerateCompletion",
       "summary": "Generates text completions using a local Ollama AI model. This node is ideal for single-prompt text generation tasks such as content creation, summarization, translation, and general text processing.",
       "howItWorks": "The Generate Completion node: 1. Connects to the Ollama server (via Client ID or Host URL) 2. Sends your prompt to the specified model 3. Receives the generated text in a streaming fashion 4. Concatenates all response chunks 5. Returns the complete generated text",
@@ -97,10 +225,42 @@
         "Pull Model",
         "List Models",
         "Connect"
+      ],
+      "credentials": [
+        {
+          "name": "Ollama Host",
+          "title": "Ollama Host",
+          "description": "Ollama server host URL for API connections",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Host URL",
+              "type": "text",
+              "placeholder": "http://localhost:11434",
+              "description": "Ollama server URL (defaults to http://localhost:11434 if not specified)"
+            }
+          ],
+          "help": [
+            "1. Install Ollama on your local machine or server",
+            "2. Start the Ollama service",
+            "3. The default URL is http://localhost:11434",
+            "4. For remote servers, provide the full URL"
+          ],
+          "resources": [
+            {
+              "label": "Ollama Documentation",
+              "url": "https://ollama.ai/docs"
+            },
+            {
+              "label": "Ollama GitHub",
+              "url": "https://github.com/ollama/ollama"
+            }
+          ]
+        }
       ]
     },
     "generate-embeddings": {
-      "namespace": "Core.Ollama.GenerateEmbeddings",
+      "namespace": "Robomotion.Ollama.GenerateEmbeddings",
       "name": "GenerateEmbeddings",
       "summary": "Generates vector embeddings for text using a local Ollama embedding model. Embeddings are numerical representations of text that capture semantic meaning, enabling advanced features like semantic search, text similarity comparison, and document clustering.",
       "howItWorks": "The Generate Embeddings node: 1. Connects to the Ollama server (via Client ID or Host URL) 2. Sends your text to the specified embedding model 3. The model processes the text and generates a vector representation 4. Returns the embedding as an array of numbers 5. These numbers can be used for similarity calculations and search",
@@ -115,10 +275,42 @@
         "Pull Model",
         "List Models",
         "Connect"
+      ],
+      "credentials": [
+        {
+          "name": "Ollama Host",
+          "title": "Ollama Host",
+          "description": "Ollama server host URL for API connections",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Host URL",
+              "type": "text",
+              "placeholder": "http://localhost:11434",
+              "description": "Ollama server URL (defaults to http://localhost:11434 if not specified)"
+            }
+          ],
+          "help": [
+            "1. Install Ollama on your local machine or server",
+            "2. Start the Ollama service",
+            "3. The default URL is http://localhost:11434",
+            "4. For remote servers, provide the full URL"
+          ],
+          "resources": [
+            {
+              "label": "Ollama Documentation",
+              "url": "https://ollama.ai/docs"
+            },
+            {
+              "label": "Ollama GitHub",
+              "url": "https://github.com/ollama/ollama"
+            }
+          ]
+        }
       ]
     },
     "list-models": {
-      "namespace": "Core.Ollama.ListModels",
+      "namespace": "Robomotion.Ollama.ListModels",
       "name": "ListModels",
       "summary": "Retrieves a list of all AI models currently available on your local Ollama server. This node is useful for discovering which models are installed and ready to use.",
       "howItWorks": "The List Models node: 1. Connects to the Ollama server (via Client ID or Host URL) 2. Queries the server for all locally available models 3. Retrieves detailed information about each model 4. Returns the complete list as an array",
@@ -131,10 +323,42 @@
         "Show Model Info",
         "Delete Model",
         "Generate Completion"
+      ],
+      "credentials": [
+        {
+          "name": "Ollama Host",
+          "title": "Ollama Host",
+          "description": "Ollama server host URL for API connections",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Host URL",
+              "type": "text",
+              "placeholder": "http://localhost:11434",
+              "description": "Ollama server URL (defaults to http://localhost:11434 if not specified)"
+            }
+          ],
+          "help": [
+            "1. Install Ollama on your local machine or server",
+            "2. Start the Ollama service",
+            "3. The default URL is http://localhost:11434",
+            "4. For remote servers, provide the full URL"
+          ],
+          "resources": [
+            {
+              "label": "Ollama Documentation",
+              "url": "https://ollama.ai/docs"
+            },
+            {
+              "label": "Ollama GitHub",
+              "url": "https://github.com/ollama/ollama"
+            }
+          ]
+        }
       ]
     },
     "pull-model": {
-      "namespace": "Core.Ollama.PullModel",
+      "namespace": "Robomotion.Ollama.PullModel",
       "name": "PullModel",
       "summary": "Downloads an AI model from the Ollama library to your local server. This is the first step in setting up models for use in your automation workflows.",
       "howItWorks": "The Pull Model node: 1. Connects to the Ollama server (via Client ID or Host URL) 2. Requests the specified model from the Ollama library 3. Downloads the model files to local storage 4. Shows progress updates during download 5. Completes when the model is fully downloaded and ready to use",
@@ -149,10 +373,42 @@
         "Show Model Info",
         "Delete Model",
         "Generate Completion"
+      ],
+      "credentials": [
+        {
+          "name": "Ollama Host",
+          "title": "Ollama Host",
+          "description": "Ollama server host URL for API connections",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Host URL",
+              "type": "text",
+              "placeholder": "http://localhost:11434",
+              "description": "Ollama server URL (defaults to http://localhost:11434 if not specified)"
+            }
+          ],
+          "help": [
+            "1. Install Ollama on your local machine or server",
+            "2. Start the Ollama service",
+            "3. The default URL is http://localhost:11434",
+            "4. For remote servers, provide the full URL"
+          ],
+          "resources": [
+            {
+              "label": "Ollama Documentation",
+              "url": "https://ollama.ai/docs"
+            },
+            {
+              "label": "Ollama GitHub",
+              "url": "https://github.com/ollama/ollama"
+            }
+          ]
+        }
       ]
     },
     "show-model-info": {
-      "namespace": "Core.Ollama.ShowModelInfo",
+      "namespace": "Robomotion.Ollama.ShowModelInfo",
       "name": "ShowModelInfo",
       "summary": "Retrieves detailed information about a specific AI model on your local Ollama server. This node provides comprehensive metadata including model parameters, architecture details, system prompt templates, and licensing information.",
       "howItWorks": "The Show Model Info node: 1. Connects to the Ollama server (via Client ID or Host URL) 2. Requests detailed information for the specified model 3. Retrieves comprehensive metadata from the Ollama registry 4. Returns all available information as a structured object",
@@ -166,6 +422,38 @@
         "Pull Model",
         "Generate Completion",
         "Delete Model"
+      ],
+      "credentials": [
+        {
+          "name": "Ollama Host",
+          "title": "Ollama Host",
+          "description": "Ollama server host URL for API connections",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Host URL",
+              "type": "text",
+              "placeholder": "http://localhost:11434",
+              "description": "Ollama server URL (defaults to http://localhost:11434 if not specified)"
+            }
+          ],
+          "help": [
+            "1. Install Ollama on your local machine or server",
+            "2. Start the Ollama service",
+            "3. The default URL is http://localhost:11434",
+            "4. For remote servers, provide the full URL"
+          ],
+          "resources": [
+            {
+              "label": "Ollama Documentation",
+              "url": "https://ollama.ai/docs"
+            },
+            {
+              "label": "Ollama GitHub",
+              "url": "https://github.com/ollama/ollama"
+            }
+          ]
+        }
       ]
     }
   }

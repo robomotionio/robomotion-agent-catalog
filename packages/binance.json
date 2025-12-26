@@ -4,7 +4,7 @@
   "description": "## Overview The Binance package allows you to:",
   "nodes": {
     "buy-order": {
-      "namespace": "Core.Binance.BuyOrder",
+      "namespace": "Robomotion.Binance.BuyOrder",
       "name": "BuyOrder",
       "summary": "Places a limit buy order on Binance, allowing you to specify the exact price at which you want to purchase a cryptocurrency.",
       "howItWorks": "The Buy Order node creates a limit buy order that will only execute at your specified price or better. When executed, the node: 1. Retrieves the Binance client (from Client Id or creates one from credentials) 2. Validates all required inputs 3. Creates a limit buy order with Time In Force = GTC (Good Till Canceled) 4. Submits the order to Binance 5. Returns the order details including the unique order ID",
@@ -30,7 +30,7 @@
       ]
     },
     "cancel-order": {
-      "namespace": "Core.Binance.CancelOrder",
+      "namespace": "Robomotion.Binance.CancelOrder",
       "name": "CancelOrder",
       "summary": "Cancels an existing open order on Binance, removing it from the order book.",
       "howItWorks": "The Cancel Order node removes an open order from the Binance order book. When executed, the node: 1. Retrieves the Binance client (from Client Id or creates one from credentials) 2. Validates the Order ID and Currency Pair inputs 3. Sends a cancel request to Binance for the specified order 4. Returns true if cancellation is successful",
@@ -56,7 +56,7 @@
       ]
     },
     "connect": {
-      "namespace": "Core.Binance.Connect",
+      "namespace": "Robomotion.Binance.Connect",
       "name": "Connect",
       "summary": "Establishes a connection to the Binance cryptocurrency exchange using API credentials, creating a reusable client session for subsequent trading and data operations.",
       "howItWorks": "The Connect node is the first step in any Binance automation workflow. It establishes a secure connection to Binance and creates a client session. When executed, the node: 1. Retrieves the API Key and Secret Key from the provided credentials 2. Validates that both credentials are not empty 3. Creates a new Binance client instance with the provided credentials 4. Generates a unique client ID for the session 5. Stores the client in memory for use by other nodes 6. Returns the client ID for subsequent operations",
@@ -76,10 +76,38 @@
       "errorCodes": [
         "ErrCredentials",
         "ErrInvalidArg"
+      ],
+      "credentials": [
+        {
+          "name": "apiKey",
+          "title": "apiKey",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "string",
+              "required": true,
+              "description": "Your Binance API key"
+            }
+          ]
+        },
+        {
+          "name": "secretKey",
+          "title": "secretKey",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Secret Key",
+              "type": "string",
+              "required": true,
+              "description": "Your Binance API secret key"
+            }
+          ]
+        }
       ]
     },
     "disconnect": {
-      "namespace": "Core.Binance.Disconnect",
+      "namespace": "Robomotion.Binance.Disconnect",
       "name": "Disconnect",
       "summary": "Closes the connection to Binance exchange and cleans up the client session, freeing system resources.",
       "howItWorks": "The Disconnect node closes the Binance client session and removes it from memory. When executed, the node: 1. Validates that the Client Id is not empty 2. Removes the client session from the internal client manager 3. Frees up system resources associated with the connection",
@@ -99,7 +127,7 @@
       ]
     },
     "get-balance": {
-      "namespace": "Core.Binance.GetBalance",
+      "namespace": "Robomotion.Binance.GetBalance",
       "name": "GetBalance",
       "summary": "Retrieves account balance information for a specific cryptocurrency or all cryptocurrencies in your Binance spot wallet.",
       "howItWorks": "The Get Balance node queries your Binance account for current holdings. When executed, the node: 1. Retrieves the Binance client (from Client Id or creates one from credentials) 2. Validates the Currency input 3. Queries Binance account information 4. Returns either a single currency balance or all balances based on the GetAllCurrencies option",
@@ -124,7 +152,7 @@
       ]
     },
     "get-coin-detail": {
-      "namespace": "Core.Binance.GetCoinDetail",
+      "namespace": "Robomotion.Binance.GetCoinDetail",
       "name": "GetCoinDetail",
       "summary": "Retrieves detailed information about a cryptocurrency, including supported networks, withdrawal settings, and deposit configurations.",
       "howItWorks": "The Get Coin Detail node queries Binance for comprehensive cryptocurrency information. When executed, the node: 1. Retrieves the Binance client (from Client Id or creates one from credentials) 2. Validates the Currency input 3. Queries Binance's asset detail service 4. Returns detailed coin information including network configurations",
@@ -148,7 +176,7 @@
       ]
     },
     "get-deposit-address": {
-      "namespace": "Core.Binance.GetDepositAddress",
+      "namespace": "Robomotion.Binance.GetDepositAddress",
       "name": "GetDepositAddress",
       "summary": "Retrieves the deposit address for a specific cryptocurrency on a chosen blockchain network.",
       "howItWorks": "The Get Deposit Address node retrieves your Binance deposit address for a specific coin and network. When executed, the node: 1. Retrieves the Binance client (from Client Id or creates one from credentials) 2. Validates Currency and Network inputs 3. Queries Binance for the deposit address on the specified network 4. Returns the address and any required tag/memo information",
@@ -174,7 +202,7 @@
       ]
     },
     "get-order": {
-      "namespace": "Core.Binance.GetOrder",
+      "namespace": "Robomotion.Binance.GetOrder",
       "name": "GetOrder",
       "summary": "Retrieves detailed information about a specific order on Binance, including its status, filled quantity, and execution details.",
       "howItWorks": "The Get Order node queries Binance for detailed information about a specific order. When executed, the node: 1. Retrieves the Binance client (from Client Id or creates one from credentials) 2. Validates the Order Id and Currency Pair inputs 3. Queries Binance for the order details 4. Returns comprehensive order information",
@@ -199,7 +227,7 @@
       ]
     },
     "get-price": {
-      "namespace": "Core.Binance.GetPrice",
+      "namespace": "Robomotion.Binance.GetPrice",
       "name": "GetPrice",
       "summary": "Retrieves the current average price for a trading pair on Binance.",
       "howItWorks": "The Get Price node queries Binance for the current average price of a trading pair. When executed, the node: 1. Retrieves the Binance client (from Client Id or creates one from credentials) 2. Validates the Currency (trading pair) input 3. Queries Binance's average price endpoint 4. Returns the average price as a string",
@@ -223,7 +251,7 @@
       ]
     },
     "get-price-change-info": {
-      "namespace": "Core.Binance.GetPriceChangeInfo",
+      "namespace": "Robomotion.Binance.GetPriceChangeInfo",
       "name": "GetPriceChangeInfo",
       "summary": "Retrieves 24-hour price change statistics for a trading pair, including price movements, volume, and trading activity.",
       "howItWorks": "The Get Price Change Info node queries Binance for 24-hour trading statistics of a specific pair. When executed, the node: 1. Retrieves the Binance client (from Client Id or creates one from credentials) 2. Validates the Currency (trading pair) input 3. Queries Binance's 24-hour ticker statistics endpoint 4. Returns detailed price change and volume information",
@@ -247,7 +275,7 @@
       ]
     },
     "get-price-history": {
-      "namespace": "Core.Binance.GetPriceHistory",
+      "namespace": "Robomotion.Binance.GetPriceHistory",
       "name": "GetPriceHistory",
       "summary": "Retrieves historical price data (candlestick/kline data) for a trading pair and saves it to a CSV file for technical analysis and backtesting.",
       "howItWorks": "The Get Price History node retrieves historical candlestick data from Binance and exports it to CSV format. When executed, the node: 1. Validates all required inputs 2. Retrieves the Binance client 3. Calculates the required number of API requests (Binance returns max 1000 candles per request) 4. Fetches candlestick data in batches with delays between requests 5. Creates a CSV file with columns: openTime, closeTime, open, close, high, low, volume, tradeNum, quoteAssetVolume, takerBuyBaseAssetVolume, takerBuyQuoteAssetVolume 6. Writes all candlestick data to the file",
@@ -275,7 +303,7 @@
       ]
     },
     "list-all-pairs": {
-      "namespace": "Core.Binance.ListAllPairs",
+      "namespace": "Robomotion.Binance.ListAllPairs",
       "name": "ListAllPairs",
       "summary": "Retrieves a list of all available trading pairs on Binance exchange.",
       "howItWorks": "The List All Pairs node queries Binance's exchange information to retrieve all available trading pairs. When executed, the node: 1. Retrieves the Binance client (from Client Id or creates one from credentials) 2. Queries Binance exchange information 3. Extracts all trading pair symbols 4. Returns an array of pair symbols",
@@ -296,7 +324,7 @@
       ]
     },
     "list-deposits": {
-      "namespace": "Core.Binance.ListDeposits",
+      "namespace": "Robomotion.Binance.ListDeposits",
       "name": "ListDeposits",
       "summary": "Retrieves recent deposit history for your Binance account, showing incoming cryptocurrency transfers.",
       "howItWorks": "The List Deposits node queries Binance for your recent deposit transactions. When executed, the node: 1. Retrieves the Binance client (from Client Id or creates one from credentials) 2. Validates the Limit input 3. Queries Binance's deposit history service (hardcoded to limit 5 in current implementation) 4. Returns an array of deposit records",
@@ -318,7 +346,7 @@
       ]
     },
     "list-my-orders": {
-      "namespace": "Core.Binance.ListMyOrders",
+      "namespace": "Robomotion.Binance.ListMyOrders",
       "name": "ListMyOrders",
       "summary": "Retrieves all currently open orders for your Binance account across all trading pairs.",
       "howItWorks": "The List My Orders node queries Binance for all active (open) orders on your account. When executed, the node: 1. Retrieves the Binance client (from Client Id or creates one from credentials) 2. Queries Binance for all open orders 3. Returns an array of order objects",
@@ -339,7 +367,7 @@
       ]
     },
     "list-orders": {
-      "namespace": "Core.Binance.ListOrders",
+      "namespace": "Robomotion.Binance.ListOrders",
       "name": "ListOrders",
       "summary": "Retrieves the current order book (bids or asks) for a trading pair, showing the best available buy and sell orders.",
       "howItWorks": "The List Orders node retrieves the current order book depth for a trading pair. When executed, the node: 1. Retrieves the Binance client (from Client Id or creates one from credentials) 2. Validates Currency Pair and Limit inputs 3. Queries Binance's order book depth 4. Filters for either bids (buy orders) or asks (sell orders) based on Order Type 5. Returns the requested number of price levels",
@@ -365,7 +393,7 @@
       ]
     },
     "list-recent-trades": {
-      "namespace": "Core.Binance.ListRecentTrades",
+      "namespace": "Robomotion.Binance.ListRecentTrades",
       "name": "ListRecentTrades",
       "summary": "Retrieves the most recent trades executed on Binance for a specific trading pair.",
       "howItWorks": "The List Recent Trades node retrieves the latest executed trades from the Binance order book. When executed, the node: 1. Retrieves the Binance client (from Client Id or creates one from credentials) 2. Validates Currency Pair and Limit inputs 3. Queries Binance's recent trades endpoint 4. Returns an array of trade records",
@@ -390,7 +418,7 @@
       ]
     },
     "list-withdraws": {
-      "namespace": "Core.Binance.ListWithdraws",
+      "namespace": "Robomotion.Binance.ListWithdraws",
       "name": "ListWithdraws",
       "summary": "Retrieves recent withdrawal history for your Binance account, showing outgoing cryptocurrency transfers.",
       "howItWorks": "The List Withdraws node queries Binance for your recent withdrawal transactions. When executed, the node: 1. Retrieves the Binance client (from Client Id or creates one from credentials) 2. Validates the Limit input 3. Queries Binance's withdrawal history service 4. Returns an array of withdrawal records",
@@ -413,7 +441,7 @@
       ]
     },
     "market-order": {
-      "namespace": "Core.Binance.MarketOrder",
+      "namespace": "Robomotion.Binance.MarketOrder",
       "name": "MarketOrder",
       "summary": "Executes an immediate buy or sell order at the current market price, guaranteeing execution but not the exact price.",
       "howItWorks": "The Market Order node executes an order immediately at the best available market price. When executed, the node: 1. Retrieves the Binance client (from Client Id or creates one from credentials) 2. Validates all required inputs 3. Determines the order side (Buy or Sell) and unit type (Amount or Total) 4. Creates a market order with the appropriate parameters 5. Executes the order immediately 6. Returns the order details including fill price and quantity",
@@ -439,7 +467,7 @@
       ]
     },
     "sell-order": {
-      "namespace": "Core.Binance.SellOrder",
+      "namespace": "Robomotion.Binance.SellOrder",
       "name": "SellOrder",
       "summary": "Places a limit sell order on Binance, allowing you to specify the exact price at which you want to sell a cryptocurrency.",
       "howItWorks": "The Sell Order node creates a limit sell order that will only execute at your specified price or better. When executed, the node: 1. Retrieves the Binance client (from Client Id or creates one from credentials) 2. Validates all required inputs (currency pair, quantity, and price) 3. Creates a limit sell order with Time In Force = GTC (Good Till Canceled) 4. Submits the order to Binance 5. Returns the order details including the unique order ID",
@@ -465,7 +493,7 @@
       ]
     },
     "stop-order": {
-      "namespace": "Core.Binance.StopOrder",
+      "namespace": "Robomotion.Binance.StopOrder",
       "name": "StopOrder",
       "summary": "Places a stop-loss limit order on Binance to automatically sell when the price falls to a specified level, helping protect profits or limit losses.",
       "howItWorks": "The Stop Order node creates a stop-loss limit order that automatically triggers when the market price reaches your stop price. When executed, the node: 1. Retrieves the Binance client (from Client Id or creates one from credentials) 2. Validates all required inputs 3. Creates a STOP_LOSS_LIMIT order with Time In Force = GTC (Good Till Canceled) 4. The order side is automatically set to SELL 5. Submits the order to Binance 6. Returns the order details including the unique order ID **Order Lifecycle:** 1. Order is created in status \"NEW\" 2. When market price hits the Stop Price, the order activates 3. A limit sell order is placed at the specified Price 4. The order fills when market price reaches the limit Price",

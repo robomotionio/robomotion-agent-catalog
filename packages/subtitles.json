@@ -4,13 +4,13 @@
   "description": "## Use Cases * Convert SRT subtitle files to JSON for data processing and analysis",
   "nodes": {
     "JSONToSRT": {
-      "namespace": "Core.Subtitles.JSONToSRT",
+      "namespace": "Robomotion.Subtitles.JSONtoSRT",
       "name": "JSONToSRT",
       "summary": "Converts JSON subtitle data to SRT (SubRip Text) file format, enabling the creation of subtitle files from programmatically generated or modified data. The node takes a JSON array of subtitle objects and generates a properly formatted SRT subtitle file.",
       "howItWorks": "The JSON to SRT node creates subtitle files by: 1. Validating the input JSON array structure 2. Processing each subtitle object in sequence 3. Converting millisecond timestamps to SRT format (HH:MM:SS,mmm) 4. Assigning sequential numbering to each subtitle entry 5. Formatting subtitle text with proper line breaks 6. Writing the complete SRT file to the specified path"
     },
     "SRTToJSON": {
-      "namespace": "Core.Subtitles.SRTToJSON",
+      "namespace": "Robomotion.Subtitles.SRTtoJSON",
       "name": "SRTToJSON",
       "summary": "Converts SRT (SubRip Text) subtitle files to JSON format, enabling programmatic manipulation of subtitle data. The node reads an SRT file and outputs a structured JSON array containing subtitle entries with timing and text information.",
       "howItWorks": "The SRT to JSON node converts subtitle files by: 1. Reading the SRT file from the specified path 2. Parsing each subtitle entry (number, timestamps, and text) 3. Converting timestamps from SRT format (HH:MM:SS,mmm) to milliseconds 4. Creating a JSON object for each subtitle with start, end, and text fields 5. Returning a JSON array containing all subtitle objects"

@@ -4,7 +4,7 @@
   "description": "## Overview The Agent Tools package provides a complete suite of automation nodes designed for AI-powered workflows. These tools enable file system operations, text processing, web interactions, and task management with advanced features like encoding support, regex matching, and background process management.",
   "nodes": {
     "bash_output": {
-      "namespace": "Core.AgentTools.Bash_output",
+      "namespace": "Robomotion.AgentTools.BashOutput",
       "name": "Bash_output",
       "summary": "Retrieves output from a running or completed background bash shell.",
       "howItWorks": "The Bash Output node retrieves output from background shells started by the Shell node. When executed, the node: 1. Validates the shell ID is provided 2. Looks up the background shell in the registry 3. Retrieves new output since the last read: - Tracks read position for stdout - Tracks read position for stderr - Returns only new lines since last call 4. Applies optional regex filter to output lines 5. Returns new output, status, and metadata 6. Updates read positions for next call",
@@ -25,7 +25,7 @@
       ]
     },
     "edit": {
-      "namespace": "Core.AgentTools.Edit",
+      "namespace": "Robomotion.AgentTools.Edit",
       "name": "Edit",
       "summary": "Performs exact string replacements in files with atomic writes for safe editing.",
       "howItWorks": "The Edit node performs exact string replacements in files using atomic write operations. When executed, the node: 1. Validates all required inputs (file path, old string, new string) 2. Ensures old and new strings are different 3. Verifies the file exists 4. Reads the entire file content 5. Performs replacement operation: - **Replace All = false:** Finds the first occurrence - Validates the string is unique (appears only once) - Replaces only that occurrence - **Replace All = true:** Finds all occurrences - Replaces every occurrence in the file 6. Writes the modified content atomically: - Creates temporary file in same directory - Writes new content to temporary file - Preserves original file permissions - Atomically renames temporary file to target 7. Returns the number of replacements made",
@@ -49,7 +49,7 @@
       ]
     },
     "glob": {
-      "namespace": "Core.AgentTools.Glob",
+      "namespace": "Robomotion.AgentTools.Glob",
       "name": "Glob",
       "summary": "Fast file pattern matching tool that works with any codebase size using glob syntax.",
       "howItWorks": "The Glob node matches files and directories using glob patterns. When executed, the node: 1. Validates the glob pattern 2. Determines the search path (uses current directory if not specified) 3. Walks the directory tree recursively 4. For each file/directory: - Checks hidden file filter - Checks symlink settings - Matches against the glob pattern - Collects matching entries up to max results 5. Sorts matches by modification time (newest first) 6. Returns detailed file information for each match",
@@ -74,7 +74,7 @@
       ]
     },
     "grep": {
-      "namespace": "Core.AgentTools.Grep",
+      "namespace": "Robomotion.AgentTools.Grep",
       "name": "Grep",
       "summary": "A powerful search tool for finding patterns in files with full regex support and multiple output modes.",
       "howItWorks": "The Grep node searches for regex patterns across files and directories. When executed, the node: 1. Validates and compiles the regex pattern 2. Determines the search scope (file or directory) 3. Applies filters: glob pattern, file type, max file size 4. Searches through matched files 5. Returns results based on output mode: - **content:** Returns matching lines with optional context - **files_with_matches:** Returns paths of files containing matches - **count:** Returns match count per file 6. Applies head_limit if specified 7. Returns statistics (match count, file count)",
@@ -98,7 +98,7 @@
       ]
     },
     "kill_bash": {
-      "namespace": "Core.AgentTools.Kill_bash",
+      "namespace": "Robomotion.AgentTools.KillBash",
       "name": "Kill_bash",
       "summary": "Terminates a running background bash shell by its ID.",
       "howItWorks": "The Kill Bash node terminates background shell processes. When executed, the node: 1. Validates the shell ID is provided 2. Looks up the background shell in the registry 3. Checks if the process exists and is running 4. Attempts graceful termination: - Sends SIGTERM signal first (graceful shutdown) - If SIGTERM fails, sends SIGKILL signal (force kill) 5. Updates shell status in registry 6. Removes shell from registry if killed or already completed 7. Returns success status and detailed information",
@@ -118,7 +118,7 @@
       ]
     },
     "ls": {
-      "namespace": "Core.AgentTools.Ls",
+      "namespace": "Robomotion.AgentTools.LS",
       "name": "Ls",
       "summary": "Lists files and directories in a given path with powerful filtering and sorting options.",
       "howItWorks": "The LS node lists directory contents with flexible filtering. When executed, the node: 1. Validates the path is absolute and exists 2. Checks that the path is a directory 3. Parses ignore patterns if provided 4. Lists directory entries: - **Non-recursive:** Lists immediate children only - **Recursive:** Lists all entries up to max depth 5. Applies filters: - Hidden file filter (based on name starting with .) - Ignore patterns (glob matching) - Files only / Directories only 6. Sorts entries based on sort criteria 7. Returns entry details and directory metadata",
@@ -143,7 +143,7 @@
       ]
     },
     "multi_edit": {
-      "namespace": "Core.AgentTools.Multi_edit",
+      "namespace": "Robomotion.AgentTools.MultiEdit",
       "name": "Multi_edit",
       "summary": "Performs multiple find-and-replace operations on a single file efficiently in one atomic operation.",
       "howItWorks": "The Multi Edit node performs multiple string replacements in sequence on a single file. When executed, the node: 1. Validates the file path and edits array 2. Verifies each edit operation has valid old_string and new_string 3. Ensures old_string and new_string are different for each edit 4. Reads the file content once 5. Applies each edit operation sequentially: - Searches for old_string in the current file state - For replace_all=false: Validates uniqueness - Performs the replacement - Updates the file content for the next edit 6. Writes the modified content atomically only once 7. Returns detailed results for each edit operation",
@@ -168,7 +168,7 @@
       ]
     },
     "notebook_edit": {
-      "namespace": "Core.AgentTools.Notebook_edit",
+      "namespace": "Robomotion.AgentTools.NotebookEdit",
       "name": "Notebook_edit",
       "summary": "Completely replaces the contents of a specific cell in a Jupyter notebook with support for insert and delete operations.",
       "howItWorks": "The Notebook Edit node modifies Jupyter notebook cells. When executed, the node: 1. Validates the notebook path is absolute and ends with .ipynb 2. Reads and parses the existing notebook 3. Performs the requested operation:",
@@ -190,7 +190,7 @@
       ]
     },
     "notebook_read": {
-      "namespace": "Core.AgentTools.Notebook_read",
+      "namespace": "Robomotion.AgentTools.NotebookRead",
       "name": "Notebook_read",
       "summary": "Reads a Jupyter notebook file and returns all cells with their outputs.",
       "howItWorks": "The Notebook Read node reads Jupyter notebook files (.ipynb format). When executed, the node: 1. Validates the notebook path is absolute and ends with .ipynb 2. Checks if the file exists 3. Reads and parses the JSON notebook format 4. If Cell ID is provided: - Finds the specific cell by ID - Returns only that cell 5. If Cell ID is not provided: - Returns all cells in the notebook 6. Converts source to string format (handles array and string formats) 7. Includes outputs and execution counts for code cells 8. Returns notebook metadata (kernel info, language version, etc.)",
@@ -212,7 +212,7 @@
       ]
     },
     "read": {
-      "namespace": "Core.AgentTools.Read",
+      "namespace": "Robomotion.AgentTools.Read",
       "name": "Read",
       "summary": "Reads a file from the local filesystem with line numbers and encoding support.",
       "howItWorks": "The Read node reads files from the filesystem and returns formatted content with line numbers. When executed, the node: 1. Validates the file path is absolute 2. Checks if the file exists and is accessible 3. Detects if the file is binary or text 4. For binary files: Returns base64-encoded content (limited to 10MB) 5. For text files: - Detects or uses the specified encoding - Reads lines with optional offset and limit - Formats each line with line number (6-digit, tab-separated) - Truncates lines exceeding max length 6. Returns comprehensive file metadata",
@@ -236,7 +236,7 @@
       ]
     },
     "shell": {
-      "namespace": "Core.AgentTools.Shell",
+      "namespace": "Robomotion.AgentTools.Shell",
       "name": "Shell",
       "summary": "Executes shell commands with timeout control, environment management, and background execution support.",
       "howItWorks": "The Shell node executes commands in a shell environment. When executed, the node:",
@@ -259,7 +259,7 @@
       ]
     },
     "todo_write": {
-      "namespace": "Core.AgentTools.Todo_write",
+      "namespace": "Robomotion.AgentTools.TodoWrite",
       "name": "Todo_write",
       "summary": "Creates and manages a structured task list for tracking progress with status tracking, priority levels, and persistence.",
       "howItWorks": "The Todo Write node manages structured task lists. When executed, the node: 1. Validates the todos array format 2. Parses each todo item: - Validates required content field - Validates status (pending/in_progress/completed) - Validates priority (high/medium/low) - Extracts optional id and timestamps 3. Processes todos: - Generates IDs for todos without them (if autoID enabled) - Checks for duplicate IDs - Sets created timestamp if not provided - Updates updated timestamp 4. Sorts todos based on sort criteria 5. Calculates status counts 6. If persist path provided: - Creates TodoList structure with metadata - Writes to JSON file atomically 7. Returns processed todos and statistics",
@@ -287,7 +287,7 @@
       ]
     },
     "web_fetch": {
-      "namespace": "Core.AgentTools.Web_fetch",
+      "namespace": "Robomotion.AgentTools.WebFetch",
       "name": "Web_fetch",
       "summary": "Fetches content from a URL, converts it to markdown, and processes it using an AI model.",
       "howItWorks": "The Web Fetch node retrieves and processes web content. When executed, the node: 1. Validates the URL format 2. Upgrades HTTP URLs to HTTPS automatically 3. Creates HTTP client with specified options: - Sets timeout - Configures redirect following - Optionally uses proxy 4. Sends GET request with appropriate headers: - User-Agent - Accept (HTML and XML) - Accept-Language 5. Checks for cross-domain redirects: - If redirected to different host, returns redirect info 6. Validates HTTP status code (200-299) 7. Reads response body up to max size limit 8. Converts HTML content to markdown format 9. Processes content with AI model using the provided prompt 10. Returns markdown content, AI response, and metadata",
@@ -310,7 +310,7 @@
       ]
     },
     "web_search": {
-      "namespace": "Core.AgentTools.Web_search",
+      "namespace": "Robomotion.AgentTools.WebSearch",
       "name": "Web_search",
       "summary": "Searches the web using various search engines and returns formatted results with domain filtering.",
       "howItWorks": "The Web Search node performs web searches using various search engines. When executed, the node: 1. Validates the search query (minimum 2 characters) 2. Parses domain filter lists (allowed and blocked) 3. Determines search parameters (max results, region, etc.) 4. Performs search based on selected engine: - **Mock:** Returns demo results for testing - **Google:** Uses Google Custom Search JSON API - **Bing:** Uses Bing Web Search API v7 - **DuckDuckGo:** Uses available DuckDuckGo API 5. Applies domain filters: - Removes results from blocked domains - Keeps only results from allowed domains (if specified) 6. Formats results with title, URL, snippet, domain, and date 7. Returns filtered results and search metadata",
@@ -333,10 +333,74 @@
         "Real search engines require valid API keys",
         "Search results include snippets (descriptions)",
         "Publish dates are included when available from the search engine"
+      ],
+      "credentials": [
+        {
+          "name": "google_api_key",
+          "title": "Google Custom Search API Key",
+          "description": "API key for Google Custom Search. Required when using Google as search engine.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "password",
+              "required": true,
+              "placeholder": "AIzaSy...",
+              "description": "Your Google Custom Search API key"
+            }
+          ],
+          "help": [
+            "1. Go to Google Cloud Console",
+            "2. Enable the Custom Search JSON API",
+            "3. Go to 'Credentials' and create an API key",
+            "4. Optionally restrict the key to Custom Search API only"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            },
+            {
+              "label": "Custom Search API Documentation",
+              "url": "https://developers.google.com/custom-search/v1/overview"
+            }
+          ]
+        },
+        {
+          "name": "bing_api_key",
+          "title": "Bing Search API Key",
+          "description": "API key for Bing Web Search. Required when using Bing as search engine.",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "password",
+              "required": true,
+              "placeholder": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+              "description": "Your Bing Search API subscription key"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal",
+            "2. Create a Bing Search v7 resource",
+            "3. Copy one of the subscription keys from 'Keys and Endpoint'"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Bing Search API Documentation",
+              "url": "https://docs.microsoft.com/en-us/bing/search-apis/bing-web-search/overview"
+            }
+          ]
+        }
       ]
     },
     "write": {
-      "namespace": "Core.AgentTools.Write",
+      "namespace": "Robomotion.AgentTools.Write",
       "name": "Write",
       "summary": "Writes content to a file with atomic write support for data integrity.",
       "howItWorks": "The Write node writes content to a file using atomic write operations to ensure data integrity. When executed, the node: 1. Validates the file path is absolute 2. Checks for directory traversal attempts (blocks \"..\" in paths) 3. Creates parent directories if they don't exist 4. Writes content atomically using a temporary file: - Creates a temporary file in the same directory - Writes content to the temporary file - Syncs data to disk - Preserves original file permissions (if file exists) - Atomically renames temporary file to target path 5. Returns file metadata after successful write",

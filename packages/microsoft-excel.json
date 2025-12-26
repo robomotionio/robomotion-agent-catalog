@@ -4,7 +4,7 @@
   "description": ":::info Platform Requirement This package is available only on **Windows** platforms and requires Microsoft Excel to be installed.",
   "nodes": {
     "activate-sheet": {
-      "namespace": "Core.MicrosoftExcel.ActivateSheet",
+      "namespace": "Robomotion.MicrosoftExcel.ActivateSheet",
       "name": "ActivateSheet",
       "summary": "Activates a sheet by name or index, making it the active worksheet for subsequent operations.",
       "examples": [
@@ -29,7 +29,7 @@
       ]
     },
     "chart-to-image": {
-      "namespace": "Core.MicrosoftExcel.ChartToImage",
+      "namespace": "Robomotion.MicrosoftExcel.ChartToImage",
       "name": "ChartToImage",
       "summary": "Exports a chart from the worksheet to an image file (PNG format).",
       "examples": [
@@ -60,7 +60,7 @@
       ]
     },
     "clear-range": {
-      "namespace": "Core.MicrosoftExcel.ClearRange",
+      "namespace": "Robomotion.MicrosoftExcel.ClearRange",
       "name": "ClearRange",
       "summary": "Clears all content and formatting from a range of cells in the active sheet.",
       "examples": [
@@ -86,7 +86,7 @@
       ]
     },
     "clear-sheet": {
-      "namespace": "Core.MicrosoftExcel.ClearSheet",
+      "namespace": "Robomotion.MicrosoftExcel.ClearSheet",
       "name": "ClearSheet",
       "summary": "Clears all content from a specific sheet, removing all cell values and formatting.",
       "examples": [
@@ -113,7 +113,7 @@
       ]
     },
     "clone-range": {
-      "namespace": "Core.MicrosoftExcel.CloneRange",
+      "namespace": "Robomotion.MicrosoftExcel.CloneRange",
       "name": "CloneRange",
       "summary": "Copies a range of cells to a destination location, optionally in a different Excel file or sheet. Unlike Copy/Paste Range, this node performs the operation in one step.",
       "examples": [
@@ -143,7 +143,7 @@
       ]
     },
     "close-excel": {
-      "namespace": "Core.MicrosoftExcel.CloseExcel",
+      "namespace": "Robomotion.MicrosoftExcel.CloseExcel",
       "name": "CloseExcel",
       "summary": "Closes an Excel file and releases the application resources. This node properly cleans up COM objects to prevent memory leaks.",
       "examples": [
@@ -164,7 +164,7 @@
       ]
     },
     "copy-range": {
-      "namespace": "Core.MicrosoftExcel.CopyRange",
+      "namespace": "Robomotion.MicrosoftExcel.CopyRange",
       "name": "CopyRange",
       "summary": "Copies a range of cells to the clipboard for later pasting. This node should be used together with [Paste Range](/reference/packages/microsoft-excel/paste-range).",
       "examples": [
@@ -193,7 +193,7 @@
       ]
     },
     "copy-sheet": {
-      "namespace": "Core.MicrosoftExcel.CopySheet",
+      "namespace": "Robomotion.MicrosoftExcel.CopySheet",
       "name": "CopySheet",
       "summary": "Creates a copy of a sheet within the same workbook. The copied sheet includes all data, formatting, and formulas.",
       "examples": [
@@ -219,7 +219,7 @@
       ]
     },
     "create-excel": {
-      "namespace": "Core.MicrosoftExcel.CreateExcel",
+      "namespace": "Robomotion.MicrosoftExcel.CreateExcel",
       "name": "CreateExcel",
       "summary": "Creates a new Excel file at the specified path with a default worksheet.",
       "examples": [
@@ -240,7 +240,7 @@
       ]
     },
     "create-sheet": {
-      "namespace": "Core.MicrosoftExcel.CreateSheet",
+      "namespace": "Robomotion.MicrosoftExcel.CreateSheet",
       "name": "CreateSheet",
       "summary": "Creates a new sheet in the workbook at the specified position.",
       "examples": [
@@ -266,7 +266,7 @@
       ]
     },
     "delete-cell": {
-      "namespace": "Core.MicrosoftExcel.DeleteCell",
+      "namespace": "Robomotion.MicrosoftExcel.DeleteCell",
       "name": "DeleteCell",
       "summary": "Deletes or clears a specific cell in the active sheet.",
       "examples": [
@@ -296,7 +296,7 @@
       ]
     },
     "delete-column": {
-      "namespace": "Core.MicrosoftExcel.DeleteColumn",
+      "namespace": "Robomotion.MicrosoftExcel.DeleteColumn",
       "name": "DeleteColumn",
       "summary": "Deletes or clears a column at the specified position in the active sheet.",
       "examples": [
@@ -327,7 +327,7 @@
       ]
     },
     "delete-row": {
-      "namespace": "Core.MicrosoftExcel.DeleteRow",
+      "namespace": "Robomotion.MicrosoftExcel.DeleteRow",
       "name": "DeleteRow",
       "summary": "Deletes or clears a row at the specified position in the active sheet.",
       "examples": [
@@ -358,7 +358,7 @@
       ]
     },
     "delete-sheet": {
-      "namespace": "Core.MicrosoftExcel.DeleteSheet",
+      "namespace": "Robomotion.MicrosoftExcel.DeleteSheet",
       "name": "DeleteSheet",
       "summary": "Deletes a sheet from the workbook by name.",
       "examples": [
@@ -379,7 +379,7 @@
       ]
     },
     "get-column": {
-      "namespace": "Core.MicrosoftExcel.GetColumn",
+      "namespace": "Robomotion.MicrosoftExcel.GetColumn",
       "name": "GetColumn",
       "summary": "Retrieves all cell values from a specific column in the active sheet.",
       "examples": [
@@ -409,7 +409,7 @@
       ]
     },
     "get-formula": {
-      "namespace": "Core.MicrosoftExcel.GetFormula",
+      "namespace": "Robomotion.MicrosoftExcel.GetFormula",
       "name": "GetFormula",
       "summary": "Retrieves formulas from cells in a range and returns them as a dictionary mapping cell addresses to their formulas.",
       "examples": [
@@ -439,7 +439,7 @@
       ]
     },
     "get-hyperlink": {
-      "namespace": "Core.MicrosoftExcel.GetHyperlink",
+      "namespace": "Robomotion.MicrosoftExcel.GetHyperlink",
       "name": "GetHyperlink",
       "summary": "Retrieves hyperlink information from a specific cell, including the link address and display text.",
       "examples": [
@@ -469,7 +469,7 @@
       ]
     },
     "get-range": {
-      "namespace": "Core.MicrosoftExcel.GetRange",
+      "namespace": "Robomotion.MicrosoftExcel.GetRange",
       "name": "GetRange",
       "summary": "Reads data from a range of cells and returns it as a table structure with columns and rows.",
       "examples": [
@@ -499,7 +499,7 @@
       ]
     },
     "get-row": {
-      "namespace": "Core.MicrosoftExcel.GetRow",
+      "namespace": "Robomotion.MicrosoftExcel.GetRow",
       "name": "GetRow",
       "summary": "Retrieves all cell values from a specific row in the active sheet.",
       "examples": [
@@ -529,7 +529,7 @@
       ]
     },
     "get-sheets": {
-      "namespace": "Core.MicrosoftExcel.GetSheets",
+      "namespace": "Robomotion.MicrosoftExcel.GetSheets",
       "name": "GetSheets",
       "summary": "Retrieves a list of all sheets in the workbook, optionally including detailed metadata.",
       "examples": [
@@ -558,7 +558,7 @@
       ]
     },
     "insert-column": {
-      "namespace": "Core.MicrosoftExcel.InsertColumn",
+      "namespace": "Robomotion.MicrosoftExcel.InsertColumn",
       "name": "InsertColumn",
       "summary": "Inserts a new empty column at the specified position in the active sheet.",
       "examples": [
@@ -589,7 +589,7 @@
       ]
     },
     "insert-row": {
-      "namespace": "Core.MicrosoftExcel.InsertRow",
+      "namespace": "Robomotion.MicrosoftExcel.InsertRow",
       "name": "InsertRow",
       "summary": "Inserts a new empty row at the specified position in the active sheet.",
       "examples": [
@@ -619,7 +619,7 @@
       ]
     },
     "open-excel": {
-      "namespace": "Core.MicrosoftExcel.OpenExcel",
+      "namespace": "Robomotion.MicrosoftExcel.OpenExcel",
       "name": "OpenExcel",
       "summary": "Opens an existing Excel file and returns a file descriptor for subsequent operations. This node supports password-protected files and can optionally share the same Excel application instance for files with cross-references (like VLOOKUP to another workbook).",
       "examples": [
@@ -644,7 +644,7 @@
       ]
     },
     "paste-range": {
-      "namespace": "Core.MicrosoftExcel.PasteRange",
+      "namespace": "Robomotion.MicrosoftExcel.PasteRange",
       "name": "PasteRange",
       "summary": "Pastes the copied range from clipboard to a specified location. This node should be used after [Copy Range](/reference/packages/microsoft-excel/copy-range).",
       "examples": [
@@ -670,7 +670,7 @@
       ]
     },
     "range-to-image": {
-      "namespace": "Core.MicrosoftExcel.RangeToImage",
+      "namespace": "Robomotion.MicrosoftExcel.RangeToImage",
       "name": "RangeToImage",
       "summary": "Exports a range of cells to an image file (PNG format), capturing the exact appearance of the cells including formatting.",
       "examples": [
@@ -705,7 +705,7 @@
       ]
     },
     "read-cell-value": {
-      "namespace": "Core.MicrosoftExcel.ReadCellValue",
+      "namespace": "Robomotion.MicrosoftExcel.ReadCellValue",
       "name": "ReadCellValue",
       "summary": "Reads the value from a specific cell in the active Excel sheet.",
       "examples": [
@@ -734,7 +734,7 @@
       ]
     },
     "run-macro": {
-      "namespace": "Core.MicrosoftExcel.RunMacro",
+      "namespace": "Robomotion.MicrosoftExcel.RunMacro",
       "name": "RunMacro",
       "summary": "Executes a VBA macro in the Excel workbook. Supports both macros embedded in the workbook and external macro files.",
       "examples": [
@@ -765,7 +765,7 @@
       ]
     },
     "save-excel": {
-      "namespace": "Core.MicrosoftExcel.SaveExcel",
+      "namespace": "Robomotion.MicrosoftExcel.SaveExcel",
       "name": "SaveExcel",
       "summary": "Saves the Excel file to the specified path or saves changes to the current file location.",
       "examples": [
@@ -791,7 +791,7 @@
       ]
     },
     "search-sheet": {
-      "namespace": "Core.MicrosoftExcel.SearchSheet",
+      "namespace": "Robomotion.MicrosoftExcel.SearchSheet",
       "name": "SearchSheet",
       "summary": "Searches for a term in a sheet and returns a list of cell addresses where the term was found.",
       "examples": [
@@ -826,7 +826,7 @@
       ]
     },
     "set-active-cell": {
-      "namespace": "Core.MicrosoftExcel.SetActiveCell",
+      "namespace": "Robomotion.MicrosoftExcel.SetActiveCell",
       "name": "SetActiveCell",
       "summary": "Sets the active cell in the worksheet by address or relative movement from the current position.",
       "examples": [
@@ -860,7 +860,7 @@
       ]
     },
     "set-cell-value": {
-      "namespace": "Core.MicrosoftExcel.SetCellValue",
+      "namespace": "Robomotion.MicrosoftExcel.SetCellValue",
       "name": "SetCellValue",
       "summary": "Sets the value of a specific cell in the active Excel sheet with type formatting support.",
       "examples": [
@@ -894,7 +894,7 @@
       ]
     },
     "set-formula": {
-      "namespace": "Core.MicrosoftExcel.SetFormula",
+      "namespace": "Robomotion.MicrosoftExcel.SetFormula",
       "name": "SetFormula",
       "summary": "Sets a formula in a specific cell in the active Excel sheet.",
       "examples": [
@@ -929,7 +929,7 @@
       ]
     },
     "set-range": {
-      "namespace": "Core.MicrosoftExcel.SetRange",
+      "namespace": "Robomotion.MicrosoftExcel.SetRange",
       "name": "SetRange",
       "summary": "Writes a table of data to a range of cells starting from a specified cell.",
       "examples": [

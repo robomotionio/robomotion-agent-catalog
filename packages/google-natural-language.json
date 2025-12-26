@@ -4,7 +4,7 @@
   "description": "## Overview The Google Natural Language package integrates with Google Cloud's Natural Language API. Use it when you need to analyze text for sentiment, extract entities, classify content, or understand the structure of documents.",
   "nodes": {
     "TextAnalyze": {
-      "namespace": "Core.GoogleNaturalLanguage.TextAnalyze",
+      "namespace": "Robomotion.GoogleLanguage.TextAnalyze",
       "name": "TextAnalyze",
       "summary": "Analyzes text using Google Cloud Natural Language API to extract insights such as sentiment, entities, and syntax.",
       "howItWorks": "The Text Analyze node processes text using Google Cloud Natural Language API to extract various types of insights. When executed, the node: 1. Validates the provided text input 2. Retrieves Google Cloud credentials from the credentials option 3. Creates a Natural Language API client with the provided credentials 4. Performs the selected type of analysis on the text: * **Sentiment Analysis:** Determines the emotional tone of the text (positive, negative, neutral) * **Entity Analysis:** Extracts entities (people, places, organizations, etc.) and their metadata * **Entity Sentiment Analysis:** Combines entity extraction with sentiment analysis for each entity * **Syntactic Analysis:** Analyzes the grammatical structure of the text * **Content Classification:** Classifies the content into categories 5. Returns the structured analysis results",
@@ -24,6 +24,42 @@
         "Longer texts may require more processing time and API quota",
         "The default analysis type is Sentiment Analysis",
         "Results are returned in the language of the input text when possible"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "Google Cloud Service Account for Natural Language API access.",
+          "default": true,
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Go to Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Cloud Natural Language API",
+            "3. Go to 'IAM \u0026 Admin' -\u003e 'Service Accounts' -\u003e Create service account",
+            "4. Grant the 'Cloud Natural Language API User' role",
+            "5. Create and download the JSON key file",
+            "6. Paste the entire JSON content here"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/library/language.googleapis.com"
+            },
+            {
+              "label": "Natural Language API Documentation",
+              "url": "https://cloud.google.com/natural-language/docs"
+            }
+          ]
+        }
       ]
     }
   }

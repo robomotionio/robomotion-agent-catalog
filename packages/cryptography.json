@@ -4,7 +4,7 @@
   "description": "## Use Cases - Encrypt sensitive data before storage or transmission",
   "nodes": {
     "DecryptFile": {
-      "namespace": "Core.Cryptography.DecryptFile",
+      "namespace": "Robomotion.Cryptography.DecryptFile",
       "name": "DecryptFile",
       "summary": "Decrypts a file that was encrypted using symmetric encryption algorithms (AES or 3DES), restoring the original file contents. The node creates a new decrypted file with a modified filename.",
       "howItWorks": "The Decrypt File node reverses file encryption to restore original contents: 1. Opens the encrypted input file for reading 2. Decodes the hexadecimal decryption key 3. Creates a decipher based on the selected algorithm 4. For AES decryption: * Uses the same zero initialization vector (IV) as encryption * Uses OFB (Output Feedback) mode for stream decryption * Creates output file with \"decrypted\" in the filename * Streams and decrypts the file content block by block 5. For 3DES decryption: * Currently uses AES cipher (implementation note) * Creates output file with decrypted content 6. Writes the decrypted data to the output file 7. Returns the path to the decrypted file",
@@ -18,7 +18,7 @@
       ]
     },
     "DecryptText": {
-      "namespace": "Core.Cryptography.DecryptText",
+      "namespace": "Robomotion.Cryptography.DecryptText",
       "name": "DecryptText",
       "summary": "Decrypts cipher text that was encrypted using symmetric encryption algorithms (AES or 3DES), converting it back to the original plain text. The node accepts hexadecimal-encoded cipher text and returns the decrypted plain text.",
       "howItWorks": "The Decrypt Text node reverses the encryption process to recover the original plain text: 1. Receives the hexadecimal cipher text and decryption key 2. Decodes both the cipher text and key from hexadecimal format 3. Applies the selected decryption algorithm: * **AES**: Uses ECB mode for block-by-block decryption * **3DES**: Uses CBC mode with the initialization vector from cipher text 4. Removes PKCS7 padding from the decrypted data 5. Returns the original plain text",
@@ -30,7 +30,7 @@
       ]
     },
     "EncryptFile": {
-      "namespace": "Core.Cryptography.EncryptFile",
+      "namespace": "Robomotion.Cryptography.EncryptFile",
       "name": "EncryptFile",
       "summary": "Encrypts an entire file using symmetric encryption algorithms (AES or 3DES), protecting file contents from unauthorized access. The node creates a new encrypted file with a modified filename.",
       "howItWorks": "The Encrypt File node securely encrypts file contents using stream encryption: 1. Opens the input file for reading 2. Decodes the hexadecimal encryption key 3. Creates a cipher based on the selected algorithm 4. For AES encryption: * Creates a zero initialization vector (IV) for file encryption * Uses OFB (Output Feedback) mode for stream encryption * Creates output file with \"encrypted\" in the filename * Streams and encrypts the file content block by block 5. For 3DES encryption: * Reads the entire file into memory * Applies PKCS7 padding to match block size * Encrypts the data * Returns hexadecimal encoded cipher text 6. Returns the path to the encrypted file or encrypted data",
@@ -43,7 +43,7 @@
       ]
     },
     "EncryptText": {
-      "namespace": "Core.Cryptography.EncryptText",
+      "namespace": "Robomotion.Cryptography.EncryptText",
       "name": "EncryptText",
       "summary": "Encrypts plain text using symmetric encryption algorithms (AES or 3DES), converting it into a secure cipher text format. The encrypted output is encoded as a hexadecimal string for safe storage and transmission.",
       "howItWorks": "The Encrypt Text node transforms plain text into encrypted cipher text using symmetric key encryption: 1. Receives the plain text and hexadecimal encryption key 2. Decodes the key from hexadecimal format 3. Applies PKCS7 padding to the plain text to match block size requirements 4. Encrypts the text using the selected algorithm: * **AES**: Uses ECB mode with block-by-block encryption * **3DES**: Uses CBC mode with a random initialization vector (IV) 5. Encodes the encrypted output as a hexadecimal string 6. Returns the cipher text for storage or transmission",
@@ -54,7 +54,7 @@
       ]
     },
     "FileHash": {
-      "namespace": "Core.Cryptography.FileHash",
+      "namespace": "Robomotion.Cryptography.HashFile",
       "name": "FileHash",
       "summary": "Calculates a cryptographic hash value from file contents using various hash algorithms. File hashing creates unique fingerprints for files, enabling integrity verification, duplicate detection, and change monitoring.",
       "howItWorks": "The File Hash node processes file contents to generate cryptographic hashes: 1. Opens the specified file for reading 2. Reads file content based on algorithm: * SHA-1, SHA-256, SHA-512, MD5: Stream-based reading (memory efficient) * BLAKE-256, BLAKE-512, Whirlpool: Load entire file into memory 3. Applies the selected hash algorithm to file bytes 4. Encodes the hash output as hexadecimal string 5. Closes the file and returns the hash value Stream-based hashing is more memory efficient for large files.",
@@ -66,7 +66,7 @@
       ]
     },
     "GenerateKey": {
-      "namespace": "Core.Cryptography.GenerateKey",
+      "namespace": "Robomotion.Cryptography.GenerateKey",
       "name": "GenerateKey",
       "summary": "Generates a cryptographically secure random key for use with encryption and hashing operations. The node produces high-quality random keys suitable for AES, 3DES, and other cryptographic algorithms.",
       "howItWorks": "The Generate Key node creates cryptographically secure random keys: 1. Receives the requested key length option 2. Calculates the byte size needed: 2^(option + 2) bits 3. Generates random bytes using crypto/rand (cryptographically secure random generator) 4. Encodes the random bytes as a hexadecimal string 5. Returns the key for use in encryption operations The key generation uses the system's cryptographically secure random number generator, ensuring high-quality randomness suitable for security-critical operations.",
@@ -77,7 +77,7 @@
       ]
     },
     "HMACSignature": {
-      "namespace": "Core.Cryptography.HMACSignature",
+      "namespace": "Robomotion.Cryptography.HMAC",
       "name": "HMACSignature",
       "summary": "Generates Hash-based Message Authentication Code (HMAC) signatures for data using a secret key. HMAC provides both data integrity verification and authentication, ensuring data hasn't been tampered with and confirming the sender's identity.",
       "howItWorks": "HMAC combines a secret key with data and a hash function to create an authentication code: 1. Receives the data to sign and retrieves the secret key from vault 2. Validates that the secret key is available and properly formatted 3. Creates an HMAC instance using the selected hash function and secret key 4. Processes the data through the HMAC algorithm 5. Generates the authentication code 6. Encodes the signature as hexadecimal string 7. Returns the HMAC signature HMAC signatures are deterministic - same data and key always produce the same signature.",
@@ -86,10 +86,25 @@
         "Secret key should be cryptographically random (use Generate Key node)",
         "Data can be any string (typically JSON, XML, or plain text)",
         "Same secret key required for verification"
+      ],
+      "credentials": [
+        {
+          "name": "apiKey",
+          "title": "apiKey",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Secret Key",
+              "type": "string",
+              "required": true,
+              "description": "Secret key for HMAC signature generation"
+            }
+          ]
+        }
       ]
     },
     "Sign": {
-      "namespace": "Core.Cryptography.Sign",
+      "namespace": "Robomotion.Cryptography.Sign",
       "name": "Sign",
       "summary": "Creates RSA digital signatures using a private key and the PKCS#1 v1.5 signature scheme. Digital signatures provide authentication, integrity verification, and non-repudiation for data and documents.",
       "howItWorks": "The Sign node creates RSA digital signatures using asymmetric cryptography: 1. Receives the input data and retrieves the private key from vault 2. Decodes the private key from PEM format 3. Parses the PKCS#1 private key 4. Processes the input based on format: * **Hex**: Decodes hex string and hashes it * **Raw String**: Treats as UTF-8 text and hashes it * **Pre-hashed**: Decodes hex string, skips hashing 5. Applies the selected hash function (if needed) 6. Signs the hash using RSA PKCS#1 v1.5 signature algorithm 7. Encodes the signature as hexadecimal string 8. Returns the signature The signature can be verified by anyone with the corresponding public key.",
@@ -98,10 +113,25 @@
         "Private key stored securely in Robomotion Vault",
         "Recommended minimum key size: 2048 bits (4096 bits for high security)",
         "Input data in appropriate format"
+      ],
+      "credentials": [
+        {
+          "name": "document",
+          "title": "document",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Private Key",
+              "type": "string",
+              "required": true,
+              "description": "RSA private key in PEM format for signing"
+            }
+          ]
+        }
       ]
     },
     "TextHash": {
-      "namespace": "Core.Cryptography.TextHash",
+      "namespace": "Robomotion.Cryptography.HashText",
       "name": "TextHash",
       "summary": "Calculates a cryptographic hash value from text input using various hash algorithms. Hash functions create fixed-size fingerprints of data, useful for integrity verification, password storage, and data deduplication.",
       "howItWorks": "The Text Hash node applies one-way cryptographic hash functions to text: 1. Receives the input text and selected hash function 2. Converts the text to bytes 3. Applies the selected hash algorithm: * MD5: 128-bit digest * SHA-1: 160-bit digest * SHA-256: 256-bit digest * SHA-512: 512-bit digest * BLAKE-256/512: 256/512-bit digest * Whirlpool: 512-bit digest 4. Encodes the hash output as hexadecimal string 5. Returns the hash value Hash functions are one-way: you cannot reverse a hash to get the original text.",
@@ -114,7 +144,7 @@
       ]
     },
     "Verify": {
-      "namespace": "Core.Cryptography.Verify",
+      "namespace": "Robomotion.Cryptography.Verify",
       "name": "Verify",
       "summary": "Verifies RSA digital signatures using a public key and the PKCS#1 v1.5 signature scheme. This node authenticates that data was signed by the holder of the corresponding private key and hasn't been modified.",
       "howItWorks": "The Verify node validates RSA digital signatures using public key cryptography: 1. Receives the original hash, signature, and public key 2. Decodes the public key from PEM format 3. Parses the PKIX public key structure 4. Validates it's an RSA public key 5. Decodes the signature from hexadecimal 6. Decodes the hash from hexadecimal 7. Uses the selected hash algorithm to verify the signature 8. Calls RSA PKCS#1 v1.5 verification 9. If verification succeeds, flow continues 10. If verification fails, throws an error Verification confirms that: - The signature was created by the holder of the matching private key - The hash hasn't been modified since signing - The data integrity is intact",

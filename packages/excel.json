@@ -4,7 +4,7 @@
   "description": "## Overview The Excel package provides comprehensive spreadsheet manipulation capabilities. Unlike the Microsoft Excel package which requires Excel installed, this package works directly with Excel file formats. Use it for processing Excel files on any system, regardless of Office installation.",
   "nodes": {
     "append-excel": {
-      "namespace": "Core.Excel.AppendExcel",
+      "namespace": "Core.Excel.Append",
       "name": "AppendExcel",
       "summary": "Appends data from a sheet in one excel file to another excel file.",
       "howItWorks": "1. **Validates Input**: Checks that both file descriptors and sheet names are provided 2. **Sets Active Sheets**: Activates cell A1 in both source and destination sheets 3. **Retrieves Handles**: Gets the Excel file handles for both files 4. **Reads Headers**: Reads the first row (column headers) from both sheets 5. **Validates Columns**: Compares column headers to ensure they match exactly (same names in same order) 6. **Counts Rows**: Determines the total number of rows in the destination sheet 7. **Copies Data**: Iterates through all data rows in the source sheet (skipping the header) and appends them to the destination sheet starting after the last row 8. **Preserves Values**: Each cell value is copied individually from source to destination",
@@ -51,7 +51,7 @@
       ]
     },
     "close-excel": {
-      "namespace": "Core.Excel.CloseExcel",
+      "namespace": "Core.Excel.Close",
       "name": "CloseExcel",
       "summary": "Closes an opened excel file",
       "howItWorks": "1. **Validates Input**: Checks that the file descriptor is provided and not empty 2. **Verifies Handle**: Confirms that the file descriptor exists and corresponds to an open Excel file 3. **Closes File**: Releases the Excel file handle and frees associated system resources 4. **Cleanup**: Removes the file descriptor from the internal handle registry",
@@ -134,7 +134,7 @@
       ]
     },
     "create-excel": {
-      "namespace": "Core.Excel.CreateExcel",
+      "namespace": "Core.Excel.Create",
       "name": "CreateExcel",
       "summary": "Creates a new excel file",
       "howItWorks": "1. **Validates Input**: Checks that the file path is provided and not empty 2. **Checks Existence**: Verifies if a file already exists at the specified path 3. **Handles Overwrite**: If the file exists and Overwrite If Exists is enabled, deletes the existing file; otherwise returns an error 4. **Creates File**: Creates a new Excel file using the excelize library 5. **Generates Descriptor**: Creates a unique file descriptor for the new Excel file 6. **Saves File**: Saves the new Excel file to the specified path 7. **Sets Active Sheet**: Activates the default sheet (usually \"Sheet1\") 8. **Returns Descriptor**: Outputs the file descriptor for use in subsequent Excel operations",
@@ -378,7 +378,7 @@
       "summary": "Converts an Excel file's Sheets into CSV files"
     },
     "find-and-replace": {
-      "namespace": "Core.Excel.FindAndReplace",
+      "namespace": "Core.Excel.FindReplace",
       "name": "FindAndReplace",
       "summary": "Finds and replaces a specific value in an excel file."
     },
@@ -506,12 +506,12 @@
       "summary": "Inserts a row into an excel file."
     },
     "merge-excel": {
-      "namespace": "Core.Excel.MergeExcel",
+      "namespace": "Core.Excel.Merge",
       "name": "MergeExcel",
       "summary": "Merges contents of two excel sheets side by side. If the first Excel has Name, Location, Age columns and the second Excel has Surname and Company columns the final Excel will have all the columns."
     },
     "open-excel": {
-      "namespace": "Core.Excel.OpenExcel",
+      "namespace": "Core.Excel.Open",
       "name": "OpenExcel",
       "summary": "Opens an existing excel file or creates a new one.",
       "howItWorks": "1. **Validates Input**: Checks that the file path is provided and not empty 2. **Checks File Type**: Verifies the file extension (.xls, .xlsx, .xlsm, .xlam, .xltm, .xltx) 3. **Handles Legacy Format**: If .xls file, converts it to .xlsx format automatically 4. **Processes Password**: If credentials are provided, retrieves password from vault or uses provided password 5. **Opens File**: Attempts to open the Excel file with or without password 6. **Creates If Missing**: If file doesn't exist and Create If Not Exists is true, creates a new file 7. **Generates Descriptor**: Creates a unique file descriptor for the opened Excel file 8. **Sets Active Sheet**: Activates the first sheet at cell A1 9. **Returns Descriptor**: Outputs the file descriptor for use in subsequent Excel operations",
@@ -559,7 +559,7 @@
       ]
     },
     "save-excel": {
-      "namespace": "Core.Excel.SaveExcel",
+      "namespace": "Core.Excel.Save",
       "name": "SaveExcel",
       "summary": "Saves an Excel file to the specified location.",
       "howItWorks": "1. **Validates Input**: Checks that the file descriptor is provided and not empty 2. **Retrieves Handle**: Gets the Excel file handle from the descriptor 3. **Updates Linked Values**: Refreshes any linked values or formulas in the workbook 4. **Determines Save Path**: If Save File Path is provided, uses it; otherwise saves to original file location 5. **Saves File**: Writes the Excel file to disk at the specified or original location 6. **Persists Changes**: All modifications made to the file are written to disk",
@@ -676,7 +676,7 @@
       "summary": "Sets the style of a cell or range of cells in an Excel file."
     },
     "switch-to-sheet": {
-      "namespace": "Core.Excel.SwitchToSheet",
+      "namespace": "Core.Excel.SwitchSheet",
       "name": "SwitchToSheet",
       "summary": "Switches to a specific sheet in an Excel file."
     }

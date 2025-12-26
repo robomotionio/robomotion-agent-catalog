@@ -4,7 +4,7 @@
   "description": "## Overview The Google Calendar package provides comprehensive calendar management capabilities. Use it when you need to create, update, or delete calendar events, check availability, or automate scheduling workflows.",
   "nodes": {
     "CreateEvent": {
-      "namespace": "Core.GoogleCalendar.CreateEvent",
+      "namespace": "Robomotion.GoogleCalendar.Events.CreateEvent",
       "name": "CreateEvent",
       "summary": "Creates a new event in Google Calendar.",
       "howItWorks": "The Create Event node integrates with Google Calendar to create new events. When executed, the node: 1. Validates the provided inputs (Calendar ID, Summary, Description, Start Time, End Time, Attendees) 2. Authenticates with Google Calendar using the provided credentials 3. Creates a new event with the specified details 4. Returns the created event object as the result",
@@ -19,10 +19,84 @@
         "Start Time and End Time must be in RFC3339 format (e.g. 2024-03-20T15:30:00Z)",
         "Attendee emails are validated for proper email format",
         "The created event object is returned as the result, which can be used in subsequent nodes"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For shared/team calendars and server automation. Requires sharing the calendar with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Calendar API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. In Google Calendar: Settings → Share with specific people → Add the service account email",
+            "6. Use the Calendar ID in the node (your email for primary, or find it in Calendar Settings → Integrate)"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal calendars. Authorize once via browser, access your own calendars directly.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Calendar API",
+            "3. Go to 'Credentials' -\u003e 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "DeleteEvent": {
-      "namespace": "Core.GoogleCalendar.DeleteEvent",
+      "namespace": "Robomotion.GoogleCalendar.Events.DeleteEvent",
       "name": "DeleteEvent",
       "summary": "Deletes an event from Google Calendar.",
       "howItWorks": "The Delete Event node integrates with Google Calendar to delete existing events. When executed, the node: 1. Validates the provided inputs (Calendar ID and Event ID) 2. Authenticates with Google Calendar using the provided credentials 3. Deletes the specified event from the calendar 4. Optionally sends notifications about the deletion if enabled 5. Returns a success message with details about the deleted event",
@@ -37,10 +111,84 @@
         "The Event ID is required and must be a valid event identifier from Google Calendar",
         "Send Notifications option can be enabled to notify attendees about the event deletion",
         "The result contains details about the deletion including success status, event ID, and calendar ID"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For shared/team calendars and server automation. Requires sharing the calendar with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Calendar API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. In Google Calendar: Settings → Share with specific people → Add the service account email",
+            "6. Use the Calendar ID in the node (your email for primary, or find it in Calendar Settings → Integrate)"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal calendars. Authorize once via browser, access your own calendars directly.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Calendar API",
+            "3. Go to 'Credentials' -\u003e 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "GetAllEvents": {
-      "namespace": "Core.GoogleCalendar.GetAllEvents",
+      "namespace": "Robomotion.GoogleCalendar.Events.GetAllEvents",
       "name": "GetAllEvents",
       "summary": "Retrieves all events from a Google Calendar within specified parameters.",
       "howItWorks": "The Get All Events node integrates with Google Calendar to retrieve events based on specified parameters. When executed, the node: 1. Authenticates with Google Calendar using the provided credentials 2. Applies filters based on Calendar ID, time range, and search query 3. Configures options for maximum results, deleted events, recurring events, and sorting 4. Retrieves events from Google Calendar 5. Returns an array of event objects as the result",
@@ -59,10 +207,84 @@
         "When Single Events is true (default), recurring events are expanded into individual events",
         "Order By determines how results are sorted (by start time or last updated)",
         "The result contains an array of event objects with fields like id, summary, description, start, end, attendees, etc."
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For shared/team calendars and server automation. Requires sharing the calendar with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Calendar API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. In Google Calendar: Settings → Share with specific people → Add the service account email",
+            "6. Use the Calendar ID in the node (your email for primary, or find it in Calendar Settings → Integrate)"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal calendars. Authorize once via browser, access your own calendars directly.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Calendar API",
+            "3. Go to 'Credentials' -\u003e 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "GetAvailability": {
-      "namespace": "Core.GoogleCalendar.GetAvailability",
+      "namespace": "Robomotion.GoogleCalendar.Calendar.GetAvailability",
       "name": "GetAvailability",
       "summary": "Checks the availability of multiple Google Calendars within a specified time range.",
       "howItWorks": "The Get Availability node integrates with Google Calendar to check the availability of multiple calendars within a specified time range. When executed, the node: 1. Validates the provided inputs (Calendar IDs, Time Min, Time Max) 2. Authenticates with Google Calendar using the provided credentials 3. Creates a freebusy query request for all specified calendars 4. Executes the freebusy query to check calendar availability 5. Processes and formats the response for better usability 6. Returns detailed availability information as the result",
@@ -81,10 +303,84 @@
         "Any errors encountered for each calendar",
         "The result also includes the raw Google Calendar API response with timeMin, timeMax, calendars, groups, and kind fields",
         "This node is particularly useful for scheduling applications to find available time slots across multiple calendars"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For shared/team calendars and server automation. Requires sharing the calendar with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Calendar API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. In Google Calendar: Settings → Share with specific people → Add the service account email",
+            "6. Use the Calendar ID in the node (your email for primary, or find it in Calendar Settings → Integrate)"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal calendars. Authorize once via browser, access your own calendars directly.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Calendar API",
+            "3. Go to 'Credentials' -\u003e 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "GetEvent": {
-      "namespace": "Core.GoogleCalendar.GetEvent",
+      "namespace": "Robomotion.GoogleCalendar.Events.GetEvent",
       "name": "GetEvent",
       "summary": "Retrieves a specific event from Google Calendar by its ID.",
       "howItWorks": "The Get Event node integrates with Google Calendar to retrieve a specific event by its ID. When executed, the node: 1. Validates the provided inputs (Calendar ID and Event ID) 2. Authenticates with Google Calendar using the provided credentials 3. Retrieves the specified event from the calendar 4. Returns the complete event object as the result",
@@ -99,10 +395,84 @@
         "The Event ID is required and must be a valid event identifier from Google Calendar",
         "The result contains the complete event object with all its properties like summary, description, start time, end time, attendees, etc.",
         "This node is useful when you need to retrieve detailed information about a specific event"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For shared/team calendars and server automation. Requires sharing the calendar with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Calendar API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. In Google Calendar: Settings → Share with specific people → Add the service account email",
+            "6. Use the Calendar ID in the node (your email for primary, or find it in Calendar Settings → Integrate)"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal calendars. Authorize once via browser, access your own calendars directly.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Calendar API",
+            "3. Go to 'Credentials' -\u003e 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "ListEvents": {
-      "namespace": "Core.GoogleCalendar.ListEvents",
+      "namespace": "Robomotion.GoogleCalendar.Events.ListEvents",
       "name": "ListEvents",
       "summary": "Lists upcoming events from a Google Calendar.",
       "howItWorks": "The List Events node integrates with Google Calendar to list upcoming events. When executed, the node: 1. Authenticates with Google Calendar using the provided credentials 2. Lists upcoming events from the specified calendar 3. Returns an array of event objects as the result",
@@ -119,10 +489,84 @@
         "Events are ordered by start time",
         "The result contains an array of event objects with fields like id, summary, description, start, end, attendees, etc.",
         "The default maximum number of results is 25, but this can be adjusted using the Max Results option"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For shared/team calendars and server automation. Requires sharing the calendar with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Calendar API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. In Google Calendar: Settings → Share with specific people → Add the service account email",
+            "6. Use the Calendar ID in the node (your email for primary, or find it in Calendar Settings → Integrate)"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal calendars. Authorize once via browser, access your own calendars directly.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Calendar API",
+            "3. Go to 'Credentials' -\u003e 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "UpdateEvent": {
-      "namespace": "Core.GoogleCalendar.UpdateEvent",
+      "namespace": "Robomotion.GoogleCalendar.Events.UpdateEvent",
       "name": "UpdateEvent",
       "summary": "Updates an existing event in Google Calendar.",
       "howItWorks": "The Update Event node integrates with Google Calendar to update existing events. When executed, the node: 1. Validates the provided inputs (Calendar ID, Event ID, and any fields to update) 2. Authenticates with Google Calendar using the provided credentials 3. Retrieves the existing event from Google Calendar 4. Updates only the fields that are provided in the inputs 5. Optionally sends notifications about the update if enabled 6. Returns the updated event object as the result",
@@ -141,6 +585,80 @@
         "Attendee emails are validated for proper email format",
         "The Send Notifications option can be enabled to notify attendees about the event update",
         "The updated event object is returned as the result, which can be used in subsequent nodes"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For shared/team calendars and server automation. Requires sharing the calendar with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Google Calendar API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. In Google Calendar: Settings → Share with specific people → Add the service account email",
+            "6. Use the Calendar ID in the node (your email for primary, or find it in Calendar Settings → Integrate)"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal calendars. Authorize once via browser, access your own calendars directly.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Calendar API",
+            "3. Go to 'Credentials' -\u003e 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     }
   }

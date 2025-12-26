@@ -4,7 +4,7 @@
   "description": "## Use Cases - Extract text from scanned documents and PDFs",
   "nodes": {
     "image_to_text": {
-      "namespace": "Core.Tesseract.Image_to_text",
+      "namespace": "Robomotion.Tesseract.ImageToText",
       "name": "Image_to_text",
       "summary": "Extracts text from images using Tesseract OCR (Optical Character Recognition). Supports both image file paths and base64-encoded image data with multi-language support.",
       "howItWorks": "The Image To Text node extracts text from images using Tesseract OCR technology. When executed, the node: 1. Validates that Tesseract is installed and available in the system PATH 2. Determines which input source to use (Image Path or Base64 Data) 3. For base64 input: - Decodes the base64 string to an image - Overlays the image on a white background for better OCR accuracy - Processes the image with Tesseract 4. For file path input: - Reads the image file using OpenCV - Converts the image to grayscale for improved OCR performance - Saves a temporary processed image - Processes the image with Tesseract - Cleans up the temporary file 5. Returns the extracted text with leading and trailing whitespace removed",

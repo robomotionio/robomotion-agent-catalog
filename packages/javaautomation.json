@@ -4,7 +4,7 @@
   "description": "## Overview The Java Automation package enables automation of Java-based desktop applications using the Java Access Bridge. Use it when you need to interact with Java Swing/AWT applications, read values from Java UI components, or automate legacy Java desktop software.",
   "nodes": {
     "ClickElement": {
-      "namespace": "Core.Javaautomation.ClickElement",
+      "namespace": "Robomotion.JavaAutomation.ClickElement",
       "name": "ClickElement",
       "summary": "Clicks on a Java UI element using the Java Access Bridge.",
       "howItWorks": "The Click Element node interacts with Java applications through the Java Access Bridge to perform click actions on UI elements. When executed, the node: 1. Waits for the specified Java context to become available based on the Window Title, Window Handle, and Full Path 2. If the element is found, it performs the specified click action using AccessibleActionsToDo 3. If the element is not found or the click fails, appropriate errors are thrown",
@@ -21,7 +21,7 @@
       ]
     },
     "DoAction": {
-      "namespace": "Core.Javaautomation.DoAction",
+      "namespace": "Robomotion.JavaAutomation.DoAction",
       "name": "DoAction",
       "summary": "Performs a specified action on a Java UI element using the Java Access Bridge.",
       "howItWorks": "The Do Action node interacts with Java applications through the Java Access Bridge to perform custom actions on UI elements. When executed, the node: 1. Gets the action to perform, either from the Custom Action input or the Action option 2. Waits for the specified Java context to become available based on the Window Title, Window Handle, and Full Path 3. If the element is found, it performs the specified action using AccessibleActionsToDo 4. If the element is not found or the action fails, appropriate errors are thrown",
@@ -40,7 +40,7 @@
       ]
     },
     "GetActions": {
-      "namespace": "Core.Javaautomation.GetActions",
+      "namespace": "Robomotion.JavaAutomation.GetActions",
       "name": "GetActions",
       "summary": "Retrieves the list of available actions for a Java UI element using the Java Access Bridge.",
       "howItWorks": "The Get Actions node interacts with Java applications through the Java Access Bridge to retrieve the list of actions available for a UI element. When executed, the node: 1. Waits for the specified Java context to become available based on the Window Title, Window Handle, and Full Path 2. If the element is found, it retrieves the list of available actions using GetAccessibleActions 3. The action names are extracted and returned as an array 4. If the element is not found or actions cannot be retrieved, appropriate errors are thrown",
@@ -58,7 +58,7 @@
       ]
     },
     "GetCombobox": {
-      "namespace": "Core.Javaautomation.GetCombobox",
+      "namespace": "Robomotion.JavaAutomation.GetCombobox",
       "name": "GetCombobox",
       "summary": "Retrieves the available values from a Java combobox element using the Java Access Bridge.",
       "howItWorks": "The Get Combobox node interacts with Java applications through the Java Access Bridge to retrieve the list of values available in a combobox element. When executed, the node: 1. Waits for the specified Java context to become available based on the Window Title, Window Handle, and Full Path 2. If the element is found, it retrieves the count of accessible selections using GetAccessibleSelectionCountFromContext 3. Iterates through each selection to get the accessible selection using GetAccessibleSelectionFromContext 4. Extracts the name of each selection and adds it to the values list 5. Returns the values as an array 6. If the element is not found, appropriate errors are thrown",
@@ -76,7 +76,7 @@
       ]
     },
     "GetInfo": {
-      "namespace": "Core.Javaautomation.GetInfo",
+      "namespace": "Robomotion.JavaAutomation.GetInfo",
       "name": "GetInfo",
       "summary": "Retrieves information about a Java UI element including its position and dimensions using the Java Access Bridge.",
       "howItWorks": "The Get Info node interacts with Java applications through the Java Access Bridge to retrieve positional and dimensional information about a UI element. When executed, the node: 1. Waits for the specified Java context to become available based on the Window Title, Window Handle, and Full Path 2. If the element is found, it retrieves the element's context information using GetInfo() 3. Extracts the position (x, y) and dimensions (height, width) from the context information 4. Creates an Info object with these values and outputs it 5. If the element is not found, appropriate errors are thrown",
@@ -93,7 +93,7 @@
       ]
     },
     "GetText": {
-      "namespace": "Core.Javaautomation.GetText",
+      "namespace": "Robomotion.JavaAutomation.GetText",
       "name": "GetText",
       "summary": "Retrieves the text content from a Java UI element using the Java Access Bridge.",
       "howItWorks": "The Get Text node interacts with Java applications through the Java Access Bridge to retrieve text content from a UI element. When executed, the node: 1. Waits for the specified Java context to become available based on the Window Title, Window Handle, and Full Path 2. If the element is found, it checks if the element has accessible text 3. If the element has accessible text, it retrieves the text using GetAccessibleTextInfo and AccessibleTextReader 4. If the element doesn't have accessible text, it retrieves the element's name from its context information 5. Returns the retrieved text 6. If the element is not found or text retrieval fails, appropriate errors are thrown",
@@ -111,7 +111,7 @@
       ]
     },
     "GetTitle": {
-      "namespace": "Core.Javaautomation.GetTitle",
+      "namespace": "Robomotion.JavaAutomation.GetTitle",
       "name": "GetTitle",
       "summary": "Retrieves the title (name) of a Java UI element using the Java Access Bridge.",
       "howItWorks": "The Get Title node interacts with Java applications through the Java Access Bridge to retrieve the title (name) of a UI element. When executed, the node: 1. Waits for the specified Java context to become available based on the Window Title, Window Handle, and Full Path 2. If the element is found, it retrieves the element's name from its context information using GetInfo().name 3. Returns the retrieved title 4. If the element is not found, appropriate errors are thrown",
@@ -129,7 +129,7 @@
       ]
     },
     "GetValue": {
-      "namespace": "Core.Javaautomation.GetValue",
+      "namespace": "Robomotion.JavaAutomation.GetValue",
       "name": "GetValue",
       "summary": "Retrieves the current value of a Java UI element using the Java Access Bridge.",
       "howItWorks": "The Get Value node interacts with Java applications through the Java Access Bridge to retrieve the current value of a UI element. When executed, the node: 1. Waits for the specified Java context to become available based on the Window Title, Window Handle, and Full Path 2. If the element is found, it retrieves the current value using GetCurrentAccessibleValueFromContext 3. Returns the retrieved value as a string 4. If the element is not found or value retrieval fails, appropriate errors are thrown",
@@ -147,7 +147,7 @@
       ]
     },
     "IsEnabled": {
-      "namespace": "Core.Javaautomation.IsEnabled",
+      "namespace": "Robomotion.JavaAutomation.IsEnabled",
       "name": "IsEnabled",
       "summary": "Checks if a Java UI element is enabled using the Java Access Bridge.",
       "howItWorks": "The Is Enabled node interacts with Java applications through the Java Access Bridge to check if a UI element is enabled. When executed, the node: 1. Waits for the specified Java context to become available based on the Window Title, Window Handle, and Full Path 2. If the element is found, it retrieves the element's state information using GetInfo().states 3. Checks if the \"enabled\" state is present in the comma-separated list of states 4. Returns true if the element is enabled, false otherwise 5. If the element is not found, appropriate errors are thrown",
@@ -165,7 +165,7 @@
       ]
     },
     "SendKey": {
-      "namespace": "Core.Javaautomation.SendKey",
+      "namespace": "Robomotion.JavaAutomation.SendKey",
       "name": "SendKey",
       "summary": "Sends keyboard input to a Java application window using the Java Access Bridge.",
       "howItWorks": "The Send Key node interacts with Java applications through the Java Access Bridge to send keyboard input to a window. When executed, the node: 1. Gets the target window context based on the Window Title and Window Handle 2. If the window is found and valid, it processes the key modifiers and key input 3. Converts the key modifiers and key to KeyCode values 4. Sends the key combination to the window using SendKeys.SendKey 5. If the window is not found or key sending fails, appropriate errors are thrown",
@@ -184,7 +184,7 @@
       ]
     },
     "SetCombobox": {
-      "namespace": "Core.Javaautomation.SetCombobox",
+      "namespace": "Robomotion.JavaAutomation.SetCombobox",
       "name": "SetCombobox",
       "summary": "Sets the value of a Java combobox element using the Java Access Bridge.",
       "howItWorks": "The Set Combobox node interacts with Java applications through the Java Access Bridge to set the value of a combobox element. When executed, the node: 1. Waits for the specified Java context to become available based on the Window Title, Window Handle, and Full Path 2. If the element is found, it retrieves the current value of the combobox 3. Attempts to find and select the specified value in the combobox using AddAccessibleSelectionFromContext 4. Iterates through the available selections until it finds the matching value 5. If the value is found and selected, the operation completes successfully 6. If the value is not found, it attempts to restore the previous value and throws an error 7. If the element is not found, appropriate errors are thrown",
@@ -204,7 +204,7 @@
       ]
     },
     "SetText": {
-      "namespace": "Core.Javaautomation.SetText",
+      "namespace": "Robomotion.JavaAutomation.SetText",
       "name": "SetText",
       "summary": "Sets the text content of a Java UI element using the Java Access Bridge.",
       "howItWorks": "The Set Text node interacts with Java applications through the Java Access Bridge to set the text content of a UI element. When executed, the node: 1. Waits for the specified Java context to become available based on the Window Title, Window Handle, and Full Path 2. If the element is found, it retrieves the text content from the Text input 3. Sets the text content of the element using SetTextContents 4. If the element is not found or text setting fails, appropriate errors are thrown",
@@ -224,7 +224,7 @@
       ]
     },
     "WaitContext": {
-      "namespace": "Core.Javaautomation.WaitContext",
+      "namespace": "Robomotion.JavaAutomation.WaitContext",
       "name": "WaitContext",
       "summary": "Waits for a Java UI element or window to become available using the Java Access Bridge.",
       "howItWorks": "The Wait Context node interacts with Java applications through the Java Access Bridge to wait for a UI element or window to become available. When executed, the node: 1. Gets the Window Title, Window Handle, and Full Path from the inputs 2. Uses Helper.WaitForContext to wait for the specified Java context to become available 3. If a Full Path is provided, it waits for the specific element to be available 4. If no Full Path is provided, it waits for the window to be available 5. If the element or window is found within the timeout period, the node completes successfully 6. If the element or window is not found within the timeout period, an appropriate error is thrown",

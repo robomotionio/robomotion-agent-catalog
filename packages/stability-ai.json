@@ -4,7 +4,7 @@
   "description": "## Overview The Stability AI package provides integration with Stability AI's image generation platform. Use it when you need to generate images from text descriptions, transform existing images, or upscale images using AI.",
   "nodes": {
     "Connect": {
-      "namespace": "Core.StabilityAi.Connect",
+      "namespace": "Robomotion.StabilityAI.Connect",
       "name": "Connect",
       "summary": "Establishes a connection to the Stability AI API and creates a session for use in subsequent Stability AI operations.",
       "howItWorks": "The Connect node is the first step in any Stability AI automation flow. It creates a secure connection to the Stability AI API and returns a connection ID that is used by all other Stability AI nodes in the flow. When executed, the node: 1. Retrieves the API key from the provided credentials 2. Creates a unique connection identifier 3. Stores the API key associated with the connection ID in a secure session 4. Returns the connection ID that references the stored credentials 5. This connection ID is then used by other Stability AI nodes to access the API",
@@ -21,7 +21,7 @@
       ]
     },
     "Disconnect": {
-      "namespace": "Core.StabilityAi.Disconnect",
+      "namespace": "Robomotion.StabilityAI.Disconnect",
       "name": "Disconnect",
       "summary": "Closes an existing Stability AI connection and releases resources.",
       "howItWorks": "The Disconnect node is the final step in any Stability AI automation flow. It properly cleans up the connection session and removes stored credentials from memory. When executed, the node: 1. Validates the provided Connection Id 2. Retrieves the stored API key associated with the connection 3. Removes the connection from the session manager 4. Frees up memory resources",
@@ -38,7 +38,7 @@
       ]
     },
     "GetEnginesList": {
-      "namespace": "Core.StabilityAi.GetEnginesList",
+      "namespace": "Robomotion.StabilityAI.Engines.GetEnginesList",
       "name": "GetEnginesList",
       "summary": "Retrieves the list of available Stability AI engines for image generation.",
       "howItWorks": "The Get Engines List node queries the Stability AI API to retrieve information about all available image generation engines. When executed, the node: 1. Validates the connection or creates a temporary client using provided credentials 2. Sends a request to the Stability AI engines endpoint 3. Retrieves the list of available engines 4. Returns the engine details as a structured object",
@@ -62,7 +62,7 @@
       ]
     },
     "GetUserAccount": {
-      "namespace": "Core.StabilityAi.GetUserAccount",
+      "namespace": "Robomotion.StabilityAI.User.GetUserAccount",
       "name": "GetUserAccount",
       "summary": "Retrieves the current user's Stability AI account information.",
       "howItWorks": "The Get User Account node retrieves account information from Stability AI. When executed, the node: 1. Validates the connection or creates a temporary client using provided credentials 2. Sends a request to the Stability AI user account endpoint 3. Retrieves the account information 4. Returns the account details as a structured object",
@@ -80,7 +80,7 @@
       ]
     },
     "GetUserCredit": {
-      "namespace": "Core.StabilityAi.GetUserCredit",
+      "namespace": "Robomotion.StabilityAI.User.GetUserCredit",
       "name": "GetUserCredit",
       "summary": "Retrieves the current user's Stability AI credit balance.",
       "howItWorks": "The Get User Credit node retrieves the credit balance from Stability AI. When executed, the node: 1. Validates the connection or creates a temporary client using provided credentials 2. Sends a request to the Stability AI user balance endpoint 3. Retrieves the credit balance 4. Returns the credit amount as a numeric value",
@@ -99,7 +99,7 @@
       ]
     },
     "ImageToImages": {
-      "namespace": "Core.StabilityAi.ImageToImages",
+      "namespace": "Robomotion.StabilityAI.Generation.ImageToImage",
       "name": "ImageToImages",
       "summary": "Generates new images based on an input image and text prompt using Stability AI's image-to-image generation.",
       "howItWorks": "The Create Images From Image node transforms an existing image based on a text prompt. When executed, the node: 1. Validates the connection or creates a temporary client using provided credentials 2. Validates the prompt, init image path, and save path 3. Reads the init image file from the specified path 4. Constructs the generation request with: - Main prompt (positive weight) - Negative prompt if provided (negative weight) - Init image data - Init image mode and strength/schedule parameters - Generation parameters (steps, cfg_scale, seed, etc.) - Style and sampler settings 5. Sends the multipart request to Stability AI API 6. Receives base64-encoded images from the API 7. Decodes and saves images to the specified directory 8. Images are named sequentially: img2img_0.png, img2img_1.png, etc.",
@@ -112,7 +112,7 @@
       ]
     },
     "Masking": {
-      "namespace": "Core.StabilityAi.Masking",
+      "namespace": "Robomotion.StabilityAI.Generation.Masking",
       "name": "Masking",
       "summary": "Generates images with masked inpainting - selectively regenerates specific areas of an image while preserving the rest.",
       "howItWorks": "The Masking node performs selective image regeneration (inpainting) on specific areas. When executed, the node: 1. Validates the connection or creates a temporary client using provided credentials 2. Validates the prompt, engine ID, init image path, and save path 3. Determines the mask source and reads required files: - For MASK_IMAGE_WHITE/BLACK: Reads both init image and mask image - For INIT_IMAGE_ALPHA: Reads init image with alpha channel 4. Constructs the multipart request with: - Init image data - Mask image data (if applicable) - Mask source mode - Prompt for masked area - Generation parameters 5. Sends the request to Stability AI inpainting endpoint 6. Receives base64-encoded images with inpainted regions 7. Saves images to the specified directory 8. Images are named sequentially: img2img_masking_0.png, img2img_masking_1.png, etc.",
@@ -128,7 +128,7 @@
       ]
     },
     "TextToImages": {
-      "namespace": "Core.StabilityAi.TextToImages",
+      "namespace": "Robomotion.StabilityAI.Generation.TextToImage",
       "name": "TextToImages",
       "summary": "Generates images from text prompts using Stability AI's Stable Diffusion models.",
       "howItWorks": "The Create Images From Text node generates images from text descriptions using Stable Diffusion. When executed, the node: 1. Validates the connection or creates a temporary client using provided credentials 2. Validates the prompt and image save path 3. Constructs the generation request with: - Main prompt (positive weight) - Negative prompt if provided (negative weight) - Dimension settings (width/height) - Generation parameters (steps, cfg_scale, seed, etc.) - Style and sampler settings 4. Sends the request to Stability AI API 5. Receives base64-encoded images from the API 6. Decodes and saves images to the specified directory 7. Images are named sequentially: txt2img_0.png, txt2img_1.png, etc.",
@@ -140,7 +140,7 @@
       ]
     },
     "Upscale": {
-      "namespace": "Core.StabilityAi.Upscale",
+      "namespace": "Robomotion.StabilityAI.Generation.Upscale",
       "name": "Upscale",
       "summary": "Upscales an image to higher resolution using Stability AI's upscaling engines.",
       "howItWorks": "The Create Upscale node enhances image resolution using advanced upscaling techniques. When executed, the node: 1. Validates the connection or creates a temporary client using provided credentials 2. Validates the init image path and save path 3. Validates dimension settings (width OR height, not both) 4. Reads the source image file 5. Constructs the upscaling request: - For ESRGAN: Simple upscaling with dimension specification - For SD x4: Includes prompt and generation parameters 6. Sends the multipart request to Stability AI upscaling endpoint 7. Receives the upscaled image 8. Saves the image as `upscaled_img.png` in the specified directory",

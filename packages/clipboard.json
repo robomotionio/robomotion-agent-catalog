@@ -4,7 +4,7 @@
   "description": "## Overview The Clipboard package provides direct access to the operating system's clipboard. Use it when you need to copy data for pasting into applications, transfer text between different programs, or retrieve data that was copied to the clipboard.",
   "nodes": {
     "get-from-clipboard": {
-      "namespace": "Core.Clipboard.GetFromClipboard",
+      "namespace": "Core.Clipboard.Get",
       "name": "GetFromClipboard",
       "summary": "Retrieves the contents of the clipboard",
       "howItWorks": "The Get From Clipboard node performs the following steps: 1. **Accesses System Clipboard** - Connects to the operating system's clipboard service 2. **Reads Clipboard Content** - Retrieves the current text content stored in the clipboard 3. **Converts to String** - Ensures the clipboard data is in string format 4. **Outputs Data** - Returns the clipboard content through the Clipboard Data output property 5. **Handles Empty Clipboard** - If clipboard is empty, returns an empty string",
@@ -42,7 +42,7 @@
       ]
     },
     "set-to-clipboard": {
-      "namespace": "Core.Clipboard.SetToClipboard",
+      "namespace": "Core.Clipboard.Set",
       "name": "SetToClipboard",
       "summary": "Sets the specified text to the clipboard.",
       "howItWorks": "The Set To Clipboard node performs the following steps: 1. **Receives Input** - Takes the text string provided in the Clipboard Data input 2. **Accesses System Clipboard** - Connects to the operating system's clipboard service 3. **Clears Existing Content** - Removes any existing clipboard content 4. **Writes Data** - Stores the new text data to the clipboard 5. **Makes Available** - The data is now available for paste operations (Ctrl+V) in any application",

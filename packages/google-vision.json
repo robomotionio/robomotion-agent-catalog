@@ -4,7 +4,7 @@
   "description": "```mdx-code-block import DocCardList from '@theme/DocCardList';",
   "nodes": {
     "connect": {
-      "namespace": "Core.GoogleVision.Connect",
+      "namespace": "Robomotion.GoogleVision.Connect",
       "name": "Connect",
       "summary": "Establishes a connection to Google Vision API service for subsequent image analysis operations.",
       "howItWorks": "The Connect node establishes a connection to the Google Vision API service using the provided credentials. When executed, the node: 1. Retrieves the provided credentials and validates them 2. Creates a new ImageAnnotatorClient using the Google Cloud Vision API 3. Stores the client connection and assigns it a unique ID 4. Returns the unique Vision ID that can be used by other nodes",
@@ -26,10 +26,45 @@
         "**Service Account**: Use a dedicated service account with minimum required permissions",
         "**Error Recovery**: Wrap Connect node in error handling to manage authentication failures gracefully",
         "**Direct Credentials Option**: For single operations, you can skip Connect and provide credentials directly to Vision nodes"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "Service Account credentials for Google Cloud Vision API.",
+          "default": true,
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Cloud Vision API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Grant the service account appropriate roles",
+            "4. Download the JSON key file",
+            "5. Paste the JSON content here"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            },
+            {
+              "label": "Cloud Vision Documentation",
+              "url": "https://cloud.google.com/vision/docs"
+            }
+          ]
+        }
       ]
     },
     "extractimagelabels": {
-      "namespace": "Core.GoogleVision.Extractimagelabels",
+      "namespace": "Robomotion.GoogleVision.ExtractImageLabels",
       "name": "Extractimagelabels",
       "summary": "Extracts labels and tags from images using Google Vision API's label detection feature.",
       "howItWorks": "The Extract Image Labels node analyzes an image and returns descriptive labels that represent the content of the image. When executed, the node: 1. Retrieves the Vision API client using the provided client ID 2. Validates that the image path is not empty 3. Opens and reads the image file from the specified path 4. Creates a Vision API image object from the file 5. Calls the DetectLabels method to identify labels in the image 6. Processes the results and returns the detected labels",
@@ -58,10 +93,45 @@
         "**Case Sensitivity**: Labels are returned with proper capitalization",
         "**Batch Processing**: Reuse connection for processing multiple images efficiently",
         "**Label Validation**: Cross-reference with your own taxonomy if needed"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "Service Account credentials for Google Cloud Vision API.",
+          "default": true,
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Cloud Vision API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Grant the service account appropriate roles",
+            "4. Download the JSON key file",
+            "5. Paste the JSON content here"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            },
+            {
+              "label": "Cloud Vision Documentation",
+              "url": "https://cloud.google.com/vision/docs"
+            }
+          ]
+        }
       ]
     },
     "imagesafety": {
-      "namespace": "Core.GoogleVision.Imagesafety",
+      "namespace": "Robomotion.GoogleVision.CheckImageSafety",
       "name": "Imagesafety",
       "summary": "Analyzes images for potentially unsafe content using Google Vision API's safe search detection feature.",
       "howItWorks": "The Check Image Safety node analyzes an image to detect potentially unsafe content using Google Vision API's safe search detection. When executed, the node: 1. Retrieves the Vision API client using the provided client ID 2. Validates that the image path is not empty 3. Opens and reads the image file from the specified path 4. Creates a Vision API image object from the file 5. Calls the DetectSafeSearch method to analyze the image for unsafe content 6. Processes the results and returns the safety assessment",
@@ -91,10 +161,45 @@
         "**False Positives**: Vision API may flag legitimate content; allow appeal process",
         "**Continuous Monitoring**: Regularly review flagged content to adjust thresholds",
         "**Logging**: Keep detailed logs of safety decisions for compliance and improvement"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "Service Account credentials for Google Cloud Vision API.",
+          "default": true,
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Cloud Vision API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Grant the service account appropriate roles",
+            "4. Download the JSON key file",
+            "5. Paste the JSON content here"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            },
+            {
+              "label": "Cloud Vision Documentation",
+              "url": "https://cloud.google.com/vision/docs"
+            }
+          ]
+        }
       ]
     },
     "imagetotext": {
-      "namespace": "Core.GoogleVision.Imagetotext",
+      "namespace": "Robomotion.GoogleVision.ImageToText",
       "name": "Imagetotext",
       "summary": "Extracts text from images using Google Vision API's optical character recognition (OCR) feature.",
       "howItWorks": "The Image To Text node uses optical character recognition (OCR) to extract text from images using Google Vision API. When executed, the node: 1. Retrieves the Vision API client using the provided client ID 2. Validates that the image path is not empty 3. Opens and reads the image file from the specified path 4. Creates a Vision API image object from the file 5. Calls the DetectDocumentText method to extract text from the image 6. Processes the results and returns both the extracted text and confidence scores",
@@ -125,10 +230,45 @@
         "**Large Images**: Vision API handles large images, but consider resizing extremely large files for faster processing",
         "**Handwriting**: Works with neat handwriting; messy handwriting may have lower accuracy",
         "**Direct Credentials**: For single-use scenarios, provide credentials directly instead of using Connect node"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "Service Account credentials for Google Cloud Vision API.",
+          "default": true,
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Cloud Vision API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Grant the service account appropriate roles",
+            "4. Download the JSON key file",
+            "5. Paste the JSON content here"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            },
+            {
+              "label": "Cloud Vision Documentation",
+              "url": "https://cloud.google.com/vision/docs"
+            }
+          ]
+        }
       ]
     },
     "pdftotext": {
-      "namespace": "Core.GoogleVision.Pdftotext",
+      "namespace": "Robomotion.GoogleVision.PdfToText",
       "name": "Pdftotext",
       "summary": "Extracts text from PDF documents using Google Vision API's document text detection feature.",
       "howItWorks": "The Pdf To Text node uses Google Vision API to extract text from PDF documents and save the results as JSON files in Google Cloud Storage. When executed, the node: 1. Retrieves the Vision API client using the provided client ID 2. Validates that both source and destination URIs are not empty 3. Calls the AsyncBatchAnnotateFiles method to initiate asynchronous text extraction 4. Waits for the operation to complete 5. Returns the path to the output JSON file containing the extracted text",
@@ -164,6 +304,41 @@
         "**Parsing Results**: Use JSON parsing to extract text from the structured output",
         "**Error Recovery**: Implement retry logic for long-running operations",
         "**Cost Optimization**: Vision API charges per page, so monitor usage for large document sets"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "Service Account credentials for Google Cloud Vision API.",
+          "default": true,
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Cloud Vision API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Grant the service account appropriate roles",
+            "4. Download the JSON key file",
+            "5. Paste the JSON content here"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            },
+            {
+              "label": "Cloud Vision Documentation",
+              "url": "https://cloud.google.com/vision/docs"
+            }
+          ]
+        }
       ]
     }
   }

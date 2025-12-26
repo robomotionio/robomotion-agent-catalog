@@ -4,13 +4,70 @@
   "description": "## Overview The Microsoft Teams package allows you to:",
   "nodes": {
     "connect": {
-      "namespace": "Core.MicrosoftTeams.Connect",
+      "namespace": "Robomotion.MicrosoftTeams.Connect",
       "name": "Connect",
       "summary": "Connects to Microsoft Teams using OAuth2 credentials and establishes a session for subsequent operations.",
-      "howItWorks": "The Connect node handles the complete OAuth2 authentication flow: 1. **First-time authentication**: If no refresh token exists, opens OAuth2 dialog for user authorization 2. **Token refresh**: If access token is expired but refresh token exists, automatically refreshes the token 3. **Token reuse**: If access token is still valid, reuses it without additional authentication 4. **Automatic updates**: Updates the vault credentials with new tokens automatically"
+      "howItWorks": "The Connect node handles the complete OAuth2 authentication flow: 1. **First-time authentication**: If no refresh token exists, opens OAuth2 dialog for user authorization 2. **Token refresh**: If access token is expired but refresh token exists, automatically refreshes the token 3. **Token reuse**: If access token is still valid, reuses it without additional authentication 4. **Automatic updates**: Updates the vault credentials with new tokens automatically",
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Teams API. Authorize via browser to access your Teams resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Team.ReadBasic.All, Channel.ReadBasic.All, Chat.ReadWrite, ChannelMessage.Send",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
+      ]
     },
     "create-channel": {
-      "namespace": "Core.MicrosoftTeams.CreateChannel",
+      "namespace": "Robomotion.MicrosoftTeams.CreateChannel",
       "name": "CreateChannel",
       "summary": "Creates a new channel within a Microsoft Teams team with the specified name and description.",
       "howItWorks": "The Create Channel node: 1. Validates the team ID and channel details 2. Creates a standard channel in the specified team 3. Returns the complete channel object with ID and metadata 4. Channel is immediately available for use :::note Channel names must be unique within a team. If a channel with the same name exists, the operation will fail. :::",
@@ -21,10 +78,67 @@
         "UpdateChannel",
         "DeleteChannel",
         "SendMessage"
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Teams API. Authorize via browser to access your Teams resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Team.ReadBasic.All, Channel.ReadBasic.All, Chat.ReadWrite, ChannelMessage.Send",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
       ]
     },
     "create-team": {
-      "namespace": "Core.MicrosoftTeams.CreateTeam",
+      "namespace": "Robomotion.MicrosoftTeams.CreateTeam",
       "name": "CreateTeam",
       "summary": "Creates a new Microsoft Teams team with specified name, description, and template.",
       "howItWorks": "The Create Team node: 1. Sends a team creation request to Microsoft Graph API 2. Uses the specified template to configure default channels and settings 3. Returns immediately (actual team provisioning happens asynchronously) 4. Team will be available for use within a few seconds",
@@ -33,10 +147,67 @@
         "ListTeams",
         "GetTeam",
         "CreateChannel"
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Teams API. Authorize via browser to access your Teams resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Team.ReadBasic.All, Channel.ReadBasic.All, Chat.ReadWrite, ChannelMessage.Send",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
       ]
     },
     "delete-channel": {
-      "namespace": "Core.MicrosoftTeams.DeleteChannel",
+      "namespace": "Robomotion.MicrosoftTeams.DeleteChannel",
       "name": "DeleteChannel",
       "summary": "Deletes a channel from a Microsoft Teams team.",
       "howItWorks": "The Delete Channel node: 1. Validates the team and channel IDs 2. Sends a deletion request to Microsoft Graph API 3. Permanently removes the channel and all its contents 4. Returns when deletion is complete",
@@ -46,16 +217,130 @@
         "GetChannel",
         "CreateChannel",
         "GetMessages"
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Teams API. Authorize via browser to access your Teams resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Team.ReadBasic.All, Channel.ReadBasic.All, Chat.ReadWrite, ChannelMessage.Send",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
       ]
     },
     "disconnect": {
-      "namespace": "Core.MicrosoftTeams.Disconnect",
+      "namespace": "Robomotion.MicrosoftTeams.Disconnect",
       "name": "Disconnect",
       "summary": "Disconnects from Microsoft Teams and releases the connection session.",
-      "howItWorks": "The Disconnect node: 1. Removes the connection from the active sessions pool 2. Releases any resources associated with the connection 3. Prevents further use of the client ID :::warning After disconnecting, the client ID cannot be used for any Teams operations. You must create a new connection using the Connect node. :::"
+      "howItWorks": "The Disconnect node: 1. Removes the connection from the active sessions pool 2. Releases any resources associated with the connection 3. Prevents further use of the client ID :::warning After disconnecting, the client ID cannot be used for any Teams operations. You must create a new connection using the Connect node. :::",
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Teams API. Authorize via browser to access your Teams resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Team.ReadBasic.All, Channel.ReadBasic.All, Chat.ReadWrite, ChannelMessage.Send",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
+      ]
     },
     "get-channel": {
-      "namespace": "Core.MicrosoftTeams.GetChannel",
+      "namespace": "Robomotion.MicrosoftTeams.GetChannel",
       "name": "GetChannel",
       "summary": "Retrieves detailed information about a specific channel within a Microsoft Teams team.",
       "relatedNodes": [
@@ -63,10 +348,67 @@
         "CreateChannel",
         "UpdateChannel",
         "DeleteChannel"
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Teams API. Authorize via browser to access your Teams resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Team.ReadBasic.All, Channel.ReadBasic.All, Chat.ReadWrite, ChannelMessage.Send",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
       ]
     },
     "get-chat": {
-      "namespace": "Core.MicrosoftTeams.GetChat",
+      "namespace": "Robomotion.MicrosoftTeams.GetChat",
       "name": "GetChat",
       "summary": "Retrieves detailed information about a specific Microsoft Teams chat by its ID.",
       "relatedNodes": [
@@ -74,10 +416,67 @@
         "GetChatMembers",
         "GetMessages",
         "SendMessage"
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Teams API. Authorize via browser to access your Teams resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Team.ReadBasic.All, Channel.ReadBasic.All, Chat.ReadWrite, ChannelMessage.Send",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
       ]
     },
     "get-chat-members": {
-      "namespace": "Core.MicrosoftTeams.GetChatMembers",
+      "namespace": "Robomotion.MicrosoftTeams.GetChatMembers",
       "name": "GetChatMembers",
       "summary": "Retrieves all members (participants) of a specific Microsoft Teams chat.",
       "relatedNodes": [
@@ -85,10 +484,67 @@
         "GetChats",
         "SendMessage",
         "GetMessages"
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Teams API. Authorize via browser to access your Teams resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Team.ReadBasic.All, Channel.ReadBasic.All, Chat.ReadWrite, ChannelMessage.Send",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
       ]
     },
     "get-chats": {
-      "namespace": "Core.MicrosoftTeams.GetChats",
+      "namespace": "Robomotion.MicrosoftTeams.ListChats",
       "name": "GetChats",
       "summary": "Lists all chats that the authenticated user is a member of.",
       "relatedNodes": [
@@ -99,7 +555,7 @@
       ]
     },
     "get-messages": {
-      "namespace": "Core.MicrosoftTeams.GetMessages",
+      "namespace": "Robomotion.MicrosoftTeams.GetMessages",
       "name": "GetMessages",
       "summary": "Retrieves messages from a Microsoft Teams chat or channel.",
       "relatedNodes": [
@@ -107,20 +563,134 @@
         "GetChats",
         "ListChannels",
         "GetChatMembers"
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Teams API. Authorize via browser to access your Teams resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Team.ReadBasic.All, Channel.ReadBasic.All, Chat.ReadWrite, ChannelMessage.Send",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
       ]
     },
     "get-team": {
-      "namespace": "Core.MicrosoftTeams.GetTeam",
+      "namespace": "Robomotion.MicrosoftTeams.GetTeam",
       "name": "GetTeam",
       "summary": "Retrieves detailed information about a specific Microsoft Teams team by its ID.",
       "relatedNodes": [
         "ListTeams",
         "CreateTeam",
         "ListChannels"
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Teams API. Authorize via browser to access your Teams resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Team.ReadBasic.All, Channel.ReadBasic.All, Chat.ReadWrite, ChannelMessage.Send",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
       ]
     },
     "list-channels": {
-      "namespace": "Core.MicrosoftTeams.ListChannels",
+      "namespace": "Robomotion.MicrosoftTeams.ListChannels",
       "name": "ListChannels",
       "summary": "Lists all channels within a Microsoft Teams team.",
       "relatedNodes": [
@@ -130,10 +700,67 @@
         "DeleteChannel",
         "SendMessage",
         "GetMessages"
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Teams API. Authorize via browser to access your Teams resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Team.ReadBasic.All, Channel.ReadBasic.All, Chat.ReadWrite, ChannelMessage.Send",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
       ]
     },
     "list-teams": {
-      "namespace": "Core.MicrosoftTeams.ListTeams",
+      "namespace": "Robomotion.MicrosoftTeams.ListTeams",
       "name": "ListTeams",
       "summary": "Lists all Microsoft Teams teams that the authenticated user is a member of.",
       "relatedNodes": [
@@ -141,10 +768,67 @@
         "CreateTeam",
         "ListChannels",
         "SendMessage"
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Teams API. Authorize via browser to access your Teams resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Team.ReadBasic.All, Channel.ReadBasic.All, Chat.ReadWrite, ChannelMessage.Send",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
       ]
     },
     "send-message": {
-      "namespace": "Core.MicrosoftTeams.SendMessage",
+      "namespace": "Robomotion.MicrosoftTeams.SendMessage",
       "name": "SendMessage",
       "summary": "Sends a message to a Microsoft Teams chat or channel with customizable formatting and importance.",
       "relatedNodes": [
@@ -152,10 +836,67 @@
         "ListChannels",
         "GetChats",
         "Connect"
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Teams API. Authorize via browser to access your Teams resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Team.ReadBasic.All, Channel.ReadBasic.All, Chat.ReadWrite, ChannelMessage.Send",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
       ]
     },
     "update-channel": {
-      "namespace": "Core.MicrosoftTeams.UpdateChannel",
+      "namespace": "Robomotion.MicrosoftTeams.UpdateChannel",
       "name": "UpdateChannel",
       "summary": "Updates an existing Microsoft Teams channel's display name or description.",
       "relatedNodes": [
@@ -164,6 +905,63 @@
         "CreateChannel",
         "DeleteChannel",
         "Connect"
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Teams API. Authorize via browser to access your Teams resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Team.ReadBasic.All, Channel.ReadBasic.All, Chat.ReadWrite, ChannelMessage.Send",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
       ]
     }
   }

@@ -4,7 +4,7 @@
   "description": "## Overview FFmpeg is a complete, cross-platform solution to record, convert and stream audio and video. The Robomotion FFmpeg package wraps this functionality in easy-to-use nodes that can be connected together to create complex media processing pipelines.",
   "nodes": {
     "Create": {
-      "namespace": "Core.Ffmpeg.Create",
+      "namespace": "Robomotion.FFmpeg.Create",
       "name": "Create",
       "summary": "Initializes a new FFmpeg session for media processing operations. This is the starting point for building FFmpeg workflows.",
       "howItWorks": "The Create node initializes a new FFmpeg session by generating a unique session identifier. This session serves as a container for your media processing pipeline, allowing you to: 1. Add multiple input files 2. Apply filters and transformations 3. Define output files 4. Execute the complete processing command The session ID output from this node is used by subsequent nodes (Input, Filter, Output, Run) to build and execute the media processing pipeline.",
@@ -17,7 +17,7 @@
       ]
     },
     "Filter": {
-      "namespace": "Core.Ffmpeg.Filter",
+      "namespace": "Robomotion.FFmpeg.Filter",
       "name": "Filter",
       "summary": "Applies FFmpeg filters to transform video and audio streams. Filters enable operations like scaling, cropping, rotating, overlaying, concatenating, and applying visual or audio effects.",
       "howItWorks": "The Filter node applies transformations to media streams. When executed, the node: 1. Validates that the filter name and at least one stream are provided 2. Retrieves the input stream(s) from the session 3. Parses filter options into arguments and keyword arguments 4. Applies the specified filter with the given options 5. Returns a new stream ID representing the filtered output Filters can be chained together, with the output of one filter becoming the input to another.",
@@ -31,7 +31,7 @@
       ]
     },
     "Input": {
-      "namespace": "Core.Ffmpeg.Input",
+      "namespace": "Robomotion.FFmpeg.Input",
       "name": "Input",
       "summary": "Adds an input media file to an FFmpeg session. Input files can be local paths or URLs, and multiple inputs can be added to the same session for complex operations like merging or overlaying.",
       "howItWorks": "The Input node adds a media file to the FFmpeg session and returns a stream identifier. When executed, the node: 1. Validates that both the FFmpeg session ID and input file path are provided 2. Parses any input options specified 3. Creates an FFmpeg input stream with the specified file and options 4. Registers the stream with the session 5. Returns a unique stream ID that can be used by downstream nodes",
@@ -45,7 +45,7 @@
       ]
     },
     "Output": {
-      "namespace": "Core.Ffmpeg.Output",
+      "namespace": "Robomotion.FFmpeg.Output",
       "name": "Output",
       "summary": "Defines the output file for an FFmpeg session. This node specifies where processed media will be saved and what encoding parameters to apply.",
       "howItWorks": "The Output node defines the final destination and encoding parameters for your media processing pipeline. When executed, the node: 1. Validates the input stream ID and output file path 2. Retrieves the input stream(s) from the session 3. Parses output options 4. Creates an FFmpeg output stream with the specified settings 5. Returns an output stream ID for use with the Run node",
@@ -60,7 +60,7 @@
       ]
     },
     "Play": {
-      "namespace": "Core.Ffmpeg.Play",
+      "namespace": "Robomotion.FFmpeg.Play",
       "name": "Play",
       "summary": "Plays media files using FFplay, FFmpeg's built-in media player. This node is useful for previewing videos, testing media files, and verifying processing results during automation development.",
       "howItWorks": "The Play node launches FFplay to display media files. When executed, the node: 1. Validates that the file path is provided 2. Checks that the file exists and is not a directory 3. Constructs FFplay command with specified options 4. Launches FFplay to play the media 5. Blocks until playback is complete or window is closed 6. Returns when playback finishes Note: The flow execution pauses while the media is playing. The node completes when the player window is closed.",
@@ -76,7 +76,7 @@
       ]
     },
     "Probe": {
-      "namespace": "Core.Ffmpeg.Probe",
+      "namespace": "Robomotion.FFmpeg.Probe",
       "name": "Probe",
       "summary": "Analyzes media files to extract detailed information about format, streams, codecs, duration, bitrate, resolution, and other metadata. This node uses FFprobe under the hood to inspect media files without processing them.",
       "howItWorks": "The Probe node uses FFprobe to analyze media files and extract detailed information. When executed, the node: 1. Validates that the file path is provided 2. Checks that the file exists and is not a directory 3. Executes FFprobe with JSON output format 4. Parses the JSON response 5. Returns the complete media information as an object This operation is read-only and does not modify the file. It's fast and lightweight compared to media processing operations.",
@@ -91,7 +91,7 @@
       ]
     },
     "Run": {
-      "namespace": "Core.Ffmpeg.Run",
+      "namespace": "Robomotion.FFmpeg.Run",
       "name": "Run",
       "summary": "Executes the FFmpeg command to process media files. This is the final node in an FFmpeg pipeline that actually performs the media processing operation.",
       "howItWorks": "The Run node executes the FFmpeg command based on the pipeline built by previous nodes. When executed, the node: 1. Validates that a stream ID is provided 2. Retrieves the complete stream pipeline from the session 3. Applies the overwrite setting if enabled 4. Adds any global options specified 5. Compiles the FFmpeg command 6. Executes the command 7. Waits for completion 8. Cleans up the session 9. Returns the executed command string The actual media processing happens during this node's execution. Processing time depends on file size, complexity of operations, and system resources.",

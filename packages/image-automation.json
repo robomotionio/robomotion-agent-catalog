@@ -4,7 +4,7 @@
   "description": "## Overview The Image Automation package enables visual-based desktop automation using image recognition and OCR. Use it when you need to automate applications that don't have accessible UI elements, legacy systems, Citrix/virtual environments, or any scenario where traditional element-based automation isn't possible.",
   "nodes": {
     "actions": {
-      "namespace": "Core.ImageAutomation.Actions",
+      "namespace": "Robomotion.ImageAutomation.Actions",
       "name": "Actions",
       "summary": "Performs image-based automation actions such as clicking images and typing text based on image recognition.",
       "howItWorks": "The Actions node performs image-based automation tasks. When executed, the node: 1. Downloads and prepares the reference image if needed 2. Takes a screenshot of the current screen 3. Identifies target regions defined in the workflow 4. For each target region: - If it's a ClickImage action, performs a click at the identified location - If it's a ClickType action, clicks at the location and types the specified text 5. Uses image recognition to find anchor points and target coordinates 6. Applies confidence thresholds to ensure accurate image matching",
@@ -25,7 +25,7 @@
       ]
     },
     "click_image": {
-      "namespace": "Core.ImageAutomation.Click_image",
+      "namespace": "Robomotion.ImageAutomation.Image.ClickImage",
       "name": "Click_image",
       "summary": "Locates an image on the screen and performs a click action at its position.",
       "howItWorks": "The Click Image node finds a specified image on the screen and clicks it. When executed, the node: 1. Downloads and prepares the reference image if needed 2. Uses pyautogui to locate the image on screen with the specified confidence level 3. Moves the mouse cursor to the image's position (adjusted by deltaX and deltaY if specified) 4. Performs the specified click action with any modifier keys 5. Releases any modifier keys after clicking",
@@ -45,7 +45,7 @@
       ]
     },
     "click_text": {
-      "namespace": "Core.ImageAutomation.Click_text",
+      "namespace": "Robomotion.ImageAutomation.OCR.ClickText",
       "name": "Click_text",
       "summary": "Uses OCR (Optical Character Recognition) to locate specific text on the screen and performs a click action at its position.",
       "howItWorks": "The Click Text node finds specific text on the screen using OCR and clicks it. When executed, the node: 1. Takes a screenshot of the current screen or uses a reference image if provided 2. Uses OCR (pytesseract) to extract text from the image 3. Searches for the specified text within the recognized text 4. Moves the mouse cursor to the center of the found text 5. Performs the specified click action with any modifier keys 6. Releases any modifier keys after clicking",
@@ -69,7 +69,7 @@
       ]
     },
     "click_type": {
-      "namespace": "Core.ImageAutomation.Click_type",
+      "namespace": "Robomotion.ImageAutomation.Image.ClickType",
       "name": "Click_type",
       "summary": "Locates an image on the screen, clicks it, and types specified text into the clicked area.",
       "howItWorks": "The Click \u0026 Type node finds a specified image on the screen, clicks it, and types text. When executed, the node: 1. Downloads and prepares the reference image if needed 2. Uses pyautogui to locate the image on screen with the specified confidence level 3. Moves the mouse cursor to the image's position (adjusted by deltaX and deltaY if specified) 4. Clicks the left mouse button at the image location 5. Optionally clears existing content (if Clear Before Typing is enabled) 6. Types the specified text 7. Optionally presses Enter (if Press Enter is enabled)",
@@ -90,7 +90,7 @@
       ]
     },
     "find_image": {
-      "namespace": "Core.ImageAutomation.Find_image",
+      "namespace": "Robomotion.ImageAutomation.Image.FindImage",
       "name": "Find_image",
       "summary": "Locates an image on the screen and returns its position coordinates and confidence level.",
       "howItWorks": "The Find Image node searches for a specified image on the screen and returns its position. When executed, the node: 1. Downloads and prepares the reference image if needed 2. Takes a screenshot of the current screen 3. Uses OpenCV template matching to find the image with the specified confidence level 4. Returns the coordinates and confidence of the best match found",
@@ -109,7 +109,7 @@
       ]
     },
     "find_text": {
-      "namespace": "Core.ImageAutomation.Find_text",
+      "namespace": "Robomotion.ImageAutomation.OCR.FindText",
       "name": "Find_text",
       "summary": "Uses OCR (Optical Character Recognition) to locate specific text on the screen and returns its position information.",
       "howItWorks": "The Find Text node uses OCR to locate specific text on the screen. When executed, the node: 1. Takes a screenshot of the current screen or uses a reference image if provided 2. Processes the image using OCR (pytesseract) to extract text 3. Searches for the specified text within the recognized text 4. Returns position information for all instances of the found text",
@@ -132,7 +132,7 @@
       ]
     },
     "get_text": {
-      "namespace": "Core.ImageAutomation.Get_text",
+      "namespace": "Robomotion.ImageAutomation.OCR.GetText",
       "name": "Get_text",
       "summary": "Uses OCR (Optical Character Recognition) to extract text from a specified region of the screen or from a reference image.",
       "howItWorks": "The Get Text node extracts text from images using OCR technology. When executed, the node: 1. Downloads and prepares the reference image if needed 2. Takes a screenshot of the current screen 3. Uses OCR (pytesseract) to extract text from either: - The entire reference image - A specific region defined by anchor and target regions 4. Returns the extracted text",
@@ -154,7 +154,7 @@
       ]
     },
     "select_copy": {
-      "namespace": "Core.ImageAutomation.Select_copy",
+      "namespace": "Robomotion.ImageAutomation.Image.SelectCopy",
       "name": "Select_copy",
       "summary": "Locates an image on the screen, clicks it, selects all text in the area, and copies it to the clipboard.",
       "howItWorks": "The Select \u0026 Copy node finds a specified image on the screen, clicks it, and copies text. When executed, the node: 1. Downloads and prepares the reference image if needed 2. Takes a screenshot of the current screen 3. Uses image recognition to locate a defined region on screen 4. Calculates the target click position based on anchor and target regions 5. Moves the mouse cursor to the calculated position 6. Clicks the left mouse button 7. Selects all text (Ctrl+A) 8. Copies the selected text to clipboard (Ctrl+C)",
@@ -177,7 +177,7 @@
       ]
     },
     "take_screenshot": {
-      "namespace": "Core.ImageAutomation.Take_screenshot",
+      "namespace": "Robomotion.ImageAutomation.Image.TakeScreenshot",
       "name": "Take_screenshot",
       "summary": "Captures a screenshot of the entire screen and saves it to a specified file path.",
       "howItWorks": "The Take Screenshot node captures the current screen and saves it as an image file. When executed, the node: 1. Takes a screenshot of the entire screen using pyautogui 2. Converts the screenshot to the appropriate color format 3. Saves the image to the specified file path using OpenCV",
@@ -197,7 +197,7 @@
       ]
     },
     "text_exists": {
-      "namespace": "Core.ImageAutomation.Text_exists",
+      "namespace": "Robomotion.ImageAutomation.OCR.TextExists",
       "name": "Text_exists",
       "summary": "Uses OCR (Optical Character Recognition) to check if specific text exists on the screen or in a reference image.",
       "howItWorks": "The Text Exists node determines if specific text is present on the screen. When executed, the node: 1. Takes a screenshot of the current screen or uses a reference image if provided 2. Uses OCR (pytesseract) to extract text from either: - The entire screen - A specific region defined by anchor and target regions in a reference image 3. Searches for the specified text within the recognized text 4. Returns a boolean result indicating whether the text was found",
@@ -219,7 +219,7 @@
       ]
     },
     "wait_image": {
-      "namespace": "Core.ImageAutomation.Wait_image",
+      "namespace": "Robomotion.ImageAutomation.Image.WaitImage",
       "name": "Wait_image",
       "summary": "Waits for a specified image to appear on the screen within a given timeout period.",
       "howItWorks": "The Wait Image node pauses execution until a specified image appears on screen. When executed, the node: 1. Downloads and prepares the reference image if needed 2. Continuously takes screenshots of the screen at regular intervals 3. Uses OpenCV template matching to search for the image on each screenshot 4. Continues looping until either: - The image is found with the specified confidence level - The timeout period is exceeded 5. Proceeds with the workflow if the image is found, or raises an error if timeout is reached",

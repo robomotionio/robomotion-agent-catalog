@@ -4,7 +4,7 @@
   "description": "## Overview The CapMonster package helps you bypass captcha challenges in web automation tasks. It supports multiple captcha types and provides a simple, reliable way to solve captchas without manual intervention.",
   "nodes": {
     "create-session": {
-      "namespace": "Core.Capmonster.CreateSession",
+      "namespace": "Robomotion.CapMonster.CreateSession",
       "name": "CreateSession",
       "summary": "Establishes a connection to CapMonster Cloud by creating a session with your API key. This session is required for all captcha solving operations.",
       "howItWorks": "The Create Session node is the entry point for all CapMonster operations. When executed, it: 1. Retrieves your API key from the provided credential 2. Creates a CapMonster Cloud client instance 3. Generates a unique session ID 4. Stores the client instance for use by other nodes 5. Returns the session ID for use in subsequent operations",
@@ -19,10 +19,25 @@
         "Each Create Session creates a new client instance",
         "Sessions are stored in memory and persist throughout the flow execution",
         "Multiple sessions can be created if you need to use different API keys"
+      ],
+      "credentials": [
+        {
+          "name": "apiKey",
+          "title": "apiKey",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "string",
+              "required": true,
+              "description": "Your CapMonster Cloud API key"
+            }
+          ]
+        }
       ]
     },
     "get-balance": {
-      "namespace": "Core.Capmonster.GetBalance",
+      "namespace": "Robomotion.CapMonster.GetBalance",
       "name": "GetBalance",
       "summary": "Retrieves the current account balance from your CapMonster Cloud account in USD.",
       "howItWorks": "The Get Balance node queries your CapMonster Cloud account to retrieve the current balance. When executed, it: 1. Retrieves the session using the provided session ID 2. Makes an API call to CapMonster Cloud 3. Returns your current balance in USD 4. Stores the balance in the output variable",
@@ -40,7 +55,7 @@
       ]
     },
     "solve-captcha": {
-      "namespace": "Core.Capmonster.SolveCaptcha",
+      "namespace": "Robomotion.CapMonster.SolveCaptcha",
       "name": "SolveCaptcha",
       "summary": "Solves image-based captchas by extracting text from the image. Supports various captcha formats including Google, Yandex, Steam, Facebook, and other popular captcha providers.",
       "howItWorks": "The Solve Captcha node processes image-based captchas and returns the recognized text. When executed, it: 1. Retrieves the session using the provided session ID 2. Receives the base64-encoded captcha image 3. Creates a captcha solving task with the specified module 4. Sends the task to CapMonster Cloud for processing 5. Waits for the solution 6. Returns the recognized text",
@@ -60,7 +75,7 @@
       ]
     },
     "solve-funcaptcha": {
-      "namespace": "Core.Capmonster.SolveFuncaptcha",
+      "namespace": "Robomotion.CapMonster.SolveFunCaptcha",
       "name": "SolveFuncaptcha",
       "summary": "Solves FunCaptcha (Arkose Labs) challenges and returns a response token. FunCaptcha uses interactive puzzles to verify users and is commonly found on gaming platforms, financial services, and e-commerce sites.",
       "howItWorks": "The Solve FunCaptcha node solves Arkose Labs FunCaptcha challenges. When executed, it: 1. Retrieves the session using the provided session ID 2. Creates a FunCaptcha solving task with the website URL and public key 3. Optionally adds the data parameter if provided 4. Sends the task to CapMonster Cloud for processing 5. Waits for the challenge to be solved 6. Returns the response token",
@@ -80,7 +95,7 @@
       ]
     },
     "solve-hcaptcha": {
-      "namespace": "Core.Capmonster.SolveHcaptcha",
+      "namespace": "Robomotion.CapMonster.SolveHCaptcha",
       "name": "SolveHcaptcha",
       "summary": "Solves hCaptcha challenges and returns a response token. hCaptcha is a privacy-focused alternative to reCAPTCHA, commonly used on websites that prioritize user privacy.",
       "howItWorks": "The Solve HCaptcha node solves hCaptcha challenges. When executed, it: 1. Retrieves the session using the provided session ID 2. Creates an hCaptcha solving task with the website URL and site key 3. Sends the task to CapMonster Cloud for processing 4. Waits for the challenge to be solved 5. Returns the response token (h-captcha-response)",
@@ -101,7 +116,7 @@
       ]
     },
     "solve-recaptcha-v2": {
-      "namespace": "Core.Capmonster.SolveRecaptchaV2",
+      "namespace": "Robomotion.CapMonster.SolveRecaptchaV2",
       "name": "SolveRecaptchaV2",
       "summary": "Solves Google reCAPTCHA v2 challenges and returns a response token. reCAPTCHA v2 is the familiar \"I'm not a robot\" checkbox captcha used on millions of websites worldwide.",
       "howItWorks": "The Solve Recaptcha v2 node solves Google's reCAPTCHA v2 challenges. When executed, it: 1. Retrieves the session using the provided session ID 2. Creates a reCAPTCHA v2 solving task with the website URL and site key 3. Optionally adds the data-s value if provided 4. Sends the task to CapMonster Cloud for processing 5. Waits for the challenge to be solved (including image selection if required) 6. Returns the g-recaptcha-response token",
@@ -122,7 +137,7 @@
       ]
     },
     "solve-recaptcha-v2-enterprise": {
-      "namespace": "Core.Capmonster.SolveRecaptchaV2Enterprise",
+      "namespace": "Robomotion.CapMonster.SolveRecaptchaV2Enterprise",
       "name": "SolveRecaptchaV2Enterprise",
       "summary": "Solves Google reCAPTCHA v2 Enterprise challenges with custom payload support. reCAPTCHA v2 Enterprise is the business/enterprise version of reCAPTCHA v2 with enhanced security features and additional configuration options.",
       "howItWorks": "The Solve Recaptcha v2 Enterprise node solves Google's enterprise-grade reCAPTCHA v2. When executed, it: 1. Retrieves the session using the provided session ID 2. Creates a reCAPTCHA v2 Enterprise solving task with the website URL and site key 3. Optionally adds the enterprise payload if provided 4. Sends the task to CapMonster Cloud for processing 5. Waits for the challenge to be solved (including image selection if required) 6. Returns the g-recaptcha-response token",
@@ -144,7 +159,7 @@
       ]
     },
     "solve-recaptcha-v3": {
-      "namespace": "Core.Capmonster.SolveRecaptchaV3",
+      "namespace": "Robomotion.CapMonster.SolveRecaptchaV3",
       "name": "SolveRecaptchaV3",
       "summary": "Solves Google reCAPTCHA v3 challenges with score control and returns a response token. reCAPTCHA v3 is Google's invisible captcha that uses behavioral analysis to assess user interactions without requiring user interaction.",
       "howItWorks": "The Solve Recaptcha v3 node solves Google's invisible reCAPTCHA v3. When executed, it: 1. Retrieves the session using the provided session ID 2. Creates a reCAPTCHA v3 solving task with the website URL and site key 3. Optionally adds the page action parameter 4. Optionally sets the minimum score requirement 5. Sends the task to CapMonster Cloud for processing 6. Returns a token with the requested score level",

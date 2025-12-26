@@ -4,7 +4,7 @@
   "description": "## Overview The DateTime package provides essential operations for handling dates and times. Use it when you need to format dates, calculate time differences, convert between time zones, or perform date arithmetic.",
   "nodes": {
     "add-time": {
-      "namespace": "Core.Datetime.AddTime",
+      "namespace": "Robomotion.DateTime.Add",
       "name": "AddTime",
       "summary": "Adds or subtracts a specified duration from a date/time value. This node is essential for calculating future or past dates in automation workflows.",
       "howItWorks": "The Add Time node performs date/time arithmetic by: 1. Parsing the input time according to the specified layout 2. Converting the duration value to the appropriate time unit 3. Adding (positive) or subtracting (negative) the duration 4. Formatting the result in the same layout as the input 5. Outputting the calculated date/time",
@@ -16,7 +16,7 @@
       ]
     },
     "convert-timezone": {
-      "namespace": "Core.Datetime.ConvertTimezone",
+      "namespace": "Robomotion.DateTime.ConvertTimezone",
       "name": "ConvertTimezone",
       "summary": "Converts a date/time value from one timezone to another. This node is essential for handling time-sensitive operations across different geographical regions and coordinating global automation workflows.",
       "howItWorks": "The Convert Timezone node transforms date/time values between timezones by: 1. Parsing the input time according to the Time Format 2. Interpreting the time in the source timezone (From Timezone) 3. Converting the absolute moment in time to the target timezone (To Timezone) 4. Formatting the result according to the Time Format 5. Outputting the converted time string The conversion preserves the actual moment in time while changing its representation for the target timezone.",
@@ -28,7 +28,7 @@
       ]
     },
     "format-time": {
-      "namespace": "Core.Datetime.FormatTime",
+      "namespace": "Robomotion.DateTime.Format",
       "name": "FormatTime",
       "summary": "Converts a date/time value from one format to another. This node is essential for transforming date/time strings to match different system requirements or human-readable formats.",
       "howItWorks": "The Format Time node converts date/time strings between different formats by: 1. Parsing the input time string according to the In Layout format 2. Extracting the date/time components 3. Reformatting the date/time according to the Out Layout format 4. Outputting the converted time string The conversion preserves the actual date/time value; only the string representation changes.",
@@ -40,7 +40,7 @@
       ]
     },
     "is-leap-year": {
-      "namespace": "Core.Datetime.IsLeapYear",
+      "namespace": "Robomotion.DateTime.Leap",
       "name": "IsLeapYear",
       "summary": "Checks whether the year in a given date is a leap year. This node is useful for date validation, calendar calculations, and handling February 29th date operations in automation workflows.",
       "howItWorks": "The Is Leap Year node determines if a year is a leap year using the standard calendar rules: **A year is a leap year if:** 1. It is divisible by 4, AND 2. Either: - It is NOT divisible by 100, OR - It IS divisible by 400 **Examples:** - 2024 is a leap year (divisible by 4, not by 100) - 2000 is a leap year (divisible by 400) - 1900 is NOT a leap year (divisible by 100 but not by 400) - 2023 is NOT a leap year (not divisible by 4)",
@@ -52,7 +52,7 @@
       ]
     },
     "now": {
-      "namespace": "Core.Datetime.Now",
+      "namespace": "Robomotion.DateTime.Now",
       "name": "Now",
       "summary": "Gets the current date and time in a specified format and timezone.",
       "howItWorks": "The Now node retrieves the current system time and formats it according to your specifications. When executed, the node: 1. Gets the current system time 2. Applies the specified timezone offset (if not using Local) 3. Formats the time according to the selected layout 4. Outputs the formatted time string",
@@ -63,7 +63,7 @@
       ]
     },
     "split-date": {
-      "namespace": "Core.Datetime.SplitDate",
+      "namespace": "Robomotion.DateTime.Split",
       "name": "SplitDate",
       "summary": "Extracts individual date and time components (year, month, day, hour, minute, second, weekday, etc.) from a date/time value and returns them as separate fields in an object. This node is essential for performing conditional logic, filtering, and custom date operations based on specific components.",
       "howItWorks": "The Split Date node parses a date/time string and extracts all components by: 1. Parsing the input time according to the specified Layout 2. Extracting each date and time component 3. Creating an object with all components as separate fields 4. Outputting the object for use in subsequent nodes",
@@ -75,7 +75,7 @@
       ]
     },
     "time-span": {
-      "namespace": "Core.Datetime.TimeSpan",
+      "namespace": "Robomotion.DateTime.Span",
       "name": "TimeSpan",
       "summary": "Calculates the time difference between two date/time values and returns the result in milliseconds. This node is essential for measuring durations, calculating elapsed time, and time-based analytics in automation workflows.",
       "howItWorks": "The Time Span node calculates the duration between two date/time values by: 1. Parsing the Start Date according to the specified Layout 2. Parsing the End Date according to the specified Layout 3. Calculating the difference (End Date - Start Date) 4. Converting the difference to milliseconds 5. Outputting the result as a number **Important:** The result is `End Date - Start Date`: - Positive value: End Date is after Start Date - Negative value: End Date is before Start Date - Zero: Both dates are the same",

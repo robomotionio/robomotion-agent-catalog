@@ -4,7 +4,7 @@
   "description": "## Overview The OAuth2 package provides OAuth2 authentication capabilities for API integrations. Use it when you need to authenticate with services that require OAuth2, obtain access tokens, and authorize your automation to access protected resources.",
   "nodes": {
     "auth_code": {
-      "namespace": "Core.Oauth2.Auth_code",
+      "namespace": "Robomotion.Oauth2.AuthCode",
       "name": "Auth_code",
       "summary": "Implements the OAuth 2.0 Authorization Code flow for obtaining access tokens.",
       "howItWorks": "The Auth Code node implements the OAuth 2.0 Authorization Code flow to obtain access tokens. When executed, the node: 1. Retrieves the OAuth 2.0 credentials from the configured credential store 2. Validates the required credential fields (client_id, client_secret, token_uri) 3. Checks if an auth_uri is provided: * If present, initiates the full OAuth 2.0 authorization flow using a browser dialog * If not present, uses a refresh token to obtain a new access token 4. Updates the credential store with the new token information 5. Returns the access token as output",
@@ -20,6 +20,77 @@
         "For security, access tokens and refresh tokens are stored encrypted in the credential store",
         "The authorization flow requires user interaction through a browser dialog",
         "The redirect URL must be properly configured in your OAuth 2.0 provider's settings"
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 Credentials",
+          "description": "OAuth2 credentials for authorization code flow. Authorize via browser to obtain tokens.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "description": "OAuth2 Client ID from your application"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth2 Client Secret from your application"
+            },
+            {
+              "name": "auth_uri",
+              "title": "Authorization URL",
+              "type": "text",
+              "required": true,
+              "placeholder": "https://accounts.google.com/o/oauth2/auth",
+              "description": "OAuth2 authorization endpoint URL"
+            },
+            {
+              "name": "token_uri",
+              "title": "Token URL",
+              "type": "text",
+              "required": true,
+              "placeholder": "https://oauth2.googleapis.com/token",
+              "description": "OAuth2 token endpoint URL"
+            },
+            {
+              "name": "scopes",
+              "title": "Scopes",
+              "type": "text",
+              "required": true,
+              "placeholder": "openid,email,profile",
+              "description": "Comma-separated list of OAuth2 scopes to request"
+            }
+          ],
+          "help": [
+            "1. Create an OAuth2 application in your provider's developer console",
+            "2. Add http://localhost:9876/oauth2/callback as a Redirect URI",
+            "3. Copy the Client ID and Client Secret",
+            "4. Find the Authorization and Token URLs in your provider's documentation",
+            "5. Enter the scopes required for your application"
+          ],
+          "resources": [
+            {
+              "label": "Google OAuth2",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            },
+            {
+              "label": "Microsoft OAuth2",
+              "url": "https://portal.azure.com/#blade/Microsoft_AAD_RegisteredApps/ApplicationsListBlade"
+            }
+          ]
+        }
       ]
     }
   }

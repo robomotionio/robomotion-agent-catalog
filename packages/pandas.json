@@ -4,7 +4,7 @@
   "description": "## Overview The Pandas package provides advanced data table manipulation capabilities inspired by Python's pandas library. Use it when you need to work with structured tabular data, perform complex queries, merge datasets, or convert between data formats.",
   "nodes": {
     "add_column": {
-      "namespace": "Core.Pandas.Add_column",
+      "namespace": "Robomotion.Pandas.AddColumn",
       "name": "Add_column",
       "summary": "Adds a new column to a table with specified values.",
       "howItWorks": "The Add Column node adds a new column to an existing table with the specified values. When executed, the node: 1. Validates that the input table is not empty and is valid 2. Checks if the table is a reference table and handles it appropriately 3. Validates that the column name is not empty 4. Adds the new column with the provided values to the table 5. Returns the updated table",
@@ -20,7 +20,7 @@
       ]
     },
     "add_row": {
-      "namespace": "Core.Pandas.Add_row",
+      "namespace": "Robomotion.Pandas.AddRow",
       "name": "Add_row",
       "summary": "Adds a new row to a table with specified values.",
       "howItWorks": "The Add Row node adds a new row to an existing table with the specified values. When executed, the node: 1. Validates that the input table is not empty and is valid 2. Checks if the table is a reference table and handles it appropriately 3. Validates that the row data is not empty 4. Adds the new row to the table 5. Returns the updated table",
@@ -35,7 +35,7 @@
       ]
     },
     "append_table": {
-      "namespace": "Core.Pandas.Append_table",
+      "namespace": "Robomotion.Pandas.AppendTable",
       "name": "Append_table",
       "summary": "Combines two tables by appending the rows of the second table to the first table.",
       "howItWorks": "The Append Table node combines two tables by appending the rows of the second table to the first table. When executed, the node: 1. Validates that both input tables are not empty and are valid 2. Checks if the tables are reference tables and handles them appropriately 3. Ensures that both tables have the same column structure 4. Concatenates the rows of both tables 5. Returns the combined table",
@@ -50,7 +50,7 @@
       ]
     },
     "convert_type": {
-      "namespace": "Core.Pandas.Convert_type",
+      "namespace": "Robomotion.Pandas.ConvertType",
       "name": "Convert_type",
       "summary": "Converts the data type of a specified column in a table.",
       "howItWorks": "The Convert Type node changes the data type of a specified column in a table. When executed, the node: 1. Validates that the input table is not empty and is valid 2. Checks if the table is a reference table and handles it appropriately 3. Validates that the column name is not empty 4. Ensures a data type is selected 5. Converts the specified column to the selected data type 6. Returns the updated table",
@@ -66,7 +66,7 @@
       ]
     },
     "csv_to_datatable": {
-      "namespace": "Core.Pandas.Csv_to_datatable",
+      "namespace": "Robomotion.Pandas.CSVToDataTable",
       "name": "Csv_to_datatable",
       "summary": "Converts a CSV file to a data table format.",
       "howItWorks": "The CSV To Data Table node reads a CSV file and converts it to a data table format. When executed, the node: 1. Validates that the CSV file path is not empty 2. Checks if the CSV file exists at the specified path 3. Reads the CSV file using pandas 4. Replaces any NaN values with empty strings 5. Converts the data to a dictionary format with columns and rows 6. Returns the data table",
@@ -83,7 +83,7 @@
       ]
     },
     "datatable_to_csv": {
-      "namespace": "Core.Pandas.Datatable_to_csv",
+      "namespace": "Robomotion.Pandas.DataTableToCSV",
       "name": "Datatable_to_csv",
       "summary": "Converts a data table to a CSV file format.",
       "howItWorks": "The Data Table To CSV node converts a data table to a CSV file format. When executed, the node: 1. Validates that the input table is not empty and is valid 2. Checks if the table is a reference table and handles it appropriately 3. Validates that the CSV file path is not empty 4. Checks if a file already exists at the specified path and handles overwrite settings 5. Converts the data table to a pandas DataFrame 6. Saves the DataFrame as a CSV file at the specified path",
@@ -100,7 +100,7 @@
       ]
     },
     "excel_to_datatable": {
-      "namespace": "Core.Pandas.Excel_to_datatable",
+      "namespace": "Robomotion.Pandas.ExcelToDataTable",
       "name": "Excel_to_datatable",
       "summary": "Converts an Excel file to a data table format.",
       "howItWorks": "The Excel To Data Table node reads an Excel file and converts it to a data table format. When executed, the node: 1. Validates that the Excel file path is not empty 2. Checks if the Excel file exists at the specified path 3. Reads the Excel file using pandas 4. Replaces any NaN values with empty strings 5. Converts the data to a dictionary format with columns and rows 6. Returns the data table",
@@ -117,7 +117,7 @@
       ]
     },
     "get_column": {
-      "namespace": "Core.Pandas.Get_column",
+      "namespace": "Robomotion.Pandas.GetColumn",
       "name": "Get_column",
       "summary": "Extracts a specific column from a data table.",
       "howItWorks": "The Get Column node extracts a specific column from a data table. When executed, the node: 1. Validates that the input table is not empty and is valid 2. Checks if the table is a reference table and handles it appropriately 3. Validates that the column name is not empty 4. Converts the data table to a pandas DataFrame 5. Extracts the specified column as a list of values 6. Returns the column data",
@@ -132,7 +132,7 @@
       ]
     },
     "html_to_datatable": {
-      "namespace": "Core.Pandas.Html_to_datatable",
+      "namespace": "Robomotion.Pandas.HtmlToDataTable",
       "name": "Html_to_datatable",
       "summary": "Converts HTML table data to a data table format.",
       "howItWorks": "The Html To Data Table node extracts table data from HTML content and converts it to a data table format. When executed, the node: 1. Validates that the HTML content is not empty 2. Validates that the table index is a valid integer 3. Reads the HTML content and extracts all tables using pandas 4. Selects the table at the specified index 5. Replaces any NaN values with empty strings 6. Converts the data to a dictionary format with columns and rows 7. Returns the data table",
@@ -149,7 +149,7 @@
       ]
     },
     "json_to_datatable": {
-      "namespace": "Core.Pandas.Json_to_datatable",
+      "namespace": "Robomotion.Pandas.JsonToDataTable",
       "name": "Json_to_datatable",
       "summary": "Converts JSON data to a data table format.",
       "howItWorks": "The Json To Data Table node converts JSON data to a data table format. When executed, the node: 1. Validates that the JSON data is not empty 2. Converts the JSON data to a pandas DataFrame 3. Converts the DataFrame to a dictionary format with columns and rows 4. Returns the data table",
@@ -165,7 +165,7 @@
       ]
     },
     "merge_tables": {
-      "namespace": "Core.Pandas.Merge_tables",
+      "namespace": "Robomotion.Pandas.MergeTables",
       "name": "Merge_tables",
       "summary": "Combines two tables by merging their columns side by side.",
       "howItWorks": "The Merge Tables node combines two tables by merging their columns side by side. When executed, the node: 1. Validates that both input tables are not empty and are valid 2. Checks if the tables are reference tables and handles them appropriately 3. Converts both tables to pandas DataFrames 4. Renames columns in the second table if there are naming conflicts 5. Concatenates the DataFrames horizontally (side by side) 6. Replaces any NaN values with empty strings 7. Converts the result back to the data table format 8. Returns the merged table",
@@ -181,7 +181,7 @@
       ]
     },
     "pdf_to_datatable": {
-      "namespace": "Core.Pandas.Pdf_to_datatable",
+      "namespace": "Robomotion.Pandas.PdfToDataTable",
       "name": "Pdf_to_datatable",
       "summary": "Extracts tables from a PDF file and converts them to data table format.",
       "howItWorks": "The Pdf To Data Table node extracts tables from a PDF file and converts them to data table format. When executed, the node: 1. Validates that the PDF file path is not empty 2. Checks if the PDF file exists at the specified path 3. Sets the TABULA_JAR environment variable for table extraction 4. Reads the PDF file and extracts tables using the tabula library 5. Converts each extracted table to a dictionary format with columns and rows 6. Replaces any NaN values with empty strings 7. Returns a list of all extracted tables",
@@ -200,7 +200,7 @@
       ]
     },
     "query": {
-      "namespace": "Core.Pandas.Query",
+      "namespace": "Robomotion.Pandas.Query",
       "name": "Query",
       "summary": "Filters a data table using a query string.",
       "howItWorks": "The Query node filters a data table using a query string. When executed, the node: 1. Validates that the input table is not empty and is valid 2. Checks if the table is a reference table and handles it appropriately 3. Validates that the query string is not empty 4. Converts the data table to a pandas DataFrame 5. Applies the query string to filter the DataFrame 6. Converts the filtered DataFrame back to the data table format 7. Returns the filtered table",
@@ -219,7 +219,7 @@
       ]
     },
     "remove_column": {
-      "namespace": "Core.Pandas.Remove_column",
+      "namespace": "Robomotion.Pandas.RemoveColumn",
       "name": "Remove_column",
       "summary": "Removes a specified column from a data table.",
       "howItWorks": "The Remove Column node removes a specified column from a data table. When executed, the node: 1. Validates that the input table is not empty and is valid 2. Checks if the table is a reference table and handles it appropriately 3. Validates that the column name is not empty 4. Converts the data table to a pandas DataFrame 5. Removes the specified column from the DataFrame 6. Converts the modified DataFrame back to the data table format 7. Returns the updated table",
@@ -235,7 +235,7 @@
       ]
     },
     "remove_duplicates": {
-      "namespace": "Core.Pandas.Remove_duplicates",
+      "namespace": "Robomotion.Pandas.RemoveDuplicates",
       "name": "Remove_duplicates",
       "summary": "Removes duplicate rows from a data table.",
       "howItWorks": "The Remove Duplicates node removes duplicate rows from a data table. When executed, the node: 1. Validates that the input table is not empty and is valid 2. Checks if the table is a reference table and handles it appropriately 3. Converts the data table to a pandas DataFrame 4. Removes duplicate rows based on the specified options 5. Converts the modified DataFrame back to the data table format 6. Returns the updated table",
@@ -253,7 +253,7 @@
       ]
     },
     "remove_row": {
-      "namespace": "Core.Pandas.Remove_row",
+      "namespace": "Robomotion.Pandas.RemoveRow",
       "name": "Remove_row",
       "summary": "Removes a specified row from a data table.",
       "howItWorks": "The Remove Row node removes a specified row from a data table. When executed, the node: 1. Validates that the input table is not empty and is valid 2. Checks if the table is a reference table and handles it appropriately 3. Validates that the row index is a valid integer 4. Removes the row at the specified index from the table 5. Converts the modified table to a pandas DataFrame 6. Converts the DataFrame back to the data table format 7. Returns the updated table",
@@ -270,7 +270,7 @@
       ]
     },
     "replace": {
-      "namespace": "Core.Pandas.Replace",
+      "namespace": "Robomotion.Pandas.ReplaceValues",
       "name": "Replace",
       "summary": "Replaces specified values in a data table with new values.",
       "howItWorks": "The Replace Values node replaces specified values in a data table with new values. When executed, the node: 1. Validates that the input table is not empty and is valid 2. Checks if the table is a reference table and handles it appropriately 3. Validates that both Old Value and New Value are provided 4. Converts the data table to a pandas DataFrame 5. Replaces all occurrences of the Old Value with the New Value 6. Converts the modified DataFrame back to the data table format 7. Returns the updated table",
@@ -287,7 +287,7 @@
       ]
     },
     "sort": {
-      "namespace": "Core.Pandas.Sort",
+      "namespace": "Robomotion.Pandas.SortTable",
       "name": "Sort",
       "summary": "Sorts a data table based on the values in a specified column.",
       "howItWorks": "The Sort Table node sorts a data table based on the values in a specified column. When executed, the node: 1. Validates that the input table is not empty and is valid 2. Checks if the table is a reference table and handles it appropriately 3. Validates that the column name is not empty 4. Converts the data table to a pandas DataFrame 5. Sorts the DataFrame based on the specified column and options 6. Converts the sorted DataFrame back to the data table format 7. Returns the sorted table",

@@ -4,7 +4,7 @@
   "description": "## Overview The Google YouTube package enables you to work with YouTube content programmatically. Use it when you need to download videos, extract transcripts, or gather video metadata for content analysis and processing.",
   "nodes": {
     "downloadTranscript": {
-      "namespace": "Core.GoogleYoutube.DownloadTranscript",
+      "namespace": "Robomotion.YouTube.DownloadTranscript",
       "name": "DownloadTranscript",
       "summary": "Downloads and saves the transcript (captions) of a YouTube video in various formats.",
       "howItWorks": "The Download Transcript node retrieves the captions/transcript of a YouTube video and saves them to a file in the specified format. When executed, the node: 1. Validates the required inputs (URL/ID, language code, and save path) 2. Extracts the video ID from the URL if a full URL is provided 3. Retrieves the list of available transcripts for the video 4. Either gets the transcript in the specified language or translates it if the \"If Not Exists Translate\" option is enabled 5. Formats the transcript according to the selected format 6. Saves the formatted transcript to the specified file path",
@@ -28,7 +28,7 @@
       ]
     },
     "downloadVideo": {
-      "namespace": "Core.GoogleYoutube.DownloadVideo",
+      "namespace": "Robomotion.YouTube.DownloadVideo",
       "name": "DownloadVideo",
       "summary": "Downloads YouTube videos in various resolutions and formats.",
       "howItWorks": "The Download Video node downloads a YouTube video using the pytube library. When executed, the node: 1. Validates the required inputs (Video URL and Path to Save) 2. Creates a YouTube object using the provided URL 3. Determines the download settings based on the options selected 4. Selects the appropriate video or audio stream based on the settings 5. Downloads the stream to the specified path with the optional custom file name",
@@ -51,7 +51,7 @@
       ]
     },
     "getVideos": {
-      "namespace": "Core.GoogleYoutube.GetVideos",
+      "namespace": "Robomotion.YouTube.GetVideos",
       "name": "GetVideos",
       "summary": "Retrieves a list of videos from a YouTube playlist.",
       "howItWorks": "The Get Videos node retrieves information about videos in a YouTube playlist. When executed, the node: 1. Validates the required input (Playlist URL) 2. Creates a Playlist object using the provided URL 3. Extracts the playlist title and video URLs 4. Returns the information as a JSON object",
@@ -71,7 +71,7 @@
       ]
     },
     "mediaInfo": {
-      "namespace": "Core.GoogleYoutube.MediaInfo",
+      "namespace": "Robomotion.YouTube.MediaInfo",
       "name": "MediaInfo",
       "summary": "Retrieves detailed information about a YouTube video including metadata and available streams.",
       "howItWorks": "The Media Info node retrieves comprehensive information about a YouTube video using the pytube library. When executed, the node: 1. Validates the required input (Video URL) 2. Creates a YouTube object using the provided URL 3. Extracts all available video and audio streams 4. Collects metadata information about the video 5. Formats all information as a JSON object and returns it",

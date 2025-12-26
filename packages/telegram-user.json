@@ -4,7 +4,7 @@
   "description": "## Overview The Telegram User package provides Telegram automation using a user account (not a bot). Use it when you need functionality only available to user accounts, such as joining channels, managing contacts, or accessing user-specific features.",
   "nodes": {
     "add_contact": {
-      "namespace": "Core.TelegramUser.Add_contact",
+      "namespace": "Robomotion.Telegram.AddContact",
       "name": "Add_contact",
       "summary": "Adds a new contact to the Telegram client's contact list.",
       "howItWorks": "The Add Contact node adds a new contact to the Telegram client's contact list. When executed, the node: 1. Validates the provided inputs (Client Id, Phone Number, and First Name) 2. Creates an InputPhoneContact object with the provided details 3. Uses the Telegram client to import the contact into the user's contact list",
@@ -21,7 +21,7 @@
       ]
     },
     "create_channel": {
-      "namespace": "Core.TelegramUser.Create_channel",
+      "namespace": "Robomotion.Telegram.CreateChannel",
       "name": "Create_channel",
       "summary": "Creates a new Telegram channel with the specified title and optional description and username.",
       "howItWorks": "The Create Channel node creates a new Telegram channel. When executed, the node: 1. Validates the provided inputs (Client Id and Title) 2. Creates a private channel with the specified title and optional description 3. Optionally assigns a username to make the channel public 4. Returns the channel's ID and access hash as output",
@@ -38,7 +38,7 @@
       ]
     },
     "delete_contact": {
-      "namespace": "Core.TelegramUser.Delete_contact",
+      "namespace": "Robomotion.Telegram.DeleteContact",
       "name": "Delete_contact",
       "summary": "Deletes a contact from the Telegram client's contact list.",
       "howItWorks": "The Delete Contact node removes a contact from the Telegram client's contact list. When executed, the node: 1. Validates the provided inputs (Client Id, User Id, and Access Hash) 2. Creates an InputUser object with the provided User Id and Access Hash 3. Uses the Telegram client to delete the contact from the user's contact list",
@@ -55,7 +55,7 @@
       ]
     },
     "download_image": {
-      "namespace": "Core.TelegramUser.Download_image",
+      "namespace": "Robomotion.Telegram.DownloadImage",
       "name": "Download_image",
       "summary": "Downloads an image from a Telegram message to a specified directory.",
       "howItWorks": "The Download Image node downloads an image from a specified Telegram message. When executed, the node: 1. Validates the provided inputs (Client Id, Chat Id, Message Id, and Download Directory) 2. Retrieves the specified message from the Telegram chat 3. Checks if the message contains a photo 4. Downloads the image to the specified directory 5. Returns the full path to the downloaded image file",
@@ -73,7 +73,7 @@
       ]
     },
     "get_chats": {
-      "namespace": "Core.TelegramUser.Get_chats",
+      "namespace": "Robomotion.Telegram.GetChats",
       "name": "Get_chats",
       "summary": "Retrieves a list of chats (dialogs) from the Telegram client.",
       "howItWorks": "The Get Chats node retrieves a list of chats (dialogs) from the Telegram client. When executed, the node: 1. Validates the provided inputs (Client Id, Limit, and Offset) 2. Uses the Telegram client to fetch dialogs with the specified limit and offset 3. Processes each dialog to extract relevant information: - For user chats, extracts the user ID - For channel chats, extracts the channel ID and title 4. Returns the list of chats as output",
@@ -90,7 +90,7 @@
       ]
     },
     "get_contacts": {
-      "namespace": "Core.TelegramUser.Get_contacts",
+      "namespace": "Robomotion.Telegram.GetContacts",
       "name": "Get_contacts",
       "summary": "Retrieves the list of contacts from the Telegram client.",
       "howItWorks": "The Get Contacts node retrieves the list of contacts from the Telegram client. When executed, the node: 1. Validates the provided Client Id input 2. Uses the Telegram client to fetch the contacts list 3. Processes each contact to extract relevant information: - ID - Access hash - First name - Last name - Username - Phone number 4. Returns the list of contacts as output",
@@ -105,7 +105,7 @@
       ]
     },
     "get_messages": {
-      "namespace": "Core.TelegramUser.Get_messages",
+      "namespace": "Robomotion.Telegram.GetMessages",
       "name": "Get_messages",
       "summary": "Retrieves messages from a specified Telegram chat.",
       "howItWorks": "The Get Messages node retrieves messages from a specified Telegram chat. When executed, the node: 1. Validates the provided inputs (Client Id, Chat, and Limit) 2. Uses the Telegram client to fetch messages from the specified chat 3. Processes each message to extract relevant information: - ID - Sender ID - Message text - Date and time - Whether the message contains a photo - From ID (if applicable) 4. Returns the list of messages as output",
@@ -124,7 +124,7 @@
       ]
     },
     "get_participants": {
-      "namespace": "Core.TelegramUser.Get_participants",
+      "namespace": "Robomotion.Telegram.GetChannelParticipants",
       "name": "Get_participants",
       "summary": "Retrieves participants from a specified Telegram channel.",
       "howItWorks": "The Get Channel Participants node retrieves participants from a specified Telegram channel. When executed, the node: 1. Validates the provided inputs (Client Id, Channel Username, Limit, and Offset) 2. Resolves the channel username to get the channel entity 3. Uses the Telegram client to fetch participants from the specified channel 4. Processes each participant to extract relevant information: - ID - Access hash - First name - Last name - Username - Phone number 5. Returns the list of participants as output",
@@ -143,7 +143,7 @@
       ]
     },
     "get_user": {
-      "namespace": "Core.TelegramUser.Get_user",
+      "namespace": "Robomotion.Telegram.GetUser",
       "name": "Get_user",
       "summary": "Retrieves detailed information about a specific Telegram user.",
       "howItWorks": "The Get User node retrieves detailed information about a specific Telegram user. When executed, the node: 1. Validates the provided inputs (Client Id and User Id) 2. Uses the Telegram client to fetch the entity information for the specified user 3. Extracts relevant user information: - ID - Access hash - First name - Last name - Username - Phone number 4. Returns the user information as output",
@@ -160,7 +160,7 @@
       ]
     },
     "invite_user_to_channel": {
-      "namespace": "Core.TelegramUser.Invite_user_to_channel",
+      "namespace": "Robomotion.Telegram.InviteUserToChannel",
       "name": "Invite_user_to_channel",
       "summary": "Invites a user to a Telegram channel.",
       "howItWorks": "The Invite User To Channel node invites a user to a Telegram channel. When executed, the node: 1. Validates the provided inputs (Client Id, Channel, User Id, and Access Hash) 2. Retrieves the channel entity using the Telegram client 3. Creates an InputUser object with the provided User Id and Access Hash 4. Uses the Telegram client to invite the user to the specified channel",
@@ -178,7 +178,7 @@
       ]
     },
     "join_chat": {
-      "namespace": "Core.TelegramUser.Join_chat",
+      "namespace": "Robomotion.Telegram.JoinChat",
       "name": "Join_chat",
       "summary": "Joins a Telegram chat or channel.",
       "howItWorks": "The Join Chat node joins a Telegram chat or channel. When executed, the node: 1. Validates the provided inputs (Client Id and Chat) 2. Retrieves the chat or channel entity using the Telegram client 3. If a Chat Hash is provided, uses it to join a private chat via invitation link 4. If no Chat Hash is provided, joins the channel directly 5. Uses the Telegram client to execute the join operation",
@@ -196,7 +196,7 @@
       ]
     },
     "login": {
-      "namespace": "Core.TelegramUser.Login",
+      "namespace": "Robomotion.Telegram.Login",
       "name": "Login",
       "summary": "Logs into a Telegram account and creates a client session.",
       "howItWorks": "The Log In node authenticates with Telegram and creates a client session. When executed, the node: 1. Validates the provided credentials (Api Id, Api Hash, and Phone Number) 2. Validates the Session Name 3. Creates a new TelegramClient with the provided credentials 4. Connects to Telegram 5. Checks if the user is already authorized: - If not authorized, sends a code request to the phone number - Opens a GUI window to enter the received code - Completes the sign-in process with the code 6. Adds the client to the client registry 7. Returns the Client Id for use in other Telegram nodes",
@@ -211,10 +211,92 @@
         "A GUI window will appear during first-time login to enter the verification code sent to the phone",
         "The returned Client Id is used in other Telegram nodes to identify which session to use",
         "Multiple sessions can be created with different Session Names"
+      ],
+      "credentials": [
+        {
+          "name": "api_id",
+          "title": "Telegram API ID",
+          "description": "Telegram API ID from my.telegram.org",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "12345678",
+              "description": "Your Telegram API ID (numeric value)"
+            }
+          ],
+          "help": [
+            "1. Go to my.telegram.org and sign in with your phone number",
+            "2. Click on 'API development tools'",
+            "3. Create a new application if you haven't already",
+            "4. Copy your API ID (numeric value)"
+          ],
+          "resources": [
+            {
+              "label": "Telegram API",
+              "url": "https://my.telegram.org"
+            }
+          ]
+        },
+        {
+          "name": "api_hash",
+          "title": "Telegram API Hash",
+          "description": "Telegram API Hash from my.telegram.org",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Hash",
+              "type": "password",
+              "required": true,
+              "placeholder": "0123456789abcdef0123456789abcdef",
+              "description": "Your Telegram API Hash (32 character hex string)"
+            }
+          ],
+          "help": [
+            "1. Go to my.telegram.org and sign in with your phone number",
+            "2. Click on 'API development tools'",
+            "3. Create a new application if you haven't already",
+            "4. Copy your API Hash"
+          ],
+          "resources": [
+            {
+              "label": "Telegram API",
+              "url": "https://my.telegram.org"
+            }
+          ]
+        },
+        {
+          "name": "phone_number",
+          "title": "Phone Number",
+          "description": "Phone number associated with the Telegram account",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Phone Number",
+              "type": "text",
+              "required": true,
+              "placeholder": "+1234567890",
+              "description": "Phone number in international format (e.g., +1234567890)"
+            }
+          ],
+          "help": [
+            "1. Enter your phone number in international format",
+            "2. Include the country code (e.g., +1 for US, +44 for UK)",
+            "3. This must be the phone number registered with your Telegram account"
+          ],
+          "resources": [
+            {
+              "label": "Telegram",
+              "url": "https://telegram.org"
+            }
+          ]
+        }
       ]
     },
     "logout": {
-      "namespace": "Core.TelegramUser.Logout",
+      "namespace": "Robomotion.Telegram.Logout",
       "name": "Logout",
       "summary": "Logs out of a Telegram account and disconnects the client session.",
       "howItWorks": "The Log Out node disconnects a Telegram client session and removes it from the client registry. When executed, the node: 1. Validates the provided Client Id input 2. Retrieves the client instance associated with the Client Id 3. Disconnects the client from Telegram 4. Removes the client from the client registry",
@@ -230,7 +312,7 @@
       ]
     },
     "send_media": {
-      "namespace": "Core.TelegramUser.Send_media",
+      "namespace": "Robomotion.Telegram.SendMedia",
       "name": "Send_media",
       "summary": "Sends a media file to a specified recipient on Telegram.",
       "howItWorks": "The Send Media node sends a media file to a specified recipient on Telegram. When executed, the node: 1. Validates the provided inputs (Client Id, To, and Media Path) 2. Checks that the media file exists and is a valid file 3. Uses the Telegram client to send the media file to the specified recipient",
@@ -248,7 +330,7 @@
       ]
     },
     "send_message": {
-      "namespace": "Core.TelegramUser.Send_message",
+      "namespace": "Robomotion.Telegram.SendMessage",
       "name": "Send_message",
       "summary": "Sends a text message to a specified recipient on Telegram.",
       "howItWorks": "The Send Message node sends a text message to a specified recipient on Telegram. When executed, the node: 1. Validates the provided inputs (Client Id, To, and Message) 2. Uses the Telegram client to send the text message to the specified recipient",

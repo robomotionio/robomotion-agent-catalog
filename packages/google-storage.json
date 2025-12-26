@@ -4,7 +4,7 @@
   "description": "## Overview Google Cloud Storage is a unified object storage service for storing and accessing data on Google Cloud Platform. With this package, you can automate file operations, bucket management, and integrate cloud storage into your automation workflows.",
   "nodes": {
     "connect": {
-      "namespace": "Core.GoogleStorage.Connect",
+      "namespace": "Robomotion.GoogleStorage.Connect",
       "name": "Connect",
       "summary": "Establishes a connection to Google Cloud Storage service and creates a reusable client session for subsequent storage operations.",
       "howItWorks": "The Connect node establishes a connection to Google Cloud Storage service using provided credentials. When executed, the node: 1. Validates the provided Google Cloud service account credentials 2. Authenticates with Google Cloud Storage API 3. Creates a storage client instance 4. Generates a unique client ID 5. Stores the client session for reuse by other nodes 6. Returns the client ID as output",
@@ -29,10 +29,45 @@
         "Error",
         "ErrCredentials",
         "ErrRuntime"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "Service Account credentials for Google Cloud Storage API.",
+          "default": true,
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Cloud Storage API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Grant the service account appropriate roles (e.g., 'Storage Admin' or 'Storage Object Admin')",
+            "4. Download the JSON key file",
+            "5. Paste the JSON content here"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            },
+            {
+              "label": "Cloud Storage Documentation",
+              "url": "https://cloud.google.com/storage/docs"
+            }
+          ]
+        }
       ]
     },
     "createbucket": {
-      "namespace": "Core.GoogleStorage.Createbucket",
+      "namespace": "Robomotion.GoogleStorage.CreateBucket",
       "name": "Createbucket",
       "summary": "Creates a new storage bucket in Google Cloud Storage with configurable access control, storage class, and labels.",
       "howItWorks": "The Create Bucket node creates a new GCS bucket. When executed, the node: 1. Establishes connection using either GCS Client Id or credentials 2. Validates Project Id and Bucket Name 3. Configures bucket attributes (access control, storage class, labels) 4. Creates the bucket in the specified project 5. Returns success once bucket is created",
@@ -57,10 +92,45 @@
       "errorCodes": [
         "Error",
         "ErrInvalidArg"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "Service Account credentials for Google Cloud Storage API.",
+          "default": true,
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Cloud Storage API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Grant the service account appropriate roles (e.g., 'Storage Admin' or 'Storage Object Admin')",
+            "4. Download the JSON key file",
+            "5. Paste the JSON content here"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            },
+            {
+              "label": "Cloud Storage Documentation",
+              "url": "https://cloud.google.com/storage/docs"
+            }
+          ]
+        }
       ]
     },
     "deletebucket": {
-      "namespace": "Core.GoogleStorage.Deletebucket",
+      "namespace": "Robomotion.GoogleStorage.DeleteBucket",
       "name": "Deletebucket",
       "summary": "Permanently deletes an empty bucket from Google Cloud Storage.",
       "howItWorks": "The Delete Bucket node removes an empty bucket from Google Cloud Storage. When executed, the node: 1. Establishes connection using either GCS Client Id or provided credentials 2. Validates the bucket name 3. Attempts to delete the specified bucket 4. Operation completes with a 10-second timeout 5. Returns success if bucket is deleted",
@@ -83,10 +153,45 @@
       "errorCodes": [
         "Error",
         "ErrInvalidArg"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "Service Account credentials for Google Cloud Storage API.",
+          "default": true,
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Cloud Storage API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Grant the service account appropriate roles (e.g., 'Storage Admin' or 'Storage Object Admin')",
+            "4. Download the JSON key file",
+            "5. Paste the JSON content here"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            },
+            {
+              "label": "Cloud Storage Documentation",
+              "url": "https://cloud.google.com/storage/docs"
+            }
+          ]
+        }
       ]
     },
     "deleteobject": {
-      "namespace": "Core.GoogleStorage.Deleteobject",
+      "namespace": "Robomotion.GoogleStorage.DeleteObject",
       "name": "Deleteobject",
       "summary": "Permanently deletes an object (file) from a Google Cloud Storage bucket.",
       "howItWorks": "The Delete Object node removes an object from a Google Cloud Storage bucket. When executed, the node: 1. Establishes connection using either GCS Client Id or provided credentials 2. Validates the bucket name and object name 3. Locates the specified object in the bucket 4. Permanently deletes the object (or creates a delete marker if versioning is enabled) 5. Completes successfully if object is deleted or doesn't exist",
@@ -111,10 +216,45 @@
       "errorCodes": [
         "Error",
         "ErrInvalidArg"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "Service Account credentials for Google Cloud Storage API.",
+          "default": true,
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Cloud Storage API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Grant the service account appropriate roles (e.g., 'Storage Admin' or 'Storage Object Admin')",
+            "4. Download the JSON key file",
+            "5. Paste the JSON content here"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            },
+            {
+              "label": "Cloud Storage Documentation",
+              "url": "https://cloud.google.com/storage/docs"
+            }
+          ]
+        }
       ]
     },
     "getbucket": {
-      "namespace": "Core.GoogleStorage.Getbucket",
+      "namespace": "Robomotion.GoogleStorage.GetBucket",
       "name": "Getbucket",
       "summary": "Retrieves detailed metadata and configuration attributes of a Google Cloud Storage bucket.",
       "howItWorks": "The Get Bucket node retrieves bucket information. When executed, the node: 1. Establishes connection using either GCS Client Id or credentials 2. Validates bucket name 3. Retrieves bucket attributes from GCS 4. Formats information into structured object 5. Returns bucket details",
@@ -137,10 +277,45 @@
       "errorCodes": [
         "Error",
         "ErrInvalidArg"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "Service Account credentials for Google Cloud Storage API.",
+          "default": true,
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Cloud Storage API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Grant the service account appropriate roles (e.g., 'Storage Admin' or 'Storage Object Admin')",
+            "4. Download the JSON key file",
+            "5. Paste the JSON content here"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            },
+            {
+              "label": "Cloud Storage Documentation",
+              "url": "https://cloud.google.com/storage/docs"
+            }
+          ]
+        }
       ]
     },
     "listbuckets": {
-      "namespace": "Core.GoogleStorage.Listbuckets",
+      "namespace": "Robomotion.GoogleStorage.ListBuckets",
       "name": "Listbuckets",
       "summary": "Retrieves a list of all storage buckets in a Google Cloud project.",
       "howItWorks": "The List Buckets node retrieves all buckets in a project. When executed, the node: 1. Establishes connection using either GCS Client Id or credentials 2. Validates the project ID 3. Queries Google Cloud Storage for all buckets in the project 4. Iterates through bucket list (10-second timeout) 5. Returns array of bucket names",
@@ -165,10 +340,45 @@
         "ErrInvalidArg",
         "ErrBucketAttribute",
         "ErrIterator"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "Service Account credentials for Google Cloud Storage API.",
+          "default": true,
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Cloud Storage API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Grant the service account appropriate roles (e.g., 'Storage Admin' or 'Storage Object Admin')",
+            "4. Download the JSON key file",
+            "5. Paste the JSON content here"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            },
+            {
+              "label": "Cloud Storage Documentation",
+              "url": "https://cloud.google.com/storage/docs"
+            }
+          ]
+        }
       ]
     },
     "listobjects": {
-      "namespace": "Core.GoogleStorage.Listobjects",
+      "namespace": "Robomotion.GoogleStorage.ListBucketObjects",
       "name": "Listobjects",
       "summary": "Retrieves a list of all objects (files) stored in a Google Cloud Storage bucket with their names and sizes.",
       "howItWorks": "The List Bucket Objects node retrieves all objects from a Google Cloud Storage bucket. When executed, the node: 1. Establishes connection using either GCS Client Id or provided credentials 2. Validates the bucket name 3. Queries Google Cloud Storage for all objects in the bucket 4. Iterates through all objects, collecting names and sizes 5. Returns an array with object details",
@@ -192,10 +402,45 @@
       "errorCodes": [
         "Error",
         "ErrInvalidArg"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "Service Account credentials for Google Cloud Storage API.",
+          "default": true,
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Cloud Storage API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Grant the service account appropriate roles (e.g., 'Storage Admin' or 'Storage Object Admin')",
+            "4. Download the JSON key file",
+            "5. Paste the JSON content here"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            },
+            {
+              "label": "Cloud Storage Documentation",
+              "url": "https://cloud.google.com/storage/docs"
+            }
+          ]
+        }
       ]
     },
     "readobject": {
-      "namespace": "Core.GoogleStorage.Readobject",
+      "namespace": "Robomotion.GoogleStorage.ReadObject",
       "name": "Readobject",
       "summary": "Reads and retrieves the contents of an object (file) from a Google Cloud Storage bucket.",
       "howItWorks": "The Read Object node retrieves the contents of an object from a Google Cloud Storage bucket. When executed, the node: 1. Establishes connection using either GCS Client Id or provided credentials 2. Validates the bucket name and object name 3. Locates the specified object in the bucket 4. Reads the complete object content 5. Converts the content to a string 6. Returns the content as output",
@@ -220,10 +465,45 @@
         "Error",
         "ErrInvalidArg",
         "ErrInternal"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "Service Account credentials for Google Cloud Storage API.",
+          "default": true,
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Cloud Storage API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Grant the service account appropriate roles (e.g., 'Storage Admin' or 'Storage Object Admin')",
+            "4. Download the JSON key file",
+            "5. Paste the JSON content here"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            },
+            {
+              "label": "Cloud Storage Documentation",
+              "url": "https://cloud.google.com/storage/docs"
+            }
+          ]
+        }
       ]
     },
     "updatebucket": {
-      "namespace": "Core.GoogleStorage.Updatebucket",
+      "namespace": "Robomotion.GoogleStorage.UpdateBucket",
       "name": "Updatebucket",
       "summary": "Updates bucket properties including storage class, versioning, and labels.",
       "howItWorks": "The Update Bucket node modifies bucket properties. When executed, the node: 1. Establishes connection using either GCS Client Id or credentials 2. Validates bucket name and inputs 3. Updates storage class if specified 4. Updates versioning if specified 5. Adds/updates label if label name and value provided 6. Returns success after updates applied",
@@ -246,10 +526,45 @@
       "errorCodes": [
         "Error",
         "ErrInvalidArg"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "Service Account credentials for Google Cloud Storage API.",
+          "default": true,
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Cloud Storage API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Grant the service account appropriate roles (e.g., 'Storage Admin' or 'Storage Object Admin')",
+            "4. Download the JSON key file",
+            "5. Paste the JSON content here"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            },
+            {
+              "label": "Cloud Storage Documentation",
+              "url": "https://cloud.google.com/storage/docs"
+            }
+          ]
+        }
       ]
     },
     "upload": {
-      "namespace": "Core.GoogleStorage.Upload",
+      "namespace": "Robomotion.GoogleStorage.Upload",
       "name": "Upload",
       "summary": "Uploads a file from the local filesystem to a Google Cloud Storage bucket.",
       "howItWorks": "The Upload File node transfers a file from the local filesystem to a Google Cloud Storage bucket. When executed, the node: 1. Establishes connection using either GCS Client Id or provided credentials 2. Validates all required inputs (Bucket Name, File Path) 3. Opens the local file for reading 4. Determines the object name (custom or original filename) 5. Uploads the file content to the specified bucket 6. Returns the GCS URI of the uploaded file",
@@ -278,6 +593,41 @@
       "errorCodes": [
         "Error",
         "ErrInvalidArg"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "Service Account credentials for Google Cloud Storage API.",
+          "default": true,
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Cloud Storage API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Grant the service account appropriate roles (e.g., 'Storage Admin' or 'Storage Object Admin')",
+            "4. Download the JSON key file",
+            "5. Paste the JSON content here"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            },
+            {
+              "label": "Cloud Storage Documentation",
+              "url": "https://cloud.google.com/storage/docs"
+            }
+          ]
+        }
       ]
     }
   }

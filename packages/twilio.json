@@ -4,7 +4,7 @@
   "description": "## Features - **SMS Messaging** - Send SMS messages to any phone number",
   "nodes": {
     "check-verification-code": {
-      "namespace": "Core.Twilio.CheckVerificationCode",
+      "namespace": "Robomotion.Twilio.Verify.CheckVerify",
       "name": "CheckVerificationCode",
       "summary": "Verifies a code entered by the user against a verification code sent via the [Send Verification Code](/reference/packages/twilio/send-verification-code) node. This node completes the verification process for two-factor authentication, phone number verification, and secure authentication flows.",
       "relatedNodes": [
@@ -26,10 +26,51 @@
         "**Security Logging** - Log failed verification attempts for security monitoring.",
         "**Retry Logic** - Allow limited retries (e.g., 3 attempts) before requiring a new code.",
         "**One-Time Use** - Once a code is successfully verified, it cannot be used again. Each verification requires a new code."
+      ],
+      "credentials": [
+        {
+          "name": "Account SID",
+          "title": "Account SID",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Account SID",
+              "type": "password",
+              "required": true,
+              "description": "Twilio Account SID for API authentication"
+            }
+          ]
+        },
+        {
+          "name": "Auth Token",
+          "title": "Auth Token",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Auth Token",
+              "type": "password",
+              "required": true,
+              "description": "Twilio Auth Token for API authentication"
+            }
+          ]
+        },
+        {
+          "name": "Verify SID",
+          "title": "Verify SID",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Verify Service SID",
+              "type": "password",
+              "required": true,
+              "description": "Twilio Verify Service SID for verification operations"
+            }
+          ]
+        }
       ]
     },
     "connect": {
-      "namespace": "Core.Twilio.Connect",
+      "namespace": "Robomotion.Twilio.Connect",
       "name": "Connect",
       "summary": "Establishes a connection to the Twilio API using your account credentials. This node creates a connection ID that can be reused across multiple Twilio nodes, eliminating the need to enter credentials repeatedly.",
       "relatedNodes": [
@@ -42,10 +83,38 @@
         "**Credential Security** - Always use Vault credentials instead of hardcoding your Account SID and Auth Token.",
         "**Error Handling** - Wrap the Connect node in a Try-Catch block to handle authentication failures gracefully.",
         "**Testing** - Verify your credentials are correct by testing with a simple Send SMS operation."
+      ],
+      "credentials": [
+        {
+          "name": "Account SID",
+          "title": "Account SID",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Account SID",
+              "type": "password",
+              "required": true,
+              "description": "Twilio Account SID for API authentication"
+            }
+          ]
+        },
+        {
+          "name": "Auth Token",
+          "title": "Auth Token",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Auth Token",
+              "type": "password",
+              "required": true,
+              "description": "Twilio Auth Token for API authentication"
+            }
+          ]
+        }
       ]
     },
     "receive-message": {
-      "namespace": "Core.Twilio.ReceiveMessage",
+      "namespace": "Robomotion.Twilio.WhatsApp.ReceiveMessage",
       "name": "ReceiveMessage",
       "summary": "Receives incoming WhatsApp messages via a webhook server. This node sets up a local HTTP server to listen for incoming messages from Twilio and triggers your automation flow when messages are received.",
       "relatedNodes": [
@@ -64,10 +133,38 @@
         "**Flow Trigger** - This node has 0 inputs (configured in the source code). It acts as a trigger node that starts the flow when messages arrive.",
         "**Concurrent Messages** - The server handles concurrent incoming messages automatically.",
         "**Error Handling** - Wrap subsequent nodes in Try-Catch to handle processing errors gracefully."
+      ],
+      "credentials": [
+        {
+          "name": "Account SID",
+          "title": "Account SID",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Account SID",
+              "type": "password",
+              "required": true,
+              "description": "Twilio Account SID for API authentication"
+            }
+          ]
+        },
+        {
+          "name": "Auth Token",
+          "title": "Auth Token",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Auth Token",
+              "type": "password",
+              "required": true,
+              "description": "Twilio Auth Token for API authentication"
+            }
+          ]
+        }
       ]
     },
     "send-sms": {
-      "namespace": "Core.Twilio.SendSms",
+      "namespace": "Robomotion.Twilio.SMS.Send",
       "name": "SendSms",
       "summary": "Sends an SMS text message to a specified phone number using the Twilio API. This node is ideal for notifications, alerts, OTP delivery, and customer communication workflows.",
       "relatedNodes": [
@@ -85,10 +182,38 @@
         "**Test Mode** - Use Twilio's verified phone numbers for testing before sending to customers.",
         "**URL Shortening** - Long URLs in messages count toward character limit. Consider using a URL shortener.",
         "**Personalization** - Use variables from your data source to personalize messages (e.g., customer name, order ID)."
+      ],
+      "credentials": [
+        {
+          "name": "Account SID",
+          "title": "Account SID",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Account SID",
+              "type": "password",
+              "required": true,
+              "description": "Twilio Account SID for API authentication"
+            }
+          ]
+        },
+        {
+          "name": "Auth Token",
+          "title": "Auth Token",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Auth Token",
+              "type": "password",
+              "required": true,
+              "description": "Twilio Auth Token for API authentication"
+            }
+          ]
+        }
       ]
     },
     "send-verification-code": {
-      "namespace": "Core.Twilio.SendVerificationCode",
+      "namespace": "Robomotion.Twilio.Verify.SendVerify",
       "name": "SendVerificationCode",
       "summary": "Sends a verification code (OTP - One-Time Password) to a phone number using Twilio Verify API. This node is essential for implementing two-factor authentication (2FA), phone number verification, and secure user authentication flows.",
       "relatedNodes": [
@@ -109,10 +234,51 @@
         "**Security** - Never log or store verification codes. Let Twilio Verify handle security.",
         "**Cost** - Verify API pricing is separate from regular SMS/WhatsApp pricing. Check Twilio pricing for your region.",
         "**Testing** - Use verified phone numbers during development to avoid costs."
+      ],
+      "credentials": [
+        {
+          "name": "Account SID",
+          "title": "Account SID",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Account SID",
+              "type": "password",
+              "required": true,
+              "description": "Twilio Account SID for API authentication"
+            }
+          ]
+        },
+        {
+          "name": "Auth Token",
+          "title": "Auth Token",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Auth Token",
+              "type": "password",
+              "required": true,
+              "description": "Twilio Auth Token for API authentication"
+            }
+          ]
+        },
+        {
+          "name": "Verify SID",
+          "title": "Verify SID",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Verify Service SID",
+              "type": "password",
+              "required": true,
+              "description": "Twilio Verify Service SID for verification operations"
+            }
+          ]
+        }
       ]
     },
     "send-wp-message": {
-      "namespace": "Core.Twilio.SendWpMessage",
+      "namespace": "Robomotion.Twilio.WhatsApp.SendMessage",
       "name": "SendWpMessage",
       "summary": "Sends a WhatsApp message to a specified phone number using the Twilio API for WhatsApp. This node enables you to integrate WhatsApp messaging into your automation workflows for richer customer communication.",
       "relatedNodes": [
@@ -131,10 +297,38 @@
         "**Template Messages** - For certain use cases (marketing, notifications), you may need to use WhatsApp-approved message templates.",
         "**Response Handling** - Use the [Receive Message](/reference/packages/twilio/receive-message) node to handle incoming WhatsApp replies.",
         "**Rate Limiting** - Add delays between messages when sending to multiple recipients to avoid rate limits."
+      ],
+      "credentials": [
+        {
+          "name": "Account SID",
+          "title": "Account SID",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Account SID",
+              "type": "password",
+              "required": true,
+              "description": "Twilio Account SID for API authentication"
+            }
+          ]
+        },
+        {
+          "name": "Auth Token",
+          "title": "Auth Token",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Auth Token",
+              "type": "password",
+              "required": true,
+              "description": "Twilio Auth Token for API authentication"
+            }
+          ]
+        }
       ]
     },
     "voice-call": {
-      "namespace": "Core.Twilio.VoiceCall",
+      "namespace": "Robomotion.Twilio.Voice.Call",
       "name": "VoiceCall",
       "summary": "Makes an automated voice call using the Twilio API. This node can deliver voice messages using text-to-speech or execute custom TwiML scripts for advanced call flows.",
       "relatedNodes": [
@@ -156,6 +350,34 @@
         "**Answering Machines** - Check `answered_by` in Response to detect if a machine answered. Consider using Twilio's AMD (Answering Machine Detection).",
         "**Retry Logic** - Implement retry logic for failed calls (busy, no-answer). Add delays between retries.",
         "**Status Tracking** - Check call status in Response: `queued`, `ringing`, `in-progress`, `completed`, `busy`, `no-answer`, `failed`."
+      ],
+      "credentials": [
+        {
+          "name": "Account SID",
+          "title": "Account SID",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Account SID",
+              "type": "password",
+              "required": true,
+              "description": "Twilio Account SID for API authentication"
+            }
+          ]
+        },
+        {
+          "name": "Auth Token",
+          "title": "Auth Token",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Auth Token",
+              "type": "password",
+              "required": true,
+              "description": "Twilio Auth Token for API authentication"
+            }
+          ]
+        }
       ]
     }
   }

@@ -4,7 +4,7 @@
   "description": "## Overview The Forms package enables you to create, manage, and collect data from web forms hosted on the Robomotion platform. Use it when you need to gather input from users, create approval workflows, or build interactive data collection processes.",
   "nodes": {
     "create-form": {
-      "namespace": "Core.Forms.CreateForm",
+      "namespace": "Core.Forms.Create",
       "name": "CreateForm",
       "summary": "This node allows you to create a new form using the provided title, description, and queue. Optionally, you can also specify a color and a logo URL.",
       "howItWorks": "1. The node validates required inputs: Form Name, Queue Name, and Form UI schema must not be empty 2. RSA credentials are retrieved from the specified vault to encrypt submitted form data 3. The Form UI JSON is processed, replacing any Mustache template variables (`{{variable}}`) with values from the message 4. A theme configuration (color and logo URL) is added to the form UI structure 5. The complete form data is sent to the Robomotion Forms API via `/v1/forms.create` endpoint 6. If creation succeeds, the new Form ID is extracted from the API response 7. The Form ID is assigned to the configured output variable and the message passes through 8. If creation fails, an error is raised with details from the API response",
@@ -52,7 +52,7 @@
       ]
     },
     "create-form-instance": {
-      "namespace": "Core.Forms.CreateFormInstance",
+      "namespace": "Core.Forms.CreateInstance",
       "name": "CreateFormInstance",
       "summary": "Creates a new form instance based on a given form ID.",
       "howItWorks": "1. The node validates that Form ID is provided and not empty 2. The node checks that a valid Form Instance Type (Disposable or Permanent) is selected 3. A request is sent to the Robomotion Forms API at `/v1/forms.create.instance` endpoint 4. The API creates a new form instance with a unique instance ID 5. The instance ID is converted to a short encoded ID for the URL 6. A publicly accessible form URL is generated using the format: `{FormsURL}/#/{shortID}` 7. Both the Form Instance ID and Form URL are set in the output variables 8. The message passes through with the new form instance information",
@@ -92,7 +92,7 @@
       ]
     },
     "delete-form": {
-      "namespace": "Core.Forms.DeleteForm",
+      "namespace": "Core.Forms.Delete",
       "name": "DeleteForm",
       "summary": "Deletes a created Form",
       "howItWorks": "1. The node validates that Form ID is provided and not empty 2. A delete request is sent to the Robomotion Forms API at `/v1/forms.delete` endpoint 3. The API permanently removes the form and all its associated instances 4. If deletion succeeds (response.OK = true), the message passes through unchanged 5. If deletion fails, an error is raised with the API error message",
@@ -130,7 +130,7 @@
       ]
     },
     "delete-form-instance": {
-      "namespace": "Core.Forms.DeleteFormInstance",
+      "namespace": "Core.Forms.DeleteInstance",
       "name": "DeleteFormInstance",
       "summary": "Deletes a form instance",
       "howItWorks": "1. The node validates that Form Instance ID is provided and not empty 2. A delete request is sent to the Robomotion Forms API at `/v1/forms.instance.delete` endpoint 3. The API removes the specific form instance and its submitted data (if any) 4. If deletion succeeds (response.OK = true), the message passes through unchanged 5. If deletion fails, an error is raised with the API error message",
@@ -167,7 +167,7 @@
       ]
     },
     "get-form-instance": {
-      "namespace": "Core.Forms.GetFormInstance",
+      "namespace": "Core.Forms.GetInstance",
       "name": "GetFormInstance",
       "summary": "Gets the form by Form Instance ID",
       "howItWorks": "1. The node validates that Form Instance ID is provided and not empty 2. A GET request is sent to the Robomotion Forms API at `/v1/forms.get?instance_id={id}` endpoint 3. The API retrieves the form instance data, including: - Form schema and UI configuration - Submitted form data (if the instance has been submitted) - Instance metadata (creation time, status, type, etc.) 4. The form instance object is extracted from the API response 5. The form data is set in the configured output variable 6. The message passes through with the form instance information",
@@ -206,7 +206,7 @@
       ]
     },
     "list-forms": {
-      "namespace": "Core.Forms.ListForms",
+      "namespace": "Core.Forms.List",
       "name": "ListForms",
       "summary": "Lists all available forms",
       "howItWorks": "1. A GET request is sent to the Robomotion Forms API at `/v1/forms.list` endpoint 2. The API retrieves all forms accessible to the current workspace 3. The forms array is extracted from the API response 4. Each form object in the array contains metadata like ID, name, description, queue name, creation date, etc. 5. The forms list is set in the configured output variable 6. The message passes through with the complete forms list",
@@ -243,7 +243,7 @@
       ]
     },
     "update-form": {
-      "namespace": "Core.Forms.UpdateForm",
+      "namespace": "Core.Forms.Update",
       "name": "UpdateForm",
       "summary": "Updates a form with the provided properties.",
       "howItWorks": "1. The node validates that Form ID is provided and not empty 2. Input values are retrieved for Form Name, Description, and Queue Name 3. If credentials are provided and valid: - The RSA Key Pair is retrieved from the vault - The public key is extracted for form encryption 4. If Form UI data is provided: - Mustache template variables (`{{variable}}`) are replaced with message values - The JSON is parsed and validated 5. All form data (name, description, queue, public key, UI) is packaged into an update request 6. The request is sent to the Robomotion Forms API at `/v1/forms.update` endpoint 7. The form is updated with the new properties 8. The message passes through unchanged",

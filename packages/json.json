@@ -4,7 +4,7 @@
   "description": "## Overview The JSON package provides comprehensive JSON handling capabilities. Use it when you need to parse JSON responses from APIs, create JSON payloads for requests, manipulate JSON objects, or read/write JSON files.",
   "nodes": {
     "clone": {
-      "namespace": "Core.Json.Clone",
+      "namespace": "Robomotion.JSON.Clone",
       "name": "Clone",
       "summary": "Creates a copy of a JSON object payload.",
       "howItWorks": "The Clone node creates an exact copy of a JSON object. When executed, the node: 1. Receives a JSON object through the Payload input 2. Passes the same object to the Clone output without modification 3. Preserves all key-value pairs and nested structures",
@@ -22,7 +22,7 @@
       ]
     },
     "create": {
-      "namespace": "Core.Json.Create",
+      "namespace": "Robomotion.JSON.Create",
       "name": "Create",
       "summary": "Creates a new empty JSON object.",
       "howItWorks": "The Create node initializes a new empty JSON object. When executed, the node: 1. Creates an empty JSON object using \"{}\" 2. Outputs the empty object through the Payload output",
@@ -37,7 +37,7 @@
       ]
     },
     "decode": {
-      "namespace": "Core.Json.Decode",
+      "namespace": "Robomotion.JSON.Decode",
       "name": "Decode",
       "summary": "Converts a JSON string to a JSON object.",
       "howItWorks": "The Decode node converts a JSON string to a JSON object. When executed, the node: 1. Receives a JSON string through the Value input 2. Uses JSON unmarshaling to parse the string into an object 3. Outputs the parsed object through the Payload output",
@@ -56,7 +56,7 @@
       ]
     },
     "delete": {
-      "namespace": "Core.Json.Delete",
+      "namespace": "Robomotion.JSON.Delete",
       "name": "Delete",
       "summary": "Removes a key-value pair from a JSON object.",
       "howItWorks": "The Delete Value node removes a specified key-value pair from a JSON object. When executed, the node: 1. Receives a JSON object through the Payload input 2. Receives a key name through the Key input 3. Optionally escapes dots in the key name if the Escape option is enabled 4. Removes the specified key-value pair from the JSON object 5. Outputs the modified JSON object through the Payload output",
@@ -76,7 +76,7 @@
       ]
     },
     "encode": {
-      "namespace": "Core.Json.Encode",
+      "namespace": "Robomotion.JSON.Encode",
       "name": "Encode",
       "summary": "Converts a JSON object to its string representation.",
       "howItWorks": "The Encode node converts a JSON object to its string format. When executed, the node: 1. Receives a JSON object through the Payload input 2. Uses JSON marshaling to convert the object to a string 3. Outputs the string representation through the Value output",
@@ -95,7 +95,7 @@
       ]
     },
     "get": {
-      "namespace": "Core.Json.Get",
+      "namespace": "Robomotion.JSON.Get",
       "name": "Get",
       "summary": "Retrieves a value from a JSON object using a specified key.",
       "howItWorks": "The Get Value node retrieves a value from a JSON object using a specified key. When executed, the node: 1. Receives a JSON object through the Payload input 2. Receives a key name through the Key input 3. Optionally escapes dots in the key name if the Escape option is enabled 4. Retrieves the value associated with the specified key from the JSON object 5. Outputs the retrieved value through the Value output",
@@ -116,7 +116,7 @@
       ]
     },
     "keys": {
-      "namespace": "Core.Json.Keys",
+      "namespace": "Robomotion.JSON.Keys",
       "name": "Keys",
       "summary": "Retrieves all keys from a JSON object.",
       "howItWorks": "The Get Keys node extracts all key names from a JSON object. When executed, the node: 1. Receives a JSON object through the Payload input 2. Iterates through all key-value pairs in the object 3. Collects all key names into an array 4. Outputs the array of keys through the Keys output",
@@ -136,7 +136,7 @@
       ]
     },
     "read": {
-      "namespace": "Core.Json.Read",
+      "namespace": "Robomotion.JSON.Read",
       "name": "Read",
       "summary": "Reads a JSON file from the file system and converts it to a JSON object.",
       "howItWorks": "The Read node loads a JSON file from the file system and converts it to a JSON object. When executed, the node: 1. Receives a file path through the Path input 2. Reads the file content from the specified path 3. Removes any Byte Order Mark (BOM) if present 4. Parses the file content as JSON 5. Outputs the parsed JSON object through the Payload output",
@@ -158,7 +158,7 @@
       ]
     },
     "set": {
-      "namespace": "Core.Json.Set",
+      "namespace": "Robomotion.JSON.Set",
       "name": "Set",
       "summary": "Sets or updates a key-value pair in a JSON object.",
       "howItWorks": "The Set Value node sets or updates a key-value pair in a JSON object. When executed, the node: 1. Receives a JSON object through the Payload input 2. Receives a key name through the Key input 3. Receives a value through the Value input 4. Optionally escapes dots in the key name if the Escape option is enabled 5. Sets or updates the specified key-value pair in the JSON object 6. Outputs the modified JSON object through the Payload output",
@@ -181,7 +181,7 @@
       ]
     },
     "values": {
-      "namespace": "Core.Json.Values",
+      "namespace": "Robomotion.JSON.Values",
       "name": "Values",
       "summary": "Retrieves all values from a JSON object.",
       "howItWorks": "The Get Values node extracts all values from a JSON object. When executed, the node: 1. Receives a JSON object through the Payload input 2. Iterates through all key-value pairs in the object 3. Collects all values into an array 4. Outputs the array of values through the Values output",
@@ -202,7 +202,7 @@
       ]
     },
     "write": {
-      "namespace": "Core.Json.Write",
+      "namespace": "Robomotion.JSON.Write",
       "name": "Write",
       "summary": "Writes a JSON object to a file in the file system.",
       "howItWorks": "The Write node converts a JSON object to its string representation and writes it to a file. When executed, the node: 1. Receives a JSON object through the Payload input 2. Receives a file path through the Path input 3. Converts the JSON object to a formatted string with indentation 4. Creates or overwrites the file at the specified path 5. Writes the JSON string to the file",

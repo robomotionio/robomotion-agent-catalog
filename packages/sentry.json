@@ -4,7 +4,7 @@
   "description": "## Overview The Sentry package provides integration with Sentry error tracking. Use it when you need to track errors, exceptions, and custom messages from your automation workflows for monitoring and debugging.",
   "nodes": {
     "capture_message": {
-      "namespace": "Core.Sentry.Capture_message",
+      "namespace": "Robomotion.Sentry.Capture",
       "name": "Capture_message",
       "summary": "Captures messages or exceptions and sends them to Sentry for error tracking and monitoring.",
       "howItWorks": "The Capture node integrates with the Sentry service to send error reports and messages for tracking and monitoring. When executed, the node: 1. Validates the provided inputs (Message) 2. Initializes the Sentry client with the provided DSN 3. Captures the message or exception based on the selected Type 4. Flushes the Sentry client to ensure all data is sent",
@@ -18,6 +18,22 @@
         "Ensure your Sentry DSN is correctly configured in the credentials",
         "The message content should not be empty",
         "Sentry captures additional context about the environment automatically"
+      ],
+      "credentials": [
+        {
+          "name": "apikey",
+          "title": "Sentry DSN",
+          "description": "Sentry Data Source Name (DSN) for error monitoring",
+          "fields": [
+            {
+              "name": "value",
+              "title": "DSN",
+              "type": "string",
+              "required": true,
+              "description": "Sentry DSN URL from your Sentry project settings"
+            }
+          ]
+        }
       ]
     }
   }

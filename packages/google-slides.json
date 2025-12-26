@@ -4,7 +4,7 @@
   "description": "## Overview Automate your presentation workflows with the Google Slides package. Whether you need to generate reports from data, create personalized presentations at scale, or maintain presentation templates, this package provides the tools you need.",
   "nodes": {
     "addImage": {
-      "namespace": "Core.GoogleSlides.AddImage",
+      "namespace": "Robomotion.GoogleSlides.AddImage",
       "name": "AddImage",
       "summary": "Adds an image to a Google Slides presentation.",
       "howItWorks": "The Add Image node integrates with Google Slides to insert an image into a specific slide of a presentation. When executed, the node: 1. Validates the provided inputs (Presentation Id, Image Object Id, Image Url, Slide Page Index) 2. Connects to the specified Google Slides presentation 3. Retrieves the target slide based on the Slide Page Index 4. Creates an image element with the specified properties (size, position, scaling) 5. Inserts the image from the provided URL into the target slide",
@@ -24,10 +24,84 @@
         "The default slide dimensions are 960.0 (width) by 540.0 (height) points",
         "Supported image formats include JPG, PNG, GIF, and other web-friendly formats",
         "The image will be added to the specified slide at the specified position and size"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For server automation. Requires sharing the presentation with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Go to Google Cloud Console and enable Google Slides API",
+            "2. Go to 'IAM \u0026 Admin' -\u003e 'Service Accounts' -\u003e Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share the presentation with the service account email",
+            "6. Paste the entire JSON content here"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal Google account access. Authorize once via browser.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Slides API",
+            "3. Go to 'Credentials' -\u003e 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "copyPresentation": {
-      "namespace": "Core.GoogleSlides.CopyPresentation",
+      "namespace": "Robomotion.GoogleSlides.CopyPresentation",
       "name": "CopyPresentation",
       "summary": "Creates a copy of an existing Google Slides presentation.",
       "howItWorks": "The Copy Presentation node creates a duplicate of an existing Google Slides presentation. When executed, the node: 1. Validates the provided inputs (Presentation Id, Title) 2. Authenticates with Google Slides API using the provided credentials 3. Creates a copy of the specified presentation with the new title 4. Optionally shares the copied presentation with specified users 5. Returns the URL of the newly created presentation",
@@ -48,10 +122,84 @@
         "EmailMessage (optional): A custom message to include in the sharing notification",
         "If Send Notification Mail is enabled, users will receive email notifications when the presentation is shared with them",
         "The output Presentation Url provides direct access to the newly created copy"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For server automation. Requires sharing the presentation with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Go to Google Cloud Console and enable Google Slides API",
+            "2. Go to 'IAM \u0026 Admin' -\u003e 'Service Accounts' -\u003e Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share the presentation with the service account email",
+            "6. Paste the entire JSON content here"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal Google account access. Authorize once via browser.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Slides API",
+            "3. Go to 'Credentials' -\u003e 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "createPresentation": {
-      "namespace": "Core.GoogleSlides.CreatePresentation",
+      "namespace": "Robomotion.GoogleSlides.CreatePresentation",
       "name": "CreatePresentation",
       "summary": "Creates a new Google Slides presentation.",
       "howItWorks": "The Create Presentation node generates a new Google Slides presentation with the specified title. When executed, the node: 1. Validates the provided Title input 2. Authenticates with Google Slides API using the provided credentials 3. Creates a new presentation with the specified title 4. Optionally shares the new presentation with specified users 5. Returns the ID of the newly created presentation",
@@ -71,10 +219,84 @@
         "If Send Notification Mail is enabled, users will receive email notifications when the presentation is shared with them",
         "The output Presentation Id can be used with other Google Slides nodes to modify the presentation",
         "The newly created presentation will be accessible in the authenticated user's Google Drive"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For server automation. Requires sharing the presentation with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Go to Google Cloud Console and enable Google Slides API",
+            "2. Go to 'IAM \u0026 Admin' -\u003e 'Service Accounts' -\u003e Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share the presentation with the service account email",
+            "6. Paste the entire JSON content here"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal Google account access. Authorize once via browser.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Slides API",
+            "3. Go to 'Credentials' -\u003e 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "getPresentation": {
-      "namespace": "Core.GoogleSlides.GetPresentation",
+      "namespace": "Robomotion.GoogleSlides.GetPresentation",
       "name": "GetPresentation",
       "summary": "Retrieves information about a Google Slides presentation.",
       "howItWorks": "The Get Presentation node retrieves detailed information about a Google Slides presentation. When executed, the node: 1. Validates the provided Presentation Id input 2. Connects to the Google Slides API 3. Retrieves either: - Full presentation details including slides, layouts, and metadata - Only the element IDs from a specific page (when Return Element IDs is enabled) 4. Returns the retrieved data as a JSON response",
@@ -91,10 +313,84 @@
         "This node is useful for inspecting presentation structure or retrieving specific page elements",
         "The retrieved data can be parsed and used in other nodes for further processing",
         "This node does not require credentials as it uses a previously opened presentation context"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For server automation. Requires sharing the presentation with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Go to Google Cloud Console and enable Google Slides API",
+            "2. Go to 'IAM \u0026 Admin' -\u003e 'Service Accounts' -\u003e Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share the presentation with the service account email",
+            "6. Paste the entire JSON content here"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal Google account access. Authorize once via browser.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Slides API",
+            "3. Go to 'Credentials' -\u003e 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "openPresentation": {
-      "namespace": "Core.GoogleSlides.OpenPresentation",
+      "namespace": "Robomotion.GoogleSlides.OpenPresentation",
       "name": "OpenPresentation",
       "summary": "Opens an existing Google Slides presentation using its URL.",
       "howItWorks": "The Open Presentation node accesses an existing Google Slides presentation using its URL. When executed, the node: 1. Validates the provided URL input 2. Authenticates with Google Slides API using the provided credentials 3. Extracts the presentation ID from the URL 4. Opens and connects to the specified presentation 5. Returns the presentation ID for use in subsequent nodes",
@@ -110,10 +406,84 @@
         "This node is useful when you have a presentation URL and need to obtain its ID for further operations",
         "Ensure the authenticated account has permission to access the presentation",
         "The presentation must be accessible to the authenticated user"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For server automation. Requires sharing the presentation with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Go to Google Cloud Console and enable Google Slides API",
+            "2. Go to 'IAM \u0026 Admin' -\u003e 'Service Accounts' -\u003e Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share the presentation with the service account email",
+            "6. Paste the entire JSON content here"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal Google account access. Authorize once via browser.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Slides API",
+            "3. Go to 'Credentials' -\u003e 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "pdfExport": {
-      "namespace": "Core.GoogleSlides.PdfExport",
+      "namespace": "Robomotion.GoogleSlides.PDFExport",
       "name": "PdfExport",
       "summary": "Exports a Google Slides presentation as a PDF file.",
       "howItWorks": "The PDF Export node converts a Google Slides presentation to PDF format and saves it to a specified local file path. When executed, the node: 1. Validates the provided Presentation Id and File Path inputs 2. Authenticates with Google Slides API using the provided credentials 3. Exports the presentation as a PDF using the Google Drive API 4. Saves the PDF file to the specified local file path",
@@ -131,10 +501,84 @@
         "The exported PDF will maintain the formatting and layout of the original presentation",
         "The PDF export uses default Google Slides export settings",
         "Make sure the application has write permissions to the specified file path directory"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For server automation. Requires sharing the presentation with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Go to Google Cloud Console and enable Google Slides API",
+            "2. Go to 'IAM \u0026 Admin' -\u003e 'Service Accounts' -\u003e Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share the presentation with the service account email",
+            "6. Paste the entire JSON content here"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal Google account access. Authorize once via browser.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Slides API",
+            "3. Go to 'Credentials' -\u003e 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "replaceImageById": {
-      "namespace": "Core.GoogleSlides.ReplaceImageById",
+      "namespace": "Robomotion.GoogleSlides.ReplaceImageById",
       "name": "ReplaceImageById",
       "summary": "Replaces an existing image in a Google Slides presentation with a new image using the image object ID.",
       "howItWorks": "The Replace Image By Id node updates an existing image in a Google Slides presentation with a new image. When executed, the node: 1. Validates the provided inputs (Presentation Id, Image Object Id, Replacement Image Url) 2. Connects to the specified Google Slides presentation 3. Locates the image object using the provided Image Object Id 4. Replaces the existing image with the new image from the provided URL 5. Applies the specified image fitting method",
@@ -155,10 +599,84 @@
         "The replaced image maintains its position and size on the slide",
         "This node is useful for updating images in templates or regularly updated presentations",
         "Supported image formats include JPG, PNG, GIF, and other web-friendly formats"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For server automation. Requires sharing the presentation with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Go to Google Cloud Console and enable Google Slides API",
+            "2. Go to 'IAM \u0026 Admin' -\u003e 'Service Accounts' -\u003e Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share the presentation with the service account email",
+            "6. Paste the entire JSON content here"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal Google account access. Authorize once via browser.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Slides API",
+            "3. Go to 'Credentials' -\u003e 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "replaceShapeswithImage": {
-      "namespace": "Core.GoogleSlides.ReplaceShapeswithImage",
+      "namespace": "Robomotion.GoogleSlides.ReplaceShapesWithImage",
       "name": "ReplaceShapeswithImage",
       "summary": "Replaces all shapes containing specific text with images in a Google Slides presentation.",
       "howItWorks": "The Replace Shapes With Image node finds all shapes containing the specified text and replaces them with images from the provided URL. When executed, the node: 1. Validates the provided inputs (Presentation Id, Text to Replace, Replacement Image Url) 2. Connects to the specified Google Slides presentation 3. Searches for all shapes containing the specified text across the presentation or specified pages 4. Replaces each matching shape with the image from the provided URL 5. Applies the specified image fitting method to each replacement",
@@ -181,10 +699,84 @@
         "The replaced images maintain the position and size of the original shapes",
         "Supported image formats include JPG, PNG, GIF, and other web-friendly formats",
         "If no matching shapes are found, the node returns an error"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For server automation. Requires sharing the presentation with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Go to Google Cloud Console and enable Google Slides API",
+            "2. Go to 'IAM \u0026 Admin' -\u003e 'Service Accounts' -\u003e Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share the presentation with the service account email",
+            "6. Paste the entire JSON content here"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal Google account access. Authorize once via browser.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Slides API",
+            "3. Go to 'Credentials' -\u003e 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     },
     "replaceText": {
-      "namespace": "Core.GoogleSlides.ReplaceText",
+      "namespace": "Robomotion.GoogleSlides.ReplaceText",
       "name": "ReplaceText",
       "summary": "Replaces all occurrences of specific text in a Google Slides presentation.",
       "howItWorks": "The Replace Text node finds all occurrences of the specified text and replaces them with new text throughout a Google Slides presentation. When executed, the node: 1. Validates the provided inputs (Presentation Id, Text to Replace, Replacement) 2. Connects to the specified Google Slides presentation 3. Searches for all occurrences of the specified text across the presentation or specified pages 4. Replaces each matching text instance with the replacement text",
@@ -206,6 +798,80 @@
         "If no matching text is found, the node returns an error",
         "The replacement preserves the original text formatting",
         "All instances of the matching text are replaced in a single operation"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "For server automation. Requires sharing the presentation with the service account email.",
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Go to Google Cloud Console and enable Google Slides API",
+            "2. Go to 'IAM \u0026 Admin' -\u003e 'Service Accounts' -\u003e Create service account",
+            "3. Download the JSON key file",
+            "4. Find 'client_email' in the JSON (e.g., bot@project.iam.gserviceaccount.com)",
+            "5. Share the presentation with the service account email",
+            "6. Paste the entire JSON content here"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            }
+          ]
+        },
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Personal)",
+          "description": "For personal Google account access. Authorize once via browser.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your OAuth app's Authorized redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxx.apps.googleusercontent.com",
+              "description": "OAuth 2.0 Client ID from Google Cloud Console"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth 2.0 Client Secret"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console (console.cloud.google.com)",
+            "2. Enable the Google Slides API",
+            "3. Go to 'Credentials' -\u003e 'Create OAuth client ID'",
+            "4. Select 'Desktop app' as application type",
+            "5. Add http://localhost:9876/oauth2/callback to redirect URIs",
+            "6. Copy the Client ID and Client Secret"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            }
+          ]
+        }
       ]
     }
   }

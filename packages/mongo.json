@@ -4,7 +4,7 @@
   "description": "## Key Features - **Connection Management**: Establish and manage connections to MongoDB servers with support for authentication",
   "nodes": {
     "Connect": {
-      "namespace": "Core.Mongo.Connect",
+      "namespace": "Robomotion.MongoDB.Connect",
       "name": "Connect",
       "summary": "Establishes a connection to a MongoDB database server using database credentials and returns a client ID for use in subsequent MongoDB operations.",
       "howItWorks": "The Connect node is the first step when using the explicit connection approach in MongoDB automation flows. When executed, the node: 1. Retrieves database credentials from the provided credential object 2. Constructs the MongoDB connection URL based on the credential fields 3. Establishes a connection to the MongoDB server 4. Verifies the connection with a ping operation 5. Stores the client connection internally with a unique client ID 6. Returns the client ID for use in other MongoDB nodes",
@@ -25,10 +25,72 @@
       "errorCodes": [
         "ErrInvalidArg",
         "ErrConnection"
+      ],
+      "credentials": [
+        {
+          "name": "mongodb_database",
+          "title": "MongoDB Database",
+          "description": "MongoDB database connection with server, port, and authentication",
+          "fields": [
+            {
+              "name": "type",
+              "title": "Database Type",
+              "type": "hidden"
+            },
+            {
+              "name": "server",
+              "title": "Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "localhost",
+              "description": "MongoDB server hostname or IP address"
+            },
+            {
+              "name": "port",
+              "title": "Port",
+              "type": "text",
+              "placeholder": "27017",
+              "description": "MongoDB server port (default: 27017)"
+            },
+            {
+              "name": "database",
+              "title": "Auth Database",
+              "type": "text",
+              "placeholder": "admin",
+              "description": "Authentication database (e.g., admin)"
+            },
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "placeholder": "admin",
+              "description": "MongoDB database username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "placeholder": "Password",
+              "description": "MongoDB database password"
+            }
+          ],
+          "help": [
+            "1. Enter the MongoDB server hostname or IP address",
+            "2. Specify the port (default is 27017)",
+            "3. Enter the authentication database (usually 'admin')",
+            "4. Provide your MongoDB credentials (username and password)"
+          ],
+          "resources": [
+            {
+              "label": "MongoDB Documentation",
+              "url": "https://www.mongodb.com/docs/"
+            }
+          ]
+        }
       ]
     },
     "CreateCollection": {
-      "namespace": "Core.Mongo.CreateCollection",
+      "namespace": "Robomotion.MongoDB.CreateCollection",
       "name": "CreateCollection",
       "summary": "Creates a new collection within a MongoDB database.",
       "howItWorks": "The Create Collection node explicitly creates a new collection in a MongoDB database. When executed, the node: 1. Validates that both database name and collection name are not empty 2. Obtains a MongoDB client (either from client ID or by creating one from credentials) 3. Accesses the specified database 4. Calls the CreateCollection command with the specified collection name 5. The new collection is created and becomes immediately available for use",
@@ -50,10 +112,72 @@
       "errorCodes": [
         "ErrInvalidArg",
         "ErrConnection"
+      ],
+      "credentials": [
+        {
+          "name": "mongodb_database",
+          "title": "MongoDB Database",
+          "description": "MongoDB database connection with server, port, and authentication",
+          "fields": [
+            {
+              "name": "type",
+              "title": "Database Type",
+              "type": "hidden"
+            },
+            {
+              "name": "server",
+              "title": "Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "localhost",
+              "description": "MongoDB server hostname or IP address"
+            },
+            {
+              "name": "port",
+              "title": "Port",
+              "type": "text",
+              "placeholder": "27017",
+              "description": "MongoDB server port (default: 27017)"
+            },
+            {
+              "name": "database",
+              "title": "Auth Database",
+              "type": "text",
+              "placeholder": "admin",
+              "description": "Authentication database (e.g., admin)"
+            },
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "placeholder": "admin",
+              "description": "MongoDB database username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "placeholder": "Password",
+              "description": "MongoDB database password"
+            }
+          ],
+          "help": [
+            "1. Enter the MongoDB server hostname or IP address",
+            "2. Specify the port (default is 27017)",
+            "3. Enter the authentication database (usually 'admin')",
+            "4. Provide your MongoDB credentials (username and password)"
+          ],
+          "resources": [
+            {
+              "label": "MongoDB Documentation",
+              "url": "https://www.mongodb.com/docs/"
+            }
+          ]
+        }
       ]
     },
     "CreateDatabase": {
-      "namespace": "Core.Mongo.CreateDatabase",
+      "namespace": "Robomotion.MongoDB.CreateDatabase",
       "name": "CreateDatabase",
       "summary": "Creates a new MongoDB database. In MongoDB, databases are created implicitly when you first store data in them, so this node creates a database by creating and immediately removing a temporary collection.",
       "howItWorks": "MongoDB creates databases lazily - a database doesn't physically exist until it contains data. This node creates a database by: 1. Validates the database name is not empty 2. Obtains a MongoDB client (either from client ID or by creating one from credentials) 3. Accesses the database with the specified name 4. Creates a temporary collection called \"defaultcollection\" 5. Inserts a temporary document into the collection 6. Immediately deletes the temporary document 7. The database now exists in MongoDB's database list",
@@ -73,10 +197,72 @@
       "errorCodes": [
         "ErrInvalidArg",
         "ErrConnection"
+      ],
+      "credentials": [
+        {
+          "name": "mongodb_database",
+          "title": "MongoDB Database",
+          "description": "MongoDB database connection with server, port, and authentication",
+          "fields": [
+            {
+              "name": "type",
+              "title": "Database Type",
+              "type": "hidden"
+            },
+            {
+              "name": "server",
+              "title": "Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "localhost",
+              "description": "MongoDB server hostname or IP address"
+            },
+            {
+              "name": "port",
+              "title": "Port",
+              "type": "text",
+              "placeholder": "27017",
+              "description": "MongoDB server port (default: 27017)"
+            },
+            {
+              "name": "database",
+              "title": "Auth Database",
+              "type": "text",
+              "placeholder": "admin",
+              "description": "Authentication database (e.g., admin)"
+            },
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "placeholder": "admin",
+              "description": "MongoDB database username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "placeholder": "Password",
+              "description": "MongoDB database password"
+            }
+          ],
+          "help": [
+            "1. Enter the MongoDB server hostname or IP address",
+            "2. Specify the port (default is 27017)",
+            "3. Enter the authentication database (usually 'admin')",
+            "4. Provide your MongoDB credentials (username and password)"
+          ],
+          "resources": [
+            {
+              "label": "MongoDB Documentation",
+              "url": "https://www.mongodb.com/docs/"
+            }
+          ]
+        }
       ]
     },
     "DeleteDocument": {
-      "namespace": "Core.Mongo.DeleteDocument",
+      "namespace": "Robomotion.MongoDB.DeleteDocument",
       "name": "DeleteDocument",
       "summary": "Deletes one or more documents from a MongoDB collection that match a specified query filter.",
       "howItWorks": "The Delete Document node removes documents from a MongoDB collection based on a query filter. When executed, the node: 1. Validates that database name and collection name are not empty 2. Obtains a MongoDB client (either from client ID or by creating one from credentials) 3. Processes the MongoDB Query input with Handlebars template rendering 4. Parses the rendered JSON into BSON format 5. Accesses the specified collection 6. Executes DeleteMany operation with the provided filter 7. Returns the count of deleted documents",
@@ -99,10 +285,72 @@
       "errorCodes": [
         "ErrInvalidArg",
         "ErrConnection"
+      ],
+      "credentials": [
+        {
+          "name": "mongodb_database",
+          "title": "MongoDB Database",
+          "description": "MongoDB database connection with server, port, and authentication",
+          "fields": [
+            {
+              "name": "type",
+              "title": "Database Type",
+              "type": "hidden"
+            },
+            {
+              "name": "server",
+              "title": "Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "localhost",
+              "description": "MongoDB server hostname or IP address"
+            },
+            {
+              "name": "port",
+              "title": "Port",
+              "type": "text",
+              "placeholder": "27017",
+              "description": "MongoDB server port (default: 27017)"
+            },
+            {
+              "name": "database",
+              "title": "Auth Database",
+              "type": "text",
+              "placeholder": "admin",
+              "description": "Authentication database (e.g., admin)"
+            },
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "placeholder": "admin",
+              "description": "MongoDB database username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "placeholder": "Password",
+              "description": "MongoDB database password"
+            }
+          ],
+          "help": [
+            "1. Enter the MongoDB server hostname or IP address",
+            "2. Specify the port (default is 27017)",
+            "3. Enter the authentication database (usually 'admin')",
+            "4. Provide your MongoDB credentials (username and password)"
+          ],
+          "resources": [
+            {
+              "label": "MongoDB Documentation",
+              "url": "https://www.mongodb.com/docs/"
+            }
+          ]
+        }
       ]
     },
     "Disconnect": {
-      "namespace": "Core.Mongo.Disconnect",
+      "namespace": "Robomotion.MongoDB.Disconnect",
       "name": "Disconnect",
       "summary": "Disconnects from a MongoDB database server and releases the client connection resources.",
       "howItWorks": "The Disconnect node properly closes a MongoDB connection and releases associated resources. When executed, the node: 1. Validates the provided client ID 2. Retrieves the MongoDB client connection from the internal registry 3. Calls the disconnect method on the MongoDB client 4. Removes the client from the internal registry 5. Releases all associated resources",
@@ -122,7 +370,7 @@
       ]
     },
     "DropCollection": {
-      "namespace": "Core.Mongo.DropCollection",
+      "namespace": "Robomotion.MongoDB.DropCollection",
       "name": "DropCollection",
       "summary": "Permanently deletes a collection and all of its documents from a MongoDB database.",
       "howItWorks": "The Drop Collection node permanently removes a collection from a MongoDB database. When executed, the node: 1. Validates that both database name and collection name are not empty 2. Obtains a MongoDB client (either from client ID or by creating one from credentials) 3. Accesses the specified database and collection 4. Calls the drop operation to delete the entire collection 5. All documents, indexes, and metadata associated with the collection are permanently removed",
@@ -145,10 +393,72 @@
       "errorCodes": [
         "ErrInvalidArg",
         "ErrConnection"
+      ],
+      "credentials": [
+        {
+          "name": "mongodb_database",
+          "title": "MongoDB Database",
+          "description": "MongoDB database connection with server, port, and authentication",
+          "fields": [
+            {
+              "name": "type",
+              "title": "Database Type",
+              "type": "hidden"
+            },
+            {
+              "name": "server",
+              "title": "Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "localhost",
+              "description": "MongoDB server hostname or IP address"
+            },
+            {
+              "name": "port",
+              "title": "Port",
+              "type": "text",
+              "placeholder": "27017",
+              "description": "MongoDB server port (default: 27017)"
+            },
+            {
+              "name": "database",
+              "title": "Auth Database",
+              "type": "text",
+              "placeholder": "admin",
+              "description": "Authentication database (e.g., admin)"
+            },
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "placeholder": "admin",
+              "description": "MongoDB database username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "placeholder": "Password",
+              "description": "MongoDB database password"
+            }
+          ],
+          "help": [
+            "1. Enter the MongoDB server hostname or IP address",
+            "2. Specify the port (default is 27017)",
+            "3. Enter the authentication database (usually 'admin')",
+            "4. Provide your MongoDB credentials (username and password)"
+          ],
+          "resources": [
+            {
+              "label": "MongoDB Documentation",
+              "url": "https://www.mongodb.com/docs/"
+            }
+          ]
+        }
       ]
     },
     "DropDatabase": {
-      "namespace": "Core.Mongo.DropDatabase",
+      "namespace": "Robomotion.MongoDB.DropDatabase",
       "name": "DropDatabase",
       "summary": "Permanently deletes a MongoDB database and all of its collections and documents.",
       "howItWorks": "The Drop Database node permanently removes a database from the MongoDB server. When executed, the node: 1. Validates that the database name is not empty 2. Obtains a MongoDB client (either from client ID or by creating one from credentials) 3. Accesses the specified database 4. Calls the drop operation to delete the entire database 5. All collections and documents within the database are permanently removed",
@@ -170,10 +480,72 @@
       "errorCodes": [
         "ErrInvalidArg",
         "ErrConnection"
+      ],
+      "credentials": [
+        {
+          "name": "mongodb_database",
+          "title": "MongoDB Database",
+          "description": "MongoDB database connection with server, port, and authentication",
+          "fields": [
+            {
+              "name": "type",
+              "title": "Database Type",
+              "type": "hidden"
+            },
+            {
+              "name": "server",
+              "title": "Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "localhost",
+              "description": "MongoDB server hostname or IP address"
+            },
+            {
+              "name": "port",
+              "title": "Port",
+              "type": "text",
+              "placeholder": "27017",
+              "description": "MongoDB server port (default: 27017)"
+            },
+            {
+              "name": "database",
+              "title": "Auth Database",
+              "type": "text",
+              "placeholder": "admin",
+              "description": "Authentication database (e.g., admin)"
+            },
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "placeholder": "admin",
+              "description": "MongoDB database username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "placeholder": "Password",
+              "description": "MongoDB database password"
+            }
+          ],
+          "help": [
+            "1. Enter the MongoDB server hostname or IP address",
+            "2. Specify the port (default is 27017)",
+            "3. Enter the authentication database (usually 'admin')",
+            "4. Provide your MongoDB credentials (username and password)"
+          ],
+          "resources": [
+            {
+              "label": "MongoDB Documentation",
+              "url": "https://www.mongodb.com/docs/"
+            }
+          ]
+        }
       ]
     },
     "InsertDocument": {
-      "namespace": "Core.Mongo.InsertDocument",
+      "namespace": "Robomotion.MongoDB.InsertDocument",
       "name": "InsertDocument",
       "summary": "Inserts one or more documents into a MongoDB collection.",
       "howItWorks": "The Insert Document node adds new documents to a MongoDB collection. When executed, the node: 1. Validates that database name and collection name are not empty 2. Obtains a MongoDB client (either from client ID or by creating one from credentials) 3. Processes the MongoDB Query input with Handlebars template rendering 4. Parses the rendered JSON into BSON format 5. Determines if it's a single document or multiple documents 6. Calls InsertOne for a single document or InsertMany for multiple documents 7. The documents are added to the collection with auto-generated ObjectIds if not provided",
@@ -196,10 +568,72 @@
       "errorCodes": [
         "ErrInvalidArg",
         "ErrConnection"
+      ],
+      "credentials": [
+        {
+          "name": "mongodb_database",
+          "title": "MongoDB Database",
+          "description": "MongoDB database connection with server, port, and authentication",
+          "fields": [
+            {
+              "name": "type",
+              "title": "Database Type",
+              "type": "hidden"
+            },
+            {
+              "name": "server",
+              "title": "Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "localhost",
+              "description": "MongoDB server hostname or IP address"
+            },
+            {
+              "name": "port",
+              "title": "Port",
+              "type": "text",
+              "placeholder": "27017",
+              "description": "MongoDB server port (default: 27017)"
+            },
+            {
+              "name": "database",
+              "title": "Auth Database",
+              "type": "text",
+              "placeholder": "admin",
+              "description": "Authentication database (e.g., admin)"
+            },
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "placeholder": "admin",
+              "description": "MongoDB database username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "placeholder": "Password",
+              "description": "MongoDB database password"
+            }
+          ],
+          "help": [
+            "1. Enter the MongoDB server hostname or IP address",
+            "2. Specify the port (default is 27017)",
+            "3. Enter the authentication database (usually 'admin')",
+            "4. Provide your MongoDB credentials (username and password)"
+          ],
+          "resources": [
+            {
+              "label": "MongoDB Documentation",
+              "url": "https://www.mongodb.com/docs/"
+            }
+          ]
+        }
       ]
     },
     "ListDatabases": {
-      "namespace": "Core.Mongo.ListDatabases",
+      "namespace": "Robomotion.MongoDB.ListDatabases",
       "name": "ListDatabases",
       "summary": "Retrieves a list of all databases available on the MongoDB server along with their metadata.",
       "howItWorks": "The List Databases node queries the MongoDB server for database information. When executed, the node: 1. Obtains a MongoDB client (either from client ID or by creating one from credentials) 2. Calls the ListDatabases command with an empty filter 3. Retrieves metadata about all databases the user has access to 4. Returns the complete database list with size and status information 5. Stores the result in the specified output variable",
@@ -222,7 +656,7 @@
       ]
     },
     "ReadAll": {
-      "namespace": "Core.Mongo.ReadAll",
+      "namespace": "Robomotion.MongoDB.ReadAll",
       "name": "ReadAll",
       "summary": "Retrieves all documents from a MongoDB collection without any filtering.",
       "howItWorks": "The Read All node retrieves every document from a MongoDB collection. When executed, the node: 1. Validates that database name and collection name are not empty 2. Obtains a MongoDB client (either from client ID or by creating one from credentials) 3. Accesses the specified collection 4. Executes a Find operation with an empty filter `{}` 5. Retrieves all documents from the collection 6. Returns the complete array of documents 7. Stores the result in the specified output variable",
@@ -246,10 +680,72 @@
       "errorCodes": [
         "ErrInvalidArg",
         "ErrConnection"
+      ],
+      "credentials": [
+        {
+          "name": "mongodb_database",
+          "title": "MongoDB Database",
+          "description": "MongoDB database connection with server, port, and authentication",
+          "fields": [
+            {
+              "name": "type",
+              "title": "Database Type",
+              "type": "hidden"
+            },
+            {
+              "name": "server",
+              "title": "Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "localhost",
+              "description": "MongoDB server hostname or IP address"
+            },
+            {
+              "name": "port",
+              "title": "Port",
+              "type": "text",
+              "placeholder": "27017",
+              "description": "MongoDB server port (default: 27017)"
+            },
+            {
+              "name": "database",
+              "title": "Auth Database",
+              "type": "text",
+              "placeholder": "admin",
+              "description": "Authentication database (e.g., admin)"
+            },
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "placeholder": "admin",
+              "description": "MongoDB database username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "placeholder": "Password",
+              "description": "MongoDB database password"
+            }
+          ],
+          "help": [
+            "1. Enter the MongoDB server hostname or IP address",
+            "2. Specify the port (default is 27017)",
+            "3. Enter the authentication database (usually 'admin')",
+            "4. Provide your MongoDB credentials (username and password)"
+          ],
+          "resources": [
+            {
+              "label": "MongoDB Documentation",
+              "url": "https://www.mongodb.com/docs/"
+            }
+          ]
+        }
       ]
     },
     "ReadDocument": {
-      "namespace": "Core.Mongo.ReadDocument",
+      "namespace": "Robomotion.MongoDB.ReadDocument",
       "name": "ReadDocument",
       "summary": "Queries and retrieves documents from a MongoDB collection based on a filter.",
       "howItWorks": "The Read Document node retrieves documents from a MongoDB collection based on a query filter. When executed, the node: 1. Validates that database name and collection name are not empty 2. Obtains a MongoDB client (either from client ID or by creating one from credentials) 3. Processes the MongoDB Query input with Handlebars template rendering 4. Parses the rendered JSON into BSON format 5. Accesses the specified collection 6. Executes a Find operation with the provided filter 7. Retrieves all matching documents 8. Returns the documents as an array",
@@ -272,10 +768,72 @@
       "errorCodes": [
         "ErrInvalidArg",
         "ErrConnection"
+      ],
+      "credentials": [
+        {
+          "name": "mongodb_database",
+          "title": "MongoDB Database",
+          "description": "MongoDB database connection with server, port, and authentication",
+          "fields": [
+            {
+              "name": "type",
+              "title": "Database Type",
+              "type": "hidden"
+            },
+            {
+              "name": "server",
+              "title": "Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "localhost",
+              "description": "MongoDB server hostname or IP address"
+            },
+            {
+              "name": "port",
+              "title": "Port",
+              "type": "text",
+              "placeholder": "27017",
+              "description": "MongoDB server port (default: 27017)"
+            },
+            {
+              "name": "database",
+              "title": "Auth Database",
+              "type": "text",
+              "placeholder": "admin",
+              "description": "Authentication database (e.g., admin)"
+            },
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "placeholder": "admin",
+              "description": "MongoDB database username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "placeholder": "Password",
+              "description": "MongoDB database password"
+            }
+          ],
+          "help": [
+            "1. Enter the MongoDB server hostname or IP address",
+            "2. Specify the port (default is 27017)",
+            "3. Enter the authentication database (usually 'admin')",
+            "4. Provide your MongoDB credentials (username and password)"
+          ],
+          "resources": [
+            {
+              "label": "MongoDB Documentation",
+              "url": "https://www.mongodb.com/docs/"
+            }
+          ]
+        }
       ]
     },
     "ShowCollections": {
-      "namespace": "Core.Mongo.ShowCollections",
+      "namespace": "Robomotion.MongoDB.ShowCollections",
       "name": "ShowCollections",
       "summary": "Retrieves a list of all collection names in a specified MongoDB database.",
       "howItWorks": "The Show Collections node queries a MongoDB database for its collection names. When executed, the node: 1. Validates that the database name is not empty 2. Obtains a MongoDB client (either from client ID or by creating one from credentials) 3. Accesses the specified database 4. Calls the ListCollectionNames command 5. Retrieves all collection names that the user has access to 6. Returns the collection names as an array 7. Stores the result in the specified output variable",
@@ -295,10 +853,72 @@
       "errorCodes": [
         "ErrInvalidArg",
         "ErrConnection"
+      ],
+      "credentials": [
+        {
+          "name": "mongodb_database",
+          "title": "MongoDB Database",
+          "description": "MongoDB database connection with server, port, and authentication",
+          "fields": [
+            {
+              "name": "type",
+              "title": "Database Type",
+              "type": "hidden"
+            },
+            {
+              "name": "server",
+              "title": "Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "localhost",
+              "description": "MongoDB server hostname or IP address"
+            },
+            {
+              "name": "port",
+              "title": "Port",
+              "type": "text",
+              "placeholder": "27017",
+              "description": "MongoDB server port (default: 27017)"
+            },
+            {
+              "name": "database",
+              "title": "Auth Database",
+              "type": "text",
+              "placeholder": "admin",
+              "description": "Authentication database (e.g., admin)"
+            },
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "placeholder": "admin",
+              "description": "MongoDB database username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "placeholder": "Password",
+              "description": "MongoDB database password"
+            }
+          ],
+          "help": [
+            "1. Enter the MongoDB server hostname or IP address",
+            "2. Specify the port (default is 27017)",
+            "3. Enter the authentication database (usually 'admin')",
+            "4. Provide your MongoDB credentials (username and password)"
+          ],
+          "resources": [
+            {
+              "label": "MongoDB Documentation",
+              "url": "https://www.mongodb.com/docs/"
+            }
+          ]
+        }
       ]
     },
     "UpdateDocument": {
-      "namespace": "Core.Mongo.UpdateDocument",
+      "namespace": "Robomotion.MongoDB.UpdateDocument",
       "name": "UpdateDocument",
       "summary": "Updates one or more documents in a MongoDB collection that match a specified filter.",
       "howItWorks": "The Update Document node modifies documents in a MongoDB collection based on a filter and update specification. When executed, the node: 1. Validates that database name and collection name are not empty 2. Obtains a MongoDB client (either from client ID or by creating one from credentials) 3. Processes the MongoDB Query input with Handlebars template rendering 4. Parses the rendered JSON into Filter and Update components 5. Validates that both Filter and Update are provided 6. Accesses the specified collection 7. Executes UpdateMany operation with the provided filter and update 8. Returns the count of modified documents",
@@ -321,6 +941,68 @@
       "errorCodes": [
         "ErrInvalidArg",
         "ErrConnection"
+      ],
+      "credentials": [
+        {
+          "name": "mongodb_database",
+          "title": "MongoDB Database",
+          "description": "MongoDB database connection with server, port, and authentication",
+          "fields": [
+            {
+              "name": "type",
+              "title": "Database Type",
+              "type": "hidden"
+            },
+            {
+              "name": "server",
+              "title": "Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "localhost",
+              "description": "MongoDB server hostname or IP address"
+            },
+            {
+              "name": "port",
+              "title": "Port",
+              "type": "text",
+              "placeholder": "27017",
+              "description": "MongoDB server port (default: 27017)"
+            },
+            {
+              "name": "database",
+              "title": "Auth Database",
+              "type": "text",
+              "placeholder": "admin",
+              "description": "Authentication database (e.g., admin)"
+            },
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "placeholder": "admin",
+              "description": "MongoDB database username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "placeholder": "Password",
+              "description": "MongoDB database password"
+            }
+          ],
+          "help": [
+            "1. Enter the MongoDB server hostname or IP address",
+            "2. Specify the port (default is 27017)",
+            "3. Enter the authentication database (usually 'admin')",
+            "4. Provide your MongoDB credentials (username and password)"
+          ],
+          "resources": [
+            {
+              "label": "MongoDB Documentation",
+              "url": "https://www.mongodb.com/docs/"
+            }
+          ]
+        }
       ]
     }
   }

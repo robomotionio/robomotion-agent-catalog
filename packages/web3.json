@@ -4,7 +4,7 @@
   "description": "## Key Features - **Wallet Management** - Generate, import, export, and manage cryptocurrency wallets",
   "nodes": {
     "abi-method": {
-      "namespace": "Core.Web3.AbiMethod",
+      "namespace": "Robomotion.Web3.ABIMethod",
       "name": "AbiMethod",
       "summary": "Encodes a smart contract method call with its arguments, preparing transaction data for execution via Call or Send Transaction nodes.",
       "howItWorks": "The ABI Method node encodes a smart contract function call into transaction data. When executed, the node: 1. Validates the ABI ID and retrieves the parsed ABI 2. Finds the specified method in the ABI definition 3. Validates and encodes the provided arguments according to the method signature 4. Creates a transaction data payload 5. Returns a Transaction ID for use with execution nodes",
@@ -34,7 +34,7 @@
       ]
     },
     "balance": {
-      "namespace": "Core.Web3.Balance",
+      "namespace": "Robomotion.Web3.Balance",
       "name": "Balance",
       "summary": "Retrieves the native cryptocurrency balance of a wallet address on the blockchain network.",
       "howItWorks": "The Balance node queries the blockchain for a wallet's native currency balance. When executed, the node: 1. Validates the Client ID and wallet address 2. Queries the blockchain for the address's balance in WEI 3. Converts the balance from WEI to ETH (or native currency) 4. Formats the result with the specified precision 5. Returns the balance as a string",
@@ -52,7 +52,7 @@
       ]
     },
     "call": {
-      "namespace": "Core.Web3.Call",
+      "namespace": "Robomotion.Web3.Call",
       "name": "Call",
       "summary": "Executes a read-only smart contract method call without creating a blockchain transaction. Used for querying contract state without gas costs.",
       "howItWorks": "The Call node executes a read-only contract method without sending a transaction. When executed, the node: 1. Validates all required inputs 2. Retrieves the encoded transaction data using the Transaction ID 3. Constructs a call message with the from address, to address, and data 4. Executes the call against the latest blockchain state 5. Returns the raw response data 6. Deletes the temporary transaction data",
@@ -73,7 +73,7 @@
       ]
     },
     "cancel-transaction": {
-      "namespace": "Core.Web3.CancelTransaction",
+      "namespace": "Robomotion.Web3.CancelTransaction",
       "name": "CancelTransaction",
       "summary": "Cancels a pending blockchain transaction by sending a replacement transaction with zero value and higher gas price.",
       "howItWorks": "The Cancel Transaction node creates a replacement transaction to cancel a pending one. When executed, the node: 1. Retrieves the original transaction using its hash 2. Creates a new transaction with: - Same nonce as the original - Same destination (to address) - Zero value (no ETH transferred) - Higher gas price (to prioritize over original) 3. Signs the cancellation transaction 4. Broadcasts it to the network 5. Returns the new transaction hash",
@@ -99,7 +99,7 @@
       ]
     },
     "create-client": {
-      "namespace": "Core.Web3.CreateClient",
+      "namespace": "Robomotion.Web3.CreateClient",
       "name": "CreateClient",
       "summary": "Establishes a connection to a blockchain network via an RPC endpoint and initializes a Web3 client with wallet credentials.",
       "howItWorks": "The Create Client node establishes a blockchain connection and prepares your wallet for transactions. When executed, the node: 1. Validates the RPC URL and Chain ID 2. Retrieves and decrypts the encrypted private key using the AES key 3. Creates a Web3 client connection to the specified RPC endpoint 4. Initializes the wallet for signing transactions 5. Returns a Client ID for use with other Web3 nodes",
@@ -108,10 +108,40 @@
         "The correct Chain ID for your target network",
         "An encrypted wallet private key stored in credentials",
         "The corresponding AES key for decryption"
+      ],
+      "credentials": [
+        {
+          "name": "Web3 Private Key",
+          "title": "apikey",
+          "description": "Encrypted private key for Web3 wallet operations",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Encrypted Private Key",
+              "type": "string",
+              "required": true,
+              "description": "Hex-encoded encrypted private key"
+            }
+          ]
+        },
+        {
+          "name": "Web3 AES Key",
+          "title": "document",
+          "description": "AES key for encrypting/decrypting private keys",
+          "fields": [
+            {
+              "name": "value",
+              "title": "AES Key",
+              "type": "string",
+              "required": true,
+              "description": "Hex-encoded 256-bit AES key"
+            }
+          ]
+        }
       ]
     },
     "decode": {
-      "namespace": "Core.Web3.Decode",
+      "namespace": "Robomotion.Web3.Decode",
       "name": "Decode",
       "summary": "Decodes transaction input or output data using a smart contract ABI, converting raw hexadecimal data into readable structured format.",
       "howItWorks": "The Decode node converts encoded blockchain data to readable format. When executed, the node: 1. Validates the ABI ID and retrieves the parsed ABI 2. Finds the specified method in the ABI 3. Removes the function signature hash from the data (for input) 4. Decodes the remaining data according to the method's inputs or outputs 5. Returns a structured object with decoded values",
@@ -140,7 +170,7 @@
       ]
     },
     "estimate-gas": {
-      "namespace": "Core.Web3.EstimateGas",
+      "namespace": "Robomotion.Web3.EstimateGas",
       "name": "EstimateGas",
       "summary": "Calculates the estimated gas units required for a transaction to execute successfully on the blockchain.",
       "howItWorks": "The Estimate Gas node simulates transaction execution to determine gas requirements. When executed, the node: 1. Validates all inputs and retrieves transaction data 2. Constructs a call message with all transaction parameters 3. Simulates the transaction execution on the current blockchain state 4. Calculates the gas units that would be consumed 5. Returns the estimated gas limit",
@@ -166,7 +196,7 @@
       ]
     },
     "estimate-gas-price": {
-      "namespace": "Core.Web3.EstimateGasPrice",
+      "namespace": "Robomotion.Web3.EstimateGasPrice",
       "name": "EstimateGasPrice",
       "summary": "Retrieves the current recommended gas price from the blockchain network in hexadecimal WEI format.",
       "howItWorks": "The Estimate Gas Price node queries the blockchain network for current gas prices. When executed, the node: 1. Validates the Client ID 2. Queries the network for the current recommended gas price 3. Converts the price to hexadecimal format 4. Pads with zeros to create a 64-character hex string 5. Returns the gas price with \"0x\" prefix",
@@ -185,7 +215,7 @@
       ]
     },
     "export": {
-      "namespace": "Core.Web3.Export",
+      "namespace": "Robomotion.Web3.Export",
       "name": "Export",
       "summary": "Exports a wallet from Robomotion to a standard Ethereum keystore file for use with other wallet applications.",
       "howItWorks": "The Export Wallet node creates a standard Ethereum keystore file. When executed, the node: 1. Retrieves the encrypted private key and AES key from credentials 2. Decrypts the private key using the AES key 3. Retrieves the export password from credentials 4. Derives the wallet address from the private key 5. Encrypts the private key using the password and standard keystore format 6. Writes the keystore JSON file to the specified path",
@@ -203,10 +233,54 @@
         "Uses standard scrypt parameters for encryption",
         "File is written with 0777 permissions (should be restricted after creation)",
         "The private key in Robomotion remains unchanged"
+      ],
+      "credentials": [
+        {
+          "name": "Web3 Private Key",
+          "title": "apikey",
+          "description": "Encrypted private key for Web3 wallet operations",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Encrypted Private Key",
+              "type": "string",
+              "required": true,
+              "description": "Hex-encoded encrypted private key"
+            }
+          ]
+        },
+        {
+          "name": "Web3 AES Key",
+          "title": "document",
+          "description": "AES key for encrypting/decrypting private keys",
+          "fields": [
+            {
+              "name": "value",
+              "title": "AES Key",
+              "type": "string",
+              "required": true,
+              "description": "Hex-encoded 256-bit AES key"
+            }
+          ]
+        },
+        {
+          "name": "Web3 Keystore Password",
+          "title": "apikey",
+          "description": "Password for keystore file encryption/decryption",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Password",
+              "type": "string",
+              "required": true,
+              "description": "Keystore file password"
+            }
+          ]
+        }
       ]
     },
     "from-wei": {
-      "namespace": "Core.Web3.FromWei",
+      "namespace": "Robomotion.Web3.Fromwei",
       "name": "FromWei",
       "summary": "Converts cryptocurrency amounts from WEI or GWEI (hexadecimal format) to human-readable decimal format (ETH).",
       "howItWorks": "The From WEI node converts blockchain amounts to readable format. When executed, the node: 1. Validates the hex format (must start with \"0x\") 2. Converts hex to a big integer 3. Divides by the appropriate factor (10^18 for WEI, 10^9 for GWEI) 4. Formats to the specified precision 5. Returns as a decimal string",
@@ -223,7 +297,7 @@
       ]
     },
     "generate-wallet": {
-      "namespace": "Core.Web3.GenerateWallet",
+      "namespace": "Robomotion.Web3.GenerateWallet",
       "name": "GenerateWallet",
       "summary": "Generates a new cryptocurrency wallet with a random private key and returns the wallet address along with the encrypted private key.",
       "howItWorks": "The Generate Wallet node creates a new Ethereum-compatible wallet. When executed, the node: 1. Retrieves the AES key from the credential vault 2. Generates a random cryptographically secure private key 3. Derives the public key and wallet address from the private key 4. Encrypts the private key using AES encryption 5. Returns both the wallet address and encrypted private key",
@@ -238,10 +312,26 @@
         "Newly generated wallets start with zero balance",
         "You need to fund the wallet before it can send transactions",
         "Store both outputs for future use"
+      ],
+      "credentials": [
+        {
+          "name": "Web3 AES Key",
+          "title": "document",
+          "description": "AES key for encrypting/decrypting private keys",
+          "fields": [
+            {
+              "name": "value",
+              "title": "AES Key",
+              "type": "string",
+              "required": true,
+              "description": "Hex-encoded 256-bit AES key"
+            }
+          ]
+        }
       ]
     },
     "get-transaction": {
-      "namespace": "Core.Web3.GetTransaction",
+      "namespace": "Robomotion.Web3.GetTransaction",
       "name": "GetTransaction",
       "summary": "Retrieves detailed information about a blockchain transaction using its transaction hash.",
       "howItWorks": "The Get Transaction node queries the blockchain for transaction information. When executed, the node: 1. Validates the Client ID and transaction hash format 2. Queries the blockchain using the transaction hash 3. Retrieves the full transaction object 4. Returns all transaction details",
@@ -265,7 +355,7 @@
       ]
     },
     "get-wallet-address": {
-      "namespace": "Core.Web3.GetWalletAddress",
+      "namespace": "Robomotion.Web3.GetWalletAddress",
       "name": "GetWalletAddress",
       "summary": "Derives a wallet address from an encrypted private key without creating a blockchain connection.",
       "howItWorks": "The Get Wallet Address node derives a wallet address from a private key. When executed, the node: 1. Retrieves the encrypted private key and AES key from credentials 2. Decrypts the private key using the AES key 3. Derives the public key from the private key 4. Computes the wallet address from the public key 5. Returns the wallet address",
@@ -281,10 +371,40 @@
         "No blockchain connection is needed",
         "This is faster than creating a full client connection",
         "Use this when you only need the address, not transaction capabilities"
+      ],
+      "credentials": [
+        {
+          "name": "Web3 Private Key",
+          "title": "apikey",
+          "description": "Encrypted private key for Web3 wallet operations",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Encrypted Private Key",
+              "type": "string",
+              "required": true,
+              "description": "Hex-encoded encrypted private key"
+            }
+          ]
+        },
+        {
+          "name": "Web3 AES Key",
+          "title": "document",
+          "description": "AES key for encrypting/decrypting private keys",
+          "fields": [
+            {
+              "name": "value",
+              "title": "AES Key",
+              "type": "string",
+              "required": true,
+              "description": "Hex-encoded 256-bit AES key"
+            }
+          ]
+        }
       ]
     },
     "import": {
-      "namespace": "Core.Web3.Import",
+      "namespace": "Robomotion.Web3.Import",
       "name": "Import",
       "summary": "Imports a wallet from a keystore file and encrypts the private key for use in Robomotion automations.",
       "howItWorks": "The Import Wallet node extracts a private key from a keystore file and re-encrypts it. When executed, the node: 1. Reads the keystore file from the specified path 2. Retrieves the keystore password from credentials 3. Decrypts the keystore using the password 4. Extracts the private key from the keystore 5. Re-encrypts the private key with your AES key 6. Returns the encrypted private key in hexadecimal format",
@@ -301,10 +421,54 @@
         "Compatible with keystores from MetaMask, Geth, MyEtherWallet, etc.",
         "The private key is never exposed in plain text",
         "Import is a one-time operation per wallet"
+      ],
+      "credentials": [
+        {
+          "name": "Web3 Private Key",
+          "title": "apikey",
+          "description": "Encrypted private key for Web3 wallet operations",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Encrypted Private Key",
+              "type": "string",
+              "required": true,
+              "description": "Hex-encoded encrypted private key"
+            }
+          ]
+        },
+        {
+          "name": "Web3 AES Key",
+          "title": "document",
+          "description": "AES key for encrypting/decrypting private keys",
+          "fields": [
+            {
+              "name": "value",
+              "title": "AES Key",
+              "type": "string",
+              "required": true,
+              "description": "Hex-encoded 256-bit AES key"
+            }
+          ]
+        },
+        {
+          "name": "Web3 Keystore Password",
+          "title": "apikey",
+          "description": "Password for keystore file encryption/decryption",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Password",
+              "type": "string",
+              "required": true,
+              "description": "Keystore file password"
+            }
+          ]
+        }
       ]
     },
     "increase-gas": {
-      "namespace": "Core.Web3.IncreaseGas",
+      "namespace": "Robomotion.Web3.IncreaseGas",
       "name": "IncreaseGas",
       "summary": "Speeds up a pending blockchain transaction by sending a replacement with the same data but higher gas price.",
       "howItWorks": "The Increase Gas node creates a replacement transaction to speed up confirmation. When executed, the node: 1. Retrieves the original pending transaction 2. Creates a new transaction with: - Same nonce (replaces original) - Same destination address - Same value (amount being sent) - Same input data (same operation) - Higher gas price (to prioritize) 3. Signs the replacement transaction 4. Broadcasts it to the network 5. Returns the new transaction hash",
@@ -330,7 +494,7 @@
       ]
     },
     "parse-abi": {
-      "namespace": "Core.Web3.ParseAbi",
+      "namespace": "Robomotion.Web3.ParseABI",
       "name": "ParseAbi",
       "summary": "Parses a smart contract ABI (Application Binary Interface) file and creates a reference that can be used with other Web3 nodes for contract interaction.",
       "howItWorks": "The Parse ABI node loads and validates a smart contract ABI definition. When executed, the node: 1. Reads the ABI JSON file from the specified path 2. Parses and validates the ABI structure 3. Stores the ABI in memory with a unique identifier 4. Returns the ABI ID for use with other nodes",
@@ -347,7 +511,7 @@
       ]
     },
     "pending-transactions": {
-      "namespace": "Core.Web3.PendingTransactions",
+      "namespace": "Robomotion.Web3.PendingTransactions",
       "name": "PendingTransactions",
       "summary": "Subscribes to pending transactions in the blockchain mempool, with optional filtering by contract methods and addresses.",
       "howItWorks": "The Pending Transactions node monitors the mempool for pending transactions. When executed, the node: 1. Connects to the blockchain via WebSocket 2. Subscribes to pending transaction hashes 3. For each pending transaction hash: - Retrieves transaction details - Applies filters (method, address) - If match, emits on output 2 4. Continues monitoring until stopped (unless \"Once\" is enabled)",
@@ -373,7 +537,7 @@
       ]
     },
     "send-transaction": {
-      "namespace": "Core.Web3.SendTransaction",
+      "namespace": "Robomotion.Web3.SendTransaction",
       "name": "SendTransaction",
       "summary": "Signs and broadcasts a transaction to the blockchain network, executing state-changing operations like transfers or contract method calls.",
       "howItWorks": "The Send Transaction node executes a blockchain transaction. When executed, the node: 1. Validates all inputs and retrieves the transaction data 2. Gets the wallet's current nonce if not provided 3. Constructs a transaction with all parameters 4. Signs the transaction with the wallet's private key 5. Broadcasts the signed transaction to the network 6. Returns the transaction hash 7. Cleans up temporary transaction data",
@@ -394,7 +558,7 @@
       ]
     },
     "subscribe": {
-      "namespace": "Core.Web3.Subscribe",
+      "namespace": "Robomotion.Web3.Subscribe",
       "name": "Subscribe",
       "summary": "Subscribes to smart contract events in real-time, monitoring the blockchain for specific events and triggering automation when they occur.",
       "howItWorks": "The Subscribe node monitors blockchain events in real-time. When executed, the node: 1. Connects to the blockchain via WebSocket 2. Sets up filters based on event signature and parameters 3. Subscribes to the contract's event logs 4. Waits for matching events 5. When an event occurs, processes it and emits on output 2 6. Continues monitoring until flow stops (unless \"Once\" is enabled)",
@@ -425,7 +589,7 @@
       ]
     },
     "to-wei": {
-      "namespace": "Core.Web3.ToWei",
+      "namespace": "Robomotion.Web3.Towei",
       "name": "ToWei",
       "summary": "Converts cryptocurrency amounts from decimal format (ETH) to WEI or GWEI in hexadecimal format for use in blockchain transactions.",
       "howItWorks": "The To WEI node converts human-readable amounts to blockchain-compatible format. When executed, the node: 1. Parses the input amount (string or number) 2. Converts to a big float for precision 3. Multiplies by the appropriate factor (10^18 for WEI, 10^9 for GWEI) 4. Converts to a big integer 5. Formats as hexadecimal with \"0x\" prefix 6. Returns the hex-encoded value",
@@ -443,7 +607,7 @@
       ]
     },
     "transaction-receipt": {
-      "namespace": "Core.Web3.TransactionReceipt",
+      "namespace": "Robomotion.Web3.TransactionReceipt",
       "name": "TransactionReceipt",
       "summary": "Retrieves the execution receipt for a confirmed blockchain transaction, including status, gas used, and emitted events.",
       "howItWorks": "The Transaction Receipt node retrieves the execution result of a transaction. When executed, the node: 1. Validates the Client ID and transaction hash 2. Connects to the blockchain using an Ethereum client 3. Queries for the transaction receipt 4. Returns the complete receipt object with all execution details",
@@ -473,7 +637,7 @@
       ]
     },
     "transfer": {
-      "namespace": "Core.Web3.Transfer",
+      "namespace": "Robomotion.Web3.Transfer",
       "name": "Transfer",
       "summary": "Creates a transfer transaction to send native cryptocurrency (ETH, MATIC, BNB, etc.) to another address.",
       "howItWorks": "The Transfer node prepares a cryptocurrency transfer transaction. When executed, the node: 1. Validates the amount is in proper hex format 2. Converts the hex amount to a big integer value 3. Creates a transaction data structure with the amount 4. Generates a unique Transaction ID 5. Returns the Transaction ID for execution with Send Transaction",

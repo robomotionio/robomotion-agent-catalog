@@ -4,7 +4,7 @@
   "description": "## Key Features - **Connection Management** - Connect to Discord using bot tokens with persistent sessions",
   "nodes": {
     "addrolemember": {
-      "namespace": "Core.Discord.Addrolemember",
+      "namespace": "Robomotion.DiscordBot.AddRoleMember",
       "name": "Addrolemember",
       "summary": "Assigns a role to a Discord server member.",
       "howItWorks": "The Add Role Member node assigns a role to a server member. When executed, the node: 1. Authenticates using either Client ID or direct bot token 2. Validates the server ID, user ID, and role ID 3. Sends a role assignment request to Discord API 4. Adds the role to the specified user",
@@ -20,7 +20,7 @@
       ]
     },
     "connect": {
-      "namespace": "Core.Discord.Connect",
+      "namespace": "Robomotion.DiscordBot.Connect",
       "name": "Connect",
       "summary": "Establishes a connection to Discord using a bot token and returns a client ID for use in subsequent Discord operations.",
       "howItWorks": "The Connect node is the first step in many Discord automation flows. It creates a Discord bot session and stores it for reuse by other nodes. When executed, the node: 1. Retrieves the bot token from the provided credentials 2. Creates a new Discord bot session using the token 3. Stores the bot session in a thread-safe session manager 4. Returns a unique Client ID that references this session 5. This Client ID is then used by other Discord nodes to access the bot",
@@ -42,7 +42,7 @@
       ]
     },
     "createchannel": {
-      "namespace": "Core.Discord.Createchannel",
+      "namespace": "Robomotion.DiscordBot.CreateChannel",
       "name": "Createchannel",
       "summary": "Creates a new text or voice channel in a Discord server.",
       "howItWorks": "The Create Channel node creates a new channel in the specified Discord server. When executed, the node: 1. Authenticates using either Client ID or direct bot token 2. Validates the server ID and channel name 3. Determines the channel type (text or voice) 4. Sends a create channel request to Discord API 5. Creates the channel with the specified name and type",
@@ -57,7 +57,7 @@
       ]
     },
     "createcommand": {
-      "namespace": "Core.Discord.Createcommand",
+      "namespace": "Robomotion.DiscordBot.CreateCommand",
       "name": "Createcommand",
       "summary": "Creates a Discord slash command (application command) that users can invoke with `/` in Discord.",
       "howItWorks": "The Create Command node registers a slash command with Discord. When executed, the node: 1. Authenticates using either Client ID or direct bot token 2. Validates the application ID 3. Parses the command JSON configuration 4. Processes any mustache template variables in the JSON 5. Sends the command registration request to Discord API 6. Creates the command (globally or for a specific server)",
@@ -75,7 +75,7 @@
       ]
     },
     "createforumpost": {
-      "namespace": "Core.Discord.Createforumpost",
+      "namespace": "Robomotion.DiscordBot.CreateForumPost",
       "name": "Createforumpost",
       "summary": "Creates a new post in a Discord forum channel with support for rich content including embeds, file attachments, and buttons.",
       "howItWorks": "The Create Forum Post node creates a new thread post in a forum channel. When executed, the node: 1. Authenticates using either Client ID or direct bot token 2. Validates the channel ID, post title, and message text 3. Constructs the post with optional components (files, embeds, buttons) 4. Sets the auto-archive duration if specified 5. Processes file attachments if provided 6. Sends the create forum post request to Discord API 7. Returns the complete post object including the thread ID",
@@ -91,7 +91,7 @@
       ]
     },
     "createinvitelink": {
-      "namespace": "Core.Discord.Createinvitelink",
+      "namespace": "Robomotion.DiscordBot.CreateInviteLink",
       "name": "Createinvitelink",
       "summary": "Generates an invitation link for a Discord channel.",
       "howItWorks": "The Create Invite Link node generates a temporary invitation link for a Discord channel. When executed, the node: 1. Authenticates using either Client ID or direct bot token 2. Validates the channel ID 3. Creates an invite with temporary settings 4. Constructs the full invite URL 5. Returns the complete invite link",
@@ -106,7 +106,7 @@
       ]
     },
     "deletechannel": {
-      "namespace": "Core.Discord.Deletechannel",
+      "namespace": "Robomotion.DiscordBot.DeleteChannel",
       "name": "Deletechannel",
       "summary": "Deletes a Discord channel from a server.",
       "howItWorks": "The Delete Channel node permanently removes a channel from a Discord server. When executed, the node: 1. Authenticates using either Client ID or direct bot token 2. Validates the channel ID 3. Sends a delete channel request to Discord API 4. Permanently removes the channel and all its contents",
@@ -121,7 +121,7 @@
       ]
     },
     "deletechannelmessage": {
-      "namespace": "Core.Discord.Deletechannelmessage",
+      "namespace": "Robomotion.DiscordBot.DeleteChannelMessage",
       "name": "Deletechannelmessage",
       "summary": "Deletes a specific message from a Discord channel.",
       "howItWorks": "The Delete Channel Message node removes a specific message from a Discord channel. When executed, the node: 1. Authenticates using either Client ID or direct bot token 2. Validates the channel ID and message ID 3. Sends a delete message request to Discord API 4. Permanently removes the message",
@@ -136,7 +136,7 @@
       ]
     },
     "deletecommand": {
-      "namespace": "Core.Discord.Deletecommand",
+      "namespace": "Robomotion.DiscordBot.DeleteCommand",
       "name": "Deletecommand",
       "summary": "Deletes a registered Discord slash command.",
       "howItWorks": "The Delete Command node removes a slash command registration. When executed, the node: 1. Authenticates using either Client ID or direct bot token 2. Validates the application ID and command ID 3. Sends a delete command request to Discord API 4. Removes the command (globally or from the specified server)",
@@ -152,7 +152,7 @@
       ]
     },
     "disconnect": {
-      "namespace": "Core.Discord.Disconnect",
+      "namespace": "Robomotion.DiscordBot.Disconnect",
       "name": "Disconnect",
       "summary": "Disconnects from Discord and closes the bot session, cleaning up resources.",
       "howItWorks": "The Disconnect node properly closes a Discord bot session and removes it from memory. When executed, the node: 1. Validates the provided Client ID 2. Retrieves the bot session associated with the Client ID 3. Closes the Discord WebSocket connection 4. Removes the session from the session manager 5. Frees up system resources",
@@ -172,7 +172,7 @@
       ]
     },
     "editmessage": {
-      "namespace": "Core.Discord.Editmessage",
+      "namespace": "Robomotion.DiscordBot.EditMessage",
       "name": "Editmessage",
       "summary": "Edits the content of an existing message in a Discord channel.",
       "howItWorks": "The Edit Channel Message node modifies the content of an existing message. When executed, the node: 1. Authenticates using either Client ID or direct bot token 2. Validates the channel ID, message ID, and new message text 3. Constructs the edit request with the new content 4. Sends the edit request to Discord API 5. Updates the message with the new text",
@@ -187,7 +187,7 @@
       ]
     },
     "getchannelinfo": {
-      "namespace": "Core.Discord.Getchannelinfo",
+      "namespace": "Robomotion.DiscordBot.GetChannelInfo",
       "name": "Getchannelinfo",
       "summary": "Retrieves detailed information about a Discord channel.",
       "howItWorks": "The Get Channel Info node retrieves complete information about a specific Discord channel. When executed, the node: 1. Authenticates using either Client ID or direct bot token 2. Validates the channel ID 3. Requests channel information from Discord API 4. Returns the complete channel object with all details",
@@ -202,7 +202,7 @@
       ]
     },
     "getchannelmessages": {
-      "namespace": "Core.Discord.Getchannelmessages",
+      "namespace": "Robomotion.DiscordBot.GetChannelMessages",
       "name": "Getchannelmessages",
       "summary": "Retrieves messages from a Discord channel with pagination support.",
       "howItWorks": "The Get Channel Messages node retrieves historical messages from a Discord channel. When executed, the node: 1. Authenticates using either Client ID or direct bot token 2. Validates the channel ID and message ID 3. Determines the pagination direction 4. Requests messages from Discord API 5. Returns an array of message objects",
@@ -217,7 +217,7 @@
       ]
     },
     "getuserinfo": {
-      "namespace": "Core.Discord.Getuserinfo",
+      "namespace": "Robomotion.DiscordBot.GetUserInfo",
       "name": "Getuserinfo",
       "summary": "Retrieves detailed information about a Discord user.",
       "howItWorks": "The Get User Info node retrieves complete information about a specific Discord user. When executed, the node: 1. Authenticates using either Client ID or direct bot token 2. Validates the user ID 3. Requests user information from Discord API 4. Returns the complete user object with all details",
@@ -231,7 +231,7 @@
       ]
     },
     "interactionin": {
-      "namespace": "Core.Discord.Interactionin",
+      "namespace": "Robomotion.DiscordBot.InteractionIn",
       "name": "Interactionin",
       "summary": "Listens for Discord interactions including slash command invocations, button clicks, modal submissions, and autocomplete requests. This node has no inputs and acts as a trigger node.",
       "howItWorks": "The Interaction In node creates a persistent WebSocket connection to Discord and listens for interactions. When executed, the node: 1. Retrieves the bot token from credentials 2. Creates a Discord bot session 3. Opens a WebSocket connection to Discord 4. Adds an interaction event handler 5. Applies filters based on type, server, channel, sender, and command name 6. Emits the interaction object when a matching interaction is received 7. Continues listening until the flow is stopped",
@@ -243,10 +243,26 @@
       ],
       "errorCodes": [
         "ErrInvalidArg"
+      ],
+      "credentials": [
+        {
+          "name": "Bot Token",
+          "title": "apiKey",
+          "description": "Discord bot token for authentication. Get this from the Discord Developer Portal.",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Bot Token",
+              "type": "string",
+              "required": true,
+              "description": "Your Discord bot token from the Developer Portal"
+            }
+          ]
+        }
       ]
     },
     "interactionout": {
-      "namespace": "Core.Discord.Interactionout",
+      "namespace": "Robomotion.DiscordBot.InteractionOut",
       "name": "Interactionout",
       "summary": "Sends a response to a Discord interaction. Must be used after Interaction In to acknowledge and respond to user interactions.",
       "howItWorks": "The Interaction Out node sends a response to a Discord interaction. When executed, the node: 1. Validates the interaction ID 2. Retrieves the interaction session 3. Parses the response JSON configuration 4. Processes any mustache template variables in the JSON 5. Determines the response type (message, modal, deferred, autocomplete) 6. Sends the appropriate response to Discord 7. Removes the interaction from the session manager",
@@ -261,7 +277,7 @@
       ]
     },
     "listcommands": {
-      "namespace": "Core.Discord.Listcommands",
+      "namespace": "Robomotion.DiscordBot.ListCommands",
       "name": "Listcommands",
       "summary": "Retrieves all registered Discord slash commands for an application.",
       "howItWorks": "The List Commands node retrieves all slash commands registered for your application. When executed, the node: 1. Authenticates using either Client ID or direct bot token 2. Validates the application ID 3. Requests command list from Discord API (global or server-specific) 4. Returns an array of command objects",
@@ -277,7 +293,7 @@
       ]
     },
     "receivemessage": {
-      "namespace": "Core.Discord.Receivemessage",
+      "namespace": "Robomotion.DiscordBot.ReceiveMessage",
       "name": "Receivemessage",
       "summary": "Listens for incoming messages from Discord channels and triggers your automation flow when messages are received. This node has no inputs and acts as a trigger node.",
       "howItWorks": "The Receive Message node creates a persistent WebSocket connection to Discord and listens for incoming messages. When executed, the node: 1. Retrieves the bot token from credentials 2. Creates a Discord bot session 3. Opens a WebSocket connection to Discord 4. Adds a message event handler 5. Applies filters based on Server Id, Channel Id, and Sender Id options 6. Emits the message object when a matching message is received 7. Continues listening until the flow is stopped",
@@ -296,10 +312,26 @@
       ],
       "errorCodes": [
         "ErrInvalidArg"
+      ],
+      "credentials": [
+        {
+          "name": "Bot Token",
+          "title": "apiKey",
+          "description": "Discord bot token for authentication. Get this from the Discord Developer Portal.",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Bot Token",
+              "type": "string",
+              "required": true,
+              "description": "Your Discord bot token from the Developer Portal"
+            }
+          ]
+        }
       ]
     },
     "removerolemember": {
-      "namespace": "Core.Discord.Removerolemember",
+      "namespace": "Robomotion.DiscordBot.RemoveRoleMember",
       "name": "Removerolemember",
       "summary": "Removes a role from a Discord server member.",
       "howItWorks": "The Remove Role Member node removes a role from a server member. When executed, the node: 1. Authenticates using either Client ID or direct bot token 2. Validates the server ID, user ID, and role ID 3. Sends a role removal request to Discord API 4. Removes the role from the specified user",
@@ -312,7 +344,7 @@
       ]
     },
     "senddirectmessage": {
-      "namespace": "Core.Discord.Senddirectmessage",
+      "namespace": "Robomotion.DiscordBot.SendDirectMessage",
       "name": "Senddirectmessage",
       "summary": "Sends a direct message (DM) to a Discord user with support for rich content including embeds, file attachments, buttons, and message replies.",
       "howItWorks": "The Send Direct Message node creates a DM channel with the user (if it doesn't exist) and sends a message to it. When executed, the node: 1. Authenticates using either Client ID or direct bot token 2. Validates the user ID and message text 3. Creates or retrieves the DM channel with the specified user 4. Constructs the message with optional components (files, embeds, buttons) 5. Processes file attachments if provided 6. Sends the message to the DM channel 7. Returns the complete message object",
@@ -327,7 +359,7 @@
       ]
     },
     "sendmessage": {
-      "namespace": "Core.Discord.Sendmessage",
+      "namespace": "Robomotion.DiscordBot.SendMessage",
       "name": "Sendmessage",
       "summary": "Sends a message to a Discord channel with support for rich content including embeds, file attachments, buttons, and message replies.",
       "howItWorks": "The Send Channel Message node sends messages to Discord channels with various content types. When executed, the node: 1. Authenticates using either Client ID or direct bot token 2. Validates the channel ID and message text 3. Constructs the message with optional components (files, embeds, buttons) 4. Processes file attachments if provided 5. Adds reply reference if replying to another message 6. Sends the message to Discord via the API 7. Returns the complete message object",
@@ -344,7 +376,7 @@
       ]
     },
     "updateinteractionresponse": {
-      "namespace": "Core.Discord.Updateinteractionresponse",
+      "namespace": "Robomotion.DiscordBot.UpdateInteractionRespond",
       "name": "Updateinteractionresponse",
       "summary": "Updates a deferred interaction response with the final content. Used after sending a deferred response to provide the actual result.",
       "howItWorks": "The Update Interaction Respond node edits a previously sent deferred interaction response. When executed, the node: 1. Authenticates using either Client ID or direct bot token 2. Validates the application ID and interaction token 3. Parses the response JSON configuration 4. Processes any mustache template variables 5. Converts the JSON to a webhook edit structure 6. Updates the interaction response with the new content",

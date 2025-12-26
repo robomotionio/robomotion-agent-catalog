@@ -4,7 +4,7 @@
   "description": "## Overview The FTP package provides file transfer capabilities using FTP and SFTP protocols. Use it when you need to upload, download, or manage files on remote servers, integrate with legacy systems, or automate file exchanges with external partners.",
   "nodes": {
     "connect": {
-      "namespace": "Core.Ftp.Connect",
+      "namespace": "Core.FTP.Connect",
       "name": "Connect",
       "summary": "Connects to a remote FTP server",
       "howItWorks": "The Connect node establishes a connection to a remote FTP server and creates a session that can be used by other FTP nodes: 1. **Credential Validation**: Retrieves username and password from the specified Vault 2. **Session Creation**: Creates a new session based on the selected FTP type (FTP, FTPS, or SFTP) 3. **Connection Establishment**: Connects to the server using the provided host and port 4. **Authentication**: Logs in using the credentials and any additional security parameters 5. **Session ID Generation**: Returns a unique session ID for use with subsequent FTP operations",
@@ -57,7 +57,7 @@
       ]
     },
     "create-directory": {
-      "namespace": "Core.Ftp.CreateDirectory",
+      "namespace": "Core.FTP.CreateDirectory",
       "name": "CreateDirectory",
       "summary": "Creates a directory on the remote FTP server.",
       "howItWorks": "The Create Directory node creates a new directory on the remote FTP server: 1. **Session Validation**: Verifies the session ID is valid and active 2. **Path Validation**: Ensures the directory path is not empty 3. **Directory Creation**: Creates the directory at the specified path on the FTP server 4. **Path Output**: Returns the created directory path for confirmation",
@@ -101,7 +101,7 @@
       ]
     },
     "delete-directory": {
-      "namespace": "Core.Ftp.DeleteDirectory",
+      "namespace": "Core.FTP.RemoveDirectory",
       "name": "DeleteDirectory",
       "summary": "Allows removal of a directory from an FTP server.",
       "howItWorks": "The Delete Directory node removes a directory from the remote FTP server: 1. **Session Validation**: Verifies the session ID is valid and active 2. **Path Validation**: Ensures the directory path is not empty 3. **Directory Deletion**: Removes the directory at the specified path 4. **Recursive Removal**: For FTP, removes the directory and all its contents recursively",
@@ -148,7 +148,7 @@
       ]
     },
     "delete-file": {
-      "namespace": "Core.Ftp.DeleteFile",
+      "namespace": "Core.FTP.RemoveFile",
       "name": "DeleteFile",
       "summary": "Deletes a file from FTP server",
       "howItWorks": "The Delete File node removes a file from the remote FTP server: 1. **Session Validation**: Verifies the session ID is valid and active 2. **Path Validation**: Ensures the file path is not empty 3. **File Existence Check**: Verifies the file exists on the server 4. **File Deletion**: Removes the file from the FTP server",
@@ -193,7 +193,7 @@
       ]
     },
     "disconnect": {
-      "namespace": "Core.Ftp.Disconnect",
+      "namespace": "Core.FTP.Disconnect",
       "name": "Disconnect",
       "summary": "Disconnects FTP session",
       "howItWorks": "The Disconnect node closes an active FTP session and releases server resources: 1. **Session Validation**: Verifies the session ID is valid and active 2. **Logout Operation**: Sends logout command to the FTP server 3. **Connection Closure**: Closes the network connection 4. **Resource Cleanup**: Releases session resources from memory",
@@ -234,7 +234,7 @@
       ]
     },
     "download": {
-      "namespace": "Core.Ftp.Download",
+      "namespace": "Core.FTP.Download",
       "name": "Download",
       "summary": "Downloads a file from an FTP server to the local machine.",
       "howItWorks": "The Download node retrieves a file from the remote FTP server to the local machine: 1. **Session Validation**: Verifies the session ID is valid and active 2. **Path Validation**: Ensures both FTP and local paths are provided 3. **File Existence Check**: Verifies the file exists on the FTP server 4. **File Download**: Reads the file from the server 5. **Local Storage**: Writes the file to the specified local path",
@@ -284,7 +284,7 @@
       ]
     },
     "file-exists": {
-      "namespace": "Core.Ftp.FileExists",
+      "namespace": "Core.FTP.FileExists",
       "name": "FileExists",
       "summary": "Checks if a file exists in the specified FTP path",
       "howItWorks": "The File Exists node verifies whether a file is present on the remote FTP server: 1. **Session Validation**: Verifies the session ID is valid and active 2. **Path Validation**: Ensures the file path is not empty 3. **File Check**: Queries the FTP server for file existence 4. **Result Output**: Returns boolean true if file exists, false otherwise",
@@ -329,7 +329,7 @@
       ]
     },
     "list-directory": {
-      "namespace": "Core.Ftp.ListDirectory",
+      "namespace": "Core.FTP.ListDirectory",
       "name": "ListDirectory",
       "summary": "Lists the files in a directory on an FTP server.",
       "howItWorks": "The List Directory node retrieves a listing of files and directories from the remote FTP server: 1. **Session Validation**: Verifies the session ID is valid and active 2. **Path Validation**: Ensures the directory path is not empty 3. **Directory Listing**: Retrieves all files and subdirectories from the specified path 4. **Sorting**: Applies the selected sort order (ascend, descend, modifiedlatest, modifiedearlier) 5. **Limit Application**: Returns only the top N files if Top option is set 6. **Result Output**: Returns an array of file objects with properties (Name, IsDir, Size, Date)",
@@ -379,7 +379,7 @@
       ]
     },
     "move-file": {
-      "namespace": "Core.Ftp.MoveFile",
+      "namespace": "Core.FTP.MoveFile",
       "name": "MoveFile",
       "summary": "Moves a file from one FTP location to another.",
       "howItWorks": "The Move File node relocates or renames a file on the remote FTP server: 1. **Session Validation**: Verifies the session ID is valid and active 2. **Source Path Validation**: Ensures source file path is not empty 3. **File Existence Check**: Verifies the source file exists and is not a directory 4. **Destination Path Validation**: Ensures destination path is not empty 5. **Destination Check**: Verifies destination file doesn't already exist 6. **File Move/Rename**: Performs the rename operation on the FTP server",
@@ -429,7 +429,7 @@
       ]
     },
     "upload": {
-      "namespace": "Core.Ftp.Upload",
+      "namespace": "Core.FTP.Upload",
       "name": "Upload",
       "summary": "Uploads a file to an FTP server",
       "howItWorks": "The Upload node transfers a file from the local machine to the remote FTP server: 1. **Session Validation**: Verifies the session ID is valid and active 2. **Path Validation**: Ensures both local and FTP paths are provided 3. **Local File Read**: Reads the file from the local file system 4. **File Upload**: Transfers the file data to the FTP server 5. **Server Storage**: Writes the file to the specified path on the server Note: For FTPS, large files are uploaded in 64KB chunks with retry logic (3 retries per chunk).",

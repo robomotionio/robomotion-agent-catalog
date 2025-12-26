@@ -4,7 +4,7 @@
   "description": "## Overview The Image Processing package provides comprehensive image manipulation capabilities. Use it when you need to resize, crop, convert, or enhance images as part of your automation workflow - whether preparing images for OCR, generating thumbnails, or processing documents.",
   "nodes": {
     "AddTextToImage": {
-      "namespace": "Core.ImageProcessing.AddTextToImage",
+      "namespace": "Robomotion.ImageProcessing.AddTextToImage",
       "name": "AddTextToImage",
       "summary": "Adds text to an image at a specified position with customizable styling options.",
       "howItWorks": "The Add Text To Image node uses ImageMagick library to add customizable text to images. When executed, the node: 1. Validates all input parameters including file paths, dimensions, and coordinates 2. Loads the specified input image 3. Configures text rendering settings including font, colors, alignment, and dimensions 4. Creates a text overlay with the specified properties 5. Composites the text onto the image at the specified coordinates 6. Saves the resulting image to the output path",
@@ -24,7 +24,7 @@
       ]
     },
     "BlurImage": {
-      "namespace": "Core.ImageProcessing.BlurImage",
+      "namespace": "Robomotion.ImageProcessing.BlurImage",
       "name": "BlurImage",
       "summary": "Applies various blur effects to an image including standard blur, adaptive blur, bilateral blur, and Gaussian blur.",
       "howItWorks": "The Blur Image node uses ImageMagick library to apply different types of blur effects to images. When executed, the node: 1. Validates input and output file paths 2. Loads the specified input image 3. Applies the selected blur effect based on the profile option: * Standard Blur: Applies a general blur effect * Adaptive Blur: Blurs pixels based on their local variance * Bilateral Blur: Blurs while preserving edges using width and height parameters * Gaussian Blur: Applies Gaussian function blur using radius parameter 4. Saves the resulting blurred image to the output path",
@@ -47,7 +47,7 @@
       ]
     },
     "ConvertImage": {
-      "namespace": "Core.ImageProcessing.ConvertImage",
+      "namespace": "Robomotion.ImageProcessing.ConvertImage",
       "name": "ConvertImage",
       "summary": "Converts an image from one format to another using the ImageMagick library.",
       "howItWorks": "The Convert Image node uses ImageMagick library to convert images between different formats. When executed, the node: 1. Validates input and output file paths 2. Loads the specified input image 3. Automatically detects the desired output format based on the file extension of the output path 4. Converts the image to the target format 5. Saves the converted image to the output path",
@@ -72,7 +72,7 @@
       ]
     },
     "CropImage": {
-      "namespace": "Core.ImageProcessing.CropImage",
+      "namespace": "Robomotion.ImageProcessing.CropImage",
       "name": "CropImage",
       "summary": "Crops an image to a specified rectangular region defined by coordinates and dimensions.",
       "howItWorks": "The Crop Image node uses ImageMagick library to extract a rectangular portion of an image. When executed, the node: 1. Validates input and output file paths 2. Loads the specified input image 3. Validates crop coordinates and dimensions against the image size 4. Automatically adjusts crop dimensions if they exceed image boundaries 5. Extracts the specified rectangular region from the image 6. Saves the cropped image to the output path",
@@ -93,7 +93,7 @@
       ]
     },
     "EnhanceBorders": {
-      "namespace": "Core.ImageProcessing.EnhanceBorders",
+      "namespace": "Robomotion.ImageProcessing.EnhanceBorders",
       "name": "EnhanceBorders",
       "summary": "Enhances the borders and edges in an image using morphological operations to highlight horizontal and vertical lines.",
       "howItWorks": "The Enhance Borders node uses ImageMagick library to detect and enhance horizontal and vertical lines in an image through morphological operations. When executed, the node: 1. Validates input and output file paths 2. Loads the specified input image and converts it to grayscale 3. Applies adaptive thresholding to create a binary version of the image 4. Uses morphological operations to detect horizontal and vertical lines separately 5. Combines the detected lines and thickens them based on the Line Thickness parameter 6. Either overlays the enhanced borders on the original image or outputs only the enhanced borders based on the Preserve Original option 7. Saves the resulting image to the output path",
@@ -114,7 +114,7 @@
       ]
     },
     "GrayscaleImage": {
-      "namespace": "Core.ImageProcessing.GrayscaleImage",
+      "namespace": "Robomotion.ImageProcessing.GrayscaleImage",
       "name": "GrayscaleImage",
       "summary": "Converts a color image to grayscale by removing color information while preserving luminance.",
       "howItWorks": "The Grayscale Image node uses ImageMagick library to convert color images to grayscale. When executed, the node: 1. Validates input and output file paths 2. Loads the specified input image 3. Applies the grayscale conversion algorithm which converts each pixel to a shade of gray based on its luminance 4. Saves the resulting grayscale image to the output path",
@@ -137,7 +137,7 @@
       ]
     },
     "ImageIdentify": {
-      "namespace": "Core.ImageProcessing.ImageIdentify",
+      "namespace": "Robomotion.ImageProcessing.ImageIdentify",
       "name": "ImageIdentify",
       "summary": "Extracts metadata and technical information from an image file including format, dimensions, color space, and EXIF data.",
       "howItWorks": "The Image Identify node uses ImageMagick library to analyze image files and extract comprehensive metadata. When executed, the node: 1. Validates the input file path 2. Loads image information using MagickImageInfo for basic properties 3. Opens the image to access detailed EXIF metadata 4. Extracts GPS coordinates from EXIF data if available 5. Compiles all extracted information into a structured result object 6. Outputs the metadata as a dictionary for use in subsequent nodes",
@@ -161,7 +161,7 @@
       ]
     },
     "InvertImageColors": {
-      "namespace": "Core.ImageProcessing.InvertImageColors",
+      "namespace": "Robomotion.ImageProcessing.InvertImageColors",
       "name": "InvertImageColors",
       "summary": "Inverts the colors of an image by negating each pixel value, creating a \"negative\" effect.",
       "howItWorks": "The Invert Image Colors node uses ImageMagick library to create a negative of the input image by inverting all pixel values. When executed, the node: 1. Validates input and output file paths 2. Loads the specified input image 3. Applies the negate operation which inverts each pixel's color values 4. Saves the resulting inverted image to the output path",
@@ -185,7 +185,7 @@
       ]
     },
     "RegionCrop": {
-      "namespace": "Core.ImageProcessing.RegionCrop",
+      "namespace": "Robomotion.ImageProcessing.RegionCrop",
       "name": "RegionCrop",
       "summary": "Automatically detects and crops a specific region of interest in an image based on content analysis and configurable parameters.",
       "howItWorks": "The Region Crop node uses ImageMagick library to intelligently detect and crop a region of interest in an image. When executed, the node: 1. Validates input and output file paths 2. Loads the specified input image 3. Creates a grayscale copy for processing 4. Applies thresholding to distinguish content from background 5. Uses connected components analysis to identify regions matching the size constraints 6. Determines the bounding box of valid regions 7. Applies buffer values to expand the crop area 8. Crops the original image to the calculated region 9. Saves the cropped image to the output path",
@@ -210,7 +210,7 @@
       ]
     },
     "ResizeImage": {
-      "namespace": "Core.ImageProcessing.ResizeImage",
+      "namespace": "Robomotion.ImageProcessing.ResizeImage",
       "name": "ResizeImage",
       "summary": "Resizes an image to specified dimensions with optional aspect ratio preservation.",
       "howItWorks": "The Resize Image node uses ImageMagick library to change the dimensions of an image. When executed, the node: 1. Validates input and output file paths 2. Validates that width and height values are greater than zero 3. Loads the specified input image 4. Creates resize properties based on the specified dimensions 5. Applies the resize operation with or without aspect ratio preservation based on the option 6. Saves the resized image to the output path",
@@ -235,7 +235,7 @@
       ]
     },
     "RotateImage": {
-      "namespace": "Core.ImageProcessing.RotateImage",
+      "namespace": "Robomotion.ImageProcessing.RotateImage",
       "name": "RotateImage",
       "summary": "Rotates an image by a specified number of degrees clockwise or counterclockwise.",
       "howItWorks": "The Rotate Image node uses ImageMagick library to rotate an image by the specified angle. When executed, the node: 1. Validates input and output file paths 2. Loads the specified input image 3. Applies the rotation transformation using the specified degree value 4. Saves the rotated image to the output path",
@@ -264,7 +264,7 @@
       ]
     },
     "ScaleImage": {
-      "namespace": "Core.ImageProcessing.ScaleImage",
+      "namespace": "Robomotion.ImageProcessing.ScaleImage",
       "name": "ScaleImage",
       "summary": "Scales an image by a specified percentage, maintaining the original aspect ratio.",
       "howItWorks": "The Scale Image node uses ImageMagick library to proportionally resize an image by a specified percentage. When executed, the node: 1. Validates input and output file paths 2. Validates that the percentage value is greater than zero 3. Loads the specified input image 4. Applies the scaling transformation using the specified percentage 5. Saves the scaled image to the output path",

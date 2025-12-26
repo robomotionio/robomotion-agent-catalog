@@ -4,7 +4,7 @@
   "description": "## Overview The Robomotion Assistant package enables building interactive UI components for conversational automation. Use it when you need to collect user input, display forms, show results, or create step-by-step guided workflows that interact with users.",
   "nodes": {
     "button_group": {
-      "namespace": "Core.RobomotionAssistant.Button_group",
+      "namespace": "Robomotion.Assistant.ButtonGroup",
       "name": "Button_group",
       "summary": "Creates a group of buttons for user interaction in chat interfaces.",
       "howItWorks": "The Button Group node creates interactive buttons in chat interfaces. When executed, the node: 1. Creates a group of buttons with the specified labels 2. Displays the buttons in the chat interface 3. Waits for user interaction with the buttons 4. Returns a payload with information about the user's selection",
@@ -20,7 +20,7 @@
       ]
     },
     "change_mode": {
-      "namespace": "Core.RobomotionAssistant.Change_mode",
+      "namespace": "Robomotion.Assistant.ChangeMode",
       "name": "Change_mode",
       "summary": "Changes the runtime mode of the Assistant, enabling or disabling specific features like prompts and streaming.",
       "howItWorks": "The Change Mode node modifies the runtime behavior of the Assistant. When executed, the node: 1. Sends a command to change the Assistant's mode based on the selected options 2. If streaming is enabled, creates a streaming endpoint for real-time communication 3. Returns stream connection details when streaming is enabled",
@@ -37,7 +37,7 @@
       ]
     },
     "change_theme": {
-      "namespace": "Core.RobomotionAssistant.Change_theme",
+      "namespace": "Robomotion.Assistant.Theme",
       "name": "Change_theme",
       "summary": "Changes the color theme of the Assistant interface, allowing customization of colors and icons.",
       "howItWorks": "The Change Theme node modifies the visual appearance of the Assistant interface. When executed, the node: 1. Collects all the color values from the inputs 2. Constructs a theme object with the specified colors 3. Sends the theme configuration to the Assistant 4. Updates the interface with the new theme",
@@ -54,7 +54,7 @@
       ]
     },
     "checkbox": {
-      "namespace": "Core.RobomotionAssistant.Checkbox",
+      "namespace": "Robomotion.Assistant.Checkboxes",
       "name": "Checkbox",
       "summary": "Creates a group of checkboxes for user selection in chat interfaces.",
       "howItWorks": "The Checkboxes node creates interactive checkboxes in chat interfaces. When executed, the node: 1. Creates a group of checkboxes with the specified options 2. Displays the checkboxes in the chat interface 3. Waits for user interaction with the checkboxes 4. Returns a payload with information about the user's selections",
@@ -71,7 +71,7 @@
       ]
     },
     "datepicker": {
-      "namespace": "Core.RobomotionAssistant.Datepicker",
+      "namespace": "Robomotion.Assistant.DatePicker",
       "name": "Datepicker",
       "summary": "Creates a date picker interface for users to select dates in chat interfaces.",
       "howItWorks": "The Date Picker node creates an interactive date selection interface in chat interfaces. When executed, the node: 1. Creates a date picker with the specified title and date constraints 2. Displays the date picker in the chat interface 3. Waits for user interaction with the date picker 4. Returns a payload with information about the user's date selection",
@@ -89,7 +89,7 @@
       ]
     },
     "divider": {
-      "namespace": "Core.RobomotionAssistant.Divider",
+      "namespace": "Robomotion.Assistant.Divider",
       "name": "Divider",
       "summary": "Adds a horizontal divider to separate content in chat interfaces.",
       "howItWorks": "The Divider node adds a horizontal visual separator in chat interfaces. When executed, the node: 1. Creates a horizontal divider with the specified width 2. Displays the divider in the chat interface 3. Helps organize and separate different sections of content",
@@ -105,7 +105,7 @@
       ]
     },
     "download_file": {
-      "namespace": "Core.RobomotionAssistant.Download_file",
+      "namespace": "Robomotion.Assistant.Download",
       "name": "Download_file",
       "summary": "Creates a file download link in chat interfaces, allowing users to download files.",
       "howItWorks": "The Download File node creates a download link for a file in chat interfaces. When executed, the node: 1. Validates the file path and checks if the file exists 2. Creates a temporary download link for the file 3. Displays a download button or link in the chat interface 4. Allows users to download the file through the chat interface",
@@ -124,7 +124,7 @@
       ]
     },
     "dropdown": {
-      "namespace": "Core.RobomotionAssistant.Dropdown",
+      "namespace": "Robomotion.Assistant.Dropdown",
       "name": "Dropdown",
       "summary": "Creates a dropdown list for user selection in chat interfaces.",
       "howItWorks": "The Dropdown node creates an interactive dropdown list in chat interfaces. When executed, the node: 1. Creates a dropdown list with the specified options 2. Displays the dropdown list in the chat interface 3. Waits for user interaction with the dropdown 4. Returns a payload with information about the user's selection",
@@ -141,7 +141,7 @@
       ]
     },
     "end_conversation": {
-      "namespace": "Core.RobomotionAssistant.End_conversation",
+      "namespace": "Robomotion.Assistant.End",
       "name": "End_conversation",
       "summary": "Ends the Assistant conversation and closes the chat session.",
       "howItWorks": "The End Conversation node terminates the current Assistant conversation. When executed, the node: 1. Sends a command to end the conversation to the Assistant 2. Closes the chat session 3. Cleans up any resources associated with the conversation",
@@ -159,7 +159,7 @@
       ]
     },
     "header": {
-      "namespace": "Core.RobomotionAssistant.Header",
+      "namespace": "Robomotion.Assistant.Header",
       "name": "Header",
       "summary": "Prints a plain or Markdown formatted header in chat interfaces.",
       "howItWorks": "The Header node displays formatted header text in chat interfaces. When executed, the node: 1. Takes the provided text input 2. Applies the specified alignment 3. Displays the header in the chat interface with Markdown formatting",
@@ -177,7 +177,7 @@
       ]
     },
     "image": {
-      "namespace": "Core.RobomotionAssistant.Image",
+      "namespace": "Robomotion.Assistant.Image",
       "name": "Image",
       "summary": "Displays an image from a URL in chat interfaces.",
       "howItWorks": "The Image node displays an image from a URL in chat interfaces. When executed, the node: 1. Retrieves the image from the provided URL 2. Applies the specified alignment and size settings 3. Displays the image with the provided title in the chat interface",
@@ -196,7 +196,7 @@
       ]
     },
     "prompt": {
-      "namespace": "Core.RobomotionAssistant.Prompt",
+      "namespace": "Robomotion.Assistant.Prompt",
       "name": "Prompt",
       "summary": "Creates a prompt for user input in chat interfaces.",
       "howItWorks": "The Prompt node creates an interactive prompt in chat interfaces to collect user input. When executed, the node: 1. Sends a prompt request to the Assistant 2. Displays a prompt interface in the chat for user input 3. Waits for the user to provide input or respond 4. Returns a payload with the user's response",
@@ -214,7 +214,7 @@
       ]
     },
     "radio_button": {
-      "namespace": "Core.RobomotionAssistant.Radio_button",
+      "namespace": "Robomotion.Assistant.RadioButtons",
       "name": "Radio_button",
       "summary": "Creates a group of radio buttons for single-choice user selection in chat interfaces.",
       "howItWorks": "The Radio Buttons node creates a group of radio buttons in chat interfaces where users can select only one option. When executed, the node: 1. Creates a radio button group with the specified options 2. Displays the radio buttons in the chat interface 3. Waits for user interaction with the radio buttons 4. Returns a payload with information about the user's single selection",
@@ -232,7 +232,7 @@
       ]
     },
     "streaming_text": {
-      "namespace": "Core.RobomotionAssistant.Streaming_text",
+      "namespace": "Robomotion.Assistant.StreamingText",
       "name": "Streaming_text",
       "summary": "Streams text content in real-time to chat interfaces, enabling progressive text display.",
       "howItWorks": "The Streaming Text node enables real-time text streaming in chat interfaces. When executed, the node: 1. Receives text content and streaming parameters 2. Establishes a connection to the streaming endpoint 3. Sends text data in real-time chunks 4. Maintains the streaming session until completion 5. Returns stream status information",
@@ -252,7 +252,7 @@
       ]
     },
     "text": {
-      "namespace": "Core.RobomotionAssistant.Text",
+      "namespace": "Robomotion.Assistant.Text",
       "name": "Text",
       "summary": "Prints plain or Markdown formatted text in chat interfaces.",
       "howItWorks": "The Text node displays formatted text content in chat interfaces. When executed, the node: 1. Takes the provided text input 2. Applies Markdown formatting if present 3. Displays the formatted text in the chat interface",
@@ -270,7 +270,7 @@
       ]
     },
     "textbox": {
-      "namespace": "Core.RobomotionAssistant.Textbox",
+      "namespace": "Robomotion.Assistant.Textbox",
       "name": "Textbox",
       "summary": "Adds a plain textbox input for user text entry in chat interfaces.",
       "howItWorks": "The Textbox node creates a text input field in chat interfaces. When executed, the node: 1. Creates a textbox input with the specified ID and label 2. Displays the textbox in the chat interface 3. Waits for user to enter text and submit 4. Returns a payload with the user's text input",
@@ -289,7 +289,7 @@
       ]
     },
     "upload_file": {
-      "namespace": "Core.RobomotionAssistant.Upload_file",
+      "namespace": "Robomotion.Assistant.File",
       "name": "Upload_file",
       "summary": "Creates a file upload dialog in chat interfaces, allowing users to upload files.",
       "howItWorks": "The Upload File node creates a file upload interface in chat interfaces. When executed, the node: 1. Creates a file upload dialog with the specified ID and options 2. Displays the upload dialog in the chat interface 3. Waits for user to select and upload files 4. Saves the uploaded files to the specified directory 5. Returns payload information and file paths",

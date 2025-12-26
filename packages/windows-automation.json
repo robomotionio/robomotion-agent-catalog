@@ -4,7 +4,7 @@
   "description": "## Overview The Windows Automation package provides native Windows application automation using Microsoft UI Automation. Use it when you need to automate Windows desktop applications, interact with UI elements, read control values, or control windows.",
   "nodes": {
     "click_coordinate": {
-      "namespace": "Core.WindowsAutomation.Click_coordinate",
+      "namespace": "Robomotion.WindowsAutomation.ClickCoordinate",
       "name": "Click_coordinate",
       "summary": "Clicks at a specific coordinate on the screen or within an element.",
       "howItWorks": "The Click Coordinate node performs mouse clicks at specified coordinates. When executed, the node: 1. Retrieves the X and Y coordinates from the inputs 2. If Coordinate Type is set to \"Relative\", it finds the specified element and adjusts the coordinates relative to that element's position 3. If Focus is enabled and an element was specified, it focuses that element 4. Performs the specified mouse click action at the calculated coordinates",
@@ -17,7 +17,7 @@
       ]
     },
     "click_element": {
-      "namespace": "Core.WindowsAutomation.Click_element",
+      "namespace": "Robomotion.WindowsAutomation.Click",
       "name": "Click_element",
       "summary": "Clicks on a specific UI element identified by selectors.",
       "howItWorks": "The Click Element node performs clicks on UI elements identified by selectors. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target element 2. If Focus is enabled, focuses the element 3. Performs the specified mouse click action on the element 4. If Invoke Pattern is enabled for left clicks, it first tries to use the element's invoke pattern before falling back to direct click",
@@ -29,7 +29,7 @@
       ]
     },
     "close_window": {
-      "namespace": "Core.WindowsAutomation.Close_window",
+      "namespace": "Robomotion.WindowsAutomation.Close",
       "name": "Close_window",
       "summary": "Closes a window identified by a selector by terminating its process.",
       "howItWorks": "The Close Window node terminates the process of a window identified by a selector. When executed, the node: 1. Uses the Window Selector to locate the target window 2. Finds the process associated with the window 3. Terminates the process, effectively closing the window",
@@ -45,7 +45,7 @@
       ]
     },
     "get_checkbox": {
-      "namespace": "Core.WindowsAutomation.Get_checkbox",
+      "namespace": "Robomotion.WindowsAutomation.GetCheckbox",
       "name": "Get_checkbox",
       "summary": "Retrieves the checked state of a checkbox element.",
       "howItWorks": "The Get Checkbox node retrieves the checked state of a checkbox element. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target checkbox element 2. Retrieves the TogglePattern of the element to determine its state 3. Sets the output variable \"Checked\" to true if the checkbox is checked, false otherwise",
@@ -60,7 +60,7 @@
       ]
     },
     "get_combobox": {
-      "namespace": "Core.WindowsAutomation.Get_combobox",
+      "namespace": "Robomotion.WindowsAutomation.GetCombobox",
       "name": "Get_combobox",
       "summary": "Retrieves the selected values from a combobox element.",
       "howItWorks": "The Get Combobox node retrieves the selected values from a combobox element. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target combobox element 2. Retrieves the SelectionPattern of the element to determine its selected items 3. Extracts the names of all selected items and returns them as an array",
@@ -76,7 +76,7 @@
       ]
     },
     "get_properties": {
-      "namespace": "Core.WindowsAutomation.Get_properties",
+      "namespace": "Robomotion.WindowsAutomation.GetProperties",
       "name": "Get_properties",
       "summary": "Retrieves all accessible properties of a UI element and returns them as a JSON string.",
       "howItWorks": "The Get Properties node retrieves all accessible properties of a UI element and returns them as a JSON string. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target element 2. Iterates through all properties of the element object 3. Filters out private properties (those starting with underscore) and methods 4. Serializes the remaining properties to a JSON string 5. Sets the JSON string as the output value",
@@ -93,7 +93,7 @@
       ]
     },
     "get_session": {
-      "namespace": "Core.WindowsAutomation.Get_session",
+      "namespace": "Robomotion.WindowsAutomation.GetSession",
       "name": "Get_session",
       "summary": "Retrieves the current Windows Automation session object.",
       "howItWorks": "The Get Session node retrieves the current Windows Automation session object. When executed, the node: 1. Gets the current session from the Windows Automation context 2. Verifies that an interactive desktop session exists 3. Returns the session object as an output",
@@ -108,7 +108,7 @@
       ]
     },
     "get_slider": {
-      "namespace": "Core.WindowsAutomation.Get_slider",
+      "namespace": "Robomotion.WindowsAutomation.GetSlider",
       "name": "Get_slider",
       "summary": "Retrieves the current value of a slider element.",
       "howItWorks": "The Get Slider node retrieves the current value of a slider element. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target slider element 2. Retrieves the RangeValuePattern of the element to determine its current value 3. Sets the output variable \"Value\" to the slider's current numeric value",
@@ -123,7 +123,7 @@
       ]
     },
     "get_text": {
-      "namespace": "Core.WindowsAutomation.Get_text",
+      "namespace": "Robomotion.WindowsAutomation.GetText",
       "name": "Get_text",
       "summary": "Retrieves the text content from a text element.",
       "howItWorks": "The Get Text node retrieves the text content from a text element. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target text element 2. Attempts to retrieve the text using multiple TextPattern implementations: - TextPattern - TextPattern2 - TextEditPattern - TextControl().GetTextPattern() (fallback) 3. Extracts the text content from the document range 4. Sets the output variable \"Text\" to the retrieved content",
@@ -139,7 +139,7 @@
       ]
     },
     "get_value": {
-      "namespace": "Core.WindowsAutomation.Get_value",
+      "namespace": "Robomotion.WindowsAutomation.GetValue",
       "name": "Get_value",
       "summary": "Retrieves the value property of a UI element.",
       "howItWorks": "The Get Value node retrieves the value property of a UI element. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target element 2. Retrieves the ValuePattern of the element 3. Extracts the Value property from the pattern 4. Sets the output variable \"Value\" to the element's value",
@@ -155,7 +155,7 @@
       ]
     },
     "is_enabled": {
-      "namespace": "Core.WindowsAutomation.Is_enabled",
+      "namespace": "Robomotion.WindowsAutomation.IsEnabled",
       "name": "Is_enabled",
       "summary": "Checks whether a UI element is enabled or disabled.",
       "howItWorks": "The Is Enabled node checks whether a UI element is enabled or disabled. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target element 2. Checks the IsEnabled property of the element 3. Sets the output variable \"Enabled\" to true if the element is enabled, false otherwise",
@@ -170,7 +170,7 @@
       ]
     },
     "is_selected": {
-      "namespace": "Core.WindowsAutomation.Is_selected",
+      "namespace": "Robomotion.WindowsAutomation.IsSelected",
       "name": "Is_selected",
       "summary": "Checks whether a UI element is currently selected.",
       "howItWorks": "The Is Selected node checks whether a UI element is currently selected. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target element 2. Retrieves the SelectionItemPattern of the element 3. Checks the IsSelected property of the pattern 4. Sets the output variable \"Selected\" to true if the element is selected, false otherwise",
@@ -186,7 +186,7 @@
       ]
     },
     "move_window": {
-      "namespace": "Core.WindowsAutomation.Move_window",
+      "namespace": "Robomotion.WindowsAutomation.MoveWindow",
       "name": "Move_window",
       "summary": "Moves a window to a specified position on the screen.",
       "howItWorks": "The Move Window node moves a window to a specified position on the screen. When executed, the node: 1. Uses the Window Selector to locate the target window 2. Retrieves the current size of the window 3. Moves the window to the specified X, Y coordinates while maintaining its current size 4. Ensures the window is visible by showing it",
@@ -203,7 +203,7 @@
       ]
     },
     "screenshot": {
-      "namespace": "Core.WindowsAutomation.Screenshot",
+      "namespace": "Robomotion.WindowsAutomation.Screenshot",
       "name": "Screenshot",
       "summary": "Takes a screenshot of a specified UI element and saves it to a file.",
       "howItWorks": "The Screenshot node captures an image of a specified UI element and saves it to a file. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target element 2. Determines the bounding rectangle (position and size) of the element 3. Captures a screenshot of the element's area 4. Saves the screenshot to the specified file path",
@@ -221,7 +221,7 @@
       ]
     },
     "send_key": {
-      "namespace": "Core.WindowsAutomation.Send_key",
+      "namespace": "Robomotion.WindowsAutomation.SendKey",
       "name": "Send_key",
       "summary": "Sends keystrokes to a UI element, simulating keyboard input.",
       "howItWorks": "The Send Key node simulates keyboard input by sending keystrokes to a UI element. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target element 2. Constructs a keystroke sequence by combining up to three modifier keys with the specified text 3. Sends the complete keystroke sequence to the element 4. Verifies that the element still exists after sending the keys",
@@ -239,7 +239,7 @@
       ]
     },
     "set_checkbox": {
-      "namespace": "Core.WindowsAutomation.Set_checkbox",
+      "namespace": "Robomotion.WindowsAutomation.SetCheckbox",
       "name": "Set_checkbox",
       "summary": "Sets the state of a checkbox element (check, uncheck, or toggle).",
       "howItWorks": "The Set Checkbox node changes the state of a checkbox element. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target checkbox element 2. Retrieves the TogglePattern of the element to determine its current state 3. Based on the selected State option: - Check: Toggles the checkbox if it's currently unchecked - Uncheck: Toggles the checkbox if it's currently checked - Toggle: Always toggles the checkbox to the opposite state 4. If no State is selected, an error is raised",
@@ -255,7 +255,7 @@
       ]
     },
     "set_combobox": {
-      "namespace": "Core.WindowsAutomation.Set_combobox",
+      "namespace": "Robomotion.WindowsAutomation.SetCombobox",
       "name": "Set_combobox",
       "summary": "Selects a specific value in a combobox element.",
       "howItWorks": "The Set Combobox node selects a specific value in a combobox element. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target combobox element 2. Selects the specified value in the combobox by its item name 3. Optionally simulates mouse movement to the element before selection",
@@ -273,7 +273,7 @@
       ]
     },
     "set_focus": {
-      "namespace": "Core.WindowsAutomation.Set_focus",
+      "namespace": "Robomotion.WindowsAutomation.SetFocus",
       "name": "Set_focus",
       "summary": "Sets keyboard focus to a specific UI element.",
       "howItWorks": "The Set Focus node sets keyboard focus to a specific UI element. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target element 2. Calls the SetFocus method on the element to give it keyboard focus",
@@ -290,7 +290,7 @@
       ]
     },
     "set_selected": {
-      "namespace": "Core.WindowsAutomation.Set_selected",
+      "namespace": "Robomotion.WindowsAutomation.SetSelected",
       "name": "Set_selected",
       "summary": "Selects or deselects a UI element that supports selection.",
       "howItWorks": "The Set Selected node selects or deselects a UI element that supports selection. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target element 2. Retrieves the SelectionItemPattern of the element 3. Based on the Selected option: - If true: Calls Select() method to select the element - If false: Calls RemoveFromSelection() method to deselect the element",
@@ -307,7 +307,7 @@
       ]
     },
     "set_slider": {
-      "namespace": "Core.WindowsAutomation.Set_slider",
+      "namespace": "Robomotion.WindowsAutomation.SetSlider",
       "name": "Set_slider",
       "summary": "Sets the value of a slider element to a specific numeric value.",
       "howItWorks": "The Set Slider node sets the value of a slider element to a specific numeric value. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target slider element 2. Retrieves the RangeValuePattern of the element 3. Sets the slider's value to the specified numeric value",
@@ -325,7 +325,7 @@
       ]
     },
     "set_text": {
-      "namespace": "Core.WindowsAutomation.Set_text",
+      "namespace": "Robomotion.WindowsAutomation.SetText",
       "name": "Set_text",
       "summary": "Sets the text content of a UI element by sending keystrokes.",
       "howItWorks": "The Set Text node sets the text content of a UI element by sending keystrokes. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target element 2. Sends the specified text as keystrokes to the element with no delay between characters",
@@ -344,7 +344,7 @@
       ]
     },
     "set_value": {
-      "namespace": "Core.WindowsAutomation.Set_value",
+      "namespace": "Robomotion.WindowsAutomation.SetValue",
       "name": "Set_value",
       "summary": "Sets the value property of a UI element using the ValuePattern interface.",
       "howItWorks": "The Set Value node sets the value property of a UI element using the ValuePattern interface. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target element 2. Retrieves the ValuePattern of the element 3. Sets the element's value property to the specified value",
@@ -362,7 +362,7 @@
       ]
     },
     "start_session": {
-      "namespace": "Core.WindowsAutomation.Start_session",
+      "namespace": "Robomotion.WindowsAutomation.Session.StartSession",
       "name": "Start_session",
       "summary": "Starts a new Windows Remote Desktop Protocol (RDP) session to a remote computer.",
       "howItWorks": "The Start Session node establishes a new Windows Remote Desktop Protocol (RDP) session to a remote computer. When executed, the node: 1. Validates the provided credentials (username and password) 2. Stores the credentials securely using Windows cmdkey 3. Launches an RDP connection using mstsc with full-screen mode 4. Waits for the session to be established and identifies the new session 5. Cleans up the stored credentials 6. Returns the session information as an output",
@@ -379,10 +379,33 @@
         "The connection is launched in full-screen mode for optimal interaction",
         "For localhost connections, ensure that Remote Desktop is enabled on the local machine",
         "The node waits up to 60 seconds for the session to be established"
+      ],
+      "credentials": [
+        {
+          "name": "Login",
+          "title": "Windows Login",
+          "description": "Windows username and password for RDP session authentication",
+          "fields": [
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "description": "Windows username (e.g., DOMAIN\\username or username@domain.com)"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "Windows password"
+            }
+          ]
+        }
       ]
     },
     "stop_session": {
-      "namespace": "Core.WindowsAutomation.Stop_session",
+      "namespace": "Robomotion.WindowsAutomation.Session.StopSession",
       "name": "Stop_session",
       "summary": "Stops a Windows Remote Desktop Protocol (RDP) session by either disconnecting or logging off.",
       "howItWorks": "The Stop Session node terminates a Windows Remote Desktop Protocol (RDP) session. When executed, the node: 1. Validates the provided session object 2. Based on the selected Action option: - Disconnect: Uses tscon command to disconnect from the session while keeping it active on the remote computer - Log Off: Uses logoff command to completely terminate the session on the remote computer",
@@ -399,7 +422,7 @@
       ]
     },
     "transfer_session": {
-      "namespace": "Core.WindowsAutomation.Transfer_session",
+      "namespace": "Robomotion.WindowsAutomation.TransferSession",
       "name": "Transfer_session",
       "summary": "Transfers a Windows session to the console and optionally adjusts the display resolution.",
       "howItWorks": "The Transfer Session node transfers a Windows session to the console and optionally adjusts the display resolution. When executed, the node: 1. Validates that the robot is running with administrator privileges 2. Validates the provided session object 3. Based on the Resolution Mode option: - No Change: Proceeds directly to session transfer - Current Resolution: Saves the current resolution, transfers the session, then restores the resolution - Custom Resolution: Transfers the session, then sets the specified custom resolution 4. Uses tscon command to transfer the session to the console 5. Applies any requested resolution changes after the transfer",
@@ -422,7 +445,7 @@
       ]
     },
     "wait_element": {
-      "namespace": "Core.WindowsAutomation.Wait_element",
+      "namespace": "Robomotion.WindowsAutomation.WaitElement",
       "name": "Wait_element",
       "summary": "Waits for a UI element to appear or disappear within a specified timeout period.",
       "howItWorks": "The Wait Element node pauses execution until a specified UI element either appears or disappears. When executed, the node: 1. Uses the Window Selector and Element Selector to identify the target element 2. Based on the Condition option: - To Appear: Continuously checks for the element's existence until it appears or timeout - To Disappear: Continuously checks for the element's existence until it disappears or timeout 3. Checks for the element every 0.5 seconds during the wait period 4. Raises a TimeoutError if the condition is not met within the specified timeout",
@@ -440,7 +463,7 @@
       ]
     },
     "wait_window": {
-      "namespace": "Core.WindowsAutomation.Wait_window",
+      "namespace": "Robomotion.WindowsAutomation.WaitWindow",
       "name": "Wait_window",
       "summary": "Waits for a window to appear or disappear within a specified timeout period.",
       "howItWorks": "The Wait Window node pauses execution until a specified window either appears or disappears. When executed, the node: 1. Uses the Window Selector to identify the target window 2. Based on the Condition option: - To Appear: Continuously checks for the window's existence until it appears or timeout - To Disappear: Continuously checks for the window's existence until it disappears or timeout 3. Checks for the window every 0.5 seconds during the wait period 4. Raises a TimeoutError if the condition is not met within the specified timeout",

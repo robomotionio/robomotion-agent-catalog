@@ -4,7 +4,7 @@
   "description": "## Overview The Cookie Store package provides secure cookie management capabilities for web automation workflows. It uses AES (Advanced Encryption Standard) encryption to protect sensitive session data, making it ideal for scenarios where you need to:",
   "nodes": {
     "load-cookies": {
-      "namespace": "Core.CookieStore.LoadCookies",
+      "namespace": "Robomotion.CookieStore.LoadCookies",
       "name": "LoadCookies",
       "summary": "Loads and decrypts browser cookies from an encrypted file using AES decryption. This node allows you to restore previously saved browser sessions for web automation workflows.",
       "howItWorks": "The Load Cookies node performs the following operations: 1. Validates the load path 2. Reads the encrypted cookie file from disk 3. Retrieves the AES decryption key from credentials 4. Decrypts the file data using AES-CBC 5. Parses the decrypted JSON data into cookie objects 6. Stores the cookies in the message scope for use by other nodes",
@@ -26,10 +26,25 @@
       "relatedNodes": [
         "**Get Cookies**",
         "**Open Browser**"
+      ],
+      "credentials": [
+        {
+          "name": "AES Encryption Key",
+          "title": "AES Encryption Key",
+          "fields": [
+            {
+              "name": "value",
+              "title": "AES Key",
+              "type": "password",
+              "required": true,
+              "description": "AES encryption key in hexadecimal format (32 or 64 hex characters for AES-128 or AES-256)"
+            }
+          ]
+        }
       ]
     },
     "save-cookies": {
-      "namespace": "Core.CookieStore.SaveCookies",
+      "namespace": "Robomotion.CookieStore.SaveCookies",
       "name": "SaveCookies",
       "summary": "Encrypts and saves browser cookies to a secure file using AES encryption. This node is essential for preserving authenticated browser sessions between automation runs.",
       "howItWorks": "The Save Cookies node performs the following operations: 1. Validates the save path and cookies input 2. Converts browser cookies to a standardized JSON format 3. Serializes the cookies to JSON 4. Retrieves the AES encryption key from credentials 5. Encrypts the cookie data using AES-CBC with PKCS7 padding 6. Writes the encrypted data to the specified file",
@@ -51,6 +66,21 @@
       "relatedNodes": [
         "**Get Cookies**",
         "**Open Browser**"
+      ],
+      "credentials": [
+        {
+          "name": "AES Encryption Key",
+          "title": "AES Encryption Key",
+          "fields": [
+            {
+              "name": "value",
+              "title": "AES Key",
+              "type": "password",
+              "required": true,
+              "description": "AES encryption key in hexadecimal format (32 or 64 hex characters for AES-128 or AES-256)"
+            }
+          ]
+        }
       ]
     }
   }

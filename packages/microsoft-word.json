@@ -4,17 +4,17 @@
   "description": "## Overview The Microsoft Word package provides comprehensive Word document manipulation capabilities. Use it when you need to generate reports, fill templates, create documents from data, or process existing Word files.",
   "nodes": {
     "add-footer": {
-      "namespace": "Core.MicrosoftWord.AddFooter",
+      "namespace": "Robomotion.MicrosoftWord.AddFooter",
       "name": "AddFooter",
       "summary": "Adds a footer to all sections of the Word document. The footer appears at the bottom of each page and can be aligned left, center, or right."
     },
     "add-header": {
-      "namespace": "Core.MicrosoftWord.AddHeader",
+      "namespace": "Robomotion.MicrosoftWord.AddHeader",
       "name": "AddHeader",
       "summary": "Adds a header to all sections of the Word document. The header appears at the top of each page and can be aligned left, center, or right."
     },
     "add-heading": {
-      "namespace": "Core.MicrosoftWord.AddHeading",
+      "namespace": "Robomotion.MicrosoftWord.AddHeading",
       "name": "AddHeading",
       "summary": "Adds a formatted heading to the Word document with a specified style. Headings are automatically formatted with bold text and can use predefined Word styles for consistent document structure.",
       "examples": [
@@ -25,12 +25,12 @@
       ]
     },
     "add-image": {
-      "namespace": "Core.MicrosoftWord.AddImage",
+      "namespace": "Robomotion.MicrosoftWord.AddImage",
       "name": "AddImage",
       "summary": "Adds an image to the Word document with specified dimensions. The image is inserted at the end of the document as an inline shape."
     },
     "add-table": {
-      "namespace": "Core.MicrosoftWord.AddTable",
+      "namespace": "Robomotion.MicrosoftWord.AddTable",
       "name": "AddTable",
       "summary": "Adds a table to the Word document with data from a Table object. The table is formatted with borders and can optionally display headers with special formatting.",
       "examples": [
@@ -41,32 +41,32 @@
       ]
     },
     "add-text": {
-      "namespace": "Core.MicrosoftWord.AddText",
+      "namespace": "Robomotion.MicrosoftWord.AddText",
       "name": "AddText",
       "summary": "Adds a paragraph of text to the Word document with specified formatting options. The text is appended to the end of the document as a new paragraph."
     },
     "clear-word": {
-      "namespace": "Core.MicrosoftWord.ClearWord",
+      "namespace": "Robomotion.MicrosoftWord.ClearWord",
       "name": "ClearWord",
       "summary": "Clears all content from the Word document, removing all text, images, tables, and other elements. This operation empties the document body while preserving headers and footers."
     },
     "close-word": {
-      "namespace": "Core.MicrosoftWord.CloseWord",
+      "namespace": "Robomotion.MicrosoftWord.CloseWord",
       "name": "CloseWord",
       "summary": "Closes an open Word document and optionally saves changes. This node can also export the document to different formats (PDF, Text, Doc, Docx) before closing."
     },
     "create-word": {
-      "namespace": "Core.MicrosoftWord.CreateWord",
+      "namespace": "Robomotion.MicrosoftWord.CreateWord",
       "name": "CreateWord",
       "summary": "Creates a new Word document file at the specified path. This node creates an empty Word document and saves it to disk without opening it."
     },
     "open-word": {
-      "namespace": "Core.MicrosoftWord.OpenWord",
+      "namespace": "Robomotion.MicrosoftWord.OpenWord",
       "name": "OpenWord",
       "summary": "Opens an existing Word document file for editing and manipulation. This node creates a file descriptor that is used by other Word nodes to perform operations on the document."
     },
     "read-word": {
-      "namespace": "Core.MicrosoftWord.ReadWord",
+      "namespace": "Robomotion.MicrosoftWord.ReadWord",
       "name": "ReadWord",
       "summary": "Reads the content from a Word document, including text from each page and optionally headers and footers. This node extracts all readable content from the document for further processing.",
       "examples": [
@@ -77,7 +77,7 @@
       ]
     },
     "replace-text": {
-      "namespace": "Core.MicrosoftWord.ReplaceText",
+      "namespace": "Robomotion.MicrosoftWord.ReplaceText",
       "name": "ReplaceText",
       "summary": "Finds and replaces text in the Word document. Supports both single text replacement and multiple replacements using a dictionary. All occurrences of the search text are replaced throughout the entire document."
     }

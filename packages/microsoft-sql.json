@@ -4,7 +4,7 @@
   "description": "## Overview The Microsoft SQL Server package provides database connectivity for SQL Server. Use it when you need to query data, insert records, execute stored procedures, or perform transactions against Microsoft SQL Server databases.",
   "nodes": {
     "commit": {
-      "namespace": "Core.MicrosoftSql.Commit",
+      "namespace": "Robomotion.MSSQL.Commit",
       "name": "Commit",
       "summary": "Commits a database transaction to make all changes permanent in Microsoft SQL Server.",
       "howItWorks": "The Commit Transaction node finalizes a database transaction, making all changes permanent. When executed, the node: 1. Validates the transaction ID is provided and not empty 2. Retrieves the transaction from the internal transactions dictionary 3. Calls Commit() on the SqlTransaction 4. Removes the transaction from the dictionary 5. All changes made during the transaction are permanently saved to the database 6. All locks held by the transaction are released",
@@ -20,7 +20,7 @@
       ]
     },
     "connect": {
-      "namespace": "Core.MicrosoftSql.Connect",
+      "namespace": "Robomotion.MSSQL.Connect",
       "name": "Connect",
       "summary": "Establishes a connection to a Microsoft SQL Server database.",
       "howItWorks": "The Connect node establishes a connection to a Microsoft SQL Server database using the provided credentials. When executed, the node: 1. Validates the provided database credentials 2. Extracts server, port, database, username, and password from the credential 3. Constructs a SQL Server connection string with the format: `User Id={username};Password={password};Database={database};Data Source={server},{port}` 4. Creates and opens a new SqlConnection 5. Generates a unique connection ID (GUID) 6. Stores the connection in an internal connections dictionary 7. Returns the connection ID as output",
@@ -38,10 +38,75 @@
       "errorCodes": [
         "ErrInvalidArg",
         "ErrConnection"
+      ],
+      "credentials": [
+        {
+          "name": "mssql_database",
+          "title": "SQL Server Database",
+          "description": "Microsoft SQL Server database connection with server, port, database, and authentication",
+          "fields": [
+            {
+              "name": "type",
+              "title": "Database Type",
+              "type": "hidden"
+            },
+            {
+              "name": "server",
+              "title": "Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "localhost",
+              "description": "SQL Server hostname or IP address"
+            },
+            {
+              "name": "port",
+              "title": "Port",
+              "type": "text",
+              "placeholder": "1433",
+              "description": "SQL Server port number (default: 1433)"
+            },
+            {
+              "name": "database",
+              "title": "Database",
+              "type": "text",
+              "required": true,
+              "placeholder": "master",
+              "description": "Database name"
+            },
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "sa",
+              "description": "SQL Server database username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "placeholder": "Password",
+              "description": "SQL Server database password"
+            }
+          ],
+          "help": [
+            "1. Enter the SQL Server hostname or IP address",
+            "2. Specify the port (default is 1433)",
+            "3. Enter the database name",
+            "4. Provide your SQL Server credentials (username and password)"
+          ],
+          "resources": [
+            {
+              "label": "Microsoft SQL Server Documentation",
+              "url": "https://docs.microsoft.com/en-us/sql/sql-server/"
+            }
+          ]
+        }
       ]
     },
     "disconnect": {
-      "namespace": "Core.MicrosoftSql.Disconnect",
+      "namespace": "Robomotion.MSSQL.Disconnect",
       "name": "Disconnect",
       "summary": "Closes an existing Microsoft SQL Server database connection.",
       "howItWorks": "The Disconnect node closes an active SQL Server database connection. When executed, the node: 1. Validates the connection ID is provided and not empty 2. Retrieves the connection from the internal connections dictionary 3. Removes the connection from the dictionary 4. Closes the SQL Server connection 5. Releases all resources associated with the connection",
@@ -55,7 +120,7 @@
       ]
     },
     "insert": {
-      "namespace": "Core.MicrosoftSql.Insert",
+      "namespace": "Robomotion.MSSQL.Insert",
       "name": "Insert",
       "summary": "Inserts table data into a Microsoft SQL Server database table. This node is optimized for bulk inserts of structured data.",
       "howItWorks": "The Insert Table node inserts structured table data into a SQL Server table. When executed, the node: 1. Retrieves the database connection (either from connection ID or creates new connection from credentials) 2. Optionally retrieves the transaction if a transaction ID is provided 3. Validates the table name and table data 4. For each row in the table data: - Constructs an INSERT statement based on the columns - Adds column values as parameters to prevent SQL injection - Executes the INSERT statement - If Ignore Conflicts is enabled, catches and ignores unique constraint violations (error 2627) and foreign key violations (error 547) 5. Applies all changes to the database",
@@ -71,10 +136,75 @@
         "ErrNotFound",
         "ErrConnection",
         "ErrRuntime"
+      ],
+      "credentials": [
+        {
+          "name": "mssql_database",
+          "title": "SQL Server Database",
+          "description": "Microsoft SQL Server database connection with server, port, database, and authentication",
+          "fields": [
+            {
+              "name": "type",
+              "title": "Database Type",
+              "type": "hidden"
+            },
+            {
+              "name": "server",
+              "title": "Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "localhost",
+              "description": "SQL Server hostname or IP address"
+            },
+            {
+              "name": "port",
+              "title": "Port",
+              "type": "text",
+              "placeholder": "1433",
+              "description": "SQL Server port number (default: 1433)"
+            },
+            {
+              "name": "database",
+              "title": "Database",
+              "type": "text",
+              "required": true,
+              "placeholder": "master",
+              "description": "Database name"
+            },
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "sa",
+              "description": "SQL Server database username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "placeholder": "Password",
+              "description": "SQL Server database password"
+            }
+          ],
+          "help": [
+            "1. Enter the SQL Server hostname or IP address",
+            "2. Specify the port (default is 1433)",
+            "3. Enter the database name",
+            "4. Provide your SQL Server credentials (username and password)"
+          ],
+          "resources": [
+            {
+              "label": "Microsoft SQL Server Documentation",
+              "url": "https://docs.microsoft.com/en-us/sql/sql-server/"
+            }
+          ]
+        }
       ]
     },
     "non-query": {
-      "namespace": "Core.MicrosoftSql.NonQuery",
+      "namespace": "Robomotion.MSSQL.NonQuery",
       "name": "NonQuery",
       "summary": "Executes a SQL Server command that does not return data (INSERT, UPDATE, DELETE, CREATE, ALTER, etc.).",
       "howItWorks": "The Execute Non Query node executes a SQL command that modifies data or database structure. When executed, the node: 1. Retrieves the database connection (either from connection ID or creates new connection from credentials) 2. Optionally retrieves the transaction if a transaction ID is provided 3. Processes mustache template variables in the SQL command using the message context 4. Decodes any HTML entities in the rendered command 5. Creates a SqlCommand with the SQL command and timeout settings 6. Executes the command using ExecuteNonQuery 7. Returns without output (number of affected rows is not returned)",
@@ -89,10 +219,75 @@
         "ErrNotFound",
         "ErrConnection",
         "ErrRuntime"
+      ],
+      "credentials": [
+        {
+          "name": "mssql_database",
+          "title": "SQL Server Database",
+          "description": "Microsoft SQL Server database connection with server, port, database, and authentication",
+          "fields": [
+            {
+              "name": "type",
+              "title": "Database Type",
+              "type": "hidden"
+            },
+            {
+              "name": "server",
+              "title": "Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "localhost",
+              "description": "SQL Server hostname or IP address"
+            },
+            {
+              "name": "port",
+              "title": "Port",
+              "type": "text",
+              "placeholder": "1433",
+              "description": "SQL Server port number (default: 1433)"
+            },
+            {
+              "name": "database",
+              "title": "Database",
+              "type": "text",
+              "required": true,
+              "placeholder": "master",
+              "description": "Database name"
+            },
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "sa",
+              "description": "SQL Server database username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "placeholder": "Password",
+              "description": "SQL Server database password"
+            }
+          ],
+          "help": [
+            "1. Enter the SQL Server hostname or IP address",
+            "2. Specify the port (default is 1433)",
+            "3. Enter the database name",
+            "4. Provide your SQL Server credentials (username and password)"
+          ],
+          "resources": [
+            {
+              "label": "Microsoft SQL Server Documentation",
+              "url": "https://docs.microsoft.com/en-us/sql/sql-server/"
+            }
+          ]
+        }
       ]
     },
     "query": {
-      "namespace": "Core.MicrosoftSql.Query",
+      "namespace": "Robomotion.MSSQL.Query",
       "name": "Query",
       "summary": "Executes a SQL Server SELECT query and returns the results as a table.",
       "howItWorks": "The Execute Query node executes a SQL SELECT statement and returns the results. When executed, the node: 1. Retrieves the database connection (either from connection ID or creates new connection from credentials) 2. Optionally retrieves the transaction if a transaction ID is provided 3. Processes mustache template variables in the SQL query using the message context 4. Decodes any HTML entities in the rendered query 5. Creates a SqlCommand with the SQL query and timeout settings 6. Executes the query using ExecuteReader 7. Loads the results into a DataTable 8. Converts the DataTable to a table structure with columns and rows 9. Returns the table structure as output",
@@ -107,10 +302,75 @@
         "ErrNotFound",
         "ErrConnection",
         "ErrRuntime"
+      ],
+      "credentials": [
+        {
+          "name": "mssql_database",
+          "title": "SQL Server Database",
+          "description": "Microsoft SQL Server database connection with server, port, database, and authentication",
+          "fields": [
+            {
+              "name": "type",
+              "title": "Database Type",
+              "type": "hidden"
+            },
+            {
+              "name": "server",
+              "title": "Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "localhost",
+              "description": "SQL Server hostname or IP address"
+            },
+            {
+              "name": "port",
+              "title": "Port",
+              "type": "text",
+              "placeholder": "1433",
+              "description": "SQL Server port number (default: 1433)"
+            },
+            {
+              "name": "database",
+              "title": "Database",
+              "type": "text",
+              "required": true,
+              "placeholder": "master",
+              "description": "Database name"
+            },
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "sa",
+              "description": "SQL Server database username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "placeholder": "Password",
+              "description": "SQL Server database password"
+            }
+          ],
+          "help": [
+            "1. Enter the SQL Server hostname or IP address",
+            "2. Specify the port (default is 1433)",
+            "3. Enter the database name",
+            "4. Provide your SQL Server credentials (username and password)"
+          ],
+          "resources": [
+            {
+              "label": "Microsoft SQL Server Documentation",
+              "url": "https://docs.microsoft.com/en-us/sql/sql-server/"
+            }
+          ]
+        }
       ]
     },
     "start-transaction": {
-      "namespace": "Core.MicrosoftSql.StartTransaction",
+      "namespace": "Robomotion.MSSQL.Start",
       "name": "StartTransaction",
       "summary": "Starts a new database transaction for atomic operations in Microsoft SQL Server.",
       "howItWorks": "The Start Transaction node begins a new database transaction. When executed, the node: 1. Retrieves the database connection (either from connection ID or creates new connection from credentials) 2. Calls BeginTransaction() on the SqlConnection 3. Generates a unique transaction ID (GUID) 4. Stores the transaction in an internal transactions dictionary 5. Returns the transaction ID as output All subsequent database operations that use this transaction ID will be part of the same transaction and can be committed or rolled back together.",
@@ -124,10 +384,75 @@
         "ErrNotFound",
         "ErrConnection",
         "ErrRuntime"
+      ],
+      "credentials": [
+        {
+          "name": "mssql_database",
+          "title": "SQL Server Database",
+          "description": "Microsoft SQL Server database connection with server, port, database, and authentication",
+          "fields": [
+            {
+              "name": "type",
+              "title": "Database Type",
+              "type": "hidden"
+            },
+            {
+              "name": "server",
+              "title": "Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "localhost",
+              "description": "SQL Server hostname or IP address"
+            },
+            {
+              "name": "port",
+              "title": "Port",
+              "type": "text",
+              "placeholder": "1433",
+              "description": "SQL Server port number (default: 1433)"
+            },
+            {
+              "name": "database",
+              "title": "Database",
+              "type": "text",
+              "required": true,
+              "placeholder": "master",
+              "description": "Database name"
+            },
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "sa",
+              "description": "SQL Server database username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "placeholder": "Password",
+              "description": "SQL Server database password"
+            }
+          ],
+          "help": [
+            "1. Enter the SQL Server hostname or IP address",
+            "2. Specify the port (default is 1433)",
+            "3. Enter the database name",
+            "4. Provide your SQL Server credentials (username and password)"
+          ],
+          "resources": [
+            {
+              "label": "Microsoft SQL Server Documentation",
+              "url": "https://docs.microsoft.com/en-us/sql/sql-server/"
+            }
+          ]
+        }
       ]
     },
     "wait-column": {
-      "namespace": "Core.MicrosoftSql.WaitColumn",
+      "namespace": "Robomotion.MSSQL.WaitColumn",
       "name": "WaitColumn",
       "summary": "Waits until a new column is added to a specified table in Microsoft SQL Server.",
       "howItWorks": "The Wait Column node monitors a table for new columns being added. When executed, the node: 1. Retrieves the database connection (either from connection ID or creates new connection from credentials) 2. Validates the table name is provided 3. Queries INFORMATION_SCHEMA.COLUMNS to count columns in the table 4. On first execution, records the initial count of columns 5. Continuously polls the database at the specified interval 6. When the count increases (new column added), the node completes 7. Supports both simple table names and schema-qualified names",
@@ -145,7 +470,7 @@
       ]
     },
     "wait-row": {
-      "namespace": "Core.MicrosoftSql.WaitRow",
+      "namespace": "Robomotion.MSSQL.WaitRow",
       "name": "WaitRow",
       "summary": "Waits until a new row is inserted into a specified table in Microsoft SQL Server.",
       "howItWorks": "The Wait Row node monitors a table for new rows being inserted. When executed, the node: 1. Retrieves the database connection (either from connection ID or creates new connection from credentials) 2. Validates the table name and sort column are provided 3. Queries the table for the highest value in the sort column (TOP 1 ORDER BY sort column DESC) 4. On first execution, records the initial maximum value 5. Continuously polls the database at the specified interval 6. Compares the current maximum value with the last recorded value 7. When a new row is detected (value increased), the node completes 8. Handles tables with no rows initially",
@@ -164,7 +489,7 @@
       ]
     },
     "wait-table": {
-      "namespace": "Core.MicrosoftSql.WaitTable",
+      "namespace": "Robomotion.MSSQL.WaitTable",
       "name": "WaitTable",
       "summary": "Waits until a new table matching the pattern is created in the Microsoft SQL Server database.",
       "howItWorks": "The Wait Table node monitors the database for new tables matching a specified pattern. When executed, the node: 1. Retrieves the database connection (either from connection ID or creates new connection from credentials) 2. Validates the table name pattern is provided 3. Queries INFORMATION_SCHEMA.TABLES to count tables matching the pattern 4. On first execution, records the initial count of matching tables 5. Continuously polls the database at the specified interval 6. When the count increases (new table created), the node completes 7. Uses SQL LIKE pattern matching for flexible table name patterns",

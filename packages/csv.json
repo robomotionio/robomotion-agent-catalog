@@ -4,7 +4,7 @@
   "description": "## Overview The CSV package provides comprehensive tools for working with CSV files, a common format for data exchange. Use it when you need to process data exports, create reports, or transfer data between systems using CSV format.",
   "nodes": {
     "append-csv": {
-      "namespace": "Core.Csv.AppendCsv",
+      "namespace": "Core.CSV.AppendCSV",
       "name": "AppendCsv",
       "summary": "Appends a [data table](/concepts/core/data-table/) to the end of a CSV file.",
       "howItWorks": "The Append CSV node performs the following steps: 1. **Validates File Existence** - Checks if the specified CSV file exists at the given file path 2. **Reads File Encoding** - Opens the file using the specified encoding format to ensure proper character handling 3. **Parses Data Table** - Converts the input data table into CSV-formatted rows 4. **Appends Data** - Adds the new rows to the end of the existing CSV file using the specified separator 5. **Preserves Format** - Maintains the original file structure and encoding while adding new data 6. **Closes File** - Safely closes the file stream after the append operation",
@@ -41,7 +41,7 @@
       ]
     },
     "read-csv": {
-      "namespace": "Core.Csv.ReadCsv",
+      "namespace": "Core.CSV.ReadCSV",
       "name": "ReadCsv",
       "summary": "Reads data from a CSV file and outputs a [data table](/concepts/core/data-table/)",
       "howItWorks": "The Read CSV node performs the following steps: 1. **Locates File** - Validates that the CSV file exists at the specified path 2. **Opens File** - Opens the file using the specified encoding to ensure proper character interpretation 3. **Skips Rows** - If configured, skips the specified number of initial rows (useful for files with metadata) 4. **Parses Headers** - If Headers option is enabled, reads the first row as column names 5. **Reads Data** - Parses each row using the specified separator character 6. **Builds Data Table** - Constructs a data table structure with rows and columns 7. **Applies Jsonify** - If enabled, transforms header names to JSON-friendly format (lowercase, underscore-separated) 8. **Returns Table** - Outputs the complete data table for use in subsequent nodes",
@@ -80,7 +80,7 @@
       ]
     },
     "split-csv": {
-      "namespace": "Core.Csv.SplitCsv",
+      "namespace": "Core.CSV.SplitCSV",
       "name": "SplitCsv",
       "summary": "Splits a CSV file into smaller files based on the maximum number of rows specified.",
       "howItWorks": "The Split CSV node performs the following steps: 1. **Validates Input File** - Checks if the source CSV file exists at the specified path 2. **Creates Output Directory** - Creates the output directory if it doesn't already exist 3. **Parses File Structure** - Reads the CSV file to understand its structure and total row count 4. **Preserves Headers** - If Headers option is enabled, captures the header row to include in each split file 5. **Calculates Splits** - Determines how many output files will be created based on Max Rows setting 6. **Splits Data** - Divides the data into chunks, each containing up to Max Rows 7. **Writes Split Files** - Creates numbered CSV files (e.g., filename-000.csv, filename-001.csv) in the output directory 8. **Returns Directory Path** - Outputs the path to the directory containing all split files",
@@ -119,7 +119,7 @@
       ]
     },
     "write-csv": {
-      "namespace": "Core.Csv.WriteCsv",
+      "namespace": "Core.CSV.WriteCSV",
       "name": "WriteCsv",
       "summary": "Writes a [data table](/concepts/core/data-table/) to a CSV file",
       "howItWorks": "The Write CSV node performs the following steps: 1. **Validates Input** - Ensures the input table is in valid data table format 2. **Checks File Path** - Verifies the target file path is valid and writable 3. **Creates Directory** - If the directory doesn't exist, creates the necessary folders 4. **Prepares Headers** - If Headers option is enabled, extracts column names from the data table 5. **Formats Data** - Converts data table rows into CSV format using the specified separator 6. **Applies Encoding** - Encodes the data using the specified character encoding 7. **Writes File** - Creates or overwrites the CSV file with the formatted data 8. **Closes Stream** - Ensures the file is properly closed after writing",

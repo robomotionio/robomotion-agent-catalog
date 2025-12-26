@@ -4,7 +4,7 @@
   "description": "## Overview The Microsoft Active Directory package allows you to:",
   "nodes": {
     "add-user-to-group": {
-      "namespace": "Core.MicrosoftActiveDirectory.AddUserToGroup",
+      "namespace": "Robomotion.ActiveDirectory.AddUserToGroup",
       "name": "AddUserToGroup",
       "summary": "Adds a user as a member to a group in Azure Active Directory.",
       "howItWorks": "The Add User To Group node: 1. Authenticates using either the access ID or direct credentials 2. Sends a POST request to Microsoft Graph API to add the member 3. Azure AD adds the user to the group 4. Returns a success message :::note You must use the user's object ID (GUID), not the user principal name (email). Use [Get User](/reference/packages/microsoft-active-directory/get-user) to get the object ID from an email address. :::",
@@ -18,7 +18,7 @@
       ]
     },
     "connect": {
-      "namespace": "Core.MicrosoftActiveDirectory.Connect",
+      "namespace": "Robomotion.ActiveDirectory.Connect",
       "name": "Connect",
       "summary": "Connects to Azure Active Directory using client credentials and establishes an access ID for subsequent operations.",
       "howItWorks": "The Connect node: 1. Validates the provided tenant ID, client ID, and client secret 2. Obtains an access token from Azure AD using OAuth2 client credentials flow 3. Generates a unique access ID and stores the token internally 4. Returns the access ID to be used with other Active Directory nodes The access token is cached for the duration of your automation flow. Other nodes can use either: - The access ID from Connect node (recommended for better performance) - Direct credentials (if you don't want to use Connect)",
@@ -37,7 +37,7 @@
       ]
     },
     "create-group": {
-      "namespace": "Core.MicrosoftActiveDirectory.CreateGroup",
+      "namespace": "Robomotion.ActiveDirectory.CreateGroup",
       "name": "CreateGroup",
       "summary": "Creates a new group in Azure Active Directory.",
       "howItWorks": "The Create Group node: 1. Authenticates using either the access ID or direct credentials 2. Sends a POST request to Microsoft Graph API with group properties 3. Azure AD creates the group 4. Returns the complete group object including the generated group ID The group is created immediately and can be used right away for member assignments and access control.",
@@ -52,7 +52,7 @@
       ]
     },
     "create-user": {
-      "namespace": "Core.MicrosoftActiveDirectory.CreateUser",
+      "namespace": "Robomotion.ActiveDirectory.CreateUser",
       "name": "CreateUser",
       "summary": "Creates a new user in Azure Active Directory with the specified properties.",
       "howItWorks": "The Create User node: 1. Authenticates using either the access ID or direct credentials 2. Sends a POST request to Microsoft Graph API with user properties 3. Azure AD creates the user account 4. Returns the complete user object including the generated user ID The user is created immediately and can be used right away for authentication and group assignments.",
@@ -66,7 +66,7 @@
       ]
     },
     "delete-group": {
-      "namespace": "Core.MicrosoftActiveDirectory.DeleteGroup",
+      "namespace": "Robomotion.ActiveDirectory.DeleteGroup",
       "name": "DeleteGroup",
       "summary": "Deletes a group from Azure Active Directory.",
       "howItWorks": "The Delete Group node: 1. Authenticates using either the access ID or direct credentials 2. Sends a DELETE request to Microsoft Graph API for the specified group 3. Azure AD permanently deletes the group 4. All group data is removed (including files for M365 groups) :::note Unlike user deletion, group deletion is immediate and permanent. There is no recycle bin for groups. :::",
@@ -80,7 +80,7 @@
       ]
     },
     "delete-user": {
-      "namespace": "Core.MicrosoftActiveDirectory.DeleteUser",
+      "namespace": "Robomotion.ActiveDirectory.DeleteUser",
       "name": "DeleteUser",
       "summary": "Deletes a user from Azure Active Directory.",
       "howItWorks": "The Delete User node: 1. Authenticates using either the access ID or direct credentials 2. Sends a DELETE request to Microsoft Graph API for the specified user 3. Azure AD moves the user to the deleted items (recycle bin) 4. The user is soft-deleted and can be restored within 30 days 5. After 30 days, the user is permanently deleted :::note Deleted users can be restored within 30 days using the Microsoft Graph API or Azure Portal. After 30 days, deletion is permanent. :::",
@@ -94,7 +94,7 @@
       ]
     },
     "delete-user-from-group": {
-      "namespace": "Core.MicrosoftActiveDirectory.DeleteUserFromGroup",
+      "namespace": "Robomotion.ActiveDirectory.DeleteUserFromGroup",
       "name": "DeleteUserFromGroup",
       "summary": "Removes a user from a group in Azure Active Directory.",
       "howItWorks": "The Delete User From Group node: 1. Authenticates using either the access ID or direct credentials 2. Sends a DELETE request to Microsoft Graph API to remove the member 3. Azure AD removes the user from the group 4. Returns a success message :::note You must use the user's object ID (GUID), not the user principal name (email). Use [Get User](/reference/packages/microsoft-active-directory/get-user) to get the object ID from an email address. :::",
@@ -108,7 +108,7 @@
       ]
     },
     "get-group": {
-      "namespace": "Core.MicrosoftActiveDirectory.GetGroup",
+      "namespace": "Robomotion.ActiveDirectory.GetGroup",
       "name": "GetGroup",
       "summary": "Retrieves detailed information about a specific group from Azure Active Directory.",
       "howItWorks": "The Get Group node: 1. Authenticates using either the access ID or direct credentials 2. Sends a GET request to Microsoft Graph API for the specified group 3. Returns the complete group object with all properties 4. Requires the group's object ID (not display name)",
@@ -123,7 +123,7 @@
       ]
     },
     "get-user": {
-      "namespace": "Core.MicrosoftActiveDirectory.GetUser",
+      "namespace": "Robomotion.ActiveDirectory.GetUser",
       "name": "GetUser",
       "summary": "Retrieves detailed information about a specific user from Azure Active Directory.",
       "howItWorks": "The Get User node: 1. Authenticates using either the access ID or direct credentials 2. Sends a GET request to Microsoft Graph API for the specified user 3. Returns the complete user object with all properties 4. Supports lookup by either user ID or user principal name",
@@ -137,7 +137,7 @@
       ]
     },
     "list-all-groups": {
-      "namespace": "Core.MicrosoftActiveDirectory.ListAllGroups",
+      "namespace": "Robomotion.ActiveDirectory.ListAllGroups",
       "name": "ListAllGroups",
       "summary": "Retrieves a list of all groups from Azure Active Directory.",
       "howItWorks": "The List All Groups node: 1. Authenticates using either the access ID or direct credentials 2. Sends a GET request to Microsoft Graph API with `$select=id,displayName` parameter 3. Returns a list of groups with only id and displayName properties 4. Result contains `value` array with group objects",
@@ -152,7 +152,7 @@
       ]
     },
     "list-all-users": {
-      "namespace": "Core.MicrosoftActiveDirectory.ListAllUsers",
+      "namespace": "Robomotion.ActiveDirectory.ListAllUsers",
       "name": "ListAllUsers",
       "summary": "Retrieves a list of all users from Azure Active Directory.",
       "howItWorks": "The List All Users node: 1. Authenticates using either the access ID or direct credentials 2. Sends a GET request to Microsoft Graph API to retrieve all users 3. Returns a paginated list of users (default page size from Graph API) 4. Result contains `value` array with user objects :::note This node retrieves the first page of users. For large directories, you may need to handle pagination using the `@odata.nextLink` property if present in the result. :::",
@@ -166,7 +166,7 @@
       ]
     },
     "list-group-members": {
-      "namespace": "Core.MicrosoftActiveDirectory.ListGroupMembers",
+      "namespace": "Robomotion.ActiveDirectory.ListGroupMembers",
       "name": "ListGroupMembers",
       "summary": "Retrieves a list of all members of a specific group from Azure Active Directory.",
       "howItWorks": "The List Group Members node: 1. Authenticates using either the access ID or direct credentials 2. Sends a GET request to Microsoft Graph API to retrieve group members 3. Returns a list of all members (users, groups, service principals, etc.) 4. Result contains `value` array with member objects",
@@ -180,7 +180,7 @@
       ]
     },
     "update-group": {
-      "namespace": "Core.MicrosoftActiveDirectory.UpdateGroup",
+      "namespace": "Robomotion.ActiveDirectory.UpdateGroup",
       "name": "UpdateGroup",
       "summary": "Updates properties of an existing group in Azure Active Directory.",
       "howItWorks": "The Update Group node: 1. Authenticates using either the access ID or direct credentials 2. Sends a PATCH request to Microsoft Graph API with the update properties 3. Azure AD updates only the specified properties 4. Returns a success message",
@@ -194,7 +194,7 @@
       ]
     },
     "update-user": {
-      "namespace": "Core.MicrosoftActiveDirectory.UpdateUser",
+      "namespace": "Robomotion.ActiveDirectory.UpdateUser",
       "name": "UpdateUser",
       "summary": "Updates properties of an existing user in Azure Active Directory.",
       "howItWorks": "The Update User node: 1. Authenticates using either the access ID or direct credentials 2. Sends a PATCH request to Microsoft Graph API with the update properties 3. Azure AD updates only the specified properties 4. Returns a success message",

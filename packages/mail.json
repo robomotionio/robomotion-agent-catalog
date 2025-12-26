@@ -129,7 +129,7 @@
       ]
     },
     "delete-mail": {
-      "namespace": "Core.Mail.DeleteMail",
+      "namespace": "Core.Mail.Delete",
       "name": "DeleteMail",
       "summary": "Deletes a mail from a specified email account's mailbox.",
       "howItWorks": "The Delete Mail node removes emails from a mailbox by marking them with the \\Deleted flag. Here's the process: 1. **Authentication** - Uses Client ID or direct credentials 2. **Folder Selection** - Selects the specified mailbox folder 3. **Delete Mode Check** - Determines if deleting single message or all messages 4. **Flag Setting** - Marks email(s) with \\Deleted flag 5. **Server Processing** - Mail server processes deletion (may require EXPUNGE command)",
@@ -200,7 +200,7 @@
       ]
     },
     "get-mail": {
-      "namespace": "Core.Mail.GetMail",
+      "namespace": "Core.Mail.Get",
       "name": "GetMail",
       "summary": "Retrieves emails from a specified mailbox.",
       "howItWorks": "The Get Mail node retrieves emails from a mailbox using the IMAP protocol. Here's the step-by-step process: 1. **Authentication** - Uses either Client ID from Connect node or direct credentials 2. **Folder Selection** - Selects the specified mailbox folder (default: INBOX) 3. **Email Filtering** - If \"Only Unread\" is enabled, filters for unread messages 4. **Message Retrieval** - Fetches the most recent N messages (specified by Number of Messages) 5. **Content Parsing** - Parses email headers, body (plain text and HTML), and attachment information 6. **Mark as Read** - If enabled, marks retrieved emails as read 7. **Return Results** - Returns array of message objects with all email data",
@@ -259,7 +259,7 @@
       ]
     },
     "list-folders": {
-      "namespace": "Core.Mail.ListFolders",
+      "namespace": "Core.Mail.Folders",
       "name": "ListFolders",
       "summary": "Lists the folders in a mail client.",
       "howItWorks": "The List Folders node retrieves all available mailbox folders using IMAP LIST command. Here's the process: 1. **Authentication** - Uses Client ID or direct credentials 2. **IMAP LIST Command** - Executes LIST command to retrieve all folders 3. **Folder Parsing** - Parses folder names from server response 4. **Return Results** - Returns array of folder names",
@@ -295,7 +295,7 @@
       ]
     },
     "move-mail": {
-      "namespace": "Core.Mail.MoveMail",
+      "namespace": "Core.Mail.Move",
       "name": "MoveMail",
       "summary": "Moves an email from the specified `From Folder` to `To Folder` in the email mailbox. The email message is identified by its unique id set to `Email Unique ID (Uid)`.",
       "howItWorks": "The Move Mail node transfers an email from one folder to another using IMAP MOVE command. Here's the process: 1. **Authentication** - Uses Client ID or direct credentials 2. **Source Folder Selection** - Selects the \"From Folder\" 3. **UID Validation** - Validates the Email Unique ID 4. **IMAP MOVE** - Executes MOVE command to transfer email 5. **Automatic Deletion** - Source email is removed after successful move",
@@ -384,7 +384,7 @@
       ]
     },
     "search-mail": {
-      "namespace": "Core.Mail.SearchMail",
+      "namespace": "Core.Mail.Search",
       "name": "SearchMail",
       "summary": "Searches for mails based on specific criteria (mail folder, sender, receiver, cc, bcc, subject, body and mail id)",
       "howItWorks": "The Search Mail node performs advanced email searches using IMAP search criteria. Here's the process: 1. **Authentication** - Uses Client ID or direct credentials 2. **Folder Selection** - Selects the mailbox folder to search 3. **Search Criteria Building** - Constructs IMAP search query from provided fields (From, To, Subject, Body, dates, Mail ID) 4. **IMAP Search** - Executes search on mail server 5. **Results Retrieval** - Fetches full message data or just UIDs (based on Only IDs option) 6. **Return Results** - Returns array of matching messages or UIDs",
@@ -431,7 +431,7 @@
       ]
     },
     "send-mail": {
-      "namespace": "Core.Mail.SendMail",
+      "namespace": "Core.Mail.Send",
       "name": "SendMail",
       "summary": "Sends an email with the specified subject, body, and attachments.",
       "howItWorks": "The Send Mail node sends emails through SMTP with support for various features. Here's the step-by-step process: 1. **Authentication Selection** - Uses either Client ID from Connect node or direct credentials 2. **Recipient Validation** - Ensures at least one recipient is specified (To, CC, or BCC) 3. **Email Construction** - Builds the email with headers, body, and attachments 4. **Attachment Processing** - Attaches files from specified paths, supporting embedded images 5. **Reply/Forward Handling** - If in reply/replyall/forward mode, fetches original email and constructs proper headers 6. **SMTP Connection** - Connects to SMTP server using Basic Auth or OAuth2 7. **Email Transmission** - Sends the email through the SMTP server 8. **Threading Headers** - Adds In-Reply-To and References headers for email threading",

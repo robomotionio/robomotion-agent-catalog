@@ -4,7 +4,7 @@
   "description": "## Overview The Queue package provides work queue management for distributed automation. Use it when you need to queue work items for processing, distribute work across multiple robots, or track the status of processed items.",
   "nodes": {
     "add-item": {
-      "namespace": "Core.Queue.AddItem",
+      "namespace": "Core.Queue.Add",
       "name": "AddItem",
       "summary": "Adds an item to the specified queue with the provided data and reference.",
       "howItWorks": "The Add Item node adds work items to a Robomotion Queue with encryption and deduplication: 1. Validates that the input data is an object (not primitive types) 2. Checks that the data size doesn't exceed 256KB limit 3. Retrieves encryption credentials from the vault (AES or RSA key pair) 4. If an ID Key is specified and present in the data: - Creates a SHA-256 hash of the ID value for deduplication - Stores the hashed ID to prevent duplicate items 5. Encrypts the data: - **AES**: Encrypts directly with the provided key - **RSA**: Generates a random AES key, encrypts data with AES, then encrypts the AES key with RSA 6. Sends encrypted data to the Robomotion Orchestrator queue 7. The item becomes available for processing by Get Next Item or Wait Item nodes",
@@ -54,7 +54,7 @@
       ]
     },
     "delete-item": {
-      "namespace": "Core.Queue.DeleteItem",
+      "namespace": "Core.Queue.Delete",
       "name": "DeleteItem",
       "summary": "Removes an item from the specified queue using the provided item ID.",
       "howItWorks": "The Delete Item node permanently removes an item from a Robomotion Queue: 1. Receives the Item ID of the queue item to delete 2. Sends a delete request to the Robomotion Orchestrator API 3. The Orchestrator removes the item from the queue permanently 4. Returns success or error response 5. The message passes through unchanged",
@@ -94,7 +94,7 @@
       ]
     },
     "get-items": {
-      "namespace": "Core.Queue.GetItems",
+      "namespace": "Core.Queue.GetAll",
       "name": "GetItems",
       "summary": "Retrieves items from a specified Queue in Orchestrator",
       "howItWorks": "The Get Items node retrieves multiple items from a queue based on filter criteria: 1. Accepts filter parameters (Progress, Priority, Status) 2. Retrieves encryption credentials from the vault 3. Queries the Robomotion Orchestrator API with filters 4. Receives encrypted items matching the criteria 5. Decrypts each item using AES or RSA decryption 6. Outputs an array of decrypted items with metadata 7. Does NOT start transactions or modify item states",
@@ -139,7 +139,7 @@
       ]
     },
     "get-next-item": {
-      "namespace": "Core.Queue.GetNextItem",
+      "namespace": "Get Next Item node",
       "name": "GetNextItem",
       "summary": "Retrieves the next item from a specified queue.",
       "howItWorks": "The Get Next Item node retrieves the highest priority available item from a queue: 1. Queries the Robomotion Orchestrator for the next available item (highest priority first) 2. If **Start Transaction** is true: - Marks the item as \"inProgress\" - Decrements the try count - Assigns the item to this robot 3. If no item is available, outputs null for Item ID and Item 4. If an item exists: - Retrieves encrypted data - Decrypts using AES or RSA decryption - Outputs Item ID and decrypted Item data 5. Robot can then process the item and update its state",
@@ -186,7 +186,7 @@
       ]
     },
     "update-item-state": {
-      "namespace": "Core.Queue.UpdateItemState",
+      "namespace": "Core.Queue.Update",
       "name": "UpdateItemState",
       "summary": "Updates the state of a queue item",
       "howItWorks": "The Update Item State node modifies the state and properties of a queue item: 1. Receives Item ID and state update parameters 2. Validates inputs (Item ID, Progress, Priority, Status, etc.) 3. Sends update request to Robomotion Orchestrator 4. Updates item properties: - **Progress**: Custom text to track processing stages - **Priority**: Changes item priority (Low/Normal/High) - **Status**: Marks as Successful, Failed, or Abandoned - **Additional Try Count**: Adds more retry attempts - **Reference**: Updates reference information 5. The updated item becomes available based on new state",
@@ -234,7 +234,7 @@
       ]
     },
     "wait-item": {
-      "namespace": "Core.Queue.WaitItem",
+      "namespace": "Core.Queue.Wait",
       "name": "WaitItem",
       "summary": "Waits to retrieve a new item from the specified Robomotion Queue.",
       "howItWorks": "The Wait Item node continuously polls a queue until an item becomes available or timeout occurs: 1. Immediately checks for available items (first attempt) 2. If item found: - If Start Transaction is true, marks as \"inProgress\" and decrements try count - Decrypts and outputs the item - Execution continues 3. If no item found and timeout not reached: - Waits for Poll Time duration - Checks again (repeats) 4. If timeout reached without finding item: - Throws timeout error 5. Minimum Poll Time is 30 seconds (automatically adjusted if set lower)",

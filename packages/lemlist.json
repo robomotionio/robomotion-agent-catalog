@@ -4,7 +4,7 @@
   "description": "## Use Cases The Lemlist package is ideal for automating:",
   "nodes": {
     "connect": {
-      "namespace": "Core.Lemlist.Connect",
+      "namespace": "Robomotion.Lemlist.Connect",
       "name": "Connect",
       "summary": "Establishes a connection to Lemlist API by storing the API key credentials and returning a client ID for use in subsequent Lemlist operations.",
       "howItWorks": "The Connect node is the first step when using the Connect/Disconnect pattern for Lemlist automation. When executed, the node: 1. Retrieves the API key from the provided credentials 2. Creates a base HTTP request with proper authentication headers (Basic Auth) 3. Validates the credentials by making a test request to the Lemlist team endpoint 4. If authentication succeeds, stores the authenticated request in memory 5. Returns a unique Client ID that references this authenticated session The Client ID can then be passed to other Lemlist nodes to perform operations without re-authenticating each time.",
@@ -26,10 +26,25 @@
         "ErrInvalidArg",
         "ErrInternal",
         "Errors"
+      ],
+      "credentials": [
+        {
+          "name": "Lemlist API Key",
+          "title": "Lemlist API Key",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "password",
+              "required": true,
+              "description": "Lemlist API key for authentication"
+            }
+          ]
+        }
       ]
     },
     "disconnect": {
-      "namespace": "Core.Lemlist.Disconnect",
+      "namespace": "Robomotion.Lemlist.Disconnect",
       "name": "Disconnect",
       "summary": "Disconnects from the Lemlist API and releases the client connection, cleaning up the stored authentication credentials from memory.",
       "howItWorks": "The Disconnect node is the final step when using the Connect/Disconnect pattern for Lemlist automation. When executed, the node: 1. Validates that a Client ID has been provided 2. Removes the stored authentication credentials from memory 3. Releases the resources associated with the client connection 4. Completes without returning any output This ensures that sensitive authentication data is properly cleaned up after your automation completes.",
@@ -47,10 +62,25 @@
       "errorCodes": [
         "ErrInvalidArg",
         "ErrInternal"
+      ],
+      "credentials": [
+        {
+          "name": "Lemlist API Key",
+          "title": "Lemlist API Key",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "password",
+              "required": true,
+              "description": "Lemlist API key for authentication"
+            }
+          ]
+        }
       ]
     },
     "get-team": {
-      "namespace": "Core.Lemlist.GetTeam",
+      "namespace": "Robomotion.Lemlist.GetTeam",
       "name": "GetTeam",
       "summary": "Retrieves information about the current Lemlist team, including team members, settings, and account details.",
       "howItWorks": "The Get Team node retrieves information about your Lemlist workspace. When executed, the node: 1. Validates authentication (either via Client ID or direct credentials) 2. Constructs a GET request to the Lemlist `/api/team` endpoint 3. Sends the authenticated request to the Lemlist API 4. Processes the response and returns the team data 5. Outputs the team information as a structured object This node is useful for: - Validating API credentials - Retrieving team member information - Accessing account settings and limits - Building team management dashboards - Auditing team access and permissions",
@@ -71,10 +101,25 @@
         "ErrInvalidArg",
         "ErrInternal",
         "Errors"
+      ],
+      "credentials": [
+        {
+          "name": "Lemlist API Key",
+          "title": "Lemlist API Key",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "password",
+              "required": true,
+              "description": "Lemlist API key for authentication"
+            }
+          ]
+        }
       ]
     },
     "list-campaigns": {
-      "namespace": "Core.Lemlist.ListCampaigns",
+      "namespace": "Robomotion.Lemlist.ListCampaigns",
       "name": "ListCampaigns",
       "summary": "Retrieves a list of all email campaigns in your Lemlist account with pagination support for managing large campaign datasets.",
       "howItWorks": "The List Campaigns node retrieves your email campaigns from Lemlist. When executed, the node: 1. Validates authentication (either via Client ID or direct credentials) 2. Constructs a GET request to the Lemlist `/api/campaigns` endpoint 3. Applies pagination parameters (offset and limit) if specified 4. Sends the authenticated request to the Lemlist API 5. Processes the response and returns the campaigns array 6. Outputs the campaign data as a structured array of objects This node is essential for: - Monitoring active email campaigns - Analyzing campaign performance metrics - Automating campaign management workflows - Building campaign dashboards - Retrieving campaign IDs for lead management operations",
@@ -96,10 +141,25 @@
         "ErrInvalidArg",
         "ErrInternal",
         "Errors"
+      ],
+      "credentials": [
+        {
+          "name": "Lemlist API Key",
+          "title": "Lemlist API Key",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "password",
+              "required": true,
+              "description": "Lemlist API key for authentication"
+            }
+          ]
+        }
       ]
     },
     "remove-lead-from-campaign": {
-      "namespace": "Core.Lemlist.RemoveLeadFromCampaign",
+      "namespace": "Robomotion.Lemlist.RemoveLeadFromCampaign",
       "name": "RemoveLeadFromCampaign",
       "summary": "Permanently removes a lead from a specific Lemlist campaign, deleting all associated data and history. Unlike unsubscribe, this action is irreversible and the lead cannot be re-added with their previous history.",
       "howItWorks": "The Remove Lead From Campaign node permanently deletes a lead from a campaign along with all their data. When executed, the node: 1. Validates authentication (either via Client ID or direct credentials) 2. Validates that both Campaign ID and Email Address are provided 3. Constructs a DELETE request to `/api/campaigns/{campaignId}/leads/{email}?action=remove` 4. Sends the authenticated request to the Lemlist API 5. The lead is permanently removed with all history, statistics, and activity data 6. Completes without returning any output (successful execution means the operation succeeded) **Critical Difference from Unsubscribe:** - **Remove (this node):** Permanent deletion of lead and all associated data. Lead history is lost forever. - **Unsubscribe:** Soft deletion that preserves lead data. Lead can be re-added to campaign later. :::warning This is a destructive operation that cannot be undone. Once a lead is removed, all their campaign history and statistics are permanently deleted. :::",
@@ -122,10 +182,25 @@
         "ErrInvalidArg",
         "ErrInternal",
         "Errors"
+      ],
+      "credentials": [
+        {
+          "name": "Lemlist API Key",
+          "title": "Lemlist API Key",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "password",
+              "required": true,
+              "description": "Lemlist API key for authentication"
+            }
+          ]
+        }
       ]
     },
     "unsubscribe-lead-from-campaign": {
-      "namespace": "Core.Lemlist.UnsubscribeLeadFromCampaign",
+      "namespace": "Robomotion.Lemlist.UnsubscribeLeadFromCampaign",
       "name": "UnsubscribeLeadFromCampaign",
       "summary": "Unsubscribes a lead from a specific Lemlist campaign. The lead will no longer receive emails from this campaign but can be re-added to the campaign later if needed.",
       "howItWorks": "The Unsubscribe Lead From Campaign node removes a lead from an active campaign while preserving the lead's data. When executed, the node: 1. Validates authentication (either via Client ID or direct credentials) 2. Validates that both Campaign ID and Email Address are provided 3. Constructs a DELETE request to `/api/campaigns/{campaignId}/leads/{email}` 4. Sends the authenticated request to the Lemlist API 5. The lead is unsubscribed and will no longer receive emails from this campaign 6. Completes without returning any output (successful execution means the operation succeeded) **Key Difference from Remove Lead:** - **Unsubscribe:** Lead is soft-deleted and can be re-added to the campaign later. The lead's history and data are preserved. - **Remove:** Lead is permanently deleted from the campaign with all associated data.",
@@ -148,6 +223,21 @@
         "ErrInvalidArg",
         "ErrInternal",
         "Errors"
+      ],
+      "credentials": [
+        {
+          "name": "Lemlist API Key",
+          "title": "Lemlist API Key",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "password",
+              "required": true,
+              "description": "Lemlist API key for authentication"
+            }
+          ]
+        }
       ]
     }
   }

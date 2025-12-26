@@ -4,7 +4,7 @@
   "description": "## Features - Connect to Telegram using bot tokens",
   "nodes": {
     "connect": {
-      "namespace": "Core.Telegram.Connect",
+      "namespace": "Robomotion.TelegramBot.Connection.Connect",
       "name": "Connect",
       "summary": "Establishes a connection to Telegram using a bot token, creating a client session that can be used by other Telegram nodes.",
       "howItWorks": "The Connect node establishes a connection to Telegram's Bot API using the provided bot token. When executed, the node: 1. Retrieves the bot token from the credential vault 2. Validates the token format and credentials 3. Creates a new bot client instance 4. Generates a unique Client Id for this connection 5. Stores the connection for use by other Telegram nodes 6. Returns the Client Id for downstream nodes",
@@ -17,10 +17,25 @@
         "The same bot token can be used in multiple flows, but each flow should have its own Connect node",
         "If you change your bot token, you'll need to update the credential in the vault",
         "Use the Get Bot Info node to verify your connection is working correctly"
+      ],
+      "credentials": [
+        {
+          "name": "Bot Token",
+          "title": "Bot Token",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Bot Token",
+              "type": "password",
+              "required": true,
+              "description": "API token from BotFather for authentication"
+            }
+          ]
+        }
       ]
     },
     "disconnect": {
-      "namespace": "Core.Telegram.Disconnect",
+      "namespace": "Robomotion.TelegramBot.Connection.Disconnect",
       "name": "Disconnect",
       "summary": "Closes the Telegram bot connection and cleans up resources. This node should be used at the end of your flow to properly terminate the bot session.",
       "howItWorks": "The Disconnect node terminates the Telegram bot connection and releases associated resources. When executed, the node: 1. Retrieves the Client Id from the input 2. Validates that the Client Id exists and corresponds to an active connection 3. Stops any running pollers (for bots listening to messages) 4. Closes the bot client instance 5. Removes the connection from the connection pool 6. Frees up system resources",
@@ -33,10 +48,25 @@
         "Use error handling to ensure Disconnect runs even if the flow fails",
         "The Disconnect node is idempotent - calling it multiple times on an already closed connection won't cause issues (though it will log a warning)",
         "For flows using Receive Message (which runs continuously), Disconnect will be called automatically when the flow stops"
+      ],
+      "credentials": [
+        {
+          "name": "Bot Token",
+          "title": "Bot Token",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Bot Token",
+              "type": "password",
+              "required": true,
+              "description": "API token from BotFather for authentication"
+            }
+          ]
+        }
       ]
     },
     "download-file": {
-      "namespace": "Core.Telegram.DownloadFile",
+      "namespace": "Robomotion.TelegramBot.Files.DownloadFile",
       "name": "DownloadFile",
       "summary": "Downloads a file from Telegram to your local storage using the file ID. Useful for processing files received from users or retrieving media from messages.",
       "howItWorks": "The Download File node retrieves a file from Telegram's servers and saves it locally. When executed, the node: 1. Either uses the provided Client Id or creates a temporary connection using Bot Token 2. Validates the File Id 3. If Save Path is empty, creates a temporary file in the system temp directory 4. If Save Path is provided, creates the necessary parent directories 5. Calls Telegram's API to get file information using the File Id 6. Downloads the file from Telegram's servers 7. Saves the file to the specified location 8. Returns the full path of the downloaded file in the File Path output",
@@ -76,10 +106,25 @@
         "The output File Path is always absolute, even if you provide a relative Save Path",
         "Consider implementing rate limiting for bulk downloads",
         "Telegram's file storage is temporary - don't rely on it for long-term storage"
+      ],
+      "credentials": [
+        {
+          "name": "Bot Token",
+          "title": "Bot Token",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Bot Token",
+              "type": "password",
+              "required": true,
+              "description": "API token from BotFather for authentication"
+            }
+          ]
+        }
       ]
     },
     "forward-message": {
-      "namespace": "Core.Telegram.ForwardMessage",
+      "namespace": "Robomotion.TelegramBot.Messages.ForwardMessage",
       "name": "ForwardMessage",
       "summary": "Forwards a message from one Telegram chat to another. The forwarded message will show as \"Forwarded from\" in Telegram.",
       "howItWorks": "The Forward Message node copies a message from one chat to another while preserving the original sender information. When executed, the node: 1. Either uses the provided Client Id or creates a temporary connection using Bot Token 2. Validates the From Chat Id, To Chat Id, and Message Id 3. Retrieves the message from the source chat 4. Forwards it to the destination chat 5. Applies the Disable Notification and Protect Content options 6. Returns success or error based on the API response In the destination chat, the message will appear with a \"Forwarded from\" header showing the original source.",
@@ -117,10 +162,25 @@
         "For anonymous admin messages in channels, the forward will show the channel name",
         "You can forward your own messages or messages from other users (if allowed)",
         "The forwarded message gets a new Message Id in the destination chat"
+      ],
+      "credentials": [
+        {
+          "name": "Bot Token",
+          "title": "Bot Token",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Bot Token",
+              "type": "password",
+              "required": true,
+              "description": "API token from BotFather for authentication"
+            }
+          ]
+        }
       ]
     },
     "get-bot-info": {
-      "namespace": "Core.Telegram.GetBotInfo",
+      "namespace": "Robomotion.TelegramBot.Connection.GetBotInfo",
       "name": "GetBotInfo",
       "summary": "Retrieves information about the connected Telegram bot, including its username, ID, name, and other details.",
       "howItWorks": "The Get Bot Info node queries the Telegram Bot API to retrieve information about the bot. When executed, the node: 1. Either uses the provided Client Id or creates a temporary connection using Bot Token 2. Calls the Telegram API `getMe` method 3. Retrieves the bot's profile information 4. Returns the information as an object in the Bot Info output 5. If using Bot Token (without Client Id), the temporary connection is closed after retrieval",
@@ -148,10 +208,25 @@
         "Store the bot ID to identify messages sent by your bot vs. received messages",
         "Check `can_read_all_group_messages` to understand if your bot has privacy mode enabled",
         "Use this node to verify token validity before performing expensive operations"
+      ],
+      "credentials": [
+        {
+          "name": "Bot Token",
+          "title": "Bot Token",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Bot Token",
+              "type": "password",
+              "required": true,
+              "description": "API token from BotFather for authentication"
+            }
+          ]
+        }
       ]
     },
     "get-file-path": {
-      "namespace": "Core.Telegram.GetFilePath",
+      "namespace": "Robomotion.TelegramBot.Files.GetFilePath",
       "name": "GetFilePath",
       "summary": "Retrieves the file path for a Telegram file using its file ID. This path can be used to construct a download URL or get file information without downloading the entire file.",
       "howItWorks": "The Get File Path node queries Telegram's Bot API to retrieve metadata about a file. When executed, the node: 1. Either uses the provided Client Id or creates a temporary connection using Bot Token 2. Validates the File Id 3. Calls Telegram's `getFile` API method with the File Id 4. Retrieves file information including the file path 5. Returns the file path as a string in the Result output The file path returned is a relative path on Telegram's servers, not a full URL or local path.",
@@ -189,10 +264,25 @@
         "Different file types use different directory structures in the path",
         "This node is useful for debugging and logging file information",
         "Combine with Download File for complete file handling"
+      ],
+      "credentials": [
+        {
+          "name": "Bot Token",
+          "title": "Bot Token",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Bot Token",
+              "type": "password",
+              "required": true,
+              "description": "API token from BotFather for authentication"
+            }
+          ]
+        }
       ]
     },
     "get-invite-link": {
-      "namespace": "Core.Telegram.GetInviteLink",
+      "namespace": "Robomotion.TelegramBot.Management.CreateInviteLink",
       "name": "GetInviteLink",
       "summary": "Creates an invite link for a Telegram group or channel. This link can be shared with users to allow them to join the chat.",
       "howItWorks": "The Create Invite Link node generates a new invitation link for a Telegram group or channel. When executed, the node: 1. Either uses the provided Client Id or creates a temporary connection using Bot Token 2. Validates the Chat Id 3. Verifies that the Chat Id corresponds to a group or channel (not a private chat) 4. Calls Telegram's `createChatInviteLink` API method 5. Generates a new invite link for the specified chat 6. Returns the invite link URL in the Result output",
@@ -232,10 +322,25 @@
         "Consider using link analytics to track which links are most effective",
         "You can create different links for different campaigns to track sources",
         "Links remain valid even if the bot leaves the group (until revoked by admins)"
+      ],
+      "credentials": [
+        {
+          "name": "Bot Token",
+          "title": "Bot Token",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Bot Token",
+              "type": "password",
+              "required": true,
+              "description": "API token from BotFather for authentication"
+            }
+          ]
+        }
       ]
     },
     "receive-message": {
-      "namespace": "Core.Telegram.ReceiveMessage",
+      "namespace": "Robomotion.TelegramBot.Messages.ReceiveMessage",
       "name": "ReceiveMessage",
       "summary": "Listens for incoming messages from Telegram in real-time. This is a trigger node that starts new flow executions whenever a message is received.",
       "howItWorks": "The Receive Message node establishes a long-polling connection to Telegram and continuously listens for new messages. When a message is received, the node: 1. Connects to Telegram using the provided Bot Token 2. Starts a long-polling session (60-second timeout) 3. Waits for incoming messages 4. Filters messages based on Chat Id and Sender Id if specified 5. If Auto Download is enabled, downloads any files to the temp directory 6. Removes empty values from the message if Omit Empty Values is enabled 7. Triggers a new flow execution with the message data 8. Continues listening for more messages The node runs continuously while the flow is active and will trigger a new execution for each matching message received.",
@@ -275,10 +380,25 @@
         "File downloads include retry logic for reliability",
         "Omit Empty Values makes message objects easier to work with",
         "The node automatically handles long-polling reconnections"
+      ],
+      "credentials": [
+        {
+          "name": "Bot Token",
+          "title": "Bot Token",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Bot Token",
+              "type": "password",
+              "required": true,
+              "description": "API token from BotFather for authentication"
+            }
+          ]
+        }
       ]
     },
     "send-audio": {
-      "namespace": "Core.Telegram.SendAudio",
+      "namespace": "Robomotion.TelegramBot.Files.SendAudio",
       "name": "SendAudio",
       "summary": "Sends an audio file to a Telegram chat. Supports both local file paths and URLs, with options for captions, custom filenames, and MIME types.",
       "howItWorks": "The Send Audio node uploads and sends an audio file to a specified Telegram chat. When executed, the node: 1. Either uses the provided Client Id or creates a temporary connection using Bot Token 2. Validates the Chat Id and Audio Url or Path 3. Determines if the input is a URL or file path 4. For URLs: Uses Telegram's FromURL method to send the file directly 5. For file paths: Reads the local file and uploads it to Telegram 6. Applies optional caption, custom filename, and MIME type if provided 7. If Reply Id is provided, sends the audio as a reply to that message 8. Returns success or error based on the API response",
@@ -322,10 +442,25 @@
         "Consider converting video files to audio-only to save bandwidth",
         "MP3 is the most universally compatible format",
         "Add metadata to audio files before sending for better user experience"
+      ],
+      "credentials": [
+        {
+          "name": "Bot Token",
+          "title": "Bot Token",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Bot Token",
+              "type": "password",
+              "required": true,
+              "description": "API token from BotFather for authentication"
+            }
+          ]
+        }
       ]
     },
     "send-document": {
-      "namespace": "Core.Telegram.SendDocument",
+      "namespace": "Robomotion.TelegramBot.Files.SendDocument",
       "name": "SendDocument",
       "summary": "Sends a document (file) to a Telegram chat. Supports various file types including PDF, DOCX, XLSX, ZIP, and more, with options for captions and custom filenames.",
       "howItWorks": "The Send Document node uploads and sends a file to a specified Telegram chat. When executed, the node: 1. Either uses the provided Client Id or creates a temporary connection using Bot Token 2. Validates the Chat Id and Document Path 3. Checks that the file exists and is readable 4. Extracts the filename from the path (or uses the custom File Name if provided) 5. Applies optional caption and MIME type if provided 6. Uploads the file to Telegram 7. If Reply Id is provided, sends the document as a reply to that message 8. Returns success or error based on the API response",
@@ -367,10 +502,25 @@
         "Telegram scans files for malware automatically",
         "You can send the same file to multiple chats without re-uploading (using file_id from first send)",
         "Documents sent as replies create a clear reference to the original request"
+      ],
+      "credentials": [
+        {
+          "name": "Bot Token",
+          "title": "Bot Token",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Bot Token",
+              "type": "password",
+              "required": true,
+              "description": "API token from BotFather for authentication"
+            }
+          ]
+        }
       ]
     },
     "send-message": {
-      "namespace": "Core.Telegram.SendMessage",
+      "namespace": "Robomotion.TelegramBot.Messages.SendMessage",
       "name": "SendMessage",
       "summary": "Sends a text message to a Telegram chat, user, or channel. Supports text formatting, reply-to functionality, and markdown.",
       "howItWorks": "The Send Message node sends a text message to a specified Telegram chat using the Bot API. When executed, the node: 1. Either uses the provided Client Id or creates a temporary connection using Bot Token 2. Validates the Chat Id and Message Text 3. Applies the specified Parse Mode for text formatting 4. If Reply Id is provided, sets up the message as a reply 5. Sends the message via Telegram's Bot API 6. Returns success or error based on the API response",
@@ -407,10 +557,25 @@
         "You can use emojis directly in Message Text - they're fully supported",
         "If you're sending messages to a channel, make sure your bot is an administrator",
         "For groups with privacy mode enabled, the bot can only see messages that mention it or are replies to it"
+      ],
+      "credentials": [
+        {
+          "name": "Bot Token",
+          "title": "Bot Token",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Bot Token",
+              "type": "password",
+              "required": true,
+              "description": "API token from BotFather for authentication"
+            }
+          ]
+        }
       ]
     },
     "send-photo": {
-      "namespace": "Core.Telegram.SendPhoto",
+      "namespace": "Robomotion.TelegramBot.Files.SendPhoto",
       "name": "SendPhoto",
       "summary": "Sends a photo to a Telegram chat. Supports both local file paths and URLs, with optional captions and reply functionality.",
       "howItWorks": "The Send Photo node sends an image to a specified Telegram chat. When executed, the node: 1. Either uses the provided Client Id or creates a temporary connection using Bot Token 2. Validates the Chat Id and Photo Url or Path 3. Determines if the input is a URL or file path 4. For URLs: Uses Telegram's FromURL method to send the image directly 5. For file paths: Reads the local file and uploads it to Telegram 6. Applies the optional caption if provided 7. If Reply Id is provided, sends the photo as a reply to that message 8. Returns success or error based on the API response",
@@ -454,6 +619,21 @@
         "You can edit captions after sending using Telegram's edit message API",
         "Photos preserve EXIF data unless removed before sending",
         "Animated GIFs should use Send Animation node instead"
+      ],
+      "credentials": [
+        {
+          "name": "Bot Token",
+          "title": "Bot Token",
+          "fields": [
+            {
+              "name": "value",
+              "title": "Bot Token",
+              "type": "password",
+              "required": true,
+              "description": "API token from BotFather for authentication"
+            }
+          ]
+        }
       ]
     }
   }

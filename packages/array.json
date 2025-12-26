@@ -4,7 +4,7 @@
   "description": "## Overview The Array package provides essential operations for working with arrays (lists) of data. Use it when you need to process collections of items, transform data structures, or manage lists dynamically during automation.",
   "nodes": {
     "Assign": {
-      "namespace": "Core.Array.Assign",
+      "namespace": "Robomotion.Array.Assign",
       "name": "Assign",
       "summary": "Assigns an array to a variable in the specified scope.",
       "howItWorks": "The Assign node assigns an array to a variable, making it available in the selected scope. When executed, the node: 1. Receives an array through the Array input 2. Validates that the input is a valid array 3. Assigns the array to the output variable in the specified scope 4. Handles thread-safe operations when assigning to Global or Flow scopes 5. Returns an empty array if the input array has no elements",
@@ -13,7 +13,7 @@
       ]
     },
     "Concatenate": {
-      "namespace": "Core.Array.Concatenate",
+      "namespace": "Robomotion.Array.Concatenate",
       "name": "Concatenate",
       "summary": "Concatenates two arrays into a single array by appending the second array to the first array.",
       "howItWorks": "The Concatenate node combines two arrays into one by appending all elements from the second array to the end of the first array. When executed, the node: 1. Receives two arrays through the First Array and Second Array inputs 2. Validates that both inputs are valid arrays (not null) 3. Appends all elements from the second array to the first array 4. Handles thread-safe operations when working with Global or Flow scope variables 5. Returns the combined array containing elements from both inputs",
@@ -23,7 +23,7 @@
       ]
     },
     "Convert": {
-      "namespace": "Core.Array.Convert",
+      "namespace": "Robomotion.Array.Convert",
       "name": "Convert",
       "summary": "Converts all elements in an array to a specified data type (string, number, or boolean).",
       "howItWorks": "The Convert node transforms all elements in an array to a specified data type. When executed, the node: 1. Receives an array through the Array input 2. Validates that a target type is selected 3. Iterates through each element in the array 4. Converts each element to the specified type: * **String conversion**: Converts any value to its string representation * **Number conversion**: Parses strings and converts to numeric values * **Boolean conversion**: Converts valid boolean representations to true/false 5. Returns a new array with all converted elements 6. Handles thread-safe operations when working with Global or Flow scope variables",
@@ -33,7 +33,7 @@
       ]
     },
     "GetElement": {
-      "namespace": "Core.Array.GetElement",
+      "namespace": "Robomotion.Array.GetElement",
       "name": "GetElement",
       "summary": "Retrieves a single element from an array by its index position.",
       "howItWorks": "The Get Element node retrieves a specific element from an array using its index. When executed, the node: 1. Receives an array through the Array input 2. Receives an index value through the Index input 3. Validates that the array is not null 4. Validates that the index is within valid bounds (0 to array length - 1) 5. Retrieves the element at the specified index position 6. Returns the element through the Element output",
@@ -43,7 +43,7 @@
       ]
     },
     "GetLength": {
-      "namespace": "Core.Array.GetLength",
+      "namespace": "Robomotion.Array.GetLength",
       "name": "GetLength",
       "summary": "Returns the number of elements in an array.",
       "howItWorks": "The Get Length node counts the number of elements in an array. When executed, the node: 1. Receives an array through the Array input 2. Validates that the array is not null 3. Counts the number of elements in the array 4. Returns the count as an integer through the Length output",
@@ -53,7 +53,7 @@
       ]
     },
     "Pop": {
-      "namespace": "Core.Array.Pop",
+      "namespace": "Robomotion.Array.Pop",
       "name": "Pop",
       "summary": "Removes and returns the last element from an array.",
       "howItWorks": "The Pop node removes the last element from an array and returns both the removed element and the modified array. When executed, the node: 1. Receives an array through the Array input 2. Validates that the array is not null 3. If the array is empty, returns the empty array and null for the element 4. If the array has elements, removes the last element 5. Returns the removed element through the Element output 6. Returns the modified array (with last element removed) through the Array output 7. Handles thread-safe operations when working with Global or Flow scope variables",
@@ -63,7 +63,7 @@
       ]
     },
     "Push": {
-      "namespace": "Core.Array.Push",
+      "namespace": "Robomotion.Array.Push",
       "name": "Push",
       "summary": "Adds an element to the end of an array.",
       "howItWorks": "The Push node adds a new element to the end of an array. When executed, the node: 1. Receives an array through the Array input (or creates a new empty array if null) 2. Receives a value through the Value input 3. Appends the value to the end of the array 4. Returns the modified array through the Array output 5. Handles thread-safe operations when working with Global or Flow scope variables",
@@ -73,7 +73,7 @@
       ]
     },
     "RemoveElement": {
-      "namespace": "Core.Array.RemoveElement",
+      "namespace": "Robomotion.Array.RemoveElement",
       "name": "RemoveElement",
       "summary": "Removes an element from an array by index position or by matching value.",
       "howItWorks": "The Remove Element node removes an element from an array using either an index or a matching value. When executed, the node: 1. Receives an array through the Array input 2. Validates that the array is not null 3. Receives either an index or an element value (at least one must be provided) 4. If using index: a. Validates the index is within valid bounds b. Removes the element at that position 5. If using element value: a. Searches for the first element matching the value b. Removes the first match found 6. Returns the modified array with the element removed",
@@ -85,7 +85,7 @@
       ]
     },
     "Reverse": {
-      "namespace": "Core.Array.Reverse",
+      "namespace": "Robomotion.Array.Reverse",
       "name": "Reverse",
       "summary": "Reverses the order of elements in an array.",
       "howItWorks": "The Reverse node reverses the order of elements in an array. When executed, the node: 1. Receives an array through the Array input 2. Validates that the array is not null 3. Reverses the order of elements (first becomes last, last becomes first) 4. Returns the reversed array through the Array output",
@@ -94,7 +94,7 @@
       ]
     },
     "Shift": {
-      "namespace": "Core.Array.Shift",
+      "namespace": "Robomotion.Array.Shift",
       "name": "Shift",
       "summary": "Removes and returns the first element from an array.",
       "howItWorks": "The Shift node removes the first element from an array and returns both the removed element and the modified array. When executed, the node: 1. Receives an array through the Array input 2. Validates that the array is not null 3. Removes the first element (at index 0) 4. Returns the removed element through the Element output 5. Returns the modified array (with first element removed) through the Array output 6. Handles thread-safe operations when working with Global or Flow scope variables",
@@ -104,7 +104,7 @@
       ]
     },
     "Slice": {
-      "namespace": "Core.Array.Slice",
+      "namespace": "Robomotion.Array.Slice",
       "name": "Slice",
       "summary": "Extracts a portion of an array between specified start and end indices.",
       "howItWorks": "The Slice node extracts a section of an array without modifying the original. When executed, the node: 1. Receives an array through the Array input 2. Validates that the array is not null 3. Receives start and end indices (optional, with defaults) 4. Validates that indices are within valid bounds 5. Extracts elements from start index (inclusive) to end index (exclusive) 6. Returns the extracted portion as a new array",
@@ -116,7 +116,7 @@
       ]
     },
     "Sort": {
-      "namespace": "Core.Array.Sort",
+      "namespace": "Robomotion.Array.Sort",
       "name": "Sort",
       "summary": "Sorts array elements in ascending order. Supports both numeric and string arrays with locale-aware string sorting.",
       "howItWorks": "The Sort node arranges array elements in ascending order based on their data type. When executed, the node: 1. Receives an array through the Array input 2. Validates that the array is not null and not empty 3. Determines the data type of the first element (number or string) 4. Validates that all elements are of the same type 5. For numbers: - Sorts in ascending numeric order 6. For strings: - Uses locale-specific collation based on Language Code - Optionally ignores case if Ignore Case is enabled - Sorts according to language-specific alphabetical rules 7. Returns the sorted array 8. Handles thread-safe operations when working with Global or Flow scope variables",

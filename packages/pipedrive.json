@@ -4,7 +4,7 @@
   "description": "## Overview The Pipedrive package provides integration with Pipedrive CRM. Use it when you need to create or update deals, manage contacts, sync data with Pipedrive, or automate your sales pipeline.",
   "nodes": {
     "connect": {
-      "namespace": "Core.Pipedrive.Connect",
+      "namespace": "Robomotion.Pipedrive.Connect",
       "name": "Connect",
       "summary": "Establishes a connection to the Pipedrive CRM API using an API key.",
       "howItWorks": "The Connect node establishes a connection to the Pipedrive CRM API and stores the connection for use by other nodes. When executed, the node: 1. Validates the provided Company Domain input 2. Retrieves the API Key from the credential store 3. Creates a Pipedrive client with the provided credentials 4. Stores the client connection and returns a unique connection ID",
@@ -18,10 +18,26 @@
         "Each connection is stored in memory and can be used by multiple nodes",
         "Use the Disconnect node to properly close connections when they are no longer needed",
         "The API key should be stored as a credential in the Robomotion vault for security"
+      ],
+      "credentials": [
+        {
+          "name": "Token",
+          "title": "Pipedrive API Key",
+          "description": "API key for authenticating with Pipedrive CRM",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "password",
+              "required": true,
+              "description": "Your Pipedrive API key from Settings \u003e Personal preferences \u003e API"
+            }
+          ]
+        }
       ]
     },
     "create": {
-      "namespace": "Core.Pipedrive.Create",
+      "namespace": "Robomotion.Pipedrive.Create",
       "name": "Create",
       "summary": "Creates a new object in Pipedrive CRM (Activity, Deal, Note, Organization, Person, or Lead).",
       "howItWorks": "The Create node creates a new object in Pipedrive CRM. When executed, the node: 1. Validates the provided Connection Id 2. Validates the Data input 3. Uses the selected Type option to determine what kind of object to create 4. Calls the appropriate Pipedrive API endpoint to create the object 5. Returns the API response as the result",
@@ -38,7 +54,7 @@
       ]
     },
     "delete": {
-      "namespace": "Core.Pipedrive.Delete",
+      "namespace": "Robomotion.Pipedrive.Delete",
       "name": "Delete",
       "summary": "Deletes an object from Pipedrive CRM (Activity, Deal, Note, Organization, Person, or Lead).",
       "howItWorks": "The Delete node removes an object from Pipedrive CRM. When executed, the node: 1. Validates the provided Connection Id 2. Validates the Object Id input 3. Uses the selected Type option to determine what kind of object to delete 4. Calls the appropriate Pipedrive API endpoint to delete the object 5. Returns the API response as the result",
@@ -55,7 +71,7 @@
       ]
     },
     "disconnect": {
-      "namespace": "Core.Pipedrive.Disconnect",
+      "namespace": "Robomotion.Pipedrive.Disconnect",
       "name": "Disconnect",
       "summary": "Closes a connection to the Pipedrive CRM API and releases associated resources.",
       "howItWorks": "The Disconnect node closes a connection to the Pipedrive CRM API and releases associated resources. When executed, the node: 1. Validates the provided Connection Id 2. Removes the connection from the internal connection store 3. Releases any resources associated with the connection",
@@ -70,7 +86,7 @@
       ]
     },
     "get": {
-      "namespace": "Core.Pipedrive.Get",
+      "namespace": "Robomotion.Pipedrive.Get",
       "name": "Get",
       "summary": "Retrieves a specific object from Pipedrive CRM by its ID (Activity, Deal, Note, Organization, Person, or Lead).",
       "howItWorks": "The Get node retrieves a specific object from Pipedrive CRM by its ID. When executed, the node: 1. Validates the provided Connection Id 2. Validates the Object Id input 3. Uses the selected Type option to determine what kind of object to retrieve 4. Calls the appropriate Pipedrive API endpoint to get the object 5. Returns the API response as the result",
@@ -87,7 +103,7 @@
       ]
     },
     "get_all": {
-      "namespace": "Core.Pipedrive.Get_all",
+      "namespace": "Robomotion.Pipedrive.GetAll",
       "name": "Get_all",
       "summary": "Retrieves all objects of a specific type from Pipedrive CRM (Activity, Deal, Note, Organization, Person, or Lead).",
       "howItWorks": "The Get All node retrieves all objects of a specific type from Pipedrive CRM. When executed, the node: 1. Validates the provided Connection Id 2. Uses the selected Type option to determine what kind of objects to retrieve 3. Calls the appropriate Pipedrive API endpoint to get all objects of that type 4. Returns the API response as the result",
@@ -104,7 +120,7 @@
       ]
     },
     "update": {
-      "namespace": "Core.Pipedrive.Update",
+      "namespace": "Robomotion.Pipedrive.Update",
       "name": "Update",
       "summary": "Updates an existing object in Pipedrive CRM (Activity, Deal, Note, Organization, Person, or Lead).",
       "howItWorks": "The Update node modifies an existing object in Pipedrive CRM. When executed, the node: 1. Validates the provided Connection Id 2. Validates the Object Id input 3. Validates the Data input 4. Uses the selected Type option to determine what kind of object to update 5. Calls the appropriate Pipedrive API endpoint to update the object 6. Returns the API response as the result",

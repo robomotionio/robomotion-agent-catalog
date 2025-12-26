@@ -4,7 +4,7 @@
   "description": "## Overview The Leonardo AI package provides integration with Leonardo AI's image generation platform. Use it when you need to generate images from text prompts, upscale images, create image variations, or train custom models for specific image styles.",
   "nodes": {
     "connect": {
-      "namespace": "Core.LeonardoAi.Connect",
+      "namespace": "Robomotion.LeonardoAI.Connect",
       "name": "Connect",
       "summary": "Establishes a connection to the Leonardo AI API using an API key for authentication.",
       "howItWorks": "The Connect node establishes an authenticated session with the Leonardo AI API. When executed, the node: 1. Retrieves the API key from the vault credentials 2. Validates that the API key is not empty 3. Creates a connection session with Leonardo AI 4. Returns a connection ID that can be used by other Leonardo AI nodes",
@@ -21,7 +21,7 @@
       ]
     },
     "create_dataset": {
-      "namespace": "Core.LeonardoAi.Create_dataset",
+      "namespace": "Robomotion.LeonardoAI.Datasets.CreateDataset",
       "name": "Create_dataset",
       "summary": "Creates a new dataset for training custom models with your own images.",
       "howItWorks": "The Create Dataset node creates a new dataset container. When executed, the node: 1. Validates the dataset name is not empty 2. Builds the create dataset request with name and optional description 3. Sends the request to Leonardo AI API 4. Returns the dataset ID for uploading images and model training",
@@ -44,7 +44,7 @@
       ]
     },
     "create_generation": {
-      "namespace": "Core.LeonardoAi.Create_generation",
+      "namespace": "Robomotion.LeonardoAI.Generations.CreateGeneration",
       "name": "Create_generation",
       "summary": "Generates images from a text prompt using Leonardo AI's powerful image generation models.",
       "howItWorks": "The Create Generation node initiates an image generation job with Leonardo AI. When executed, the node: 1. Validates the prompt is not empty 2. Builds the generation request with your specified parameters 3. Sets default dimensions based on the selected model if not specified 4. Validates numeric parameters (width, height, guidance scale, etc.) 5. Sends the generation request to Leonardo AI API 6. Returns the generation ID for tracking and retrieval",
@@ -68,7 +68,7 @@
       ]
     },
     "create_model": {
-      "namespace": "Core.LeonardoAi.Create_model",
+      "namespace": "Robomotion.LeonardoAI.Models.CreateModel",
       "name": "Create_model",
       "summary": "Creates a new custom model by training on a dataset of images.",
       "howItWorks": "The Create Model node starts training a custom model. When executed, the node: 1. Validates dataset ID, instance prompt, and name are not empty 2. Configures training parameters (model type, resolution, strength, etc.) 3. Submits the training job to Leonardo AI 4. Returns the custom model ID for future use",
@@ -97,7 +97,7 @@
       ]
     },
     "create_upscale": {
-      "namespace": "Core.LeonardoAi.Create_upscale",
+      "namespace": "Robomotion.LeonardoAI.Variations.CreateUpscale",
       "name": "Create_upscale",
       "summary": "Creates an upscaled version of a generated image with enhanced resolution and detail.",
       "howItWorks": "The Create Upscale node initiates an upscaling job. When executed, the node: 1. Validates the generation ID is not empty 2. Sends an upscale request to Leonardo AI API 3. Starts the upscaling process 4. Returns a variation ID for tracking and retrieval",
@@ -125,7 +125,7 @@
       ]
     },
     "delete_dataset": {
-      "namespace": "Core.LeonardoAi.Delete_dataset",
+      "namespace": "Robomotion.LeonardoAI.Datasets.DeleteDataset",
       "name": "Delete_dataset",
       "summary": "Deletes a dataset and all its associated images from Leonardo AI.",
       "howItWorks": "The Delete Dataset node permanently removes a dataset. When executed, the node: 1. Validates the dataset ID is not empty 2. Sends a delete request to Leonardo AI API 3. Removes the dataset and all associated images 4. Returns the ID of the deleted dataset",
@@ -149,7 +149,7 @@
       ]
     },
     "delete_generation": {
-      "namespace": "Core.LeonardoAi.Delete_generation",
+      "namespace": "Robomotion.LeonardoAI.Generations.DeleteGeneration",
       "name": "Delete_generation",
       "summary": "Deletes a generation and its associated images from Leonardo AI.",
       "howItWorks": "The Delete Generation node permanently removes a generation from your account. When executed, the node: 1. Validates the generation ID is not empty 2. Sends a delete request to the Leonardo AI API 3. Removes the generation and all associated images",
@@ -170,7 +170,7 @@
       ]
     },
     "delete_image": {
-      "namespace": "Core.LeonardoAi.Delete_image",
+      "namespace": "Robomotion.LeonardoAI.Images.DeleteImage",
       "name": "Delete_image",
       "summary": "Deletes an uploaded image from Leonardo AI storage.",
       "howItWorks": "The Delete Image node permanently removes an uploaded image. When executed, the node: 1. Validates the image ID is not empty 2. Sends a delete request to Leonardo AI API 3. Removes the image from storage",
@@ -195,7 +195,7 @@
       ]
     },
     "delete_model": {
-      "namespace": "Core.LeonardoAi.Delete_model",
+      "namespace": "Robomotion.LeonardoAI.Models.DeleteModel",
       "name": "Delete_model",
       "summary": "Deletes a custom model from Leonardo AI.",
       "howItWorks": "The Delete Model node permanently removes a custom model. When executed, the node: 1. Validates the model ID is not empty 2. Sends a delete request to Leonardo AI API 3. Removes the custom model from your account 4. Returns the deleted model's ID",
@@ -221,7 +221,7 @@
       ]
     },
     "disconnect": {
-      "namespace": "Core.LeonardoAi.Disconnect",
+      "namespace": "Robomotion.LeonardoAI.Disconnect",
       "name": "Disconnect",
       "summary": "Disconnects from the Leonardo AI API and cleans up the connection session.",
       "howItWorks": "The Disconnect node terminates the connection to the Leonardo AI API. When executed, the node: 1. Receives the connection ID from the Connect node 2. Validates that the connection ID is not empty 3. Removes the API key session from memory 4. Cleans up the connection resources",
@@ -236,7 +236,7 @@
       ]
     },
     "get_dataset": {
-      "namespace": "Core.LeonardoAi.Get_dataset",
+      "namespace": "Robomotion.LeonardoAI.Datasets.GetDataset",
       "name": "Get_dataset",
       "summary": "Retrieves details of a dataset including its images and metadata.",
       "howItWorks": "The Get Dataset node retrieves complete information about a dataset. When executed, the node: 1. Validates the dataset ID is not empty 2. Sends a request to Leonardo AI API to fetch dataset details 3. Returns the dataset object with all images and metadata",
@@ -258,7 +258,7 @@
       ]
     },
     "get_generation": {
-      "namespace": "Core.LeonardoAi.Get_generation",
+      "namespace": "Robomotion.LeonardoAI.Generations.GetGeneration",
       "name": "Get_generation",
       "summary": "Retrieves the details and status of a generation job, including the generated images when complete.",
       "howItWorks": "The Get Generation node retrieves information about a generation job. When executed, the node: 1. Validates the generation ID is not empty 2. Sends a request to the Leonardo AI API to retrieve generation details 3. Returns the complete generation object with status and images",
@@ -278,7 +278,7 @@
       ]
     },
     "get_image": {
-      "namespace": "Core.LeonardoAi.Get_image",
+      "namespace": "Robomotion.LeonardoAI.Images.GetImage",
       "name": "Get_image",
       "summary": "Retrieves details and metadata of an uploaded image by its ID.",
       "howItWorks": "The Get Image node retrieves information about an uploaded image. When executed, the node: 1. Validates the image ID is not empty 2. Sends a request to Leonardo AI API to fetch image details 3. Returns the complete image object with metadata",
@@ -298,7 +298,7 @@
       ]
     },
     "get_model": {
-      "namespace": "Core.LeonardoAi.Get_model",
+      "namespace": "Robomotion.LeonardoAI.Models.GetModel",
       "name": "Get_model",
       "summary": "Retrieves details and status of a custom model by its ID.",
       "howItWorks": "The Get Model node retrieves information about a custom model. When executed, the node: 1. Validates the model ID is not empty 2. Sends a request to Leonardo AI API to fetch model details 3. Returns the complete model object with status and configuration",
@@ -322,7 +322,7 @@
       ]
     },
     "get_user_details": {
-      "namespace": "Core.LeonardoAi.Get_user_details",
+      "namespace": "Robomotion.LeonardoAI.User.GetUserDetails",
       "name": "Get_user_details",
       "summary": "Retrieves details of the authenticated Leonardo AI user account.",
       "howItWorks": "The Get User Details node retrieves the current user's account information. When executed, the node: 1. Sends a request to Leonardo AI API using the authenticated connection 2. Fetches complete user account details 3. Returns the user details object",
@@ -351,7 +351,7 @@
       ]
     },
     "get_variation": {
-      "namespace": "Core.LeonardoAi.Get_variation",
+      "namespace": "Robomotion.LeonardoAI.Variations.GetVariation",
       "name": "Get_variation",
       "summary": "Retrieves details and status of a variation job, including the upscaled image when complete.",
       "howItWorks": "The Get Variation node retrieves information about a variation job. When executed, the node: 1. Validates the variation ID is not empty 2. Sends a request to Leonardo AI API to fetch variation details 3. Returns the complete variation object with status and image URL",
@@ -376,7 +376,7 @@
       ]
     },
     "list_generations": {
-      "namespace": "Core.LeonardoAi.List_generations",
+      "namespace": "Robomotion.LeonardoAI.Generations.ListGenerations",
       "name": "List_generations",
       "summary": "Retrieves a list of all generations for a specific user with pagination support.",
       "howItWorks": "The List Generations node retrieves a paginated list of generations for a user. When executed, the node: 1. Validates the user ID is not empty 2. Builds the API request URL with optional pagination parameters 3. Sends the request to Leonardo AI API 4. Returns an array of generation objects",
@@ -396,7 +396,7 @@
       ]
     },
     "upload_dataset_gen_image": {
-      "namespace": "Core.LeonardoAi.Upload_dataset_gen_image",
+      "namespace": "Robomotion.LeonardoAI.Datasets.UploadDatasetGenImage",
       "name": "Upload_dataset_gen_image",
       "summary": "Uploads a previously generated image from Leonardo AI to a dataset for training custom models.",
       "howItWorks": "The Upload Dataset Generated Image node adds a previously generated image to a dataset. When executed, the node: 1. Validates the dataset ID and generated image ID are not empty 2. Sends a request to add the generated image to the dataset 3. Returns the image ID in the dataset 4. The image becomes part of the dataset for model training",
@@ -423,7 +423,7 @@
       ]
     },
     "upload_dataset_image": {
-      "namespace": "Core.LeonardoAi.Upload_dataset_image",
+      "namespace": "Robomotion.LeonardoAI.Datasets.UploadDatasetImage",
       "name": "Upload_dataset_image",
       "summary": "Uploads an image from your local file system to a dataset for training custom models.",
       "howItWorks": "The Upload Dataset Image node adds an image to a dataset. When executed, the node: 1. Validates the dataset ID and image path are not empty 2. Requests upload credentials from Leonardo AI API 3. Uploads the image file to the dataset 4. The image becomes part of the dataset for model training",
@@ -451,7 +451,7 @@
       ]
     },
     "upload_image": {
-      "namespace": "Core.LeonardoAi.Upload_image",
+      "namespace": "Robomotion.LeonardoAI.Images.UploadImage",
       "name": "Upload_image",
       "summary": "Uploads an image from your local file system to Leonardo AI for use as an init image in image-to-image generation.",
       "howItWorks": "The Upload Image node uploads a local image file to Leonardo AI. When executed, the node: 1. Validates the image path is not empty 2. Checks that the file exists at the specified path 3. Requests upload credentials from Leonardo AI API 4. Uploads the image file to the provided URL 5. Returns the image ID for use in generation",

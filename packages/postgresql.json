@@ -4,7 +4,7 @@
   "description": "## Overview The PostgreSQL package provides database connectivity for PostgreSQL. Use it when you need to query data, insert records, execute statements, or perform transactions against PostgreSQL databases.",
   "nodes": {
     "Commit": {
-      "namespace": "Core.Postgresql.Commit",
+      "namespace": "Robomotion.PostgreSQL.Commit",
       "name": "Commit",
       "summary": "Commits a PostgreSQL transaction using the provided transaction ID.",
       "howItWorks": "The Commit Transaction node commits a PostgreSQL transaction using the provided transaction ID. When executed, the node: 1. Validates the provided transaction ID 2. Retrieves the transaction object from the internal transactions dictionary 3. Commits the transaction to the database 4. Removes the transaction from the internal transactions dictionary",
@@ -17,10 +17,75 @@
         "Transactions should be committed after all related database operations are completed",
         "After committing a transaction, the transaction ID becomes invalid and cannot be used again",
         "If a transaction is not committed, changes may not be persisted to the database"
+      ],
+      "credentials": [
+        {
+          "name": "postgresql_database",
+          "title": "PostgreSQL Database",
+          "description": "PostgreSQL database connection with server, port, database, and authentication",
+          "fields": [
+            {
+              "name": "type",
+              "title": "Database Type",
+              "type": "hidden"
+            },
+            {
+              "name": "server",
+              "title": "Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "localhost",
+              "description": "PostgreSQL server hostname or IP address"
+            },
+            {
+              "name": "port",
+              "title": "Port",
+              "type": "text",
+              "placeholder": "5432",
+              "description": "PostgreSQL server port (default: 5432)"
+            },
+            {
+              "name": "database",
+              "title": "Database",
+              "type": "text",
+              "required": true,
+              "placeholder": "postgres",
+              "description": "Database name"
+            },
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "postgres",
+              "description": "PostgreSQL database username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "placeholder": "Password",
+              "description": "PostgreSQL database password"
+            }
+          ],
+          "help": [
+            "1. Enter the PostgreSQL server hostname or IP address",
+            "2. Specify the port (default is 5432)",
+            "3. Enter the database name",
+            "4. Provide your PostgreSQL credentials (username and password)"
+          ],
+          "resources": [
+            {
+              "label": "PostgreSQL Documentation",
+              "url": "https://www.postgresql.org/docs/"
+            }
+          ]
+        }
       ]
     },
     "Connect": {
-      "namespace": "Core.Postgresql.Connect",
+      "namespace": "Robomotion.PostgreSQL.Connect",
       "name": "Connect",
       "summary": "Establishes a connection to a PostgreSQL database.",
       "howItWorks": "The Connect node establishes a connection to a PostgreSQL database using the provided connection parameters. When executed, the node: 1. Validates the provided connection parameters 2. Constructs a connection string from the provided parameters 3. Creates and opens a new NpgsqlConnection 4. Generates a unique connection ID 5. Stores the connection in an internal connections dictionary 6. Returns the connection ID as output",
@@ -35,10 +100,75 @@
         "Connections should be properly closed using the Disconnect node when no longer needed",
         "The connection parameters should match the PostgreSQL server configuration",
         "The Credentials option should be configured with valid database authentication credentials"
+      ],
+      "credentials": [
+        {
+          "name": "postgresql_database",
+          "title": "PostgreSQL Database",
+          "description": "PostgreSQL database connection with server, port, database, and authentication",
+          "fields": [
+            {
+              "name": "type",
+              "title": "Database Type",
+              "type": "hidden"
+            },
+            {
+              "name": "server",
+              "title": "Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "localhost",
+              "description": "PostgreSQL server hostname or IP address"
+            },
+            {
+              "name": "port",
+              "title": "Port",
+              "type": "text",
+              "placeholder": "5432",
+              "description": "PostgreSQL server port (default: 5432)"
+            },
+            {
+              "name": "database",
+              "title": "Database",
+              "type": "text",
+              "required": true,
+              "placeholder": "postgres",
+              "description": "Database name"
+            },
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "postgres",
+              "description": "PostgreSQL database username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "placeholder": "Password",
+              "description": "PostgreSQL database password"
+            }
+          ],
+          "help": [
+            "1. Enter the PostgreSQL server hostname or IP address",
+            "2. Specify the port (default is 5432)",
+            "3. Enter the database name",
+            "4. Provide your PostgreSQL credentials (username and password)"
+          ],
+          "resources": [
+            {
+              "label": "PostgreSQL Documentation",
+              "url": "https://www.postgresql.org/docs/"
+            }
+          ]
+        }
       ]
     },
     "Disconnect": {
-      "namespace": "Core.Postgresql.Disconnect",
+      "namespace": "Robomotion.PostgreSQL.Disconnect",
       "name": "Disconnect",
       "summary": "Closes and removes a PostgreSQL database connection.",
       "howItWorks": "The Disconnect node closes and removes a PostgreSQL database connection using the provided connection ID. When executed, the node: 1. Validates the provided connection ID 2. Retrieves the connection object from the internal connections dictionary 3. Closes the database connection 4. Removes the connection from the internal connections dictionary",
@@ -53,7 +183,7 @@
       ]
     },
     "Insert": {
-      "namespace": "Core.Postgresql.Insert",
+      "namespace": "Robomotion.PostgreSQL.Insert",
       "name": "Insert",
       "summary": "Inserts data into a PostgreSQL table.",
       "howItWorks": "The Insert Table node inserts data into a PostgreSQL table using the provided parameters. When executed, the node: 1. Validates the provided connection ID and retrieves the connection 2. Optionally retrieves the transaction if a transaction ID is provided 3. Creates an insert command based on the table data and options 4. Executes the insert command for each row in the table data",
@@ -69,10 +199,75 @@
         "The Ignore Conflicts and Replace options cannot be used simultaneously",
         "When using transactions, the transaction must be committed using the Commit Transaction node",
         "The Column Names with Special Characters option should be used when column names contain special characters"
+      ],
+      "credentials": [
+        {
+          "name": "postgresql_database",
+          "title": "PostgreSQL Database",
+          "description": "PostgreSQL database connection with server, port, database, and authentication",
+          "fields": [
+            {
+              "name": "type",
+              "title": "Database Type",
+              "type": "hidden"
+            },
+            {
+              "name": "server",
+              "title": "Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "localhost",
+              "description": "PostgreSQL server hostname or IP address"
+            },
+            {
+              "name": "port",
+              "title": "Port",
+              "type": "text",
+              "placeholder": "5432",
+              "description": "PostgreSQL server port (default: 5432)"
+            },
+            {
+              "name": "database",
+              "title": "Database",
+              "type": "text",
+              "required": true,
+              "placeholder": "postgres",
+              "description": "Database name"
+            },
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "postgres",
+              "description": "PostgreSQL database username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "placeholder": "Password",
+              "description": "PostgreSQL database password"
+            }
+          ],
+          "help": [
+            "1. Enter the PostgreSQL server hostname or IP address",
+            "2. Specify the port (default is 5432)",
+            "3. Enter the database name",
+            "4. Provide your PostgreSQL credentials (username and password)"
+          ],
+          "resources": [
+            {
+              "label": "PostgreSQL Documentation",
+              "url": "https://www.postgresql.org/docs/"
+            }
+          ]
+        }
       ]
     },
     "NonQuery": {
-      "namespace": "Core.Postgresql.NonQuery",
+      "namespace": "Robomotion.PostgreSQL.NonQuery",
       "name": "NonQuery",
       "summary": "Executes a PostgreSQL non-query SQL statement (INSERT, UPDATE, DELETE, etc.).",
       "howItWorks": "The Execute Non Query node executes a PostgreSQL non-query SQL statement using the provided parameters. When executed, the node: 1. Validates the provided connection ID and retrieves the connection 2. Optionally retrieves the transaction if a transaction ID is provided 3. Processes template variables in the SQL query using the message context 4. Creates and executes the SQL command",
@@ -87,10 +282,75 @@
         "Non-query statements include INSERT, UPDATE, DELETE, CREATE, ALTER, DROP, etc.",
         "When using transactions, the transaction must be committed using the Commit Transaction node",
         "The SQL editor provides syntax highlighting for SQL statements"
+      ],
+      "credentials": [
+        {
+          "name": "postgresql_database",
+          "title": "PostgreSQL Database",
+          "description": "PostgreSQL database connection with server, port, database, and authentication",
+          "fields": [
+            {
+              "name": "type",
+              "title": "Database Type",
+              "type": "hidden"
+            },
+            {
+              "name": "server",
+              "title": "Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "localhost",
+              "description": "PostgreSQL server hostname or IP address"
+            },
+            {
+              "name": "port",
+              "title": "Port",
+              "type": "text",
+              "placeholder": "5432",
+              "description": "PostgreSQL server port (default: 5432)"
+            },
+            {
+              "name": "database",
+              "title": "Database",
+              "type": "text",
+              "required": true,
+              "placeholder": "postgres",
+              "description": "Database name"
+            },
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "postgres",
+              "description": "PostgreSQL database username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "placeholder": "Password",
+              "description": "PostgreSQL database password"
+            }
+          ],
+          "help": [
+            "1. Enter the PostgreSQL server hostname or IP address",
+            "2. Specify the port (default is 5432)",
+            "3. Enter the database name",
+            "4. Provide your PostgreSQL credentials (username and password)"
+          ],
+          "resources": [
+            {
+              "label": "PostgreSQL Documentation",
+              "url": "https://www.postgresql.org/docs/"
+            }
+          ]
+        }
       ]
     },
     "Query": {
-      "namespace": "Core.Postgresql.Query",
+      "namespace": "Robomotion.PostgreSQL.Query",
       "name": "Query",
       "summary": "Executes a PostgreSQL query SQL statement (SELECT) and returns the results.",
       "howItWorks": "The Execute Query node executes a PostgreSQL SELECT SQL statement and returns the results. When executed, the node: 1. Validates the provided connection ID and retrieves the connection 2. Optionally retrieves the transaction if a transaction ID is provided 3. Processes template variables in the SQL query using the message context 4. Creates and executes the SQL command 5. Reads the results into a DataTable 6. Converts the DataTable to a table structure 7. Returns the table structure as output",
@@ -105,10 +365,75 @@
         "Query results are returned as a table structure that can be used in subsequent nodes",
         "When using transactions, the transaction must be committed using the Commit Transaction node",
         "The SQL editor provides syntax highlighting for SQL statements"
+      ],
+      "credentials": [
+        {
+          "name": "postgresql_database",
+          "title": "PostgreSQL Database",
+          "description": "PostgreSQL database connection with server, port, database, and authentication",
+          "fields": [
+            {
+              "name": "type",
+              "title": "Database Type",
+              "type": "hidden"
+            },
+            {
+              "name": "server",
+              "title": "Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "localhost",
+              "description": "PostgreSQL server hostname or IP address"
+            },
+            {
+              "name": "port",
+              "title": "Port",
+              "type": "text",
+              "placeholder": "5432",
+              "description": "PostgreSQL server port (default: 5432)"
+            },
+            {
+              "name": "database",
+              "title": "Database",
+              "type": "text",
+              "required": true,
+              "placeholder": "postgres",
+              "description": "Database name"
+            },
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "postgres",
+              "description": "PostgreSQL database username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "placeholder": "Password",
+              "description": "PostgreSQL database password"
+            }
+          ],
+          "help": [
+            "1. Enter the PostgreSQL server hostname or IP address",
+            "2. Specify the port (default is 5432)",
+            "3. Enter the database name",
+            "4. Provide your PostgreSQL credentials (username and password)"
+          ],
+          "resources": [
+            {
+              "label": "PostgreSQL Documentation",
+              "url": "https://www.postgresql.org/docs/"
+            }
+          ]
+        }
       ]
     },
     "Start": {
-      "namespace": "Core.Postgresql.Start",
+      "namespace": "Robomotion.PostgreSQL.Start",
       "name": "Start",
       "summary": "Starts a new PostgreSQL transaction.",
       "howItWorks": "The Start Transaction node begins a new PostgreSQL transaction using the provided connection ID. When executed, the node: 1. Validates the provided connection ID and retrieves the connection 2. Begins a new transaction on the connection 3. Generates a unique transaction ID 4. Stores the transaction in an internal transactions dictionary 5. Returns the transaction ID as output",
@@ -121,6 +446,71 @@
         "Transactions should be committed using the Commit Transaction node or rolled back using a rollback mechanism",
         "All operations between Start Transaction and Commit Transaction/Rollback will be part of the same transaction",
         "Transactions help ensure data consistency and can be rolled back in case of errors"
+      ],
+      "credentials": [
+        {
+          "name": "postgresql_database",
+          "title": "PostgreSQL Database",
+          "description": "PostgreSQL database connection with server, port, database, and authentication",
+          "fields": [
+            {
+              "name": "type",
+              "title": "Database Type",
+              "type": "hidden"
+            },
+            {
+              "name": "server",
+              "title": "Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "localhost",
+              "description": "PostgreSQL server hostname or IP address"
+            },
+            {
+              "name": "port",
+              "title": "Port",
+              "type": "text",
+              "placeholder": "5432",
+              "description": "PostgreSQL server port (default: 5432)"
+            },
+            {
+              "name": "database",
+              "title": "Database",
+              "type": "text",
+              "required": true,
+              "placeholder": "postgres",
+              "description": "Database name"
+            },
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "postgres",
+              "description": "PostgreSQL database username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "placeholder": "Password",
+              "description": "PostgreSQL database password"
+            }
+          ],
+          "help": [
+            "1. Enter the PostgreSQL server hostname or IP address",
+            "2. Specify the port (default is 5432)",
+            "3. Enter the database name",
+            "4. Provide your PostgreSQL credentials (username and password)"
+          ],
+          "resources": [
+            {
+              "label": "PostgreSQL Documentation",
+              "url": "https://www.postgresql.org/docs/"
+            }
+          ]
+        }
       ]
     }
   }

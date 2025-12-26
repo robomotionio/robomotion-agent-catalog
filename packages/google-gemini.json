@@ -4,7 +4,7 @@
   "description": "```mdx-code-block import DocCardList from '@theme/DocCardList';",
   "nodes": {
     "BatchEmbeddings": {
-      "namespace": "Core.GoogleGemini.BatchEmbeddings",
+      "namespace": "Robomotion.GoogleGemini.Embeddings.BatchEmbeddings",
       "name": "BatchEmbeddings",
       "summary": "Generates embeddings for multiple text inputs using Google's Gemini API.",
       "howItWorks": "The Batch Embeddings node generates embeddings for multiple text inputs using Google's Gemini API. When executed, the node: 1. Validates the provided connection ID and content inputs 2. Ensures the content array is not empty and doesn't exceed 100 texts 3. Retrieves the configured embedding model (defaults to \"text-embedding-004\" if not specified) 4. Builds the embedding configuration with optional parameters like task type, title, and output dimensionality 5. Generates embeddings for each text in the content array 6. Returns a structured response containing the embeddings, model information, and metadata",
@@ -22,7 +22,7 @@
       ]
     },
     "CompareEmbeddings": {
-      "namespace": "Core.GoogleGemini.CompareEmbeddings",
+      "namespace": "Robomotion.GoogleGemini.Embeddings.CompareEmbeddings",
       "name": "CompareEmbeddings",
       "summary": "Compares embeddings of texts to find similarities using various similarity metrics.",
       "howItWorks": "The Compare Embeddings node calculates similarity scores between a source text and multiple comparison texts using Google's Gemini API. When executed, the node: 1. Validates the provided connection ID and input texts or files 2. Configures the embedding model based on the selected options 3. Loads or generates embeddings for the source text and comparison texts 4. Calculates similarity scores using the specified metric (cosine, dot product, or euclidean) 5. Filters results based on the similarity threshold if provided 6. Sorts results according to the specified sort order 7. Limits the number of results if a maximum is specified 8. Saves detailed results to a JSON file and returns a summary",
@@ -42,7 +42,7 @@
       ]
     },
     "DeleteFile": {
-      "namespace": "Core.GoogleGemini.DeleteFile",
+      "namespace": "Robomotion.GoogleGemini.Files.DeleteFile",
       "name": "DeleteFile",
       "summary": "Deletes a file from Google's Gemini API using the file URI.",
       "howItWorks": "The Delete File node removes a previously uploaded file from Google's Gemini API. When executed, the node: 1. Validates the provided connection ID and file URI 2. Retrieves the Gemini client using the connection ID 3. Sends a delete request to the Gemini API for the specified file URI 4. Measures the operation time for performance tracking 5. Returns a structured response with success status and metadata",
@@ -59,7 +59,7 @@
       ]
     },
     "EditImage": {
-      "namespace": "Core.GoogleGemini.EditImage",
+      "namespace": "Robomotion.GoogleGemini.Images.EditImage",
       "name": "EditImage",
       "summary": "Edits images using Google's Gemini API based on a text prompt and mask image.",
       "howItWorks": "The Edit Image node modifies images using Google's Gemini API based on a text prompt and mask. When executed, the node: 1. Validates the provided connection ID, edit prompt, and image file paths 2. Ensures the base and mask image files exist 3. Configures the image editing parameters including model, number of images, and output format 4. Reads the base and mask images from the file system 5. Sends an image editing request to the Gemini API 6. Saves the edited images to a temporary directory 7. Returns structured information about the edited images including file paths and metadata",
@@ -81,7 +81,7 @@
       ]
     },
     "Embeddings": {
-      "namespace": "Core.GoogleGemini.Embeddings",
+      "namespace": "Robomotion.GoogleGemini.Embeddings.Embeddings",
       "name": "Embeddings",
       "summary": "Generates embeddings for text content using Google's Gemini API with various task types.",
       "howItWorks": "The Embeddings node generates embeddings for text content using Google's Gemini API. When executed, the node: 1. Validates the provided connection ID and content 2. Configures the embedding model (defaults to \"text-embedding-004\" if not specified) 3. Sets optional parameters like task type, title, and output dimensionality 4. For Semantic Similarity task: * Generates embeddings for both Content and Compare Text * Calculates cosine similarity between the two embeddings * Returns the similarity score and optionally the embeddings themselves 5. For other task types: * Generates a single embedding for the Content * Returns the embedding values with metadata 6. Includes statistics if requested and available from the API",
@@ -100,7 +100,7 @@
       ]
     },
     "FileUpload": {
-      "namespace": "Core.GoogleGemini.FileUpload",
+      "namespace": "Robomotion.GoogleGemini.Files.FileUpload",
       "name": "FileUpload",
       "summary": "Uploads a local file to Google's Gemini API for use in multimodal operations.",
       "howItWorks": "The Upload File node uploads a local file to Google's Gemini API for use in multimodal operations. When executed, the node: 1. Validates the provided connection ID and file path 2. Checks that the file exists and is not a directory 3. Validates the file size (maximum 2GB) if validation is enabled 4. Detects the MIME type of the file 5. Uploads the file to the Gemini API with progress tracking 6. Returns detailed information about the uploaded file including URI and metadata",
@@ -121,7 +121,7 @@
       ]
     },
     "GenerateContent": {
-      "namespace": "Core.GoogleGemini.GenerateContent",
+      "namespace": "Robomotion.GoogleGemini.Content.GenerateContent",
       "name": "GenerateContent",
       "summary": "Generates text content using Google's Gemini API with support for multimodal inputs including text, images, and files.",
       "howItWorks": "The Generate Content node creates text content using Google's Gemini API with support for multimodal inputs. When executed, the node: 1. Validates the provided connection ID and user prompt 2. Configures the selected model with all specified parameters 3. Processes any local files or uploaded files to include as input 4. Sets up safety settings and generation parameters 5. Sends a content generation request to the Gemini API 6. Handles the response either as a complete result or as a stream 7. Returns the generated content in the specified format",
@@ -143,7 +143,7 @@
       ]
     },
     "GenerateImages": {
-      "namespace": "Core.GoogleGemini.GenerateImages",
+      "namespace": "Robomotion.GoogleGemini.Images.GenerateImages",
       "name": "GenerateImages",
       "summary": "Generates images from text prompts using Google's Imagen models.",
       "howItWorks": "The Generate Images node creates images from text prompts using Google's Imagen models. When executed, the node: 1. Validates the provided connection ID and prompt 2. Configures the selected model with all specified parameters 3. Sets up generation parameters including number of images, aspect ratio, and safety settings 4. Sends an image generation request to the Imagen API 5. Saves the generated images to a temporary directory 6. Returns structured information about the generated images including file paths and metadata",
@@ -164,7 +164,7 @@
       ]
     },
     "GenerateText": {
-      "namespace": "Core.GoogleGemini.GenerateText",
+      "namespace": "Robomotion.GoogleGemini.Content.GenerateText",
       "name": "GenerateText",
       "summary": "Generates text using Google Gemini models with optional file inputs, advanced reasoning, and tool capabilities.",
       "howItWorks": "The Generate Text node creates text content using Google Gemini models with multimodal inputs. When executed: 1. Validates connection ID/API key and user prompt 2. Configures the selected model with all parameters 3. Processes local files (max 20MB each) and uploaded files 4. Sets up thinking configuration based on model and mode 5. Configures safety settings and generation parameters 6. Sends generation request to Gemini API (or via Robomotion gateway) 7. Handles response as complete result or stream 8. Returns generated text in specified format",
@@ -207,7 +207,7 @@
       ]
     },
     "GenerateVideos": {
-      "namespace": "Core.GoogleGemini.GenerateVideos",
+      "namespace": "Robomotion.GoogleGemini.Videos.GenerateVideos",
       "name": "GenerateVideos",
       "summary": "Generates videos from text prompts using Google's Veo models.",
       "howItWorks": "The Generate Videos node creates videos from text prompts using Google's Veo models. When executed, the node: 1. Validates the provided connection ID and video prompt 2. Configures the selected model with all specified parameters 3. Sets up generation parameters including aspect ratio and person generation settings 4. Handles reference image input for image-to-video generation (Veo 2 only) 5. Sends a video generation request to the Veo API 6. Polls for completion status until the operation finishes 7. Saves the generated videos to a temporary directory 8. Returns structured information about the generated videos including file paths and metadata",
@@ -230,7 +230,7 @@
       ]
     },
     "GetFile": {
-      "namespace": "Core.GoogleGemini.GetFile",
+      "namespace": "Robomotion.GoogleGemini.Files.GetFile",
       "name": "GetFile",
       "summary": "Retrieves information about a previously uploaded file from Google's Gemini API.",
       "howItWorks": "The Get File node retrieves information about a previously uploaded file from Google's Gemini API. When executed, the node: 1. Validates the provided connection ID and file URI 2. Sends a request to the Gemini API to retrieve file information 3. Returns detailed information about the file including: * URI and name * Display name * MIME type * Size in bytes * Creation and update times * Expiration time (if applicable) * Processing state * Error information (if any) * Video metadata (for video files) * Additional metadata",
@@ -253,7 +253,7 @@
       ]
     },
     "ListFiles": {
-      "namespace": "Core.GoogleGemini.ListFiles",
+      "namespace": "Robomotion.GoogleGemini.Files.ListFiles",
       "name": "ListFiles",
       "summary": "Lists files that have been uploaded to Google's Gemini API with pagination support.",
       "howItWorks": "The List Files node retrieves a list of files that have been uploaded to Google's Gemini API with support for pagination. When executed, the node: 1. Validates the provided connection ID 2. Configures pagination parameters including page size and page token 3. Sends a request to the Gemini API to list files 4. Processes the results, filtering expired files if requested 5. Returns detailed information about each file including: * URI and name * Display name * MIME type * Size in bytes * Creation and update times * Expiration time (if applicable) * Processing state * Expiration status 6. Provides pagination support with next page token 7. Includes statistics about the files such as total size and counts by state",
@@ -277,7 +277,7 @@
       ]
     },
     "ListModels": {
-      "namespace": "Core.GoogleGemini.ListModels",
+      "namespace": "Robomotion.GoogleGemini.Models.ListModels",
       "name": "ListModels",
       "summary": "Lists available models from Google's Gemini API with detailed information and filtering capabilities.",
       "howItWorks": "The List Models node retrieves information about available models from Google's Gemini API with support for filtering and pagination. When executed, the node: 1. Validates the provided connection ID 2. Configures pagination parameters including page size and page token 3. Applies any specified filters to narrow down the model list 4. Sends a request to the Gemini API to list models 5. Processes the results and categorizes models by type 6. Returns detailed information about each model including: * Name and display name * Version information * Description * Token limits (input and output) * Supported generation methods * Additional metadata and capabilities 7. Provides pagination support with next page token 8. Includes statistics about the models such as counts by category and supported methods",
@@ -304,7 +304,7 @@
       ]
     },
     "SendChatMessage": {
-      "namespace": "Core.GoogleGemini.SendChatMessage",
+      "namespace": "Robomotion.GoogleGemini.Chat.SendChatMessage",
       "name": "SendChatMessage",
       "summary": "Sends a message in a chat conversation with Google's Gemini API, maintaining conversation history.",
       "howItWorks": "The Send Chat Message node sends a message in a chat conversation with Google's Gemini API while maintaining conversation history. When executed, the node: 1. Validates the provided connection ID and user prompt 2. Processes any chat history to maintain context 3. Configures the selected model with all specified parameters 4. Processes any local files or uploaded files to include as input 5. Sets up safety settings and generation parameters 6. Creates a chat session with the Gemini API 7. Sends the message and receives a response 8. Handles the response either as a complete result or as a stream 9. Returns the model's response and updated chat history",
@@ -328,7 +328,7 @@
       ]
     },
     "connect": {
-      "namespace": "Core.GoogleGemini.Connect",
+      "namespace": "Robomotion.GoogleGemini.Connect",
       "name": "Connect",
       "summary": "Establishes a connection to Google's Gemini API using an API key.",
       "howItWorks": "The Connect node establishes a connection to Google's Gemini API using the provided API key. When executed, the node: 1. Retrieves the API key from the credentials 2. Creates a client configuration with the API key 3. Initializes a new Gemini client with the configuration 4. Generates a unique connection ID 5. Stores the client for use by other nodes 6. Returns the connection ID as output",
@@ -340,10 +340,45 @@
         "The API key should be stored as a credential for security",
         "Each connection creates a unique client instance",
         "The connection remains active until the workflow ends or an explicit disconnect"
+      ],
+      "credentials": [
+        {
+          "name": "api_key",
+          "title": "API Key",
+          "description": "Use a Google AI Studio API key for authentication. Free tier available with usage limits.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "password",
+              "required": true,
+              "placeholder": "AIza...",
+              "description": "Your Google AI Studio API key"
+            }
+          ],
+          "help": [
+            "1. Go to Google AI Studio (aistudio.google.com)",
+            "2. Sign in with your Google account",
+            "3. Click 'Get API Key' in the top-right corner",
+            "4. Create a new API key or use an existing one",
+            "5. Copy and paste the API key here"
+          ],
+          "resources": [
+            {
+              "label": "Google AI Studio",
+              "url": "https://aistudio.google.com/apikey"
+            },
+            {
+              "label": "Gemini API Documentation",
+              "url": "https://ai.google.dev/gemini-api/docs"
+            }
+          ]
+        }
       ]
     },
     "disconnect": {
-      "namespace": "Core.GoogleGemini.Disconnect",
+      "namespace": "Robomotion.GoogleGemini.Disconnect",
       "name": "Disconnect",
       "summary": "Disconnects from Google's Gemini API and releases the connection resources.",
       "howItWorks": "The Disconnect node releases the connection resources for a Google Gemini API connection. When executed, the node: 1. Validates the provided connection ID 2. Removes the client associated with the connection ID from the internal store 3. Frees up any resources associated with the connection",

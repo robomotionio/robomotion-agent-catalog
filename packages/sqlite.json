@@ -4,7 +4,7 @@
   "description": "## Overview The SQLite package provides database connectivity for SQLite, a lightweight file-based database. Use it when you need local data storage, querying, or when you need a simple database without server infrastructure.",
   "nodes": {
     "Commit": {
-      "namespace": "Core.Sqlite.Commit",
+      "namespace": "Robomotion.SQLite.Commit",
       "name": "Commit",
       "summary": "Commits a SQLite database transaction.",
       "howItWorks": "The Commit node is used to commit a SQLite database transaction. When executed, the node: 1. Validates the provided Transaction Id input 2. Acquires a mutex lock to ensure thread safety 3. Looks up the transaction in the SQLite transaction store 4. Commits the transaction if found 5. Releases the mutex lock",
@@ -19,7 +19,7 @@
       ]
     },
     "Connect": {
-      "namespace": "Core.Sqlite.Connect",
+      "namespace": "Robomotion.SQLite.Connect",
       "name": "Connect",
       "summary": "Establishes a connection to a SQLite database.",
       "howItWorks": "The Connect node establishes a connection to a SQLite database using the provided connection string. When executed, the node: 1. Validates the provided Connection String option 2. Creates a new SQLiteConnection object with the connection string 3. Generates a unique connection identifier (GUID) 4. Acquires a mutex lock to ensure thread safety 5. Opens the database connection 6. Stores the connection in the SQLite connection pool with the GUID as key 7. Releases the mutex lock 8. Returns the connection identifier as output",
@@ -35,7 +35,7 @@
       ]
     },
     "Create": {
-      "namespace": "Core.Sqlite.Create",
+      "namespace": "Robomotion.SQLite.Create",
       "name": "Create",
       "summary": "Creates a new SQLite database file.",
       "howItWorks": "The Create Database node creates a new SQLite database file at the specified path. When executed, the node: 1. Validates the provided DB File Path input 2. Checks if a file already exists at the specified path 3. If a file exists and Overwrite If Exists is true, deletes the existing file 4. If a file exists and Overwrite If Exists is false, throws an error 5. Creates a new SQLite database file at the specified path",
@@ -51,7 +51,7 @@
       ]
     },
     "Disconnect": {
-      "namespace": "Core.Sqlite.Disconnect",
+      "namespace": "Robomotion.SQLite.Disconnect",
       "name": "Disconnect",
       "summary": "Closes and disconnects from a SQLite database connection.",
       "howItWorks": "The Disconnect node closes and removes a SQLite database connection from the connection pool. When executed, the node: 1. Validates the provided Connection Id input 2. Acquires a mutex lock to ensure thread safety 3. Looks up the connection in the SQLite connection pool 4. Throws an error if the connection is not found 5. Closes the database connection 6. Removes the connection from the SQLite connection pool 7. Releases the mutex lock",
@@ -67,7 +67,7 @@
       ]
     },
     "Export": {
-      "namespace": "Core.Sqlite.Export",
+      "namespace": "Robomotion.SQLite.Export",
       "name": "Export",
       "summary": "Exports the results of a SQL query to a file.",
       "howItWorks": "The Export Query node executes a SQL query and exports the results to a file. When executed, the node: 1. Validates the provided Connection Id and Export Path inputs 2. Looks up the database connection in the SQLite connection pool 3. If provided, looks up the transaction in the SQLite transaction store 4. Deserializes message data for use in SQL template variables 5. Renders the SQL query using template variables with Stubble template engine 6. HTML decodes the rendered SQL query 7. Creates and executes a SQLite command with the rendered query 8. Reads the query results using a data reader 9. Writes the column headers and data rows to the specified export file 10. Uses the selected separator character between values",
@@ -88,7 +88,7 @@
       ]
     },
     "Insert": {
-      "namespace": "Core.Sqlite.Insert",
+      "namespace": "Robomotion.SQLite.Insert",
       "name": "Insert",
       "summary": "Inserts data into a SQLite database table.",
       "howItWorks": "The Insert Table node inserts data into a SQLite database table. When executed, the node: 1. Validates the provided Connection Id and Table Name inputs 2. Validates that Table Data exists 3. Looks up the database connection in the SQLite connection pool 4. If provided, looks up the transaction in the SQLite transaction store 5. For each row in the Table Data: * Clears previous command parameters * For each column in the row: - Constructs an INSERT command using the table name and column names - Adds the column value as a parameter * Executes the INSERT command The node supports different conflict resolution strategies: * Standard INSERT (default) - Fails on unique constraint violations * INSERT OR REPLACE (when Replace is true) - Replaces existing rows with the same primary key * INSERT OR IGNORE (when Ignore Conflicts is true) - Skips rows that would cause unique constraint violations",
@@ -108,7 +108,7 @@
       ]
     },
     "NonQuery": {
-      "namespace": "Core.Sqlite.NonQuery",
+      "namespace": "Robomotion.SQLite.NonQuery",
       "name": "NonQuery",
       "summary": "Executes a SQL non-query command (INSERT, UPDATE, DELETE) on a SQLite database.",
       "howItWorks": "The Execute Non Query node runs a SQL command that doesn't return data (INSERT, UPDATE, DELETE). When executed, the node: 1. Validates the provided Connection Id input 2. Looks up the database connection in the SQLite connection pool 3. If provided, looks up the transaction in the SQLite transaction store 4. Deserializes message data for use in SQL template variables 5. Renders the SQL query using template variables with Stubble template engine 6. HTML decodes the rendered SQL query 7. Creates and executes a SQLite command with the rendered query using ExecuteNonQuery() 8. Returns the number of affected rows as output",
@@ -127,7 +127,7 @@
       ]
     },
     "Query": {
-      "namespace": "Core.Sqlite.Query",
+      "namespace": "Robomotion.SQLite.Query",
       "name": "Query",
       "summary": "Executes a SQL query command (SELECT) on a SQLite database and returns the results.",
       "howItWorks": "The Execute Query node runs a SQL SELECT command and returns the results. When executed, the node: 1. Validates the provided Connection Id input 2. Looks up the database connection in the SQLite connection pool 3. If provided, looks up the transaction in the SQLite transaction store 4. Deserializes message data for use in SQL template variables 5. Renders the SQL query using template variables with Stubble template engine 6. HTML decodes the rendered SQL query 7. Creates and executes a SQLite command with the rendered query 8. Reads the query results using a data reader 9. Loads the results into a DataTable 10. Converts the DataTable to a Table object 11. Returns the Table object as output",
@@ -147,7 +147,7 @@
       ]
     },
     "Start": {
-      "namespace": "Core.Sqlite.Start",
+      "namespace": "Robomotion.SQLite.Start",
       "name": "Start",
       "summary": "Starts a new SQLite database transaction.",
       "howItWorks": "The Start Transaction node begins a new SQLite database transaction. When executed, the node: 1. Validates the provided Connection Id input 2. Acquires a mutex lock to ensure thread safety 3. Looks up the connection in the SQLite connection pool 4. Throws an error if the connection is not found 5. Generates a unique transaction identifier (GUID) 6. Begins a new transaction on the database connection 7. Stores the transaction in the SQLite transaction store with the GUID as key 8. Releases the mutex lock 9. Returns the transaction identifier as output",

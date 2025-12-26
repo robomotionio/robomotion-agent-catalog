@@ -4,17 +4,82 @@
   "description": "## Overview The Oracle package provides database connectivity for Oracle Database. Use it when you need to query data, insert records, execute statements, or perform transactions against Oracle databases.",
   "nodes": {
     "Commit": {
-      "namespace": "Core.Oracle.Commit",
+      "namespace": "Robomotion.Oracle.Commit",
       "name": "Commit",
       "summary": "Commits a transaction in the Oracle database.",
       "bestPractices": [
         "The transaction must have been previously started using the Start Transaction node",
         "The transaction ID must be valid and correspond to an active transaction",
         "After committing, the transaction is removed from the transactions dictionary"
+      ],
+      "credentials": [
+        {
+          "name": "oracle_database",
+          "title": "Oracle Database",
+          "description": "Oracle database connection with server, port, SID/ServiceName, and authentication",
+          "fields": [
+            {
+              "name": "type",
+              "title": "Database Type",
+              "type": "hidden"
+            },
+            {
+              "name": "server",
+              "title": "Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "localhost",
+              "description": "Oracle server hostname or IP address"
+            },
+            {
+              "name": "port",
+              "title": "Port",
+              "type": "text",
+              "placeholder": "1521",
+              "description": "Oracle listener port (default: 1521)"
+            },
+            {
+              "name": "sid",
+              "title": "SID / Service Name",
+              "type": "text",
+              "required": true,
+              "placeholder": "ORCL",
+              "description": "Oracle System Identifier (SID) or Service Name"
+            },
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "Username",
+              "description": "Oracle database username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "placeholder": "Password",
+              "description": "Oracle database password"
+            }
+          ],
+          "help": [
+            "1. Enter the Oracle server hostname or IP address",
+            "2. Specify the listener port (default is 1521)",
+            "3. Enter the SID or Service Name for your Oracle instance",
+            "4. Provide your Oracle credentials (username and password)"
+          ],
+          "resources": [
+            {
+              "label": "Oracle Documentation",
+              "url": "https://docs.oracle.com/en/database/"
+            }
+          ]
+        }
       ]
     },
     "Connect": {
-      "namespace": "Core.Oracle.Connect",
+      "namespace": "Robomotion.Oracle.Connect",
       "name": "Connect",
       "summary": "Establishes a connection to an Oracle database.",
       "howItWorks": "The Connect node establishes a connection to an Oracle database by: 1. Collecting the connection parameters (Host Name, Port, SID/Service Name, Credentials) 2. Generating a connection string based on the provided parameters 3. Creating an OracleConnection object with the connection string 4. Opening the connection to the database 5. Storing the connection in a shared connections dictionary with a unique GUID 6. Returning the connection ID as output",
@@ -29,10 +94,75 @@
         "The connection ID must be used in subsequent database operations",
         "Connections should be properly closed using the Disconnect node when no longer needed",
         "The default Oracle port is 1521"
+      ],
+      "credentials": [
+        {
+          "name": "oracle_database",
+          "title": "Oracle Database",
+          "description": "Oracle database connection with server, port, SID/ServiceName, and authentication",
+          "fields": [
+            {
+              "name": "type",
+              "title": "Database Type",
+              "type": "hidden"
+            },
+            {
+              "name": "server",
+              "title": "Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "localhost",
+              "description": "Oracle server hostname or IP address"
+            },
+            {
+              "name": "port",
+              "title": "Port",
+              "type": "text",
+              "placeholder": "1521",
+              "description": "Oracle listener port (default: 1521)"
+            },
+            {
+              "name": "sid",
+              "title": "SID / Service Name",
+              "type": "text",
+              "required": true,
+              "placeholder": "ORCL",
+              "description": "Oracle System Identifier (SID) or Service Name"
+            },
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "Username",
+              "description": "Oracle database username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "placeholder": "Password",
+              "description": "Oracle database password"
+            }
+          ],
+          "help": [
+            "1. Enter the Oracle server hostname or IP address",
+            "2. Specify the listener port (default is 1521)",
+            "3. Enter the SID or Service Name for your Oracle instance",
+            "4. Provide your Oracle credentials (username and password)"
+          ],
+          "resources": [
+            {
+              "label": "Oracle Documentation",
+              "url": "https://docs.oracle.com/en/database/"
+            }
+          ]
+        }
       ]
     },
     "Create": {
-      "namespace": "Core.Oracle.Create",
+      "namespace": "Robomotion.Oracle.Create",
       "name": "Create",
       "summary": "Creates a new Oracle database file.",
       "bestPractices": [
@@ -42,7 +172,7 @@
       ]
     },
     "Disconnect": {
-      "namespace": "Core.Oracle.Disconnect",
+      "namespace": "Robomotion.Oracle.Disconnect",
       "name": "Disconnect",
       "summary": "Closes and disconnects from an Oracle database connection.",
       "howItWorks": "The Disconnect node closes an Oracle database connection by: 1. Validating the provided Connection Id 2. Looking up the connection in the shared connections dictionary 3. Closing the database connection 4. Removing the connection from the connections dictionary",
@@ -54,7 +184,7 @@
       ]
     },
     "Insert": {
-      "namespace": "Core.Oracle.Insert",
+      "namespace": "Robomotion.Oracle.Insert",
       "name": "Insert",
       "summary": "Inserts data into an Oracle database table.",
       "howItWorks": "The Insert node inserts data into an Oracle database table by: 1. Validating the provided Connection Id and Table Name 2. Looking up the connection and transaction in the shared dictionaries 3. Creating an INSERT command for each row in the table data 4. Executing the INSERT command for each row 5. Using a transaction if a Transaction Id is provided",
@@ -70,10 +200,75 @@
         "The Table Data should be structured as a table with rows and columns",
         "When using the Replace option, existing rows with matching primary keys will be replaced",
         "For large datasets, consider using batch operations for better performance"
+      ],
+      "credentials": [
+        {
+          "name": "oracle_database",
+          "title": "Oracle Database",
+          "description": "Oracle database connection with server, port, SID/ServiceName, and authentication",
+          "fields": [
+            {
+              "name": "type",
+              "title": "Database Type",
+              "type": "hidden"
+            },
+            {
+              "name": "server",
+              "title": "Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "localhost",
+              "description": "Oracle server hostname or IP address"
+            },
+            {
+              "name": "port",
+              "title": "Port",
+              "type": "text",
+              "placeholder": "1521",
+              "description": "Oracle listener port (default: 1521)"
+            },
+            {
+              "name": "sid",
+              "title": "SID / Service Name",
+              "type": "text",
+              "required": true,
+              "placeholder": "ORCL",
+              "description": "Oracle System Identifier (SID) or Service Name"
+            },
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "Username",
+              "description": "Oracle database username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "placeholder": "Password",
+              "description": "Oracle database password"
+            }
+          ],
+          "help": [
+            "1. Enter the Oracle server hostname or IP address",
+            "2. Specify the listener port (default is 1521)",
+            "3. Enter the SID or Service Name for your Oracle instance",
+            "4. Provide your Oracle credentials (username and password)"
+          ],
+          "resources": [
+            {
+              "label": "Oracle Documentation",
+              "url": "https://docs.oracle.com/en/database/"
+            }
+          ]
+        }
       ]
     },
     "NonQuery": {
-      "namespace": "Core.Oracle.NonQuery",
+      "namespace": "Robomotion.Oracle.NonQuery",
       "name": "NonQuery",
       "summary": "Executes non-query SQL statements (UPDATE, DELETE, INSERT) on an Oracle database.",
       "howItWorks": "The Execute Non Query node runs SQL statements that don't return data by: 1. Validating the provided Connection Id 2. Looking up the connection and transaction in the shared dictionaries 3. Using a template engine to render the SQL query with context data 4. Creating an OracleCommand with the rendered SQL 5. Executing the command using ExecuteNonQuery()",
@@ -90,10 +285,75 @@
         "When using a Transaction Id, the statement will be part of that transaction",
         "The node does not return any data, only executes the statement",
         "For SELECT statements, use the Execute Query node instead"
+      ],
+      "credentials": [
+        {
+          "name": "oracle_database",
+          "title": "Oracle Database",
+          "description": "Oracle database connection with server, port, SID/ServiceName, and authentication",
+          "fields": [
+            {
+              "name": "type",
+              "title": "Database Type",
+              "type": "hidden"
+            },
+            {
+              "name": "server",
+              "title": "Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "localhost",
+              "description": "Oracle server hostname or IP address"
+            },
+            {
+              "name": "port",
+              "title": "Port",
+              "type": "text",
+              "placeholder": "1521",
+              "description": "Oracle listener port (default: 1521)"
+            },
+            {
+              "name": "sid",
+              "title": "SID / Service Name",
+              "type": "text",
+              "required": true,
+              "placeholder": "ORCL",
+              "description": "Oracle System Identifier (SID) or Service Name"
+            },
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "Username",
+              "description": "Oracle database username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "placeholder": "Password",
+              "description": "Oracle database password"
+            }
+          ],
+          "help": [
+            "1. Enter the Oracle server hostname or IP address",
+            "2. Specify the listener port (default is 1521)",
+            "3. Enter the SID or Service Name for your Oracle instance",
+            "4. Provide your Oracle credentials (username and password)"
+          ],
+          "resources": [
+            {
+              "label": "Oracle Documentation",
+              "url": "https://docs.oracle.com/en/database/"
+            }
+          ]
+        }
       ]
     },
     "Query": {
-      "namespace": "Core.Oracle.Query",
+      "namespace": "Robomotion.Oracle.Query",
       "name": "Query",
       "summary": "Executes SELECT SQL statements on an Oracle database and returns the results.",
       "howItWorks": "The Execute Query node retrieves data from an Oracle database by: 1. Validating the provided Connection Id 2. Looking up the connection and transaction in the shared dictionaries 3. Using a template engine to render the SQL query with context data 4. Creating an OracleCommand with the rendered SQL 5. Executing the command using ExecuteReader() to get the results 6. Loading the results into a DataTable 7. Converting the DataTable to a Table object 8. Outputting the Table object as the result",
@@ -110,10 +370,75 @@
         "For non-SELECT statements (UPDATE, DELETE, INSERT), use the Execute Non Query node instead",
         "When using a Transaction Id, the query will be part of that transaction",
         "Large result sets may impact performance; consider using LIMIT clauses when appropriate"
+      ],
+      "credentials": [
+        {
+          "name": "oracle_database",
+          "title": "Oracle Database",
+          "description": "Oracle database connection with server, port, SID/ServiceName, and authentication",
+          "fields": [
+            {
+              "name": "type",
+              "title": "Database Type",
+              "type": "hidden"
+            },
+            {
+              "name": "server",
+              "title": "Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "localhost",
+              "description": "Oracle server hostname or IP address"
+            },
+            {
+              "name": "port",
+              "title": "Port",
+              "type": "text",
+              "placeholder": "1521",
+              "description": "Oracle listener port (default: 1521)"
+            },
+            {
+              "name": "sid",
+              "title": "SID / Service Name",
+              "type": "text",
+              "required": true,
+              "placeholder": "ORCL",
+              "description": "Oracle System Identifier (SID) or Service Name"
+            },
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "Username",
+              "description": "Oracle database username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "placeholder": "Password",
+              "description": "Oracle database password"
+            }
+          ],
+          "help": [
+            "1. Enter the Oracle server hostname or IP address",
+            "2. Specify the listener port (default is 1521)",
+            "3. Enter the SID or Service Name for your Oracle instance",
+            "4. Provide your Oracle credentials (username and password)"
+          ],
+          "resources": [
+            {
+              "label": "Oracle Documentation",
+              "url": "https://docs.oracle.com/en/database/"
+            }
+          ]
+        }
       ]
     },
     "Start": {
-      "namespace": "Core.Oracle.Start",
+      "namespace": "Robomotion.Oracle.Start",
       "name": "Start",
       "summary": "Starts a new transaction in an Oracle database.",
       "howItWorks": "The Start Transaction node begins a new database transaction by: 1. Validating the provided Connection Id 2. Looking up the connection in the shared connections dictionary 3. Generating a unique GUID for the transaction 4. Beginning a transaction on the database connection using BeginTransaction() 5. Storing the transaction in the shared transactions dictionary 6. Returning the transaction ID as output",
@@ -127,6 +452,71 @@
         "Transactions should be committed using the Commit Transaction node or rolled back using a rollback mechanism",
         "Transactions help ensure data consistency and can be rolled back in case of errors",
         "Each transaction is isolated from other transactions until committed"
+      ],
+      "credentials": [
+        {
+          "name": "oracle_database",
+          "title": "Oracle Database",
+          "description": "Oracle database connection with server, port, SID/ServiceName, and authentication",
+          "fields": [
+            {
+              "name": "type",
+              "title": "Database Type",
+              "type": "hidden"
+            },
+            {
+              "name": "server",
+              "title": "Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "localhost",
+              "description": "Oracle server hostname or IP address"
+            },
+            {
+              "name": "port",
+              "title": "Port",
+              "type": "text",
+              "placeholder": "1521",
+              "description": "Oracle listener port (default: 1521)"
+            },
+            {
+              "name": "sid",
+              "title": "SID / Service Name",
+              "type": "text",
+              "required": true,
+              "placeholder": "ORCL",
+              "description": "Oracle System Identifier (SID) or Service Name"
+            },
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "Username",
+              "description": "Oracle database username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "placeholder": "Password",
+              "description": "Oracle database password"
+            }
+          ],
+          "help": [
+            "1. Enter the Oracle server hostname or IP address",
+            "2. Specify the listener port (default is 1521)",
+            "3. Enter the SID or Service Name for your Oracle instance",
+            "4. Provide your Oracle credentials (username and password)"
+          ],
+          "resources": [
+            {
+              "label": "Oracle Documentation",
+              "url": "https://docs.oracle.com/en/database/"
+            }
+          ]
+        }
       ]
     }
   }

@@ -4,7 +4,7 @@
   "description": "## What is MCP? The Model Context Protocol (MCP) is an open standard that enables AI applications to securely connect to data sources and tools. It provides a unified way for AI systems to:",
   "nodes": {
     "call-tool": {
-      "namespace": "Core.Mcp.CallTool",
+      "namespace": "Robomotion.MCP.Client.CallTool",
       "name": "CallTool",
       "summary": "Calls a tool on an MCP server with specified arguments and returns the result. This node enables your automation to execute functions exposed by MCP servers.",
       "howItWorks": "The Call Tool node executes a tool on an MCP server: 1. **Client Lookup** - Retrieves the MCP client using the provided Client ID 2. **Argument Processing** - Converts arguments to the proper format (supports JSON string, object, or map) 3. **Request Creation** - Creates an MCP CallToolRequest with the tool name and arguments 4. **Tool Execution** - Sends the request to the MCP server and waits for response 5. **Response Processing** - Extracts content from the response (text or image content) 6. **JSON Formatting** - Converts the result to JSON format for output The response contains a `content` array where each item has: - `type`: Content type (`text` or `image`) - `text`: Text content (for text responses) - `data`/`mimeType`: Image data (for image responses)",
@@ -20,7 +20,7 @@
       ]
     },
     "connect": {
-      "namespace": "Core.Mcp.Connect",
+      "namespace": "Robomotion.MCP.Client.Connect",
       "name": "Connect",
       "summary": "Establishes connections to one or more MCP servers using a JSON configuration. This is the entry point for all MCP client operations, enabling your automation to interact with MCP servers.",
       "howItWorks": "The Connect node establishes connections to MCP servers: 1. **Configuration Parsing** - Parses the JSON configuration to extract server definitions 2. **Server Initialization** - For each server in the configuration: - Creates a stdio-based MCP client with the specified command and arguments - Applies environment variables if provided - Initializes the connection with protocol version 1.0 - Performs MCP handshake 3. **Client Registration** - Stores successful connections in a global registry 4. **Output Generation** - Returns client IDs for use in subsequent nodes 5. **Error Handling** - Continues with other servers if one fails, reports all errors",
@@ -32,7 +32,7 @@
       ]
     },
     "get-prompt": {
-      "namespace": "Core.Mcp.GetPrompt",
+      "namespace": "Robomotion.MCP.Client.GetPrompt",
       "name": "GetPrompt",
       "summary": "Retrieves a prompt from an MCP server with optional parameters and returns the rendered prompt content. This node enables your automation to fetch dynamic prompt templates from MCP servers.",
       "howItWorks": "The Get Prompt node retrieves prompts from MCP servers: 1. **Client Lookup** - Retrieves the MCP client using the provided Client ID 2. **Parameter Processing** - Converts parameters to map[string]string format 3. **Request Creation** - Creates an MCP GetPromptRequest with name and parameters 4. **Prompt Retrieval** - Sends request to server and receives prompt response 5. **Content Extraction** - Extracts text content from the prompt messages 6. **Output** - Returns the rendered prompt content",
@@ -48,7 +48,7 @@
       ]
     },
     "list-prompts": {
-      "namespace": "Core.Mcp.ListPrompts",
+      "namespace": "Robomotion.MCP.Client.ListPrompts",
       "name": "ListPrompts",
       "summary": "Discovers all available prompts on an MCP server. This node returns a list of prompts with their names, descriptions, and parameters, enabling dynamic prompt discovery.",
       "howItWorks": "1. **Client Lookup** - Retrieves the MCP client using the provided Client ID 2. **List Request** - Sends a ListPromptsRequest to the MCP server 3. **Response Processing** - Extracts prompt information from the server response 4. **Array Creation** - Converts prompts to an array of objects with name, description, and arguments 5. **Output** - Returns the prompts array",
@@ -58,19 +58,19 @@
       ]
     },
     "list-resources": {
-      "namespace": "Core.Mcp.ListResources",
+      "namespace": "Robomotion.MCP.Client.ListResources",
       "name": "ListResources",
       "summary": "Discovers all available resources on an MCP server. This node returns a list of resources with their URIs, names, descriptions, and MIME types, enabling dynamic resource discovery.",
       "howItWorks": "1. **Client Lookup** - Retrieves the MCP client using the provided Client ID 2. **List Request** - Sends a ListResourcesRequest to the MCP server 3. **Response Processing** - Extracts resource information from the server response 4. **Array Creation** - Converts resources to an array of objects 5. **Output** - Returns the resources array"
     },
     "list-tools": {
-      "namespace": "Core.Mcp.ListTools",
+      "namespace": "Robomotion.MCP.Client.ListTools",
       "name": "ListTools",
       "summary": "Discovers all available tools on an MCP server. This node returns a list of tools with their names, descriptions, and input schemas, enabling dynamic tool discovery and validation.",
       "howItWorks": "1. **Client Lookup** - Retrieves the MCP client using the provided Client ID 2. **List Request** - Sends a ListToolsRequest to the MCP server 3. **Response Processing** - Extracts tool information including names, descriptions, and JSON schemas 4. **Array Creation** - Converts tools to an array of objects with metadata 5. **Output** - Returns the tools array"
     },
     "listen": {
-      "namespace": "Core.Mcp.Listen",
+      "namespace": "Robomotion.MCP.Server.Listen",
       "name": "Listen",
       "summary": "Starts an MCP (Model Context Protocol) server that listens for incoming client connections via Server-Sent Events (SSE). This is the core node for building MCP servers that expose tools, prompts, and resources to AI applications.",
       "howItWorks": "The Listen node creates an MCP server and registers all connected capabilities when the flow starts: 1. **Initialization** - When the flow starts, the node waits for the runtime to be ready 2. **Registration** - Scans all connected Tool In, Prompt In, and Resource In nodes on the respective ports 3. **Server Setup** - Registers each capability with the MCP server using their configurations 4. **SSE Server** - Starts an HTTP server that provides SSE transport for MCP protocol 5. **Request Routing** - Incoming requests are routed to the appropriate Tool In/Prompt In/Resource In node 6. **Response Handling** - Results from Tool Out/Prompt Out/Resource Out nodes are sent back to clients",
@@ -81,7 +81,7 @@
       ]
     },
     "prompt-in": {
-      "namespace": "Core.Mcp.PromptIn",
+      "namespace": "Robomotion.MCP.Server.PromptIn",
       "name": "PromptIn",
       "summary": "Defines a prompt template that can be requested by MCP clients. Prompt In nodes receive requests with parameters and trigger your automation flow to generate dynamic prompt content.",
       "howItWorks": "When a Prompt In node is connected to a Listen node's **prompts** port: 1. **Registration** - The prompt is registered with the MCP server at startup 2. **Client Request** - When a client calls `GetPrompt` with this prompt's name and parameters 3. **Triggering** - The Prompt In node receives the request and outputs the prompt name and parameters 4. **Processing** - Your flow processes the request (e.g., render template, fetch data) 5. **Response** - A Prompt Out node sends the generated content back to the client The Prompt In node uses Handlebars templating for parameter substitution. Variables in the template (like `{{name}}` or `{{company}}`) are replaced with values from the client's parameter object.",
@@ -92,7 +92,7 @@
       ]
     },
     "prompt-out": {
-      "namespace": "Core.Mcp.PromptOut",
+      "namespace": "Robomotion.MCP.Server.PromptOut",
       "name": "PromptOut",
       "summary": "Returns the result of a prompt request to the MCP client. This node completes the prompt generation flow by sending the rendered prompt content back to the requesting client.",
       "howItWorks": "The Prompt Out node completes the prompt generation workflow: 1. **Request Tracking** - Receives the Caller ID that identifies the specific client request 2. **Channel Lookup** - Finds the response channel associated with this request 3. **Result Validation** - Validates that the result is a string 4. **Response Creation** - Creates an MCP-compliant prompt result with the content 5. **Client Delivery** - Sends the result back to the waiting client through the response channel The node creates a structured prompt response with: - A title (currently set to \"Code review assistance\") - An array of prompt messages with the role set to \"assistant\" - The result text as the message content",
@@ -106,7 +106,7 @@
       ]
     },
     "read-resource": {
-      "namespace": "Core.Mcp.ReadResource",
+      "namespace": "Robomotion.MCP.Client.ReadResource",
       "name": "ReadResource",
       "summary": "Reads the content of a resource from an MCP server. This node retrieves resource data (files, documents, API responses, etc.) from connected MCP servers.",
       "howItWorks": "The Read Resource node retrieves resource content from MCP servers: 1. **Client Lookup** - Retrieves the MCP client using the provided Client ID 2. **Request Creation** - Creates an MCP ReadResourceRequest with the URI 3. **Resource Reading** - Sends request to server and receives resource data 4. **Content Processing** - Extracts content based on type (text or blob) 5. **JSON Parsing** - If content looks like JSON, parses it to an object 6. **Output** - Returns content and MIME type",
@@ -122,7 +122,7 @@
       ]
     },
     "resource-in": {
-      "namespace": "Core.Mcp.ResourceIn",
+      "namespace": "Robomotion.MCP.Server.ResourceIn",
       "name": "ResourceIn",
       "summary": "Defines a resource that can be read by MCP clients. Resources are data sources (files, documents, API responses, database records) that clients can access through the MCP protocol. Resource In nodes receive read requests and trigger your automation to fetch and return the requested content.",
       "howItWorks": "When a Resource In node is connected to a Listen node's **resources** port: 1. **Registration** - The resource is registered with the MCP server at startup 2. **Discovery** - Clients can discover the resource via ListResources 3. **Client Request** - When a client calls ReadResource with the URI 4. **URI Matching** - The server matches the URI and extracts any template parameters 5. **Triggering** - The Resource In node receives the request with URI and parameters 6. **Processing** - Your flow fetches or generates the resource content 7. **Response** - A Resource Out node sends the content back to the client",
@@ -133,7 +133,7 @@
       ]
     },
     "resource-out": {
-      "namespace": "Core.Mcp.ResourceOut",
+      "namespace": "Robomotion.MCP.Server.ResourceOut",
       "name": "ResourceOut",
       "summary": "Returns the content of a resource to the MCP client. This node completes the resource retrieval flow by sending the requested resource data back to the requesting client.",
       "howItWorks": "The Resource Out node completes the resource retrieval workflow: 1. **Request Tracking** - Receives the Caller ID that identifies the specific client request 2. **Channel Lookup** - Finds the response channel associated with this request 3. **Data Validation** - Validates the Resource URI, Content Type, and Resource Data 4. **Content Type Handling** - Uses provided Content Type or defaults to `text/plain` 5. **Response Creation** - Creates an MCP-compliant resource result with the content 6. **Client Delivery** - Sends the result back to the waiting client through the response channel The node creates a structured resource response with: - Resource URI (identifies what was requested) - MIME type (describes content format) - Text content (the actual resource data)",
@@ -146,7 +146,7 @@
       ]
     },
     "tool-in": {
-      "namespace": "Core.Mcp.ToolIn",
+      "namespace": "Robomotion.MCP.Server.ToolIn",
       "name": "ToolIn",
       "summary": "Defines a tool that can be called by MCP clients. Tools are executable functions that perform specific operations when invoked by AI applications. Tool In nodes receive call requests with parameters and trigger your automation workflows to execute the tool logic.",
       "howItWorks": "When a Tool In node is connected to a Listen node's **tools** port: 1. **Registration** - The tool is registered with the MCP server at startup using the name, description, and argument schema 2. **Discovery** - Clients can discover the tool via ListTools 3. **Client Call** - When a client calls the tool with arguments 4. **Validation** - Arguments are validated against the JSON Schema 5. **Triggering** - The Tool In node receives the call and outputs the tool name and parameters 6. **Processing** - Your flow executes the tool logic 7. **Response** - A Tool Out node sends the result back to the client",
@@ -158,7 +158,7 @@
       ]
     },
     "tool-out": {
-      "namespace": "Core.Mcp.ToolOut",
+      "namespace": "Robomotion.MCP.Server.ToolOut",
       "name": "ToolOut",
       "summary": "Returns the result of a tool call to the MCP client. This node completes the tool execution flow by sending the tool's output back to the requesting client.",
       "howItWorks": "The Tool Out node completes the tool execution workflow: 1. **Request Tracking** - Receives the Caller ID that identifies the specific client request 2. **Channel Lookup** - Finds the response channel associated with this tool call 3. **Result Serialization** - Converts the result to JSON format 4. **Response Creation** - Creates an MCP-compliant tool result with the content 5. **Client Delivery** - Sends the result back to the waiting client through the response channel The node automatically marshals any result type to JSON and wraps it in a text content response that MCP clients can process.",

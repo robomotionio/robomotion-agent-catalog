@@ -4,7 +4,7 @@
   "description": "## Overview The FlexiCapture package connects with ABBYY FlexiCapture, an enterprise document processing solution. Use it when you need to extract structured data from documents like invoices, forms, contracts, and other business documents at scale.",
   "nodes": {
     "capture": {
-      "namespace": "Core.Flexicapture.Capture",
+      "namespace": "Robomotion.Flexicapture.Capture",
       "name": "Capture",
       "summary": "Processes documents using ABBYY FlexiCapture for OCR and intelligent data extraction. This node integrates with ABBYY FlexiCapture Engine to automatically recognize, classify, and extract structured data from various document types including invoices, forms, receipts, contracts, and other business documents.",
       "howItWorks": "The FlexiCapture node processes documents through the ABBYY FlexiCapture Engine by: 1. Loading the FlexiCapture project configuration from the specified .fcproj file 2. Initializing the FlexiCapture engine with the customer project ID and DLL path 3. Reading the input document from the specified path 4. Performing OCR and intelligent character recognition on the document 5. Applying document classification rules to identify document type 6. Extracting structured data fields according to the project definition 7. Validating extracted data against configured rules 8. Exporting results to the specified export path in the configured format"

@@ -4,7 +4,7 @@
   "description": "## Features - **Profile Information** - Extract detailed profile data including followers, following, bio, and verification status",
   "nodes": {
     "download-post-media": {
-      "namespace": "Core.Instagram.DownloadPostMedia",
+      "namespace": "Robomotion.Instagram.DownloadPostMedia",
       "name": "DownloadPostMedia",
       "summary": "Downloads media files (images and videos) from an Instagram post to a local directory. Supports both single posts and carousel posts with multiple images/videos.",
       "howItWorks": "The Download Post Media node retrieves and saves media from Instagram posts. When executed, it: 1. Validates the Session ID, Post Shortcode, and Output Directory 2. Extracts the shortcode from the URL if a full URL was provided 3. Creates the output directory if it doesn't exist 4. Retrieves the post data using the Instagram API 5. For carousel posts, iterates through all sidecar nodes 6. Downloads each media file (video or image) based on options 7. Names files using the pattern: `{shortcode}_{index}.{extension}` 8. Returns array of downloaded file paths and count",
@@ -31,7 +31,7 @@
       ]
     },
     "get-followers": {
-      "namespace": "Core.Instagram.GetFollowers",
+      "namespace": "Robomotion.Instagram.GetFollowers",
       "name": "GetFollowers",
       "summary": "Retrieves the list of followers for an Instagram profile with optional limits. Returns follower usernames, profile information, verification status, and engagement metrics.",
       "howItWorks": "The Get Followers node fetches the follower list from a profile. When executed, it: 1. Validates the Session ID and Username 2. Retrieves the profile using the Instagram API 3. Iterates through the profile's followers 4. For each follower, extracts profile information 5. Stops when Max Followers limit is reached or all followers are retrieved 6. Returns the followers array and count",
@@ -59,7 +59,7 @@
       ]
     },
     "get-following": {
-      "namespace": "Core.Instagram.GetFollowing",
+      "namespace": "Robomotion.Instagram.GetFollowing",
       "name": "GetFollowing",
       "summary": "Retrieves the list of accounts that an Instagram profile is following with optional limits. Returns usernames, profile information, verification status, and engagement metrics for each followed account.",
       "howItWorks": "The Get Following node fetches the list of accounts that a profile follows. When executed, it: 1. Validates the Session ID and Username 2. Retrieves the profile using the Instagram API 3. Iterates through the accounts the profile is following 4. For each account, extracts profile information 5. Stops when Max Following limit is reached or all accounts are retrieved 6. Returns the following array and count",
@@ -86,7 +86,7 @@
       ]
     },
     "get-highlights": {
-      "namespace": "Core.Instagram.GetHighlights",
+      "namespace": "Robomotion.Instagram.GetHighlights",
       "name": "GetHighlights",
       "summary": "Retrieves story highlights from an Instagram profile. Highlights are curated collections of expired stories that profile owners choose to keep permanently on their profile. Returns highlight albums with cover images, titles, and all stories within each highlight.",
       "howItWorks": "The Get Highlights node retrieves saved story highlights from a profile. When executed, it: 1. Validates the Session ID and Username 2. Retrieves the profile information 3. Fetches all highlight albums for the profile 4. For each highlight album: - Extracts album metadata (title, cover, item count) - Retrieves all story items within the highlight - Extracts media URLs and metadata for each story 5. Returns all highlights with their contained stories",
@@ -113,7 +113,7 @@
       ]
     },
     "get-post-comments": {
-      "namespace": "Core.Instagram.GetPostComments",
+      "namespace": "Robomotion.Instagram.GetPostComments",
       "name": "GetPostComments",
       "summary": "Retrieves comments from a specific Instagram post with optional limits. Returns comment text, author information, timestamps, likes, and reply counts.",
       "howItWorks": "The Get Post Comments node fetches comments from a specific post. When executed, it: 1. Validates the Session ID and Post Shortcode/URL 2. Extracts the shortcode from the URL if a full URL was provided 3. Retrieves the post using the Instagram API 4. Iterates through the post's comments 5. Extracts comment data including author details and engagement metrics 6. Stops when Max Comments limit is reached or all comments are retrieved 7. Returns the comments array and count",
@@ -139,7 +139,7 @@
       ]
     },
     "get-post-details": {
-      "namespace": "Core.Instagram.GetPostDetails",
+      "namespace": "Robomotion.Instagram.GetPostDetails",
       "name": "GetPostDetails",
       "summary": "Retrieves detailed information about a specific Instagram post using its shortcode or URL. Returns comprehensive post data including caption, engagement metrics, media URLs, location, tagged users, and carousel items.",
       "howItWorks": "The Get Post Details node fetches comprehensive information about a specific post. When executed, it: 1. Validates the Session ID and Post Shortcode/URL 2. Extracts the shortcode from the URL if a full URL was provided 3. Retrieves the post data from Instagram's API 4. For carousel posts (multiple images/videos): - Fetches all sidecar nodes - Extracts media URLs for each item 5. Compiles all post metadata and media information 6. Returns the complete post details object",
@@ -165,7 +165,7 @@
       ]
     },
     "get-profile-info": {
-      "namespace": "Core.Instagram.GetProfileInfo",
+      "namespace": "Robomotion.Instagram.GetProfileInfo",
       "name": "GetProfileInfo",
       "summary": "Retrieves detailed information about an Instagram profile including follower count, following count, bio, verification status, profile picture URL, and more.",
       "howItWorks": "The Get Profile Info node fetches comprehensive profile data from Instagram. When executed, it: 1. Validates that both Session ID and Username are provided 2. Retrieves the active session using the Session ID 3. Queries Instagram's API for the profile information 4. Extracts and structures all available profile data 5. Returns the profile information as a structured object",
@@ -190,7 +190,7 @@
       ]
     },
     "get-profile-posts": {
-      "namespace": "Core.Instagram.GetProfilePosts",
+      "namespace": "Robomotion.Instagram.GetProfilePosts",
       "name": "GetProfilePosts",
       "summary": "Retrieves posts from an Instagram profile with optional filtering and limits. Returns detailed post information including captions, likes, comments, hashtags, mentions, and media URLs.",
       "howItWorks": "The Get Profile Posts node fetches posts from a profile's feed. When executed, it: 1. Validates the Session ID and Username 2. Retrieves the profile using the Instagram API 3. Iterates through the profile's posts 4. Filters out videos if Include Videos is disabled 5. Extracts comprehensive data for each post 6. Stops when Max Posts limit is reached or all posts are retrieved 7. Returns the posts array and count",
@@ -216,7 +216,7 @@
       ]
     },
     "get-reels": {
-      "namespace": "Core.Instagram.GetReels",
+      "namespace": "Robomotion.Instagram.GetReels",
       "name": "GetReels",
       "summary": "Retrieves reels from an Instagram profile with optional limits. Reels are short-form vertical videos. Returns reel details including video URLs, captions, likes, view counts, and engagement metrics.",
       "howItWorks": "The Get Reels node fetches reels from a profile's content. When executed, it: 1. Validates the Session ID and Username 2. Retrieves the profile using the Instagram API 3. Iterates through the profile's posts 4. Filters for video posts with reel-specific typenames 5. Extracts comprehensive data for each reel 6. Stops when Max Reels limit is reached or all reels are retrieved 7. Returns the reels array and count Note: The node identifies reels by checking if posts are videos with typename 'GraphVideo' or 'XDTGraphVideo'.",
@@ -243,7 +243,7 @@
       ]
     },
     "get-stories": {
-      "namespace": "Core.Instagram.GetStories",
+      "namespace": "Robomotion.Instagram.GetStories",
       "name": "GetStories",
       "summary": "Retrieves currently active stories from an Instagram profile. Stories are temporary content that expire after 24 hours. Returns story details including media URLs, timestamps, captions, and expiration times.",
       "howItWorks": "The Get Stories node retrieves currently active stories from a profile. When executed, it: 1. Validates the Session ID and Username 2. Retrieves the profile to get the user ID 3. Fetches active stories for that user 4. Iterates through each story item 5. Extracts media URLs, captions, and metadata 6. Returns all story items with their expiration times",
@@ -271,7 +271,7 @@
       ]
     },
     "login": {
-      "namespace": "Core.Instagram.Login",
+      "namespace": "Robomotion.Instagram.Login",
       "name": "Login",
       "summary": "Authenticates with Instagram using your credentials and establishes a session for subsequent Instagram operations. Supports session persistence to enable faster logins and reduce authentication requests.",
       "howItWorks": "The Login node is the entry point for all Instagram automation workflows. When executed, it: 1. Retrieves your Instagram credentials from the vault 2. Checks if a session file exists at the specified path (if provided) 3. Attempts to load and validate the existing session 4. If no valid session exists, performs a fresh login with username and password 5. Saves the session to the specified path (if Save Session is enabled) 6. Returns a unique Session ID for use in subsequent operations Session persistence significantly improves performance by reusing authenticated sessions instead of logging in every time.",
@@ -292,10 +292,47 @@
         "ErrAuth",
         "ErrNetwork",
         "ErrRuntime"
+      ],
+      "credentials": [
+        {
+          "name": "login",
+          "title": "Instagram Login",
+          "description": "Instagram account credentials for authentication",
+          "default": true,
+          "fields": [
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "your_instagram_username",
+              "description": "Your Instagram username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "Your Instagram password"
+            }
+          ],
+          "help": [
+            "1. Enter your Instagram username",
+            "2. Enter your Instagram password",
+            "3. If you have 2FA enabled, consider using an app password or disabling 2FA temporarily",
+            "4. For better security, use a session file to avoid repeated logins"
+          ],
+          "resources": [
+            {
+              "label": "Instagram",
+              "url": "https://www.instagram.com"
+            }
+          ]
+        }
       ]
     },
     "logout": {
-      "namespace": "Core.Instagram.Logout",
+      "namespace": "Robomotion.Instagram.Logout",
       "name": "Logout",
       "summary": "Ends the Instagram session and cleans up resources. This node should be called when you're finished using Instagram operations to properly release the session.",
       "howItWorks": "The Logout node properly terminates an Instagram session and releases associated resources. When executed, it: 1. Validates that a Session ID is provided 2. Retrieves the Instaloader instance associated with the session 3. Calls the close method to properly terminate the connection 4. Removes the session from the internal registry 5. Returns a success status Even if the close operation fails, the session is removed from the registry to prevent resource leaks.",
@@ -315,7 +352,7 @@
       ]
     },
     "search-hashtag": {
-      "namespace": "Core.Instagram.SearchHashtag",
+      "namespace": "Robomotion.Instagram.SearchHashtag",
       "name": "SearchHashtag",
       "summary": "Searches for Instagram posts by hashtag and retrieves post details including captions, engagement metrics, and media URLs. Useful for discovering trending content, monitoring brand hashtags, and researching popular topics.",
       "howItWorks": "The Search Hashtag node discovers posts using a specific hashtag. When executed, it: 1. Validates the Session ID and Hashtag 2. Removes the # symbol if provided (accepts both formats) 3. Queries Instagram's hashtag search API 4. Iterates through posts containing the hashtag 5. Filters out videos if Include Videos is disabled 6. Extracts comprehensive data for each post 7. Stops when Max Posts limit is reached 8. Returns the posts array and count",

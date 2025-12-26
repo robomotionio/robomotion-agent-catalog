@@ -4,7 +4,7 @@
   "description": "## Overview The Net package provides HTTP communication capabilities for API integration and web operations. Use it when you need to call REST APIs, download files from URLs, or create webhook endpoints to receive HTTP requests.",
   "nodes": {
     "download-file": {
-      "namespace": "Core.Net.DownloadFile",
+      "namespace": "Core.Net.Download",
       "name": "DownloadFile",
       "summary": "Downloads a file from a given URL and saves it to the specified path on the local machine. Supports basic authentication.",
       "howItWorks": "The Download File node retrieves files from URLs and saves them locally: 1. **Input Validation:** - Validates and normalizes the URL (adds http:// if protocol is missing) - Parses the URL to ensure it's valid - Validates the download path or creates a temporary file if path is empty 2. **Authentication Setup:** - If credentials are provided, retrieves them from the vault - Sets up basic authentication headers - Adds cookies from cookie store if provided 3. **Download Process:** - Creates an HTTP client with the specified timeout (default: 120 seconds) - Sends a GET request to the URL with authentication and cookies - Checks the HTTP status code (fails if 4 or greater00) - Streams the response body directly to the file 4. **File Saving:** - If download path is provided, creates the file at that location - If no path is provided, creates a temporary file using the temp file pattern - Returns the final path where the file was saved",
@@ -48,7 +48,7 @@
       ]
     },
     "html-template": {
-      "namespace": "Core.Net.HtmlTemplate",
+      "namespace": "Core.Net.HttpTemplate",
       "name": "HtmlTemplate",
       "summary": "Creates a dynamic HTML template",
       "howItWorks": "The HTML Template node uses Mustache templating to generate dynamic HTML content: 1. **Template Definition:** - The HTML template is defined in the node's function/template field - Template can contain static HTML and dynamic placeholders using Mustache syntax 2. **Data Binding:** - The entire message object is passed to the template engine - Any property in the message can be accessed using `{{propertyName}}` syntax 3. **Rendering:** - Mustache engine processes the template - Replaces all placeholders with corresponding values from the message - Generates the final rendered HTML string 4. **Output:** - The rendered HTML is stored in the output variable - Can be used in HTTP responses, saved to files, or sent via email",

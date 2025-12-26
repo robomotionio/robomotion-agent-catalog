@@ -4,25 +4,25 @@
   "description": "## Overview The Barcode package enables you to create and read various barcode formats including 1D barcodes (UPC, EAN, Code128, etc.) and 2D QR codes. Use it for inventory management, product labeling, document tracking, and data exchange.",
   "nodes": {
     "1DBarcodeDecode": {
-      "namespace": "Core.Barcode.1DBarcodeDecode",
+      "namespace": "Robomotion.Barcode.1DDecode",
       "name": "1DBarcodeDecode",
       "summary": "Reads and decodes 1D barcode images to extract the encoded text data. Supports multiple barcode formats including Code 39, Code 93, Code 128, and CodaBar. Accepts PNG, JPG, or JPEG image files.",
       "howItWorks": "The 1D Barcode Decode node extracts data from barcode images by: 1. Loading the barcode image from the specified path 2. Validating the file format (PNG, JPG, or JPEG) 3. Converting the image to a binary bitmap for processing 4. Using the selected decoding algorithm to read the barcode 5. Extracting and returning the encoded text data"
     },
     "1DBarcodeEncode": {
-      "namespace": "Core.Barcode.1DBarcodeEncode",
+      "namespace": "Robomotion.Barcode.1DEncode",
       "name": "1DBarcodeEncode",
       "summary": "Generates 1D barcode images from text data. Supports multiple barcode formats including Code 39, Code 93, Code 128, and CodaBar. The generated barcode can be saved as PNG, JPG, or JPEG image files.",
       "howItWorks": "The 1D Barcode Encode node creates barcode images by: 1. Taking the input text data from the Code parameter 2. Validating the barcode path and ensuring proper file extension 3. Using the selected encoding type to generate the barcode 4. Creating an image with the specified width and height dimensions 5. Saving the barcode image to the specified path in the chosen format"
     },
     "QRDecode": {
-      "namespace": "Core.Barcode.QRDecode",
+      "namespace": "Robomotion.Barcode.QRDecode",
       "name": "QRDecode",
       "summary": "Reads and decodes QR code images to extract the encoded data. QR codes can contain various types of information including URLs, text, contact information, WiFi credentials, and structured data. Accepts PNG, JPG, or JPEG image files.",
       "howItWorks": "The QR Decode node extracts data from QR code images by: 1. Loading the QR code image from the specified path 2. Validating the file format (PNG, JPG, or JPEG) 3. Converting the image to a binary bitmap for processing 4. Using the QR code decoding algorithm to read the data 5. Extracting and returning the encoded content as text"
     },
     "QREncode": {
-      "namespace": "Core.Barcode.QREncode",
+      "namespace": "Robomotion.Barcode.QREncode",
       "name": "QREncode",
       "summary": "Generates QR code images from text data, URLs, or other content. QR codes can store more information than traditional barcodes and are widely used for quick mobile access to websites, contact information, WiFi credentials, and more. The generated QR code can be saved as PNG, JPG, or JPEG image files.",
       "howItWorks": "The QR Encode node creates QR code images by: 1. Taking the input content from the Content parameter 2. Validating the QR path and ensuring proper file extension 3. Encoding the content using the QR code algorithm 4. Creating a square image with the specified width and height dimensions 5. Saving the QR code image to the specified path in the chosen format"

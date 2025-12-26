@@ -4,7 +4,7 @@
   "description": "## Overview The Audio Processing package provides tools for working with audio files programmatically. Use it when you need to convert audio formats, extract segments, combine files, or modify audio properties like speed.",
   "nodes": {
     "Concatenate": {
-      "namespace": "Core.AudioProcessing.Concatenate",
+      "namespace": "Robomotion.AudioProcessing.Concatenate",
       "name": "Concatenate",
       "summary": "Concatenates two audio segments together sequentially, creating a single combined audio segment.",
       "howItWorks": "The Concatenate node combines two audio segments sequentially, playing the first segment followed by the second segment. When executed, the node: 1. Retrieves both audio segments using their IDs 2. Validates that both segment IDs exist 3. Combines the segments sequentially (first + second) 4. Creates a new audio segment with a unique ID 5. Establishes dependencies in the audio processing graph 6. Returns the ID of the concatenated segment",
@@ -24,7 +24,7 @@
       ]
     },
     "Convert": {
-      "namespace": "Core.AudioProcessing.Convert",
+      "namespace": "Robomotion.AudioProcessing.Convert",
       "name": "Convert",
       "summary": "Converts an audio file from one format to another with optional frame rate and channel configuration.",
       "howItWorks": "The Convert node uses the PyDub library (powered by FFmpeg) to convert audio files between formats. When executed, the node: 1. Validates the source file path and checks if the file exists 2. Validates the destination file path 3. Loads the source audio file 4. Applies frame rate conversion if specified 5. Applies channel conversion if specified 6. Detects the output format from the destination file extension 7. Exports the converted audio to the destination path",
@@ -46,7 +46,7 @@
       ]
     },
     "Create": {
-      "namespace": "Core.AudioProcessing.Create",
+      "namespace": "Robomotion.AudioProcessing.Create",
       "name": "Create",
       "summary": "Creates an audio segment from a file or generates silent/empty audio segments for processing.",
       "howItWorks": "The Create node is the starting point for audio processing workflows. When executed, the node: 1. Checks the selected format type 2. For file-based formats (MP3, WAV, etc.): - Validates the file path - Loads the audio file into memory - Creates a segment with a unique ID 3. For Silent format: - Creates a silent audio segment with the specified duration - Generates a segment ID 4. For Empty format: - Creates an empty audio segment (0 duration) - Generates a segment ID 5. Stores the segment in memory for use by other nodes 6. Returns the segment ID for reference",
@@ -69,7 +69,7 @@
       ]
     },
     "Delete": {
-      "namespace": "Core.AudioProcessing.Delete",
+      "namespace": "Robomotion.AudioProcessing.Delete",
       "name": "Delete",
       "summary": "Deletes an audio segment and all of its predecessor segments from memory, freeing up system resources.",
       "howItWorks": "The Delete node performs recursive deletion of audio segments to free memory. When executed, the node: 1. Validates that the segment ID is not empty 2. Retrieves the segment from the internal audio graph 3. Identifies all predecessor segments in the processing chain 4. Recursively deletes the specified segment and all its predecessors 5. Removes all related nodes from the audio processing graph 6. Frees the memory occupied by these segments",
@@ -88,7 +88,7 @@
       ]
     },
     "Export": {
-      "namespace": "Core.AudioProcessing.Export",
+      "namespace": "Robomotion.AudioProcessing.Export",
       "name": "Export",
       "summary": "Exports an audio segment to a file in the specified format, or exports a PNG visualization of the audio processing graph.",
       "howItWorks": "The Export node saves audio segments to files or creates visualizations. When executed, the node: 1. Validates the segment ID and file path 2. Retrieves the audio segment from memory 3. For audio formats (MP3, WAV, etc.): - Converts the segment to the specified format - Exports the audio data to the file path - Closes the export stream 4. For PNG format: - Generates a backward dependency graph from the segment - Creates a visual representation showing how the segment was created - Saves the graph as a PNG image",
@@ -107,7 +107,7 @@
       ]
     },
     "GetMetadata": {
-      "namespace": "Core.AudioProcessing.GetMetadata",
+      "namespace": "Robomotion.AudioProcessing.GetMetadata",
       "name": "GetMetadata",
       "summary": "Retrieves detailed metadata information from an audio segment including duration, quality settings, and amplitude metrics.",
       "howItWorks": "The Get Metadata node analyzes an audio segment and extracts technical information. When executed, the node: 1. Validates the segment ID is not empty 2. Retrieves the audio segment from memory 3. Analyzes the segment's properties 4. Calculates amplitude and loudness metrics 5. Handles special cases (like infinite values for silent audio) 6. Returns a metadata object with all information",
@@ -126,7 +126,7 @@
       ]
     },
     "Slice": {
-      "namespace": "Core.AudioProcessing.Slice",
+      "namespace": "Robomotion.AudioProcessing.Slice",
       "name": "Slice",
       "summary": "Extracts a portion of an audio segment between specified start and end times, creating a new audio segment.",
       "howItWorks": "The Slice node extracts a portion of audio between two time points. When executed, the node: 1. Validates the segment ID is not empty 2. Retrieves the original audio segment 3. Determines the slice range based on provided parameters: - Both start and end: Extract segment[start:end] - Only start: Extract from start to end segment[start:] - Only end: Extract from beginning to end segment[:end] - Neither: Return the full segment unchanged 4. Creates a new segment with the sliced audio 5. Establishes a dependency link in the processing graph 6. Returns the ID of the new segment",
@@ -148,7 +148,7 @@
       ]
     },
     "Speedup": {
-      "namespace": "Core.AudioProcessing.Speedup",
+      "namespace": "Robomotion.AudioProcessing.Speedup",
       "name": "Speedup",
       "summary": "Speeds up or slows down an audio segment by a given multiplier factor, changing playback speed without altering pitch quality.",
       "howItWorks": "The Speed Up node uses advanced audio processing algorithms to change playback speed. When executed, the node: 1. Validates the segment ID is not empty 2. Retrieves the multiplier and chunk size values 3. If multiplier equals 1.0, returns the original segment unchanged (optimization) 4. Retrieves the audio segment from memory 5. Processes the audio in chunks to adjust speed while maintaining quality 6. Creates a new segment with the adjusted speed 7. Establishes a dependency link in the processing graph 8. Returns the ID of the speed-adjusted segment",

@@ -4,27 +4,27 @@
   "description": "## Overview The Number package provides essential numeric operations for RPA workflows. Use it when you need to perform calculations, generate random numbers, manipulate counters, or convert between number and string formats.",
   "nodes": {
     "assign": {
-      "namespace": "Core.Number.Assign",
+      "namespace": "Robomotion.Number.Assign",
       "name": "Assign",
       "summary": "Assigns a numeric value to a variable with support for different scopes (Message, Flow, Global, Custom)."
     },
     "decrement": {
-      "namespace": "Core.Number.Decrement",
+      "namespace": "Robomotion.Number.Decrement",
       "name": "Decrement",
       "summary": "Subtracts a value from an existing number. This is useful for countdown timers, inventory tracking, and reverse iteration in RPA workflows."
     },
     "increment": {
-      "namespace": "Core.Number.Increment",
+      "namespace": "Robomotion.Number.Increment",
       "name": "Increment",
       "summary": "Adds a value to an existing number. This is particularly useful for counters, accumulators, and iterative calculations in RPA workflows."
     },
     "random": {
-      "namespace": "Core.Number.Random",
+      "namespace": "Robomotion.Number.Random",
       "name": "Random",
       "summary": "Generates a random number within a specified range. Useful for creating test data, simulating user behavior, implementing delays with randomness, and adding variability to automation workflows."
     },
     "to-string": {
-      "namespace": "Core.Number.ToString",
+      "namespace": "Robomotion.Number.ToString",
       "name": "ToString",
       "summary": "Converts a numeric value to its string representation. This is essential for displaying numbers in UI elements, concatenating with text, formatting output, or preparing data for systems that expect string input."
     }

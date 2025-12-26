@@ -4,7 +4,7 @@
   "description": "## Overview The Object package provides utilities for working with JavaScript objects in your automation. Use it when you need to create objects, add or remove properties, or inspect object contents.",
   "nodes": {
     "add-property": {
-      "namespace": "Core.Object.AddProperty",
+      "namespace": "Robomotion.Object.AddProperty",
       "name": "AddProperty",
       "summary": "Adds a new property with a specified key and value to an object.",
       "howItWorks": "The Add Property node adds or updates a property in an object. When executed, the node: 1. Receives an object through the Object input 2. Receives a property key name through the Key input 3. Receives a value through the Value input 4. Validates that the key is not empty 5. Adds the property to the object (or updates if it already exists) 6. Applies appropriate thread-safety locks for Global or Flow scopes 7. Outputs the modified object through the Object output",
@@ -28,7 +28,7 @@
       ]
     },
     "assign": {
-      "namespace": "Core.Object.Assign",
+      "namespace": "Robomotion.Object.Assign",
       "name": "Assign",
       "summary": "Assigns an object value to a variable with configurable scope.",
       "howItWorks": "The Assign node assigns an object value to a variable with thread-safe scope management. When executed, the node: 1. Receives an object value through the Value input 2. Validates that the input value is not null 3. Applies appropriate thread-safety locks for Global or Flow scopes 4. Assigns the object to the output variable in the specified scope 5. Outputs the assigned object through the Object output The node supports multiple variable scopes: * **Message -** Variable exists only within the current message context * **Flow -** Variable shared across all nodes in the flow (thread-safe) * **Global -** Variable shared across all flows in the robot (thread-safe) * **Local -** Variable scoped to the current node execution * **Custom -** Custom variable scope defined by the user",
@@ -51,7 +51,7 @@
       ]
     },
     "get-keys": {
-      "namespace": "Core.Object.GetKeys",
+      "namespace": "Robomotion.Object.GetKeys",
       "name": "GetKeys",
       "summary": "Retrieves all property keys from an object as an array.",
       "howItWorks": "The Get Keys node extracts all property key names from an object. When executed, the node: 1. Receives an object through the Object input 2. Validates that the input is a valid object and not null 3. Iterates through all properties in the object 4. Collects all property key names into an array 5. Outputs the array of keys through the Keys output",
@@ -74,7 +74,7 @@
       ]
     },
     "get-length": {
-      "namespace": "Core.Object.GetLength",
+      "namespace": "Robomotion.Object.GetLength",
       "name": "GetLength",
       "summary": "Returns the number of properties in an object.",
       "howItWorks": "The Get Length node counts the number of properties in an object. When executed, the node: 1. Receives an object through the Object input 2. Validates that the input is a valid object and not null 3. Counts all top-level properties in the object 4. Outputs the count through the Length output",
@@ -96,7 +96,7 @@
       ]
     },
     "get-values": {
-      "namespace": "Core.Object.GetValues",
+      "namespace": "Robomotion.Object.GetValues",
       "name": "GetValues",
       "summary": "Retrieves all property values from an object as an array.",
       "howItWorks": "The Get Values node extracts all property values from an object. When executed, the node: 1. Receives an object through the Object input 2. Validates that the input is a valid object and not null 3. Iterates through all properties in the object 4. Collects all property values into an array 5. Outputs the array of values through the Values output",
@@ -119,7 +119,7 @@
       ]
     },
     "remove-property": {
-      "namespace": "Core.Object.RemoveProperty",
+      "namespace": "Robomotion.Object.RemoveProperty",
       "name": "RemoveProperty",
       "summary": "Removes a property from an object by its key.",
       "howItWorks": "The Remove Property node removes a property from an object. When executed, the node: 1. Receives an object through the Object input 2. Validates that the object is not null 3. Receives a property key name through the Key input 4. Validates that the key is not empty 5. Removes the property with the specified key from the object 6. Applies appropriate thread-safety locks for Global or Flow scopes 7. Outputs the modified object through the Object output",

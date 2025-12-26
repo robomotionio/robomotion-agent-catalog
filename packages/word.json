@@ -4,7 +4,7 @@
   "description": "## Overview The Word package provides Word document manipulation without requiring Microsoft Office. Use it when you need to create documents, add content, or modify templates using the .docx format.",
   "nodes": {
     "AddHeader": {
-      "namespace": "Core.Word.AddHeader",
+      "namespace": "Robomotion.Word.AddHeader",
       "name": "AddHeader",
       "summary": "Adds a header to a Word document with customizable formatting.",
       "howItWorks": "The Add Header node adds formatted text to the header section of the document. When executed, the node: 1. Validates the file descriptor and header text 2. Retrieves the document from memory 3. Iterates through all sections in the document 4. Configures header settings based on the selected Header Type 5. Clears any existing header content in the target section 6. Adds new header text with center alignment 7. Applies the specified font, size, and bold formatting",
@@ -24,7 +24,7 @@
       ]
     },
     "AddImage": {
-      "namespace": "Core.Word.AddImage",
+      "namespace": "Robomotion.Word.AddImage",
       "name": "AddImage",
       "summary": "Adds an image to a Word document with customizable size and alignment.",
       "howItWorks": "The Add Image node inserts an image into the Word document with specified dimensions and alignment. When executed, the node: 1. Validates the file descriptor and image path 2. Checks that the image file exists and is accessible 3. Validates width, height, and spacing values 4. Retrieves the document from memory 5. Adds the image with specified dimensions (or auto-size if width/height is 0) 6. Applies the selected alignment to the paragraph containing the image 7. Adds spacing after the image if specified",
@@ -45,7 +45,7 @@
       ]
     },
     "AddTable": {
-      "namespace": "Core.Word.AddTable",
+      "namespace": "Robomotion.Word.AddTable",
       "name": "AddTable",
       "summary": "Adds a formatted table to a Word document.",
       "howItWorks": "The Add Table node creates a formatted table with data from a table object. When executed, the node: 1. Validates the file descriptor and table data structure 2. Retrieves the document from memory 3. Calculates table dimensions (rows + 1 for header, columns) 4. Creates the table with the specified style 5. Populates the header row with column names 6. Applies header formatting if enabled 7. Fills data rows with values from the table object 8. Adds spacing after the table if specified",
@@ -65,7 +65,7 @@
       ]
     },
     "AddText": {
-      "namespace": "Core.Word.AddText",
+      "namespace": "Robomotion.Word.AddText",
       "name": "AddText",
       "summary": "Adds formatted text to a Word document.",
       "howItWorks": "The Add Text node appends a new paragraph with formatted text to the Word document. When executed, the node: 1. Validates the file descriptor and input parameters 2. Retrieves the document from memory using the file descriptor 3. Creates a new paragraph at the end of the document 4. Applies the specified font name and size to the text 5. Sets the paragraph spacing after the text 6. Adds the text to the document",
@@ -86,7 +86,7 @@
       ]
     },
     "CreateWord": {
-      "namespace": "Core.Word.CreateWord",
+      "namespace": "Robomotion.Word.Create",
       "name": "CreateWord",
       "summary": "Creates a new Word document at the specified path.",
       "howItWorks": "The Create Word node creates a new blank Word document and saves it to the specified path. When executed, the node: 1. Validates the provided file path 2. Checks if a file already exists at the path (raises error if exists and Overwrite is disabled) 3. Creates a new blank Word document in memory 4. Generates a unique file descriptor for the document 5. Saves the document to the specified path 6. Returns the file descriptor for use with other Word nodes",
@@ -105,7 +105,7 @@
       ]
     },
     "OpenWord": {
-      "namespace": "Core.Word.OpenWord",
+      "namespace": "Robomotion.Word.Open",
       "name": "OpenWord",
       "summary": "Opens an existing Word document or creates a new blank document.",
       "howItWorks": "The Open Word node is flexible and can work in two modes: **Mode 1: Open Existing Document** 1. Validates the provided file path 2. Checks if the file exists at the specified location 3. Opens the Word document 4. Generates a unique file descriptor 5. Returns the file descriptor for use with other Word nodes **Mode 2: Create New Document (when path is empty)** 1. Creates a new blank Word document in memory 2. Generates a unique file descriptor 3. Returns the file descriptor 4. Note: Document is not saved until you use the Save node",
@@ -124,7 +124,7 @@
       ]
     },
     "ReplaceImage": {
-      "namespace": "Core.Word.ReplaceImage",
+      "namespace": "Robomotion.Word.ReplaceImage",
       "name": "ReplaceImage",
       "summary": "Replaces images in a Word document by index or all at once.",
       "howItWorks": "The Replace Image node locates and replaces images in the document. When executed, the node: 1. Validates the file descriptor and replacements dictionary 2. Retrieves the document from memory 3. Scans the entire document for all images (including in tables and paragraphs) 4. Indexes all images found in document order (0, 1, 2, ...) 5. Processes replacement requests: - If key is `\"*\"`: Replaces all images with the same image - If key is a number: Replaces the image at that index 6. For each replacement: - Removes the old image from the run - Inserts the new image - Applies size settings (preserve original or use defaults) 7. Reports the number of images successfully replaced",
@@ -146,7 +146,7 @@
       ]
     },
     "ReplaceText": {
-      "namespace": "Core.Word.ReplaceText",
+      "namespace": "Robomotion.Word.ReplaceText",
       "name": "ReplaceText",
       "summary": "Replaces text in a Word document using search and replace operations.",
       "howItWorks": "The Replace Text node performs find-and-replace operations throughout the entire document. When executed, the node: 1. Validates the file descriptor and replacements dictionary 2. Retrieves the document from memory 3. Processes replacements in the main document paragraphs 4. Processes replacements in all tables (including cells) 5. Processes replacements in headers and footers of all sections 6. Applies case sensitivity and whole word settings as configured 7. Updates the document with all replacements",
@@ -166,7 +166,7 @@
       ]
     },
     "Save": {
-      "namespace": "Core.Word.Save",
+      "namespace": "Robomotion.Word.Save",
       "name": "Save",
       "summary": "Saves a Word document to a specified file path.",
       "howItWorks": "The Save Word node persists the in-memory Word document to disk. When executed, the node: 1. Validates the file descriptor and save path 2. Retrieves the document from memory using the file descriptor 3. Creates the directory structure if it doesn't exist 4. Checks if a file already exists at the path 5. If file exists and Overwrite is false, raises an error 6. Saves the document to the specified path 7. Preserves all formatting, content, and document properties",

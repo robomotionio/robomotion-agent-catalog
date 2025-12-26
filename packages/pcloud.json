@@ -4,7 +4,7 @@
   "description": "## Overview The pCloud package provides cloud storage integration with pCloud. Use it when you need to upload files, manage folders, share files via public links, or organize content in pCloud storage.",
   "nodes": {
     "copyfile": {
-      "namespace": "Core.Pcloud.Copyfile",
+      "namespace": "Robomotion.PCloud.CopyFile",
       "name": "Copyfile",
       "summary": "Copies a file from one location to another within pCloud.",
       "howItWorks": "The Copy File node duplicates a file within pCloud without downloading or re-uploading it. When executed, the node: 1. Validates the Client Id 2. Validates and normalizes the source path 3. Validates and normalizes the target path 4. Retrieves the authenticated pCloud client 5. Performs the server-side copy operation 6. Returns success when the file is copied",
@@ -23,10 +23,32 @@
         "Paths are automatically normalized with leading \"/\"",
         "If the target file exists, it will be overwritten",
         "The original file remains unchanged"
+      ],
+      "credentials": [
+        {
+          "name": "pCloud Account",
+          "title": "pCloud Account",
+          "fields": [
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "string",
+              "required": true,
+              "description": "pCloud account email or username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "pCloud account password"
+            }
+          ]
+        }
       ]
     },
     "createfolder": {
-      "namespace": "Core.Pcloud.Createfolder",
+      "namespace": "Robomotion.PCloud.CreateFolder",
       "name": "Createfolder",
       "summary": "Creates a new folder at the specified path in pCloud.",
       "howItWorks": "The Create Folder node creates a new folder at the specified location in pCloud. When executed, the node: 1. Validates the Client Id 2. Validates the path is not empty 3. Normalizes the path by adding a leading \"/\" if needed 4. Retrieves the authenticated pCloud client 5. Creates the folder at the specified path 6. Returns success when the folder is created",
@@ -43,10 +65,32 @@
         "Folder names are case-sensitive",
         "Special characters in folder names may cause issues",
         "The path \"/\" refers to the root directory"
+      ],
+      "credentials": [
+        {
+          "name": "pCloud Account",
+          "title": "pCloud Account",
+          "fields": [
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "string",
+              "required": true,
+              "description": "pCloud account email or username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "pCloud account password"
+            }
+          ]
+        }
       ]
     },
     "deletefile": {
-      "namespace": "Core.Pcloud.Deletefile",
+      "namespace": "Robomotion.PCloud.DeleteFile",
       "name": "Deletefile",
       "summary": "Permanently deletes a file from pCloud.",
       "howItWorks": "The Delete File node permanently removes a file from pCloud. When executed, the node: 1. Validates the Client Id 2. Validates the path is not empty 3. Normalizes the path by adding a leading \"/\" if needed 4. Retrieves the authenticated pCloud client 5. Deletes the file at the specified path 6. Returns success when the file is deleted :::warning This operation is permanent. Deleted files cannot be recovered unless pCloud's trash/recycle bin feature retains them temporarily. Always verify the path before deleting. :::",
@@ -64,10 +108,32 @@
         "File names are case-sensitive",
         "There is no confirmation dialog - deletion happens immediately",
         "Consider using Copy File before Delete File for backup"
+      ],
+      "credentials": [
+        {
+          "name": "pCloud Account",
+          "title": "pCloud Account",
+          "fields": [
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "string",
+              "required": true,
+              "description": "pCloud account email or username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "pCloud account password"
+            }
+          ]
+        }
       ]
     },
     "deletefolder": {
-      "namespace": "Core.Pcloud.Deletefolder",
+      "namespace": "Robomotion.PCloud.DeleteFolder",
       "name": "Deletefolder",
       "summary": "Permanently deletes a folder and all its contents recursively from pCloud.",
       "howItWorks": "The Delete Folder node permanently removes a folder and all of its contents from pCloud using recursive deletion. When executed, the node: 1. Validates the Client Id 2. Validates the path is not empty 3. Normalizes the path by adding a leading \"/\" if needed 4. Retrieves the authenticated pCloud client 5. Recursively deletes the folder and all its contents (files and subfolders) 6. Returns success when the folder is completely deleted :::danger This operation is PERMANENT and RECURSIVE. All files and subfolders within the specified folder will be deleted. This cannot be undone unless pCloud's trash/recycle bin feature retains them temporarily. Always verify the path before deleting. :::",
@@ -87,10 +153,32 @@
         "There is no confirmation dialog - deletion happens immediately",
         "Consider backing up important folders before deletion",
         "Empty folders and folders with contents are both handled"
+      ],
+      "credentials": [
+        {
+          "name": "pCloud Account",
+          "title": "pCloud Account",
+          "fields": [
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "string",
+              "required": true,
+              "description": "pCloud account email or username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "pCloud account password"
+            }
+          ]
+        }
       ]
     },
     "getpubliclink": {
-      "namespace": "Core.Pcloud.Getpubliclink",
+      "namespace": "Robomotion.PCloud.GetPublicLink",
       "name": "Getpubliclink",
       "summary": "Generates a public sharing link for a file or folder in pCloud.",
       "howItWorks": "The Get Public Link node creates a shareable public URL for files or folders in pCloud. When executed, the node: 1. Validates the Client Id 2. Validates the path is not empty 3. Determines whether to generate a file or folder link based on Type option 4. Retrieves the authenticated pCloud client 5. Requests a public link from pCloud's API 6. Returns the generated public URL The link allows anyone with the URL to access the file or folder without requiring pCloud authentication.",
@@ -109,10 +197,32 @@
         "Anyone with the link can access the shared item",
         "Consider security implications before sharing sensitive files",
         "Links can typically be revoked through pCloud's web interface"
+      ],
+      "credentials": [
+        {
+          "name": "pCloud Account",
+          "title": "pCloud Account",
+          "fields": [
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "string",
+              "required": true,
+              "description": "pCloud account email or username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "pCloud account password"
+            }
+          ]
+        }
       ]
     },
     "login": {
-      "namespace": "Core.Pcloud.Login",
+      "namespace": "Robomotion.PCloud.Login",
       "name": "Login",
       "summary": "Authenticates with pCloud and establishes a connection for performing cloud storage operations.",
       "howItWorks": "The Login node is the essential first step in any pCloud automation workflow. It establishes an authenticated connection to pCloud's servers and provides a client ID for use in subsequent operations. When executed, the node: 1. Retrieves the username and password from the provided credentials 2. Determines the appropriate pCloud server based on the selected region 3. Authenticates with pCloud using the credentials 4. Creates a pCloud client instance 5. Stores the client in a thread-safe manager 6. Returns a unique client ID for use in other pCloud nodes",
@@ -127,10 +237,32 @@
         "The region selection is important - use \"Europe\" for European accounts and \"United States\" for US accounts",
         "The client connection remains active throughout the flow execution",
         "Each Login creates a new client session in memory"
+      ],
+      "credentials": [
+        {
+          "name": "pCloud Account",
+          "title": "pCloud Account",
+          "fields": [
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "string",
+              "required": true,
+              "description": "pCloud account email or username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "pCloud account password"
+            }
+          ]
+        }
       ]
     },
     "renamefile": {
-      "namespace": "Core.Pcloud.Renamefile",
+      "namespace": "Robomotion.PCloud.RenameFile",
       "name": "Renamefile",
       "summary": "Renames a file or moves it to a different location within pCloud.",
       "howItWorks": "The Rename File node changes a file's name or location within pCloud. When executed, the node: 1. Validates the Client Id 2. Validates and normalizes the source path 3. Validates and normalizes the target path 4. Retrieves the authenticated pCloud client 5. Renames or moves the file on the server 6. Returns success when the operation completes This node can perform two operations: * **Rename** - Change the file name in the same folder * **Move** - Change the file location (and optionally the name)",
@@ -150,10 +282,32 @@
         "If the target file exists, it may be overwritten",
         "The source and target paths must both include the file name",
         "Moving to a different folder requires the target folder to exist"
+      ],
+      "credentials": [
+        {
+          "name": "pCloud Account",
+          "title": "pCloud Account",
+          "fields": [
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "string",
+              "required": true,
+              "description": "pCloud account email or username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "pCloud account password"
+            }
+          ]
+        }
       ]
     },
     "renamefolder": {
-      "namespace": "Core.Pcloud.Renamefolder",
+      "namespace": "Robomotion.PCloud.RenameFolder",
       "name": "Renamefolder",
       "summary": "Renames a folder or moves it to a different location within pCloud.",
       "howItWorks": "The Rename Folder node changes a folder's name or location within pCloud. When executed, the node: 1. Validates the Client Id 2. Validates and normalizes the source path 3. Validates and normalizes the target path 4. Retrieves the authenticated pCloud client 5. Renames or moves the folder on the server 6. Returns success when the operation completes This node can perform two operations: * **Rename** - Change the folder name in the same location * **Move** - Change the folder location (and optionally the name) All contents of the folder (files and subfolders) are moved with the folder.",
@@ -174,10 +328,32 @@
         "The source and target paths must both specify folder paths",
         "Moving to a different location requires the parent folder to exist",
         "Cannot move a folder into itself or its subdirectories"
+      ],
+      "credentials": [
+        {
+          "name": "pCloud Account",
+          "title": "pCloud Account",
+          "fields": [
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "string",
+              "required": true,
+              "description": "pCloud account email or username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "pCloud account password"
+            }
+          ]
+        }
       ]
     },
     "uploadfile": {
-      "namespace": "Core.Pcloud.Uploadfile",
+      "namespace": "Robomotion.PCloud.UploadFile",
       "name": "Uploadfile",
       "summary": "Uploads a file from the local filesystem to a specified folder in pCloud.",
       "howItWorks": "The Upload File node transfers a file from your local filesystem to pCloud. When executed, the node: 1. Validates the Client Id 2. Validates the local file path and opens the file 3. Validates the remote file name 4. Retrieves the folder ID (defaults to 0 if not specified) 5. Retrieves the authenticated pCloud client 6. Uploads the file to the specified folder 7. Closes the local file handle",
@@ -195,6 +371,28 @@
         "If a file with the same name exists in the target folder, it will be overwritten",
         "Large files are automatically handled by the pCloud API",
         "The upload progress is not reported by this node"
+      ],
+      "credentials": [
+        {
+          "name": "pCloud Account",
+          "title": "pCloud Account",
+          "fields": [
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "string",
+              "required": true,
+              "description": "pCloud account email or username"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "pCloud account password"
+            }
+          ]
+        }
       ]
     }
   }

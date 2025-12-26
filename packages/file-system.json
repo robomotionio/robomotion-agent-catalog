@@ -42,7 +42,7 @@
       ]
     },
     "copy-file-dir": {
-      "namespace": "Core.FileSystem.CopyFileDir",
+      "namespace": "Core.FileSystem.Copy",
       "name": "CopyFileDir",
       "summary": "Copies the content of a source file/directory to destination file/directory",
       "howItWorks": "The Copy File/Dir node duplicates files or directories through the following process: 1. Validates that both source and destination paths are provided 2. Checks if the source path exists 3. Uses the copy library to recursively copy the source to the destination 4. Preserves file contents, directory structure, and subdirectories 5. Creates parent directories at the destination if they don't exist",
@@ -80,7 +80,7 @@
       ]
     },
     "create-file-dir": {
-      "namespace": "Core.FileSystem.CreateFileDir",
+      "namespace": "Core.FileSystem.Create",
       "name": "CreateFileDir",
       "summary": "Creates a file or directory in a specified path",
       "howItWorks": "The Create File/Dir node creates new files or directories through the following process: 1. Validates that the path is not empty 2. Verifies that a file type (File or Directory) has been selected 3. Checks if the file or directory already exists at the specified path 4. For directories: Creates all necessary parent directories using MkdirAll (permissions: 0755) 5. For files: Creates an empty file (permissions: 0644) 6. Returns the created path in the output variable",
@@ -120,7 +120,7 @@
       ]
     },
     "delete-file-dir": {
-      "namespace": "Core.FileSystem.DeleteFileDir",
+      "namespace": "Core.FileSystem.Delete",
       "name": "DeleteFileDir",
       "summary": "Deletes the file/directory from specified path",
       "howItWorks": "The Delete File/Dir node removes files or directories through the following process: 1. Validates that the path is not empty 2. Checks if the specified path exists 3. If a name filter is provided: - Uses filepath.Glob to match files based on the filter pattern - Deletes all matched files/directories 4. If no name filter is provided: - Deletes the specified file or directory directly 5. Uses recursive deletion (RemoveAll) if Recursive option is enabled 6. Uses single-level deletion (Remove) if Recursive is disabled",
@@ -159,7 +159,7 @@
       ]
     },
     "list-directory": {
-      "namespace": "Core.FileSystem.ListDirectory",
+      "namespace": "Core.FileSystem.List",
       "name": "ListDirectory",
       "summary": "Lists the contents of a given directory",
       "howItWorks": "The List Directory node retrieves directory contents through the following process: 1. Validates that the directory path is not empty 2. Reads all files and directories from the specified path 3. Applies the selected sorting method (ascending, descending, modified latest, or modified earliest) 4. Filters results using the Name Filter regex pattern if provided 5. Constructs file objects with the selected properties (name, isDir, size, modTime, createTime, mode) 6. Returns the filtered and sorted list of files in the output variable",
@@ -199,7 +199,7 @@
       ]
     },
     "move-file-dir": {
-      "namespace": "Core.FileSystem.MoveFileDir",
+      "namespace": "Core.FileSystem.Move",
       "name": "MoveFileDir",
       "summary": "Moves file/folder from source path to destination path.\u0026#x20;",
       "howItWorks": "The Move File/Dir node relocates files or directories through the following process: 1. Validates that both source and destination paths are not empty 2. Checks if the source is a directory or a file 3. For directories: Uses os.Rename to move the directory atomically 4. For files: Uses a utility function (MoveFile) to move the file 5. The source file/directory is removed after the move completes successfully",

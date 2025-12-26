@@ -4,7 +4,7 @@
   "description": "## Overview The Airtable package provides full CRUD (Create, Read, Update, Delete) operations for Airtable bases. Use it when you need to automate data management tasks involving Airtable, such as syncing data between systems, processing form submissions, or managing inventory and CRM data.",
   "nodes": {
     "connect": {
-      "namespace": "Core.Airtable.Connect",
+      "namespace": "Robomotion.Airtable.Connect",
       "name": "Connect",
       "summary": "Establishes a connection to Airtable by storing the API key token for use in subsequent Airtable operations.",
       "howItWorks": "The Connect node is the first step in any Airtable automation flow. It securely stores your Airtable API key and returns a key ID that is used by all other Airtable nodes in the flow. When executed, the node: 1. Retrieves the API key from the provided credentials 2. Stores the API key in a thread-safe token manager 3. Returns a unique key ID that references the stored API key 4. This key ID is then used by other Airtable nodes to access the API",
@@ -19,10 +19,25 @@
         "Each Connect node creates a new token entry that should be cleaned up with a Disconnect node",
         "For security, always use the Disconnect node to remove the stored API key when it's no longer needed",
         "The API key is stored in memory only and is automatically removed when the flow stops"
+      ],
+      "credentials": [
+        {
+          "name": "Airtable API Key",
+          "title": "Airtable API Key",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "string",
+              "required": true,
+              "description": "Airtable API key or Personal Access Token for authentication"
+            }
+          ]
+        }
       ]
     },
     "createrecord": {
-      "namespace": "Core.Airtable.Createrecord",
+      "namespace": "Robomotion.Airtable.CreateRecord",
       "name": "Createrecord",
       "summary": "Creates a new record in a specified Airtable table.",
       "howItWorks": "The Create Record node adds a new record to a specified Airtable table. When executed, the node: 1. Validates the required inputs (Base Id, Table Name, and Record) 2. Constructs the Airtable API endpoint URL 3. Retrieves the API key using the provided Key Id 4. Sends a POST request to the Airtable API with the record data 5. Returns the created record details as the result",
@@ -39,10 +54,25 @@
         "The result includes the created record's ID and other metadata from Airtable",
         "All field types supported by Airtable can be included in the record data",
         "The node will fail if the table doesn't exist or if you don't have permission to create records"
+      ],
+      "credentials": [
+        {
+          "name": "Airtable API Key",
+          "title": "Airtable API Key",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "string",
+              "required": true,
+              "description": "Airtable API key or Personal Access Token for authentication"
+            }
+          ]
+        }
       ]
     },
     "deleterecord": {
-      "namespace": "Core.Airtable.Deleterecord",
+      "namespace": "Robomotion.Airtable.DeleteRecord",
       "name": "Deleterecord",
       "summary": "Deletes a specific record from an Airtable table.",
       "howItWorks": "The Delete Record node removes a specific record from an Airtable table. When executed, the node: 1. Validates the required inputs (Base Id, Table Name, and Record Id) 2. Constructs the Airtable API endpoint URL for the specific record 3. Retrieves the API key using the provided Key Id 4. Sends a DELETE request to the Airtable API 5. Returns the deletion confirmation as the result",
@@ -59,10 +89,25 @@
         "Once a record is deleted, it cannot be recovered through the API (unless using Airtable's backup features)",
         "The node will fail if the record doesn't exist or if you don't have permission to delete it",
         "Deleted records are returned in the \"deleted\" field of the result object"
+      ],
+      "credentials": [
+        {
+          "name": "Airtable API Key",
+          "title": "Airtable API Key",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "string",
+              "required": true,
+              "description": "Airtable API key or Personal Access Token for authentication"
+            }
+          ]
+        }
       ]
     },
     "disconnect": {
-      "namespace": "Core.Airtable.Disconnect",
+      "namespace": "Robomotion.Airtable.Disconnect",
       "name": "Disconnect",
       "summary": "Removes a stored Airtable API key token from memory.",
       "howItWorks": "The Disconnect node removes a stored API key token from memory. When executed, the node: 1. Retrieves the Key Id from the input 2. Calls the removeToken function to delete the token from the global tokens map 3. The token is permanently removed from memory and can no longer be used",
@@ -76,10 +121,25 @@
         "The node doesn't communicate with Airtable's servers; it only removes the local token reference",
         "It's good practice to use Disconnect nodes to prevent credential leaks",
         "If your flow has multiple exit points, consider using a Disconnect node at each exit"
+      ],
+      "credentials": [
+        {
+          "name": "Airtable API Key",
+          "title": "Airtable API Key",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "string",
+              "required": true,
+              "description": "Airtable API key or Personal Access Token for authentication"
+            }
+          ]
+        }
       ]
     },
     "listrecords": {
-      "namespace": "Core.Airtable.Listrecords",
+      "namespace": "Robomotion.Airtable.ListRecords",
       "name": "Listrecords",
       "summary": "Retrieves records from a specified Airtable table with optional filtering and view selection.",
       "howItWorks": "The List Records node retrieves multiple records from an Airtable table. When executed, the node: 1. Validates the required inputs (Base Id and Table Name) 2. Constructs the Airtable API endpoint URL with optional view and query parameters 3. Retrieves the API key using the provided Key Id 4. Sends a GET request to the Airtable API 5. Returns the retrieved records and metadata as the result",
@@ -96,10 +156,25 @@
         "Query parameters can be used for filtering, sorting, and limiting results",
         "The node returns a maximum of 100 records per request (Airtable API limit)",
         "For large datasets, use pagination with the offset parameter in the Query option"
+      ],
+      "credentials": [
+        {
+          "name": "Airtable API Key",
+          "title": "Airtable API Key",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "string",
+              "required": true,
+              "description": "Airtable API key or Personal Access Token for authentication"
+            }
+          ]
+        }
       ]
     },
     "readrecord": {
-      "namespace": "Core.Airtable.Readrecord",
+      "namespace": "Robomotion.Airtable.ReadRecord",
       "name": "Readrecord",
       "summary": "Retrieves a specific record from an Airtable table by its record ID.",
       "howItWorks": "The Read Record node retrieves a specific record from an Airtable table using its unique ID. When executed, the node: 1. Validates the required inputs (Base Id, Table Name, and Record Id) 2. Constructs the Airtable API endpoint URL for the specific record 3. Retrieves the API key using the provided Key Id 4. Sends a GET request to the Airtable API 5. Returns the retrieved record data as the result",
@@ -115,10 +190,25 @@
         "The result includes the record's fields, ID, and creation time",
         "All field types supported by Airtable will be included in the returned record data",
         "The node will fail if the record doesn't exist or if you don't have permission to read it"
+      ],
+      "credentials": [
+        {
+          "name": "Airtable API Key",
+          "title": "Airtable API Key",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "string",
+              "required": true,
+              "description": "Airtable API key or Personal Access Token for authentication"
+            }
+          ]
+        }
       ]
     },
     "updaterecord": {
-      "namespace": "Core.Airtable.Updaterecord",
+      "namespace": "Robomotion.Airtable.UpdateRecord",
       "name": "Updaterecord",
       "summary": "Updates existing records in an Airtable table.",
       "howItWorks": "The Update Record node modifies existing records in an Airtable table. When executed, the node: 1. Validates the required inputs (Base Id, Table Name, and Record) 2. Constructs the Airtable API endpoint URL 3. Retrieves the API key using the provided Key Id 4. Sends a PATCH request to the Airtable API with the record update data 5. Returns the updated records as the result",
@@ -140,6 +230,21 @@
         {
           "title": "Example 1",
           "code": "**Output:**\r\nThe result will contain the updated record details:"
+        }
+      ],
+      "credentials": [
+        {
+          "name": "Airtable API Key",
+          "title": "Airtable API Key",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key",
+              "type": "string",
+              "required": true,
+              "description": "Airtable API key or Personal Access Token for authentication"
+            }
+          ]
         }
       ]
     }

@@ -4,7 +4,7 @@
   "description": "DataTables are ideal for: - Processing and transforming data extracted from various sources (Excel, CSV, databases, web scraping)",
   "nodes": {
     "add-column": {
-      "namespace": "Core.Datatable.AddColumn",
+      "namespace": "Robomotion.DataTable.AddColumn",
       "name": "AddColumn",
       "summary": "Adds a new column with values to an existing DataTable. This node is useful for extending your table structure and populating it with data in a single operation.",
       "tips": [
@@ -16,7 +16,7 @@
       ]
     },
     "add-row": {
-      "namespace": "Core.Datatable.AddRow",
+      "namespace": "Robomotion.DataTable.AddRow",
       "name": "AddRow",
       "summary": "Adds a new row to an existing DataTable. You can provide row data either as a dictionary object via input or define it using the Custom Row option in the node properties.",
       "tips": [
@@ -29,7 +29,7 @@
       ]
     },
     "append-table": {
-      "namespace": "Core.Datatable.AppendTable",
+      "namespace": "Robomotion.DataTable.AppendDataTable",
       "name": "AppendTable",
       "summary": "Appends all rows from a second DataTable to a first DataTable. Both tables must have the same column structure. This node is ideal for combining datasets from multiple sources.",
       "tips": [
@@ -42,7 +42,7 @@
       ]
     },
     "clear-data-table": {
-      "namespace": "Core.Datatable.ClearDataTable",
+      "namespace": "Robomotion.DataTable.ClearDataTable",
       "name": "ClearDataTable",
       "summary": "Clears all rows from a DataTable while preserving its column structure. This node is useful when you need to reset a table's data without recreating the entire table structure.",
       "tips": [
@@ -55,7 +55,7 @@
       ]
     },
     "create-data-table": {
-      "namespace": "Core.Datatable.CreateDataTable",
+      "namespace": "Robomotion.DataTable.CreateDataTable",
       "name": "CreateDataTable",
       "summary": "Creates a new DataTable with specified columns. This is the starting point for building in-memory data structures for your automation workflows.",
       "tips": [
@@ -67,7 +67,7 @@
       ]
     },
     "filter-data-table": {
-      "namespace": "Core.Datatable.FilterDataTable",
+      "namespace": "Robomotion.DataTable.FilterDataTable",
       "name": "FilterDataTable",
       "summary": "Filters rows in a DataTable based on a filter expression. Only rows that match the filter criteria are included in the output table. This node is essential for data selection and conditional processing.",
       "tips": [
@@ -82,7 +82,7 @@
       ]
     },
     "get-column": {
-      "namespace": "Core.Datatable.GetColumn",
+      "namespace": "Robomotion.DataTable.GetColumn",
       "name": "GetColumn",
       "summary": "Retrieves all values from a specific column in a DataTable as an array. This node is useful for extracting column data for further processing, analysis, or iteration.",
       "tips": [
@@ -96,7 +96,7 @@
       ]
     },
     "get-row": {
-      "namespace": "Core.Datatable.GetRow",
+      "namespace": "Robomotion.DataTable.GetRow",
       "name": "GetRow",
       "summary": "Retrieves a specific row from a DataTable by its zero-based index. The row is returned as a dictionary object with column names as keys and cell values as values.",
       "tips": [
@@ -110,7 +110,7 @@
       ]
     },
     "linq-query": {
-      "namespace": "Core.Datatable.LinqQuery",
+      "namespace": "Robomotion.DataTable.LINQQuery",
       "name": "LinqQuery",
       "summary": "Executes a LINQ (Language Integrated Query) expression on a DataTable for advanced data manipulation, transformation, and analysis. This node provides powerful querying capabilities beyond simple filtering.",
       "tips": [
@@ -126,7 +126,7 @@
       ]
     },
     "lookup-data-table": {
-      "namespace": "Core.Datatable.LookupDataTable",
+      "namespace": "Robomotion.DataTable.LookupDataTable",
       "name": "LookupDataTable",
       "summary": "Searches for a value in a specified DataTable column and returns the row index. Optionally, you can retrieve a value from a different column in the same row. This node is similar to Excel's VLOOKUP function.",
       "tips": [
@@ -141,7 +141,7 @@
       ]
     },
     "merge-data-table": {
-      "namespace": "Core.Datatable.MergeDataTable",
+      "namespace": "Robomotion.DataTable.MergeDataTable",
       "name": "MergeDataTable",
       "summary": "Merges two DataTables by combining their rows and columns. This operation uses .NET's DataTable.Merge() method, which intelligently combines table structures and data based on matching schemas.",
       "tips": [
@@ -156,7 +156,7 @@
       ]
     },
     "remove-column": {
-      "namespace": "Core.Datatable.RemoveColumn",
+      "namespace": "Robomotion.DataTable.RemoveColumn",
       "name": "RemoveColumn",
       "summary": "Removes a specified column from a DataTable. All data in that column is deleted, and the table structure is updated to exclude the removed column.",
       "tips": [
@@ -171,7 +171,7 @@
       ]
     },
     "remove-row": {
-      "namespace": "Core.Datatable.RemoveRow",
+      "namespace": "Robomotion.DataTable.RemoveRow",
       "name": "RemoveRow",
       "summary": "Removes a specific row from a DataTable by its zero-based index. The row is permanently deleted, and subsequent rows shift up to fill the gap.",
       "tips": [
@@ -186,7 +186,7 @@
       ]
     },
     "sort-table": {
-      "namespace": "Core.Datatable.SortTable",
+      "namespace": "Robomotion.DataTable.SortTable",
       "name": "SortTable",
       "summary": "Sorts a DataTable by a specified column in ascending or descending order. The entire table is reordered based on the values in the sort column.",
       "tips": [

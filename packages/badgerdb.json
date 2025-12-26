@@ -4,85 +4,85 @@
   "description": "## Overview The BadgerDB package allows you to create lightweight, embedded databases for your automation workflows. Perfect for caching data, storing configuration, maintaining counters, or managing temporary data during automation runs.",
   "nodes": {
     "backup": {
-      "namespace": "Core.Badgerdb.Backup",
+      "namespace": "Robomotion.BadgerDB.Backup",
       "name": "Backup",
       "summary": "Creates a backup of a BadgerDB database to a file. Supports both live backups (database is open) and offline backups (database is closed).",
       "howItWorks": "The Backup node creates a complete snapshot of the database that can later be restored using the Restore node."
     },
     "close": {
-      "namespace": "Core.Badgerdb.Close",
+      "namespace": "Robomotion.BadgerDB.Close",
       "name": "Close",
       "summary": "Closes a BadgerDB database connection and releases all associated resources.",
       "howItWorks": "The Close node properly shuts down a BadgerDB database connection, ensuring all pending writes are flushed to disk and resources are released. When executed, the node: 1. Retrieves the database instance using the provided Database Id 2. Closes the database connection gracefully 3. Removes the database reference from memory 4. Releases all associated resources (file handles, memory buffers, etc.)"
     },
     "committransaction": {
-      "namespace": "Core.Badgerdb.Committransaction",
+      "namespace": "Robomotion.BadgerDB.CommitTransaction",
       "name": "Committransaction",
       "summary": "Commits a transaction and applies all pending changes to the BadgerDB database atomically.",
       "howItWorks": "The Commit Transaction node finalizes a transaction, making all buffered changes permanent in the database. When executed, the node: 1. Validates the transaction ID 2. Retrieves the transaction instance 3. Commits all pending changes atomically 4. Removes the transaction from the active transaction pool 5. Ensures all changes are persisted to disk :::info All changes made within the transaction are applied together. If commit fails, no changes are applied. :::"
     },
     "delete": {
-      "namespace": "Core.Badgerdb.Delete",
+      "namespace": "Robomotion.BadgerDB.Delete",
       "name": "Delete",
       "summary": "Removes a key-value pair from the BadgerDB database.",
       "howItWorks": "The Delete node removes a key-value pair from the database. Once deleted, the key will no longer exist and attempts to retrieve it will return a \"key not found\" error. When executed, the node: 1. Validates the database ID and key 2. Creates or uses an existing transaction 3. Deletes the key from the database 4. Commits the transaction (if not part of a larger transaction)"
     },
     "export": {
-      "namespace": "Core.Badgerdb.Export",
+      "namespace": "Robomotion.BadgerDB.Export",
       "name": "Export",
       "summary": "Exports all key-value pairs from a BadgerDB database to a CSV file for analysis, reporting, or migration.",
       "howItWorks": "The Export node iterates through all keys in the database and writes them to a CSV file with two columns: key and value. When executed, the node: 1. Validates the database ID and export file path 2. Creates or truncates the export file 3. Creates a CSV writer with the specified separator 4. Iterates through all key-value pairs in the database 5. Writes each pair as a row (key, value) 6. Closes and saves the CSV file"
     },
     "get": {
-      "namespace": "Core.Badgerdb.Get",
+      "namespace": "Robomotion.BadgerDB.Get",
       "name": "Get",
       "summary": "Retrieves a value from the BadgerDB database by its key.",
       "howItWorks": "The Get node retrieves stored data from BadgerDB by looking up a key. The stored bytes are decoded according to the specified format. When executed, the node: 1. Validates the database ID and key 2. Creates a read transaction (or uses an existing one if Transaction Id is provided) 3. Looks up the key in the database 4. Retrieves the raw bytes stored under that key 5. Decodes the bytes according to the selected Decoding option 6. Returns the decoded value"
     },
     "list": {
-      "namespace": "Core.Badgerdb.List",
+      "namespace": "Robomotion.BadgerDB.List",
       "name": "List",
       "summary": "Lists all keys in the BadgerDB database, optionally filtered by a key prefix.",
       "howItWorks": "The List node iterates through all keys in the database and returns those matching the optional prefix filter. When executed, the node: 1. Validates the database ID 2. Retrieves the optional prefix filter 3. Creates a read-only view of the database 4. Iterates through keys using an iterator 5. Collects keys that match the prefix (or all keys if no prefix specified) 6. Returns the array of matching keys"
     },
     "merge": {
-      "namespace": "Core.Badgerdb.Merge",
+      "namespace": "Robomotion.BadgerDB.Merge",
       "name": "Merge",
       "summary": "Adds a value to an ongoing merge operation started by Start Merge. Can be called multiple times to accumulate values.",
       "howItWorks": "The Merge node adds a value to an ongoing merge operation. Values are accumulated and applied atomically when Stop Merge is called. When executed, the node: 1. Validates the merge ID 2. Retrieves the merge operator 3. Converts the value to the appropriate format (integer or JSON) 4. Adds the value to the merge operator's buffer 5. Waits for Stop Merge to apply all accumulated values"
     },
     "open": {
-      "namespace": "Core.Badgerdb.Open",
+      "namespace": "Robomotion.BadgerDB.Open",
       "name": "Open",
       "summary": "Opens or creates a BadgerDB database instance for use in your automation workflow.",
       "howItWorks": "The Open node is the first step in working with BadgerDB. It initializes a database connection and returns a database ID that is used by all other BadgerDB operations. When executed, the node: 1. Validates the storage type and database folder (if using disk storage) 2. Creates or opens the database with the specified configuration 3. Returns a unique database ID for subsequent operations 4. Stores the database instance in memory for the duration of the flow"
     },
     "restore": {
-      "namespace": "Core.Badgerdb.Restore",
+      "namespace": "Robomotion.BadgerDB.Restore",
       "name": "Restore",
       "summary": "Restores a BadgerDB database from a backup file created by the Backup node.",
       "howItWorks": "The Restore node recreates a database from a backup file, loading all data into the specified database folder. When executed, the node: 1. Validates that the restore file exists 2. Validates that the database folder exists 3. Checks that the database folder doesn't already contain a database 4. Opens a new database at the target location 5. Loads data from the backup file 6. Closes the database after restoration completes :::warning The Restore node will fail if a database already exists in the target folder. This prevents accidental data loss. :::"
     },
     "set": {
-      "namespace": "Core.Badgerdb.Set",
+      "namespace": "Robomotion.BadgerDB.Set",
       "name": "Set",
       "summary": "Stores a key-value pair in the BadgerDB database.",
       "howItWorks": "The Set node stores data in BadgerDB by encoding the value according to the specified format and associating it with a key. When executed, the node: 1. Validates the database ID and key 2. Retrieves the value to store 3. Encodes the value according to the selected Encoding option 4. Creates or uses an existing transaction 5. Stores the encoded bytes under the specified key 6. Applies TTL if specified 7. Commits the transaction (if not part of a larger transaction)"
     },
     "startmerge": {
-      "namespace": "Core.Badgerdb.Startmerge",
+      "namespace": "Robomotion.BadgerDB.StartMerge",
       "name": "Startmerge",
       "summary": "Starts a merge operation for atomic increment, decrement, or JSON merging on a specific key in BadgerDB.",
       "howItWorks": "The Start Merge node initializes a merge operator that allows multiple values to be combined atomically. Unlike regular transactions, merge operations are designed for specific use cases like counters and object merging. When executed, the node: 1. Validates the database ID and key 2. Creates a merge operator with the specified operation type 3. Returns a unique merge ID 4. Keeps the merge operator active until stopped"
     },
     "starttransaction": {
-      "namespace": "Core.Badgerdb.Starttransaction",
+      "namespace": "Robomotion.BadgerDB.StartTransaction",
       "name": "Starttransaction",
       "summary": "Starts a new transaction for performing atomic read and write operations on a BadgerDB database.",
       "howItWorks": "The Start Transaction node creates a new transaction context that allows multiple database operations to be grouped together and committed atomically. When executed, the node: 1. Validates the database ID 2. Creates a new read-write transaction 3. Returns a unique transaction ID 4. Keeps the transaction active until committed or the flow ends"
     },
     "stopmerge": {
-      "namespace": "Core.Badgerdb.Stopmerge",
+      "namespace": "Robomotion.BadgerDB.StopMerge",
       "name": "Stopmerge",
       "summary": "Stops and finalizes a merge operation, applying all accumulated values atomically to the database.",
       "howItWorks": "The Stop Merge node finalizes a merge operation and applies all accumulated values atomically to the database. When executed, the node: 1. Validates the merge ID 2. Retrieves the merge operator 3. Applies all accumulated values atomically 4. Updates the database with the final result 5. Removes the merge operator from memory 6. Releases all associated resources :::info All values added via Merge nodes are applied together atomically when Stop Merge is called. :::"

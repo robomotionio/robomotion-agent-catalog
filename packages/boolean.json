@@ -4,19 +4,19 @@
   "description": "## Overview Boolean operations are fundamental to creating dynamic automation flows that make decisions based on conditions. This package offers nodes for:",
   "nodes": {
     "assign": {
-      "namespace": "Core.Boolean.Assign",
+      "namespace": "Robomotion.Boolean.Assign",
       "name": "Assign",
       "summary": "Assigns a boolean value (true or false) to a variable with a specified scope, making it available for use in other parts of your automation flow.",
       "howItWorks": "When executed, the Assign node: 1. Retrieves the boolean value from the specified input source 2. Applies thread-safe locking if using Global or Flow scope to prevent race conditions 3. Stores the boolean value in the output variable with the configured scope 4. Makes the value available for use by subsequent nodes"
     },
     "operation": {
-      "namespace": "Core.Boolean.Operation",
+      "namespace": "Robomotion.Boolean.Operation",
       "name": "Operation",
       "summary": "Performs logical operations on multiple boolean values, including AND, OR, XOR, NAND, NOR, and Equal operations. This node is essential for combining multiple conditions and creating complex decision logic in RPA flows.",
       "howItWorks": "When executed, the Operation node: 1. Retrieves all boolean values from the Values array 2. Uses the first value as the initial result 3. Iterates through remaining values, applying the selected operation type 4. Stores the final result in the output variable **Processing Example (AND operation):** ``` Values: [true, true, false, true] Step 1: result = true (first value) Step 2: result = true AND true = true Step 3: result = true AND false = false Step 4: result = false AND true = false Final: result = false ```"
     },
     "tostring": {
-      "namespace": "Core.Boolean.Tostring",
+      "namespace": "Robomotion.Boolean.ToString",
       "name": "Tostring",
       "summary": "Converts a boolean value to its string representation (\"true\" or \"false\"), making it suitable for logging, display, reporting, or string-based operations in RPA flows.",
       "howItWorks": "When executed, the ToString node: 1. Retrieves the boolean value from the input 2. Converts it to its string representation using Go's standard boolean formatting 3. Stores the result as a string in the output variable **Conversion Table:** | Input Boolean | Output String | |--------------|---------------| | `true`       | `\"true\"`      | | `false`      | `\"false\"`     |"

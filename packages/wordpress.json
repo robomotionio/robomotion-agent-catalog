@@ -4,7 +4,7 @@
   "description": "## Overview The WordPress package provides integration with WordPress sites via the REST API. Use it when you need to create or update posts, manage media, handle categories, or automate content publishing workflows.",
   "nodes": {
     "connect": {
-      "namespace": "Core.Wordpress.Connect",
+      "namespace": "Robomotion.Wordpress.Connect",
       "name": "Connect",
       "summary": "Establishes a connection to WordPress using Basic Authentication and returns a client ID for subsequent WordPress operations.",
       "howItWorks": "The Connect node is the first step in any WordPress automation flow. It establishes an authenticated connection to your WordPress site using the REST API. When executed, the node: 1. Validates the provided URL and credentials 2. Creates an HTTP client with Basic Authentication 3. Tests the connection by making a simple API request to verify credentials 4. Stores the authenticated client in memory 5. Returns a unique client ID that references the stored connection 6. This client ID is then used by other WordPress nodes to access the API",
@@ -21,10 +21,33 @@
         "For security, always use the Disconnect node to remove the stored connection when it's no longer needed",
         "The client connection is stored in memory only and is automatically removed when the flow stops",
         "Modern WordPress installations (4.7+) have the REST API enabled by default"
+      ],
+      "credentials": [
+        {
+          "name": "wordpress_credentials",
+          "title": "WordPress Credentials",
+          "description": "WordPress username and application password for REST API authentication",
+          "fields": [
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "description": "WordPress username"
+            },
+            {
+              "name": "password",
+              "title": "Application Password",
+              "type": "password",
+              "required": true,
+              "description": "WordPress application password (generate from Users \u003e Profile \u003e Application Passwords)"
+            }
+          ]
+        }
       ]
     },
     "createcategory": {
-      "namespace": "Core.Wordpress.Createcategory",
+      "namespace": "Robomotion.Wordpress.CreateCategory",
       "name": "Createcategory",
       "summary": "Creates a new category in WordPress with specified name, slug, description, and parent category.",
       "howItWorks": "The Create Category node creates a new WordPress category using the WordPress REST API. When executed, the node: 1. Retrieves the authentication (either from Client Id or direct credentials) 2. Validates the category data 3. Sends a POST request to `/wp-json/wp/v2/categories` endpoint 4. Returns the created category object with all metadata",
@@ -43,7 +66,7 @@
       ]
     },
     "createmedia": {
-      "namespace": "Core.Wordpress.Createmedia",
+      "namespace": "Robomotion.Wordpress.CreateMedia",
       "name": "Createmedia",
       "summary": "Uploads a media file to the WordPress media library, making it available for use in posts, pages, and as featured images.",
       "howItWorks": "The Create Media node uploads a file to the WordPress media library using the WordPress REST API. When executed, the node: 1. Retrieves the authentication (either from Client Id or direct credentials) 2. Reads the file from the specified local path 3. Validates the file path and file name 4. Sends a POST request to `/wp-json/wp/v2/media` endpoint with the file data 5. Sets the appropriate Content-Type header 6. Returns the created media object with URLs and metadata",
@@ -65,7 +88,7 @@
       ]
     },
     "createpost": {
-      "namespace": "Core.Wordpress.Createpost",
+      "namespace": "Robomotion.Wordpress.CreatePost",
       "name": "Createpost",
       "summary": "Creates a new post in WordPress with specified content, title, status, and other properties.",
       "howItWorks": "The Create Post node creates a new WordPress post using the WordPress REST API. When executed, the node: 1. Retrieves the authentication (either from Client Id or direct credentials) 2. Validates the post data 3. Sends a POST request to `/wp-json/wp/v2/posts` endpoint 4. Returns the created post object with all metadata",
@@ -85,7 +108,7 @@
       ]
     },
     "delete": {
-      "namespace": "Core.Wordpress.Delete",
+      "namespace": "Robomotion.Wordpress.Delete",
       "name": "Delete",
       "summary": "Permanently deletes a post, media file, or category from WordPress.",
       "howItWorks": "The Delete node permanently removes a WordPress object using the WordPress REST API. When executed, the node: 1. Validates the Object type is selected 2. Validates the Object Id is provided 3. Retrieves the authentication (either from Client Id or direct credentials) 4. Sends a DELETE request to `/wp-json/wp/v2/{object_type}/{id}` endpoint 5. For categories and media, automatically sets `force=true` to bypass trash 6. Permanently deletes the object",
@@ -109,7 +132,7 @@
       ]
     },
     "disconnect": {
-      "namespace": "Core.Wordpress.Disconnect",
+      "namespace": "Robomotion.Wordpress.Disconnect",
       "name": "Disconnect",
       "summary": "Disconnects from WordPress and releases the client connection, freeing up system resources.",
       "howItWorks": "The Disconnect node terminates an active WordPress connection and removes the stored client from memory. When executed, the node: 1. Validates the provided Client Id 2. Locates the stored connection using the Client Id 3. Removes the connection from the internal connection pool 4. Frees up memory resources",
@@ -126,7 +149,7 @@
       ]
     },
     "get": {
-      "namespace": "Core.Wordpress.Get",
+      "namespace": "Robomotion.Wordpress.Get",
       "name": "Get",
       "summary": "Retrieves a single post or category from WordPress by its ID, returning the complete object with all metadata.",
       "howItWorks": "The Get node retrieves a specific WordPress object by ID using the WordPress REST API. When executed, the node: 1. Validates the Object type is selected 2. Validates the Object Id is provided 3. Retrieves the authentication (either from Client Id or direct credentials) 4. Sends a GET request to `/wp-json/wp/v2/{object_type}/{id}` endpoint 5. Returns the complete object with all metadata",
@@ -149,7 +172,7 @@
       ]
     },
     "listcategories": {
-      "namespace": "Core.Wordpress.Listcategories",
+      "namespace": "Robomotion.Wordpress.ListCategories",
       "name": "Listcategories",
       "summary": "Retrieves all categories from WordPress including their metadata, hierarchy, and post counts.",
       "howItWorks": "The List Categories node retrieves all categories from WordPress using the WordPress REST API. When executed, the node: 1. Retrieves the authentication (either from Client Id or direct credentials) 2. Sends a GET request to `/wp-json/wp/v2/categories/` endpoint 3. Returns an array of all category objects with their complete metadata",
@@ -167,7 +190,7 @@
       ]
     },
     "listmedia": {
-      "namespace": "Core.Wordpress.Listmedia",
+      "namespace": "Robomotion.Wordpress.ListMedia",
       "name": "Listmedia",
       "summary": "Retrieves all media files from the WordPress media library including images, videos, documents, and other attachments.",
       "howItWorks": "The List Media node retrieves all media items from WordPress using the WordPress REST API. When executed, the node: 1. Retrieves the authentication (either from Client Id or direct credentials) 2. Sends a GET request to `/wp-json/wp/v2/media` endpoint 3. Returns an array of all media objects with their complete metadata",
@@ -186,7 +209,7 @@
       ]
     },
     "listposts": {
-      "namespace": "Core.Wordpress.Listposts",
+      "namespace": "Robomotion.Wordpress.ListPosts",
       "name": "Listposts",
       "summary": "Retrieves a list of posts from WordPress with optional filtering by status and pagination support.",
       "howItWorks": "The List Posts node retrieves posts from WordPress using the WordPress REST API with filtering and pagination. When executed, the node: 1. Validates the status parameter is selected 2. Constructs the API request with status, page, and per-page parameters 3. Sends a GET request to `/wp-json/wp/v2/posts` endpoint 4. Retrieves pagination metadata from response headers 5. Returns the posts array along with total count and page information",
@@ -208,7 +231,7 @@
       ]
     },
     "update": {
-      "namespace": "Core.Wordpress.Update",
+      "namespace": "Robomotion.Wordpress.Update",
       "name": "Update",
       "summary": "Updates an existing post or category in WordPress with new properties and metadata.",
       "howItWorks": "The Update node modifies an existing WordPress object using the WordPress REST API. When executed, the node: 1. Validates the Object type is selected 2. Validates the Object Id is provided 3. Validates the Object data is provided 4. Retrieves the authentication (either from Client Id or direct credentials) 5. Sends a POST request to `/wp-json/wp/v2/{object_type}/{id}` endpoint 6. Returns the updated object with all metadata",

@@ -4,7 +4,7 @@
   "description": "## Overview The Technical Analysis package provides financial market analysis capabilities. Use it when you need to calculate technical indicators like moving averages, RSI, MACD, or create charts for trading analysis and automation.",
   "nodes": {
     "cycles": {
-      "namespace": "Core.TechnicalAnalysis.Cycles",
+      "namespace": "Robomotion.TechnicalAnalysis.Cycles",
       "name": "Cycles",
       "summary": "Calculates technical analysis indicators related to cycles in financial data.",
       "howItWorks": "The Cycles Indicators node calculates technical analysis indicators related to cycles in financial data. When executed, the node: 1. Reads the input data from the specified Data Path 2. Sets the Index Key column as the index for the data 3. Calculates the selected cycle indicator using the specified Length parameter 4. Saves the results to the specified Indicator Path",
@@ -20,7 +20,7 @@
       ]
     },
     "momentum": {
-      "namespace": "Core.TechnicalAnalysis.Momentum",
+      "namespace": "Robomotion.TechnicalAnalysis.Momentum",
       "name": "Momentum",
       "summary": "Calculates technical analysis indicators related to momentum in financial data.",
       "howItWorks": "The Momentum Indicators node calculates technical analysis indicators related to momentum in financial data. When executed, the node: 1. Reads the input data from the specified Data Path 2. Sets the Index Key column as the index for the data 3. Calculates the selected momentum indicator using the specified Length and Signal Length parameters 4. Saves the results to the specified Indicator Path",
@@ -36,7 +36,7 @@
       ]
     },
     "overlap": {
-      "namespace": "Core.TechnicalAnalysis.Overlap",
+      "namespace": "Robomotion.TechnicalAnalysis.Overlap",
       "name": "Overlap",
       "summary": "Calculates technical analysis indicators related to overlap in financial data.",
       "howItWorks": "The Overlap Indicators node calculates technical analysis indicators related to overlap in financial data. When executed, the node: 1. Reads the input data from the specified Data Path 2. Sets the Index Key column as the index for the data 3. Calculates the selected overlap indicator using the specified Length parameter 4. Saves the results to the specified Indicator Path",
@@ -52,7 +52,7 @@
       ]
     },
     "performance": {
-      "namespace": "Core.TechnicalAnalysis.Performance",
+      "namespace": "Robomotion.TechnicalAnalysis.Performance",
       "name": "Performance",
       "summary": "Calculates technical analysis indicators related to performance in financial data.",
       "howItWorks": "The Performance Indicators node calculates technical analysis indicators related to performance in financial data. When executed, the node: 1. Reads the input data from the specified Data Path 2. Sets the Index Key column as the index for the data 3. Calculates the selected performance indicator using the specified Length parameter 4. Saves the results to the specified Indicator Path",
@@ -68,7 +68,7 @@
       ]
     },
     "plot_create": {
-      "namespace": "Core.TechnicalAnalysis.Plot_create",
+      "namespace": "Robomotion.TechnicalAnalysis.PlotCreate",
       "name": "Plot_create",
       "summary": "Creates a plot visualization from financial data.",
       "howItWorks": "The Plot Create node generates a plot visualization from financial data. When executed, the node: 1. Reads the input data from the specified Data Path 2. Uses the Date Key column as the x-axis values 3. Creates a candlestick chart using the open, high, low, and close values 4. Sets the axis titles based on the provided inputs 5. Adds the plot to the internal plot storage and returns a Plot ID",
@@ -84,7 +84,7 @@
       ]
     },
     "plot_label": {
-      "namespace": "Core.TechnicalAnalysis.Plot_label",
+      "namespace": "Robomotion.TechnicalAnalysis.PlotLabel",
       "name": "Plot_label",
       "summary": "Adds labels to an existing plot visualization.",
       "howItWorks": "The Plot Label node adds labels to an existing plot visualization. When executed, the node: 1. Retrieves the plot using the provided Plot ID 2. Reads the label data from the specified Data Path 3. For each row in the data, adds an annotation to the plot with: * Position based on Date Key and Value Key * Text from the Label Key * Background color from the Background Color Key (if provided) * Text color from the Text Color Key (if provided) 4. Updates the plot with the new annotations",
@@ -100,7 +100,7 @@
       ]
     },
     "plot_line": {
-      "namespace": "Core.TechnicalAnalysis.Plot_line",
+      "namespace": "Robomotion.TechnicalAnalysis.PlotLine",
       "name": "Plot_line",
       "summary": "Adds a line to an existing plot visualization.",
       "howItWorks": "The Plot Line node adds a line to an existing plot visualization. When executed, the node: 1. Retrieves the plot using the provided Plot ID 2. Reads the line data from the specified Data Path 3. Adds a scatter trace to the plot with: * X-axis values from the Date Key column * Y-axis values from the Value Key column * Line color as specified * Display mode as selected (lines, markers, or both) 4. Updates the plot with the new line",
@@ -116,7 +116,7 @@
       ]
     },
     "plot_write": {
-      "namespace": "Core.TechnicalAnalysis.Plot_write",
+      "namespace": "Robomotion.TechnicalAnalysis.PlotWrite",
       "name": "Plot_write",
       "summary": "Writes a plot visualization to an HTML file.",
       "howItWorks": "The Plot Write node saves a plot visualization to an HTML file. When executed, the node: 1. Retrieves the plot using the provided Plot ID 2. Writes the plot to an HTML file at the specified Output Path 3. Enables scroll zoom functionality in the saved HTML file 4. Deletes the plot from internal storage after saving",
@@ -132,7 +132,7 @@
       ]
     },
     "statistic": {
-      "namespace": "Core.TechnicalAnalysis.Statistic",
+      "namespace": "Robomotion.TechnicalAnalysis.Statistic",
       "name": "Statistic",
       "summary": "Calculates technical analysis indicators related to statistics in financial data.",
       "howItWorks": "The Statistic Indicators node calculates technical analysis indicators related to statistics in financial data. When executed, the node: 1. Reads the input data from the specified Data Path 2. Sets the Index Key column as the index for the data 3. Calculates the selected statistic indicator using the specified Length parameter 4. Saves the results to the specified Indicator Path",
@@ -148,7 +148,7 @@
       ]
     },
     "trend": {
-      "namespace": "Core.TechnicalAnalysis.Trend",
+      "namespace": "Robomotion.TechnicalAnalysis.Trend",
       "name": "Trend",
       "summary": "Calculates technical analysis indicators related to trends in financial data.",
       "howItWorks": "The Trend Indicators node calculates technical analysis indicators related to trends in financial data. When executed, the node: 1. Reads the input data from the specified Data Path 2. Sets the Index Key column as the index for the data 3. Calculates the selected trend indicator using the specified Length parameter 4. Saves the results to the specified Indicator Path",
@@ -164,7 +164,7 @@
       ]
     },
     "utility": {
-      "namespace": "Core.TechnicalAnalysis.Utility",
+      "namespace": "Robomotion.TechnicalAnalysis.Utility",
       "name": "Utility",
       "summary": "Calculates technical analysis utility indicators in financial data.",
       "howItWorks": "The Utility Indicators node calculates technical analysis utility indicators in financial data. When executed, the node: 1. Reads the input data from the specified Data Path 2. Sets the Index Key column as the index for the data 3. Calculates the selected utility indicator using the specified Length parameter 4. Saves the results to the specified Indicator Path",
@@ -180,7 +180,7 @@
       ]
     },
     "volatility": {
-      "namespace": "Core.TechnicalAnalysis.Volatility",
+      "namespace": "Robomotion.TechnicalAnalysis.Volatility",
       "name": "Volatility",
       "summary": "Calculates technical analysis indicators related to volatility in financial data.",
       "howItWorks": "The Volatility Indicators node calculates technical analysis indicators related to volatility in financial data. When executed, the node: 1. Reads the input data from the specified Data Path 2. Sets the Index Key column as the index for the data 3. Calculates the selected volatility indicator using the specified Length parameter 4. Saves the results to the specified Indicator Path",
@@ -196,7 +196,7 @@
       ]
     },
     "volume": {
-      "namespace": "Core.TechnicalAnalysis.Volume",
+      "namespace": "Robomotion.TechnicalAnalysis.Volume",
       "name": "Volume",
       "summary": "Calculates technical analysis indicators related to volume in financial data.",
       "howItWorks": "The Volume Indicators node calculates technical analysis indicators related to volume in financial data. When executed, the node: 1. Reads the input data from the specified Data Path 2. Sets the Index Key column as the index for the data 3. Calculates the selected volume indicator using the specified Length parameter 4. Saves the results to the specified Indicator Path",

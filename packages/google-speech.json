@@ -4,7 +4,7 @@
   "description": "```mdx-code-block import DocCardList from '@theme/DocCardList';",
   "nodes": {
     "speechtotext": {
-      "namespace": "Core.GoogleSpeech.Speechtotext",
+      "namespace": "Robomotion.GoogleSpeech.SpeechToText",
       "name": "Speechtotext",
       "summary": "Converts speech audio files stored in Google Cloud Storage to text using Google Cloud Speech-to-Text API with advanced recognition features and multiple language support.",
       "howItWorks": "The Speech to Text node uses Google Cloud's long-running recognition method to convert audio to text. When executed: 1. Validates the GCS URI format and ensures it's not empty 2. Authenticates with Google Cloud Speech-to-Text API using provided credentials 3. Configures recognition parameters: - Sets audio encoding to LINEAR16 (WAV format) - Applies specified sample rate and language code - Selects the appropriate recognition model - Enables requested features (punctuation, word offsets) 4. Submits long-running recognition request to Google Cloud 5. Waits for recognition operation to complete 6. Returns detailed transcription results with metadata",
@@ -18,10 +18,45 @@
       "errorCodes": [
         "ErrInvalidArg",
         "ErrCredentials"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "Service Account credentials for Google Cloud Speech-to-Text and Text-to-Speech APIs.",
+          "default": true,
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Cloud Speech-to-Text API and/or Cloud Text-to-Speech API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Grant the service account appropriate roles (e.g., 'Cloud Speech Client')",
+            "4. Download the JSON key file",
+            "5. Paste the JSON content here"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            },
+            {
+              "label": "Speech-to-Text Documentation",
+              "url": "https://cloud.google.com/speech-to-text/docs"
+            }
+          ]
+        }
       ]
     },
     "texttospeech": {
-      "namespace": "Core.GoogleSpeech.Texttospeech",
+      "namespace": "Robomotion.GoogleSpeech.TextToSpeech",
       "name": "Texttospeech",
       "summary": "Converts text or SSML content to natural-sounding speech audio using Google Cloud Text-to-Speech API with support for multiple languages, voices, and audio formats.",
       "howItWorks": "The Text to Speech node generates natural-sounding audio from text using Google Cloud's advanced neural networks. When executed: 1. Validates the input text is not empty (max 5,000 characters) 2. Authenticates with Google Cloud Text-to-Speech API using provided credentials 3. Configures synthesis parameters: - Selects the specified voice (language code + voice name) - Sets audio encoding (WAV, MP3, or OGG Opus) - Applies the specified sample rate - Processes input as plain text or SSML 4. Sends synthesis request to Google Cloud 5. Receives generated audio content 6. Saves audio to the specified path (or temporary file if no path provided) 7. Returns the file path for further processing",
@@ -36,6 +71,41 @@
         "ErrCredentials",
         "ErrFilePath",
         "ErrWriteFile"
+      ],
+      "credentials": [
+        {
+          "name": "service_account",
+          "title": "Service Account",
+          "description": "Service Account credentials for Google Cloud Speech-to-Text and Text-to-Speech APIs.",
+          "default": true,
+          "fields": [
+            {
+              "name": "content",
+              "title": "Service Account JSON",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "{\"type\": \"service_account\", \"project_id\": \"...\", ...}",
+              "description": "Paste the full JSON key file from Google Cloud Console"
+            }
+          ],
+          "help": [
+            "1. Open Google Cloud Console and enable Cloud Speech-to-Text API and/or Cloud Text-to-Speech API",
+            "2. Go to 'IAM \u0026 Admin' → 'Service Accounts' → Create service account",
+            "3. Grant the service account appropriate roles (e.g., 'Cloud Speech Client')",
+            "4. Download the JSON key file",
+            "5. Paste the JSON content here"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/"
+            },
+            {
+              "label": "Speech-to-Text Documentation",
+              "url": "https://cloud.google.com/speech-to-text/docs"
+            }
+          ]
+        }
       ]
     }
   }

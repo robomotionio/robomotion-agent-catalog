@@ -4,7 +4,7 @@
   "description": "## Key Features - Cloud-based Excel automation via Microsoft Graph API",
   "nodes": {
     "activate-sheet": {
-      "namespace": "Core.MicrosoftGraph.ActivateSheet",
+      "namespace": "Robomotion.MicrosoftGraph.Excel.ActivateSheet",
       "name": "ActivateSheet",
       "summary": "Selects a worksheet for subsequent operations. Note that Microsoft Graph API doesn't support worksheet activation like desktop Excel, so this node primarily validates the worksheet exists and returns its information for use in subsequent operations.",
       "tips": [
@@ -12,10 +12,67 @@
         "Use this node when you need to validate worksheet existence first",
         "Store the worksheet_id output for subsequent operations",
         "Consider using Get Worksheet if you need information about all worksheets"
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Graph API (Excel, SharePoint, OneDrive). Authorize via browser to access your Microsoft 365 resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Files.ReadWrite.All, Sites.ReadWrite.All",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
       ]
     },
     "clear-range": {
-      "namespace": "Core.MicrosoftGraph.ClearRange",
+      "namespace": "Robomotion.MicrosoftGraph.Excel.ClearRange",
       "name": "ClearRange",
       "summary": "Clears the contents, formats, or both from a range of cells in an Excel worksheet.",
       "tips": [
@@ -24,10 +81,67 @@
         "Use \"All\" for complete cleanup",
         "For clearing entire sheets, use Clear Sheet node instead",
         "Clearing does not delete rows or columns, only empties cells"
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Graph API (Excel, SharePoint, OneDrive). Authorize via browser to access your Microsoft 365 resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Files.ReadWrite.All, Sites.ReadWrite.All",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
       ]
     },
     "clear-sheet": {
-      "namespace": "Core.MicrosoftGraph.ClearSheet",
+      "namespace": "Robomotion.MicrosoftGraph.Excel.ClearSheet",
       "name": "ClearSheet",
       "summary": "Clears the entire content and/or formatting from a worksheet, resetting it to a blank state.",
       "tips": [
@@ -36,10 +150,67 @@
         "For clearing specific ranges, use Clear Range instead",
         "Consider backing up important data before clearing",
         "The worksheet structure (rows/columns) remains intact"
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Graph API (Excel, SharePoint, OneDrive). Authorize via browser to access your Microsoft 365 resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Files.ReadWrite.All, Sites.ReadWrite.All",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
       ]
     },
     "connect": {
-      "namespace": "Core.MicrosoftGraph.Connect",
+      "namespace": "Robomotion.MicrosoftGraph.Connect",
       "name": "Connect",
       "summary": "Establishes a connection to Microsoft Graph API using OAuth2 credentials. This node authenticates with Microsoft's cloud services and creates a session that can be used with other Microsoft Graph nodes.",
       "howItWorks": "The Connect node intelligently handles authentication: 1. **Token Reuse**: If a valid access token exists in the credentials and hasn't expired, it's reused immediately 2. **Token Refresh**: If the access token is expired but a refresh token exists, it automatically refreshes the token 3. **OAuth2 Flow**: If no refresh token exists, it opens a browser window for you to authenticate with Microsoft The node automatically updates your vault credentials with fresh tokens, so subsequent connections are faster.",
@@ -58,10 +229,67 @@
         "The same credentials can be used for multiple parallel connections",
         "Connections remain active until Disconnect is called or the flow ends",
         "For better performance, reuse a single connection across multiple operations"
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Graph API (Excel, SharePoint, OneDrive). Authorize via browser to access your Microsoft 365 resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Files.ReadWrite.All, Sites.ReadWrite.All",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
       ]
     },
     "create-table": {
-      "namespace": "Core.MicrosoftGraph.CreateTable",
+      "namespace": "Robomotion.MicrosoftGraph.Excel.CreateTable",
       "name": "CreateTable",
       "summary": "Creates an Excel table from a range of cells in a worksheet. Excel tables provide structured data with built-in filtering, sorting, and formula features.",
       "tips": [
@@ -70,10 +298,67 @@
         "Filter buttons make it easy for users to explore data",
         "Totals row can show SUM, AVERAGE, COUNT, etc.",
         "Tables automatically expand when you add data below them in Excel"
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Graph API (Excel, SharePoint, OneDrive). Authorize via browser to access your Microsoft 365 resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Files.ReadWrite.All, Sites.ReadWrite.All",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
       ]
     },
     "create-workbook": {
-      "namespace": "Core.MicrosoftGraph.CreateWorkbook",
+      "namespace": "Robomotion.MicrosoftGraph.Excel.CreateWorkbook",
       "name": "CreateWorkbook",
       "summary": "Creates a new Excel workbook in OneDrive. The workbook is created with a default empty worksheet.",
       "tips": [
@@ -83,10 +368,67 @@
         "The file is immediately available in OneDrive - no need to save manually",
         "If a file with the same name exists, it will be overwritten",
         "Store the Workbook Id output for all subsequent operations on this file"
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Graph API (Excel, SharePoint, OneDrive). Authorize via browser to access your Microsoft 365 resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Files.ReadWrite.All, Sites.ReadWrite.All",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
       ]
     },
     "create-worksheet": {
-      "namespace": "Core.MicrosoftGraph.CreateWorksheet",
+      "namespace": "Robomotion.MicrosoftGraph.Excel.CreateWorksheet",
       "name": "CreateWorksheet",
       "summary": "Creates a new worksheet in an existing Excel workbook. The worksheet is added at the end of the workbook.",
       "tips": [
@@ -96,34 +438,262 @@
         "Microsoft Graph API doesn't support setting an \"active\" worksheet like desktop Excel",
         "Maximum worksheet name length is 31 characters",
         "Avoid special characters in worksheet names (avoid: \\ / ? * [ ])"
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Graph API (Excel, SharePoint, OneDrive). Authorize via browser to access your Microsoft 365 resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Files.ReadWrite.All, Sites.ReadWrite.All",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
       ]
     },
     "delete-cell": {
-      "namespace": "Core.MicrosoftGraph.DeleteCell",
+      "namespace": "Robomotion.MicrosoftGraph.Excel.DeleteCell",
       "name": "DeleteCell",
-      "summary": "Deletes a specific cell or range of cells from an Excel worksheet, shifting surrounding cells."
+      "summary": "Deletes a specific cell or range of cells from an Excel worksheet, shifting surrounding cells.",
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Graph API (Excel, SharePoint, OneDrive). Authorize via browser to access your Microsoft 365 resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Files.ReadWrite.All, Sites.ReadWrite.All",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
+      ]
     },
     "delete-column": {
-      "namespace": "Core.MicrosoftGraph.DeleteColumn",
+      "namespace": "Robomotion.MicrosoftGraph.Excel.DeleteColumn",
       "name": "DeleteColumn",
       "summary": "Deletes one or more columns from an Excel worksheet. Columns to the right of the deleted range shift left.",
       "tips": [
         "Deletion is permanent",
         "Columns to the right shift left automatically"
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Graph API (Excel, SharePoint, OneDrive). Authorize via browser to access your Microsoft 365 resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Files.ReadWrite.All, Sites.ReadWrite.All",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
       ]
     },
     "delete-row": {
-      "namespace": "Core.MicrosoftGraph.DeleteRow",
+      "namespace": "Robomotion.MicrosoftGraph.Excel.DeleteRow",
       "name": "DeleteRow",
       "summary": "Deletes one or more rows from an Excel worksheet. Rows below the deleted range shift up.",
       "tips": [
         "Deletion is permanent",
         "Rows below shift up automatically",
         "Formulas referencing deleted rows may need updating"
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Graph API (Excel, SharePoint, OneDrive). Authorize via browser to access your Microsoft 365 resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Files.ReadWrite.All, Sites.ReadWrite.All",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
       ]
     },
     "delete-sheet": {
-      "namespace": "Core.MicrosoftGraph.DeleteSheet",
+      "namespace": "Robomotion.MicrosoftGraph.Excel.DeleteSheet",
       "name": "DeleteSheet",
       "summary": "Permanently deletes a worksheet from an Excel workbook. This operation cannot be undone.",
       "tips": [
@@ -132,10 +702,67 @@
         "Deletion is permanent and cannot be undone",
         "Consider backing up important data before deletion",
         "The Remaining Worksheets output helps verify what's left after deletion"
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Graph API (Excel, SharePoint, OneDrive). Authorize via browser to access your Microsoft 365 resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Files.ReadWrite.All, Sites.ReadWrite.All",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
       ]
     },
     "disconnect": {
-      "namespace": "Core.MicrosoftGraph.Disconnect",
+      "namespace": "Robomotion.MicrosoftGraph.Disconnect",
       "name": "Disconnect",
       "summary": "Closes an active Microsoft Graph API connection and releases associated resources. Always use this node when you're finished with Microsoft Graph operations to properly clean up the session.",
       "examples": [
@@ -156,7 +783,7 @@
       ]
     },
     "get-cell-value": {
-      "namespace": "Core.MicrosoftGraph.GetCellValue",
+      "namespace": "Robomotion.MicrosoftGraph.Excel.GetCellValue",
       "name": "GetCellValue",
       "summary": "Retrieves the value from a specific cell in an Excel worksheet stored in OneDrive or SharePoint.",
       "tips": [
@@ -165,20 +792,134 @@
         "For reading multiple cells, use Get Range for better performance",
         "Worksheet names are case-insensitive",
         "If worksheet name is empty, defaults to \"Sheet1\""
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Graph API (Excel, SharePoint, OneDrive). Authorize via browser to access your Microsoft 365 resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Files.ReadWrite.All, Sites.ReadWrite.All",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
       ]
     },
     "get-column": {
-      "namespace": "Core.MicrosoftGraph.GetColumn",
+      "namespace": "Robomotion.MicrosoftGraph.Excel.GetColumn",
       "name": "GetColumn",
       "summary": "Retrieves all data from a specific column in an Excel worksheet. Returns cell values as a dictionary with cell addresses as keys.",
       "tips": [
         "Column letters are case-insensitive",
         "Use Get Range for reading multiple columns efficiently",
         "Empty cells included based on Include Empty Cells option"
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Graph API (Excel, SharePoint, OneDrive). Authorize via browser to access your Microsoft 365 resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Files.ReadWrite.All, Sites.ReadWrite.All",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
       ]
     },
     "get-file-info": {
-      "namespace": "Core.MicrosoftGraph.GetFileInfo",
+      "namespace": "Robomotion.MicrosoftGraph.SharePoint.GetFileInfo",
       "name": "GetFileInfo",
       "summary": "Retrieves detailed information about a file in OneDrive or SharePoint, including metadata, permissions, and version history.",
       "tips": [
@@ -188,10 +929,67 @@
         "Include Permissions to see who has access to the file",
         "Include Versions to track file history",
         "The DownloadUrl can be used to download the file directly"
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Graph API (Excel, SharePoint, OneDrive). Authorize via browser to access your Microsoft 365 resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Files.ReadWrite.All, Sites.ReadWrite.All",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
       ]
     },
     "get-formula": {
-      "namespace": "Core.MicrosoftGraph.GetFormula",
+      "namespace": "Robomotion.MicrosoftGraph.Excel.GetFormula",
       "name": "GetFormula",
       "summary": "Retrieves formulas from a cell or range of cells in an Excel worksheet. Returns both the formulas and their evaluated values.",
       "tips": [
@@ -199,10 +997,67 @@
         "For single cells, use Single Formula output for convenience",
         "For ranges, use Formulas output to get all formulas in a 2D array",
         "Range Info provides context about the queried range"
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Graph API (Excel, SharePoint, OneDrive). Authorize via browser to access your Microsoft 365 resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Files.ReadWrite.All, Sites.ReadWrite.All",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
       ]
     },
     "get-range": {
-      "namespace": "Core.MicrosoftGraph.GetRange",
+      "namespace": "Robomotion.MicrosoftGraph.Excel.GetRange",
       "name": "GetRange",
       "summary": "Retrieves a range of cells from an Excel worksheet as a structured table object. This is the primary node for reading multiple cells efficiently.",
       "tips": [
@@ -212,10 +1067,67 @@
         "For large datasets, consider reading specific ranges for better performance",
         "The table object can be used directly with Loop, Filter, and other data nodes",
         "Empty cells are returned as empty strings"
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Graph API (Excel, SharePoint, OneDrive). Authorize via browser to access your Microsoft 365 resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Files.ReadWrite.All, Sites.ReadWrite.All",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
       ]
     },
     "get-row": {
-      "namespace": "Core.MicrosoftGraph.GetRow",
+      "namespace": "Robomotion.MicrosoftGraph.Excel.GetRow",
       "name": "GetRow",
       "summary": "Retrieves all data from a specific row in an Excel worksheet. Returns cell values as a dictionary with cell addresses as keys.",
       "tips": [
@@ -224,10 +1136,67 @@
         "Empty cells are included if Include Empty Cells is true",
         "Use Column Range to limit the columns read for better performance",
         "For reading multiple rows, consider using Get Range instead"
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Graph API (Excel, SharePoint, OneDrive). Authorize via browser to access your Microsoft 365 resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Files.ReadWrite.All, Sites.ReadWrite.All",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
       ]
     },
     "get-workbook": {
-      "namespace": "Core.MicrosoftGraph.GetWorkbook",
+      "namespace": "Robomotion.MicrosoftGraph.Excel.GetWorkbook",
       "name": "GetWorkbook",
       "summary": "Opens an Excel workbook from OneDrive or SharePoint and retrieves its metadata. This node is required before performing any operations on an Excel file.",
       "tips": [
@@ -237,10 +1206,67 @@
         "The workbook remains accessible until you disconnect or the flow ends",
         "File paths are case-sensitive on some systems",
         "Use forward slashes (/) for paths, not backslashes (\\)"
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Graph API (Excel, SharePoint, OneDrive). Authorize via browser to access your Microsoft 365 resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Files.ReadWrite.All, Sites.ReadWrite.All",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
       ]
     },
     "get-worksheet": {
-      "namespace": "Core.MicrosoftGraph.GetWorksheet",
+      "namespace": "Robomotion.MicrosoftGraph.Excel.GetWorksheet",
       "name": "GetWorksheet",
       "summary": "Retrieves information about worksheets in an Excel workbook. Returns details about a specific worksheet or the first worksheet if no name is provided.",
       "tips": [
@@ -249,15 +1275,129 @@
         "The UsedRange property shows where data exists - useful for determining read boundaries",
         "Position is 0-based (first sheet is position 0)",
         "Worksheet names are case-insensitive when searching"
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Graph API (Excel, SharePoint, OneDrive). Authorize via browser to access your Microsoft 365 resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Files.ReadWrite.All, Sites.ReadWrite.All",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
       ]
     },
     "insert-column": {
-      "namespace": "Core.MicrosoftGraph.InsertColumn",
+      "namespace": "Robomotion.MicrosoftGraph.Excel.InsertColumn",
       "name": "InsertColumn",
-      "summary": "Inserts one or more blank columns into an Excel worksheet at a specified position. Existing columns to the right are shifted."
+      "summary": "Inserts one or more blank columns into an Excel worksheet at a specified position. Existing columns to the right are shifted.",
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Graph API (Excel, SharePoint, OneDrive). Authorize via browser to access your Microsoft 365 resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Files.ReadWrite.All, Sites.ReadWrite.All",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
+      ]
     },
     "insert-row": {
-      "namespace": "Core.MicrosoftGraph.InsertRow",
+      "namespace": "Robomotion.MicrosoftGraph.Excel.InsertRow",
       "name": "InsertRow",
       "summary": "Inserts one or more blank rows into an Excel worksheet at a specified position. Existing rows below are shifted down.",
       "tips": [
@@ -265,10 +1405,67 @@
         "Inserted rows are blank - use Set Range or Set Cell Value to populate them",
         "Formulas in cells below are automatically adjusted",
         "For inserting and populating data, consider using Set Range with appropriate positioning"
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Graph API (Excel, SharePoint, OneDrive). Authorize via browser to access your Microsoft 365 resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Files.ReadWrite.All, Sites.ReadWrite.All",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
       ]
     },
     "list-files": {
-      "namespace": "Core.MicrosoftGraph.ListFiles",
+      "namespace": "Robomotion.MicrosoftGraph.SharePoint.ListFiles",
       "name": "ListFiles",
       "summary": "Lists files and folders from OneDrive or SharePoint. This node helps you discover and locate Excel files before performing operations on them.",
       "tips": [
@@ -278,10 +1475,67 @@
         "For SharePoint, ensure your site URL includes the full path: `https://domain.sharepoint.com/sites/sitename`",
         "Use folder path `/` to list root directory contents",
         "OneDrive paths use forward slashes (/) like: `/Documents/Reports`"
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Graph API (Excel, SharePoint, OneDrive). Authorize via browser to access your Microsoft 365 resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Files.ReadWrite.All, Sites.ReadWrite.All",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
       ]
     },
     "set-cell-value": {
-      "namespace": "Core.MicrosoftGraph.SetCellValue",
+      "namespace": "Robomotion.MicrosoftGraph.Excel.SetCellValue",
       "name": "SetCellValue",
       "summary": "Sets the value of a specific cell in an Excel worksheet stored in OneDrive or SharePoint.",
       "tips": [
@@ -291,10 +1545,67 @@
         "The cell is created if it doesn't exist",
         "Previous cell value is overwritten",
         "For formulas, use the Set Formula node instead"
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Graph API (Excel, SharePoint, OneDrive). Authorize via browser to access your Microsoft 365 resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Files.ReadWrite.All, Sites.ReadWrite.All",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
       ]
     },
     "set-formula": {
-      "namespace": "Core.MicrosoftGraph.SetFormula",
+      "namespace": "Robomotion.MicrosoftGraph.Excel.SetFormula",
       "name": "SetFormula",
       "summary": "Sets a formula in a specific cell or range of cells in an Excel worksheet. The formula is evaluated automatically by Excel.",
       "tips": [
@@ -303,10 +1614,67 @@
         "Use absolute references ($A$1) when needed",
         "For multiple formulas, consider using a loop with Set Formula",
         "Test formulas in Excel first to ensure correct syntax"
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Graph API (Excel, SharePoint, OneDrive). Authorize via browser to access your Microsoft 365 resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Files.ReadWrite.All, Sites.ReadWrite.All",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
       ]
     },
     "set-range": {
-      "namespace": "Core.MicrosoftGraph.SetRange",
+      "namespace": "Robomotion.MicrosoftGraph.Excel.SetRange",
       "name": "SetRange",
       "summary": "Writes a range of cells to an Excel worksheet from a table object. This is the primary node for writing multiple cells efficiently.",
       "tips": [
@@ -316,6 +1684,63 @@
         "Use Headers = true when updating existing formatted worksheets",
         "Start Cell determines where data writing begins",
         "All data writes are automatically saved - no separate save operation needed"
+      ],
+      "credentials": [
+        {
+          "name": "oauth2",
+          "title": "OAuth2 (Microsoft 365)",
+          "description": "OAuth2 credentials for Microsoft Graph API (Excel, SharePoint, OneDrive). Authorize via browser to access your Microsoft 365 resources.",
+          "default": true,
+          "fields": [
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this to your Azure app's Redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Application (Client) ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+              "description": "Application (client) ID from Azure AD app registration"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "Client secret value from Azure AD app registration"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or common",
+              "description": "Azure AD tenant ID (use 'common' for multi-tenant apps)"
+            }
+          ],
+          "help": [
+            "1. Go to Azure Portal (portal.azure.com) -\u003e Azure Active Directory -\u003e App registrations",
+            "2. Create a new registration or select existing app",
+            "3. Add http://localhost:9876/oauth2/callback as a Redirect URI (Mobile and desktop applications)",
+            "4. Go to 'Certificates \u0026 secrets' -\u003e Create a new client secret",
+            "5. Add API permissions: Microsoft Graph -\u003e Delegated -\u003e Files.ReadWrite.All, Sites.ReadWrite.All",
+            "6. Copy Application (client) ID, Client secret, and Directory (tenant) ID"
+          ],
+          "resources": [
+            {
+              "label": "Azure Portal",
+              "url": "https://portal.azure.com/"
+            },
+            {
+              "label": "Microsoft Graph Permissions",
+              "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+            }
+          ]
+        }
       ]
     }
   }

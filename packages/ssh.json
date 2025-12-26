@@ -4,7 +4,7 @@
   "description": "## Overview The SSH package provides secure shell connectivity for remote server operations. Use it when you need to execute commands on remote servers, transfer files via SFTP, or automate server administration tasks.",
   "nodes": {
     "connect": {
-      "namespace": "Core.Ssh.Connect",
+      "namespace": "Robomotion.SSH.Connect",
       "name": "Connect",
       "summary": "Establishes an SSH connection to a remote server.",
       "howItWorks": "The Connect node establishes an SSH connection to a remote server using either password or private key authentication: 1. Validates the provided credentials (must include a username) 2. If a private key path is provided, uses key-based authentication 3. Otherwise, uses password authentication from the credentials 4. Validates the host and port values 5. Establishes the SSH connection with the specified timeout 6. Stores the connection and returns a client ID for use with other SSH nodes",
@@ -19,10 +19,32 @@
         "For security, it's recommended to use private key authentication instead of passwords",
         "The connection should be closed using the Disconnect node when no longer needed",
         "When using \"Ignore Host Key Check\", be aware of the security implications of man-in-the-middle attacks"
+      ],
+      "credentials": [
+        {
+          "name": "SSH Credentials",
+          "title": "SSH Credentials",
+          "description": "Username and password for SSH server authentication",
+          "fields": [
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "description": "SSH username for authentication"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "description": "SSH password (optional if using private key)"
+            }
+          ]
+        }
       ]
     },
     "disconnect": {
-      "namespace": "Core.Ssh.Disconnect",
+      "namespace": "Robomotion.SSH.Disconnect",
       "name": "Disconnect",
       "summary": "Closes an established SSH connection and releases associated resources.",
       "howItWorks": "The Disconnect node closes an established SSH connection and releases all associated resources: 1. Validates the provided client ID 2. Retrieves the SSH client associated with the ID 3. Closes the SSH connection 4. Removes the client from the internal connection pool",
@@ -36,7 +58,7 @@
       ]
     },
     "downloadfile": {
-      "namespace": "Core.Ssh.Downloadfile",
+      "namespace": "Robomotion.SSH.DownloadFile",
       "name": "Downloadfile",
       "summary": "Downloads a file from a remote SSH server to the local system.",
       "howItWorks": "The Download File node transfers a file from a remote SSH server to the local system: 1. Validates the provided client ID, remote path, and local path 2. Retrieves the SSH client associated with the client ID 3. Initiates a secure file transfer from the remote path to the local path 4. Completes the transfer and returns success or error",
@@ -54,7 +76,7 @@
       ]
     },
     "runcommand": {
-      "namespace": "Core.Ssh.Runcommand",
+      "namespace": "Robomotion.SSH.RunCommand",
       "name": "Runcommand",
       "summary": "Executes a command on a remote SSH server and returns the result.",
       "howItWorks": "The Run Command node executes a command on a remote SSH server and captures its output: 1. Validates the provided client ID and command 2. Retrieves the SSH client associated with the client ID 3. Executes the specified command on the remote server 4. Captures the command output and returns it as the result",
@@ -72,7 +94,7 @@
       ]
     },
     "uploadfile": {
-      "namespace": "Core.Ssh.Uploadfile",
+      "namespace": "Robomotion.SSH.UploadFile",
       "name": "Uploadfile",
       "summary": "Uploads a file from the local system to a remote SSH server.",
       "howItWorks": "The Upload File node transfers a file from the local system to a remote SSH server: 1. Validates the provided client ID, local path, and remote path 2. Retrieves the SSH client associated with the client ID 3. Initiates a secure file transfer from the local path to the remote path 4. Completes the transfer and returns success or error",

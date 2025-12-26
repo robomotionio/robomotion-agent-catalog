@@ -4,7 +4,7 @@
   "description": "## Overview The String package provides extensive string manipulation capabilities. Use it when you need to process, transform, validate, or format text data in your automation workflows.",
   "nodes": {
     "Assign": {
-      "namespace": "Core.String.Assign",
+      "namespace": "Robomotion.String.Assign",
       "name": "Assign",
       "summary": "Assigns a string value to a variable with configurable scope (Global, Flow, Local, Message, or Custom).",
       "howItWorks": "The Assign node allows you to store a string value in a variable with different scope levels: 1. **Global** - Variable is accessible across all flows in the project 2. **Flow** - Variable is accessible within the current flow only 3. **Local** - Variable is accessible within the current execution context 4. **Message** - Variable is attached to the message object (default) 5. **Custom** - Variable is stored in a custom scope When using Global or Flow scope, the node uses mutex locks to ensure thread-safe operations when multiple executions access the same variable.",
@@ -22,7 +22,7 @@
       ]
     },
     "Compare": {
-      "namespace": "Core.String.Compare",
+      "namespace": "Robomotion.String.Compare",
       "name": "Compare",
       "summary": "Compares two strings lexicographically and returns -1, 0, or 1 indicating the relationship between them.",
       "howItWorks": "The Compare node performs lexicographical (dictionary order) comparison between two strings: 1. Takes two input strings 2. Optionally converts both to lowercase if \"Ignore Case\" is enabled 3. Compares character by character using Unicode values 4. Returns an integer indicating the relationship Lexicographical comparison works like dictionary ordering: * \"apple\" \u003c \"banana\" (returns -1) * \"hello\" = \"hello\" (returns 0) * \"zebra\" \u003e \"apple\" (returns 1)",
@@ -41,7 +41,7 @@
       ]
     },
     "Concatenate": {
-      "namespace": "Core.String.Concatenate",
+      "namespace": "Robomotion.String.Concatenate",
       "name": "Concatenate",
       "summary": "Joins two strings together into a single string.",
       "howItWorks": "The Concatenate node performs simple string concatenation by appending the second string immediately after the first string with no separator or space between them. If you need to join strings with a separator, use the [Join](/reference/packages/string/Join) node instead.",
@@ -60,7 +60,7 @@
       ]
     },
     "Count": {
-      "namespace": "Core.String.Count",
+      "namespace": "Robomotion.String.Count",
       "name": "Count",
       "summary": "Counts the number of non-overlapping occurrences of a substring within a string.",
       "howItWorks": "The Count node searches through the entire string and counts how many times the substring appears. The search is: * **Case-sensitive:** \"Hello\" and \"hello\" are different * **Non-overlapping:** In \"aaa\", searching for \"aa\" returns 1, not 2 * **Exact match:** Must match the substring exactly If the substring is empty, the count will be the length of the string + 1.",
@@ -80,7 +80,7 @@
       ]
     },
     "Cut": {
-      "namespace": "Core.String.Cut",
+      "namespace": "Robomotion.String.Cut",
       "name": "Cut",
       "summary": "Splits a string at the first occurrence of a separator into \"before\" and \"after\" parts.",
       "howItWorks": "The Cut node finds the first occurrence of the separator and splits the string into two parts: 1. Everything before the separator → `result.before` 2. Everything after the separator → `result.after` 3. The separator itself is not included in either part 4. If separator not found: entire string goes to `before`, `after` is empty",
@@ -99,7 +99,7 @@
       ]
     },
     "GenerateString": {
-      "namespace": "Core.String.GenerateString",
+      "namespace": "Robomotion.String.GenerateString",
       "name": "GenerateString",
       "summary": "Generates a random alphanumeric string of specified length.",
       "howItWorks": "The Generate String node creates a random string using: * **Character set:** Letters only (a-z, A-Z) - 52 possible characters * **Random selection:** Each character is randomly selected * **No numbers or special characters** - only alphabetic characters * **Case-mixed:** Contains both uppercase and lowercase letters * **Length specified by input**",
@@ -123,7 +123,7 @@
       ]
     },
     "GenerateUUID": {
-      "namespace": "Core.String.GenerateUUID",
+      "namespace": "Robomotion.String.GenerateUUID",
       "name": "GenerateUUID",
       "summary": "Generates a new random UUID (Universally Unique Identifier) in standard format.",
       "howItWorks": "The Generate UUID node creates a new UUID (Version 4): * **Format:** 8-4-4-4-12 hexadecimal digits separated by hyphens * **Length:** Always 36 characters (32 hex digits + 4 hyphens) * **Randomness:** 122 bits of randomness * **Uniqueness:** Virtually guaranteed to be globally unique * **Standard:** Follows RFC 4122 specification Example UUID: `550e8400-e29b-41d4-a716-446655440000`",
@@ -144,7 +144,7 @@
       ]
     },
     "GetLength": {
-      "namespace": "Core.String.GetLength",
+      "namespace": "Robomotion.String.GetLength",
       "name": "GetLength",
       "summary": "Returns the length of a string in bytes (number of characters).",
       "howItWorks": "The Get Length node counts the number of bytes in a string: * **Returns integer** - the byte count * **Empty string** returns 0 * **Spaces count** as characters * **Multi-byte characters** (Unicode) may count as multiple bytes * **ASCII characters** are 1 byte each :::note This measures byte length. Some Unicode characters use multiple bytes, so byte length may be different from visual character count. :::",
@@ -164,7 +164,7 @@
       ]
     },
     "HasPrefix": {
-      "namespace": "Core.String.HasPrefix",
+      "namespace": "Robomotion.String.HasPrefix",
       "name": "HasPrefix",
       "summary": "Checks if a string starts with a specified prefix, returning true or false.",
       "howItWorks": "The Has Prefix node checks if a string begins with the specified prefix: * **Case-sensitive:** \"Hello\" and \"hello\" are different * **Exact match:** Prefix must match exactly from the start * **Returns boolean:** true if starts with prefix, false otherwise * **Empty prefix:** Always returns true",
@@ -184,7 +184,7 @@
       ]
     },
     "HasSuffix": {
-      "namespace": "Core.String.HasSuffix",
+      "namespace": "Robomotion.String.HasSuffix",
       "name": "HasSuffix",
       "summary": "Checks if a string ends with a specified suffix, returning true or false.",
       "howItWorks": "The Has Suffix node checks if a string ends with the specified suffix: * **Case-sensitive:** \".PDF\" and \".pdf\" are different * **Exact match:** Suffix must match exactly at the end * **Returns boolean:** true if ends with suffix, false otherwise * **Empty suffix:** Always returns true",
@@ -205,7 +205,7 @@
       ]
     },
     "Includes": {
-      "namespace": "Core.String.Includes",
+      "namespace": "Robomotion.String.Includes",
       "name": "Includes",
       "summary": "Checks if a string contains a specified substring, returning true or false.",
       "howItWorks": "The Includes node performs a simple substring search: * **Case-sensitive:** \"Hello\" and \"hello\" are different * **Returns boolean:** true if found anywhere in string, false otherwise * **Exact match:** Must match the substring exactly * **Empty substring:** Always returns true",
@@ -225,7 +225,7 @@
       ]
     },
     "IndexAny": {
-      "namespace": "Core.String.IndexAny",
+      "namespace": "Robomotion.String.IndexAny",
       "name": "IndexAny",
       "summary": "Finds the index of the first occurrence of any character from a specified set of characters.",
       "howItWorks": "The Index Any node searches for the first occurrence of ANY character from the provided character set: * **0-based indexing:** First character is at index 0 * **Finds earliest match:** Returns position of whichever character appears first * **Case-sensitive:** 'A' and 'a' are different characters * **Returns -1:** If none of the characters are found Unlike **Index** which finds a substring, **IndexAny** finds individual characters.",
@@ -245,7 +245,7 @@
       ]
     },
     "Join": {
-      "namespace": "Core.String.Join",
+      "namespace": "Robomotion.String.Join",
       "name": "Join",
       "summary": "Joins an array of strings into a single string with a separator between elements.",
       "howItWorks": "The Join node combines an array of strings into one string: 1. Takes all elements from the **Elements** array 2. Adds any **Custom Elements** specified 3. Joins them with the **Separator** between each element 4. Returns the combined string * **Empty separator** - elements are concatenated without spacing * **Array with one element** - returns that element (no separator added) * **Empty array** - returns empty string",
@@ -266,7 +266,7 @@
       ]
     },
     "LastIndex": {
-      "namespace": "Core.String.LastIndex",
+      "namespace": "Robomotion.String.LastIndex",
       "name": "LastIndex",
       "summary": "Finds the index (position) of the last occurrence of a substring within a string.",
       "howItWorks": "The Last Index node searches for the last occurrence of a substring and returns its starting position: * **0-based indexing:** First character is at index 0 * **Case-sensitive:** \"Hello\" and \"hello\" are different * **Returns -1:** If substring is not found * **Last occurrence only:** Use Index for the first occurrence",
@@ -287,7 +287,7 @@
       ]
     },
     "Lowercase": {
-      "namespace": "Core.String.Lowercase",
+      "namespace": "Robomotion.String.Lowercase",
       "name": "Lowercase",
       "summary": "Converts all characters in a string to lowercase.",
       "howItWorks": "The Lowercase node converts all uppercase letters to their lowercase equivalents: * **Uppercase letters** (A-Z) → lowercase (a-z) * **Already lowercase** letters remain unchanged * **Numbers and special characters** remain unchanged * **Unicode characters** are properly converted",
@@ -307,7 +307,7 @@
       ]
     },
     "Repeat": {
-      "namespace": "Core.String.Repeat",
+      "namespace": "Robomotion.String.Repeat",
       "name": "Repeat",
       "summary": "Repeats a string a specified number of times.",
       "howItWorks": "The Repeat node creates a new string by repeating the input string: * **Concatenates** the string Count times * **Count of 0** returns empty string * **Count of 1** returns the original string * **Negative count** causes an error * **Empty string** repeated returns empty string",
@@ -329,7 +329,7 @@
       ]
     },
     "Replace": {
-      "namespace": "Core.String.Replace",
+      "namespace": "Robomotion.String.Replace",
       "name": "Replace",
       "summary": "Replaces all occurrences of a substring with another string.",
       "howItWorks": "The Replace node finds all occurrences of the old string and replaces them with the new string: * **Replaces all occurrences** - not just the first one * **Case-sensitive** - \"Hello\" and \"hello\" are different * **Exact match** - must match the old string exactly * **New string can be empty** - effectively removes the old string * **Old string can be repeated** - continues until no more matches",
@@ -349,7 +349,7 @@
       ]
     },
     "Reverse": {
-      "namespace": "Core.String.Reverse",
+      "namespace": "Robomotion.String.Reverse",
       "name": "Reverse",
       "summary": "Reverses the characters in a string, returning the string backwards.",
       "howItWorks": "The Reverse node reverses the order of characters in a string: * First character becomes last * Last character becomes first * Handles Unicode characters correctly * Empty string returns empty string",
@@ -370,7 +370,7 @@
       ]
     },
     "Split": {
-      "namespace": "Core.String.Split",
+      "namespace": "Robomotion.String.Split",
       "name": "Split",
       "summary": "Splits a string into an array of substrings using a separator.",
       "howItWorks": "The Split node divides a string into multiple parts based on a separator: * **Splits at all occurrences** of the separator * **Separator is removed** from the result * **Empty parts are included** (if separator appears consecutively) * **Returns array** - can be iterated or accessed by index * **Empty separator** splits into individual characters",
@@ -391,7 +391,7 @@
       ]
     },
     "Template": {
-      "namespace": "Core.String.Template",
+      "namespace": "Robomotion.String.Template",
       "name": "Template",
       "summary": "Renders a Handlebars template string with dynamic values from a context object.",
       "howItWorks": "The Template node uses Handlebars templating engine to render dynamic strings: 1. Takes a template string with placeholders in `{{variable}}` format 2. Takes a context object with values 3. Replaces each `{{placeholder}}` with the corresponding value from context 4. Returns the rendered string **Handlebars Features:** * Simple variable substitution: `{{name}}` * Nested properties: `{{user.email}}` * Array access: `{{items.[0]}}` * Conditionals: `{{#if condition}}...{{/if}}` * Loops: `{{#each items}}...{{/each}}` * Helpers: `{{uppercase name}}`",
@@ -412,7 +412,7 @@
       ]
     },
     "ToBoolean": {
-      "namespace": "Core.String.ToBoolean",
+      "namespace": "Robomotion.String.ToBoolean",
       "name": "ToBoolean",
       "summary": "Converts a string to a boolean value (true/false).",
       "howItWorks": "The To Boolean node converts string representations to boolean values using standard parsing rules: **Accepted values for `true`:** * \"true\", \"True\", \"TRUE\", \"t\", \"T\" * \"1\" **Accepted values for `false`:** * \"false\", \"False\", \"FALSE\", \"f\", \"F\" * \"0\" The conversion is case-insensitive and follows Go's `strconv.ParseBool` behavior.",
@@ -433,7 +433,7 @@
       ]
     },
     "ToNumber": {
-      "namespace": "Core.String.ToNumber",
+      "namespace": "Robomotion.String.ToNumber",
       "name": "ToNumber",
       "summary": "Converts a string to a numeric value (float64).",
       "howItWorks": "The To Number node parses string representations of numbers and converts them to float64 values: **Supported formats:** * Integers: \"42\", \"-17\", \"0\" * Decimals: \"3.14\", \"-0.5\", \"99.99\" * Scientific notation: \"1.23e10\", \"5e-3\" * Leading/trailing spaces are not automatically trimmed The conversion uses Go's `strconv.ParseFloat` with 64-bit precision.",
@@ -456,7 +456,7 @@
       ]
     },
     "ToString": {
-      "namespace": "Core.String.ToString",
+      "namespace": "Robomotion.String.ToString",
       "name": "ToString",
       "summary": "Converts any value to its string representation.",
       "howItWorks": "The To String node converts any data type to its string representation using Go's formatting: * **Numbers:** Converted to decimal string representation * **Booleans:** Converted to \"true\" or \"false\" * **Objects:** Formatted with field names and values * **Arrays:** Formatted as list with brackets * **Null/undefined:** Converted to string representation The node uses Go's `fmt.Sprintf(\"%+v\")` format, which includes field names for structs.",
@@ -476,7 +476,7 @@
       ]
     },
     "Trim": {
-      "namespace": "Core.String.Trim",
+      "namespace": "Robomotion.String.Trim",
       "name": "Trim",
       "summary": "Removes specified characters from the beginning and/or end of a string.",
       "howItWorks": "The Trim node removes specified characters from string edges based on the trim type: **When Cut Set is empty:** * Removes whitespace characters: spaces, tabs (`\\t`), newlines (`\\n`), carriage returns (`\\r`) * Uses `Left + Right Trim` mode (ignores Trim Type option) **When Cut Set is specified:** * Removes any characters that appear in the Cut Set string * Respects the Trim Type option (Left, Right, or Both) * Removes characters from edges only, not from the middle",
@@ -496,7 +496,7 @@
       ]
     },
     "Uppercase": {
-      "namespace": "Core.String.Uppercase",
+      "namespace": "Robomotion.String.Uppercase",
       "name": "Uppercase",
       "summary": "Converts all characters in a string to uppercase.",
       "howItWorks": "The Uppercase node converts all lowercase letters to their uppercase equivalents: * **Lowercase letters** (a-z) → uppercase (A-Z) * **Already uppercase** letters remain unchanged * **Numbers and special characters** remain unchanged * **Unicode characters** are properly converted",

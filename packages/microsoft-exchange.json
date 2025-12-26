@@ -4,19 +4,19 @@
   "description": "## Overview The Microsoft Exchange package allows you to:",
   "nodes": {
     "get-mail": {
-      "namespace": "Core.MicrosoftExchange.GetMail",
+      "namespace": "Robomotion.MicrosoftExchangeMail.GetMail",
       "name": "GetMail",
       "summary": "Retrieves emails from Microsoft Exchange Server via Exchange Web Services (EWS). This node allows you to fetch emails from specific folders, filter by read status, and optionally mark messages as read.",
       "howItWorks": "The Get Mail node: 1. Connects to Exchange Server using provided credentials and EWS URL 2. Locates the specified mail folder (case-insensitive for \"Inbox\") 3. Retrieves up to the specified number of messages 4. Filters by read status if \"Only Unread Mails\" is enabled 5. Loads full email properties including sender, recipients, subject, body, and attachments 6. Optionally marks emails as read if \"Mark as Read\" is enabled 7. Returns list of mail objects with all metadata 8. Implements automatic retry logic for transient errors (3 attempts with exponential backoff) :::note The node uses a 100-second timeout for Exchange operations and implements robust error handling for connection issues, server throttling, and temporary failures. :::"
     },
     "save-attachments": {
-      "namespace": "Core.MicrosoftExchange.SaveAttachments",
+      "namespace": "Robomotion.MicrosoftExchangeMail.SaveAttachments",
       "name": "SaveAttachments",
       "summary": "Saves email attachments from Microsoft Exchange Server to local disk. This node downloads attachments from a specific email retrieved via the Get Mail node and stores them in a specified directory.",
       "howItWorks": "The Save Attachments node: 1. Validates the mail object, save path, and credentials 2. Creates the save directory if it doesn't exist 3. Connects to Exchange Server using provided credentials and EWS URL 4. Binds to the specific email using the email ID from the mail object 5. Iterates through all attachments in the email 6. Downloads each attachment's content from Exchange Server 7. Handles filename conflicts by appending numbers (e.g., `file_1.pdf`, `file_2.pdf`) 8. Saves each attachment to the specified directory 9. Returns a list of all saved file paths 10. Implements automatic retry logic for transient errors (3 attempts with exponential backoff) :::note The node uses a 100-second timeout for Exchange operations. Files with duplicate names are automatically renamed with numeric suffixes to avoid overwriting existing files. The node handles large attachments efficiently and provides robust error handling for network issues and server throttling. :::"
     },
     "send-mail": {
-      "namespace": "Core.MicrosoftExchange.SendMail",
+      "namespace": "Robomotion.MicrosoftExchangeMail.SendMail",
       "name": "SendMail",
       "summary": "Sends an email via Microsoft Exchange Server using Exchange Web Services (EWS). This node supports sending emails with HTML or plain text content, multiple recipients, and file attachments.",
       "howItWorks": "The Send Mail node: 1. Validates all required inputs (URL, To, Body, Credentials) 2. Connects to Exchange Server using provided credentials and EWS URL 3. Creates an email message with specified subject and body 4. Parses and adds To, Cc, and Bcc recipients (supports comma or semicolon separation) 5. Attaches files if provided (validates file existence) 6. Sets body type (HTML or plain text) 7. Sends the email or saves to Sent Items based on \"Save Copy\" option 8. Implements automatic retry logic for transient errors (3 attempts with exponential backoff) :::note The node uses TLS 1.2 for secure connections. File attachments must exist at the specified paths before sending. Empty or whitespace-only email addresses in recipient lists are automatically filtered out. :::"

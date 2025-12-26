@@ -82,9 +82,6 @@
         "Current Item and Current Index variable names must be unique within the message scope"
       ],
       "bestPractices": [
-        "CRITICAL - EDGES STRUCTURE: ForEach has exactly 2 outputs - edges[0] for loop body, edges[1] for done",
-        "CRITICAL - LOOP BACK: The loop body MUST return to ForEach input via GoTo-Label or direct edge",
-        "Example edges: [[\"process-node-id\"], [\"done-node-id\"]] - first array = loop, second = completion",
         "The flow **must** loop back to the For Each input - forgetting this will cause the loop to execute only once",
         "The top port is used for iteration; the bottom port is only triggered when the loop completes",
         "Each For Each node maintains its own independent loop context via a unique scope ID",
@@ -129,8 +126,7 @@
       ],
       "bestPractices": [
         "The Function node uses V8 JavaScript engine (same as Chrome/Node.js)",
-        "All standard JavaScript features are available (ES6+)",
-        "CRITICAL: async/await, setTimeout, setInterval, and Promise are NOT supported - use only synchronous code",
+        "All standard JavaScript features are available (ES6+, async not supported)",
         "Variables accessed via `local`, `global`, and `flow` APIs are automatically serialized to JSON",
         "Returning `null` for single output will still generate an error - return the msg object instead",
         "For multiple outputs, use `null` in array positions where no message should be sent",
@@ -220,11 +216,6 @@
         "Global/Flow variables accessed in conditions must exist"
       ],
       "bestPractices": [
-        "CRITICAL - EDGES STRUCTURE: Switch edges array length MUST equal optConditions array length!",
-        "CRITICAL - Each condition gets its own output port: edges[0] = condition[0], edges[1] = condition[1], etc.",
-        "WRONG: 13 conditions with 1 edge array - this will NOT work correctly!",
-        "RIGHT: 3 conditions with 3 edges: [[\"node-a\"], [\"node-b\"], [\"node-c\"]]",
-        "If all conditions point to same node, still use separate edges: [[\"same-id\"], [\"same-id\"], [\"same-id\"]]",
         "Conditions are evaluated in order from top to bottom (Output 1, then Output 2, etc.)",
         "With Break enabled, only the first matching condition triggers - ideal for if/else-if/else logic",
         "Without Break, multiple outputs can fire - useful for triggering multiple parallel actions",
