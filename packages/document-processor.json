@@ -1,0 +1,71 @@
+{
+  "package": "DocumentProcessor",
+  "summary": "Parse and process documents for RAG (Retrieval-Augmented Generation) applications. Extract text, tables, and metadata from PDF, DOCX, PPTX, HTML, and more.",
+  "description": "## Supported Formats The Document Processor package supports a wide range of document formats:",
+  "nodes": {
+    "chunk_text": {
+      "namespace": "Core.DocumentProcessor.Chunk_text",
+      "name": "Chunk_text",
+      "summary": "Split text or document elements into chunks optimized for embedding models and vector databases. Essential for RAG (Retrieval-Augmented Generation) workflows where documents need to be broken into searchable segments.",
+      "howItWorks": "The Chunk Text node processes your content based on the selected strategy. When executed, the node: 1. Validates input (text string or elements array) 2. Parses configuration options (max characters, overlap, etc.) 3. For plain text: Applies basic chunking with sentence-aware splitting 4. For elements array: Uses selected strategy (basic or by_title) 5. Ensures no chunk exceeds max character limit 6. Adds overlap between chunks for context continuity 7. Preserves metadata from original elements when available 8. Returns array of chunks with indices and metadata",
+      "usage": [
+        "Valid text string or elements array from Read Document",
+        "Reasonable max characters value (at least 100 characters)",
+        "Overlap should be less than max characters"
+      ]
+    },
+    "extract_tables": {
+      "namespace": "Core.DocumentProcessor.Extract_tables",
+      "name": "Extract_tables",
+      "summary": "Extract tables from documents (PDF, DOCX, HTML, etc.) with support for multiple output formats. Get structured table data ready for processing, analysis, or database insertion.",
+      "howItWorks": "The Extract Tables node scans documents for table elements and extracts them in your preferred format. When executed, the node: 1. Validates the provided file path 2. Parses the entire document 3. Identifies all table elements 4. Extracts table content with metadata (page numbers, position) 5. Converts tables to the selected output format 6. For JSON format, parses HTML tables into structured columns and rows 7. Returns array of tables with count",
+      "usage": [
+        "Valid file path to a document containing tables",
+        "Read access to the file",
+        "Document with properly structured tables (best results with native tables, not text formatted to look like tables)"
+      ]
+    },
+    "extract_text": {
+      "namespace": "Core.DocumentProcessor.Extract_text",
+      "name": "Extract_text",
+      "summary": "Simple and fast text extraction from documents. Use this when you need plain text content without structural information. For detailed document structure analysis, use the Read Document node instead.",
+      "howItWorks": "The Extract Text node provides a simplified text extraction workflow. When executed, the node: 1. Validates the provided file path 2. Automatically detects and parses the document format 3. Extracts all text elements from the document 4. Joins text with the specified separator 5. Optionally adds page break markers 6. Returns the complete text string with character and page counts",
+      "usage": [
+        "Valid file path to a supported document format",
+        "Read access to the file",
+        "Sufficient memory for large documents"
+      ]
+    },
+    "get_document_info": {
+      "namespace": "Core.DocumentProcessor.Get_document_info",
+      "name": "Get_document_info",
+      "summary": "Get metadata and information about a document without fully parsing its content. This node provides a quick way to inspect document properties, check file support, and validate documents before processing.",
+      "howItWorks": "The Get Document Info node provides lightweight document inspection. When executed, the node: 1. Validates the provided file path 2. Retrieves basic file system information (size, name, extension) 3. Determines MIME type and file format 4. Checks if the format is supported by the Document Processor package 5. For PDFs, extracts metadata including page count, title, author, and encryption status 6. For DOCX files, extracts paragraph and table counts 7. Returns comprehensive document information object",
+      "usage": [
+        "Valid file path to any file (doesn't need to be a supported document)",
+        "Read access to the file"
+      ]
+    },
+    "prepare_for_embeddings": {
+      "namespace": "Core.DocumentProcessor.Prepare_for_embeddings",
+      "name": "Prepare_for_embeddings",
+      "summary": "Format document chunks for direct use with embedding APIs and vector databases. This node bridges the gap between chunked documents and vector storage, preparing data in the exact format needed for OpenAI embeddings and LanceDB.",
+      "howItWorks": "The Prepare for Embeddings node transforms chunks into the specific formats required by embedding APIs and vector databases. When executed, the node: 1. Validates the input chunks array 2. Extracts text from each chunk (handles both string and object formats) 3. Generates unique IDs using the specified prefix 4. Creates a simple texts array for the embedding API 5. Creates structured records with IDs and metadata for the database 6. Preserves chunk metadata (page numbers, element counts) when available 7. Returns both formats ready for the next steps in your pipeline",
+      "usage": [
+        "Valid chunks array from Chunk Text node",
+        "Chunks must contain text content"
+      ]
+    },
+    "read_document": {
+      "namespace": "Core.DocumentProcessor.Read_document",
+      "name": "Read_document",
+      "summary": "Parse any document (PDF, DOCX, PPTX, TXT, HTML, MD, etc.) into structured elements with text and metadata. This node provides detailed document structure analysis, making it ideal for understanding document layout and extracting specific sections.",
+      "howItWorks": "The Read Document node uses the Unstructured library to intelligently parse documents. When executed, the node: 1. Validates the provided file path 2. Automatically detects the document format based on file extension 3. Applies the appropriate parsing strategy (especially for PDFs) 4. Extracts all elements with their text content and type 5. Captures metadata for each element (page numbers, coordinates, etc.) 6. Returns structured elements array and concatenated full text",
+      "usage": [
+        "Valid file path to a supported document format",
+        "Read access to the file",
+        "Sufficient memory for large documents"
+      ]
+    }
+  }
+}

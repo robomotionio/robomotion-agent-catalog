@@ -1,0 +1,157 @@
+{
+  "package": "StabilityAi",
+  "summary": "Generate and transform images using Stability AI's Stable Diffusion models.",
+  "description": "## Overview The Stability AI package provides integration with Stability AI's image generation platform. Use it when you need to generate images from text descriptions, transform existing images, or upscale images using AI.",
+  "nodes": {
+    "Connect": {
+      "namespace": "Core.StabilityAi.Connect",
+      "name": "Connect",
+      "summary": "Establishes a connection to the Stability AI API and creates a session for use in subsequent Stability AI operations.",
+      "howItWorks": "The Connect node is the first step in any Stability AI automation flow. It creates a secure connection to the Stability AI API and returns a connection ID that is used by all other Stability AI nodes in the flow. When executed, the node: 1. Retrieves the API key from the provided credentials 2. Creates a unique connection identifier 3. Stores the API key associated with the connection ID in a secure session 4. Returns the connection ID that references the stored credentials 5. This connection ID is then used by other Stability AI nodes to access the API",
+      "usage": [
+        "A valid Stability AI account and API key (can be generated at platform.stability.ai)",
+        "The API key must be stored as a credential in Robomotion's vault"
+      ],
+      "bestPractices": [
+        "The Connect node should be executed before any other Stability AI operations",
+        "The returned Connection Id must be passed to subsequent Stability AI nodes",
+        "Each Connect node creates a new session that should be cleaned up with a Disconnect node",
+        "For security, always use the Disconnect node to remove the stored credentials when they're no longer needed",
+        "The session is stored in memory only and is automatically removed when the flow stops"
+      ]
+    },
+    "Disconnect": {
+      "namespace": "Core.StabilityAi.Disconnect",
+      "name": "Disconnect",
+      "summary": "Closes an existing Stability AI connection and releases resources.",
+      "howItWorks": "The Disconnect node is the final step in any Stability AI automation flow. It properly cleans up the connection session and removes stored credentials from memory. When executed, the node: 1. Validates the provided Connection Id 2. Retrieves the stored API key associated with the connection 3. Removes the connection from the session manager 4. Frees up memory resources",
+      "usage": [
+        "A valid Connection Id from a previously executed Connect node",
+        "The Connect node must have run successfully before Disconnect"
+      ],
+      "bestPractices": [
+        "Always place a Disconnect node at the end of your Stability AI flow",
+        "The Disconnect node ensures proper cleanup of credentials from memory",
+        "It's a good practice to use Disconnect even if the flow encounters errors",
+        "If a flow stops unexpectedly, the connection will be automatically cleaned up when the flow terminates",
+        "You cannot reuse a Connection Id after it has been disconnected"
+      ]
+    },
+    "GetEnginesList": {
+      "namespace": "Core.StabilityAi.GetEnginesList",
+      "name": "GetEnginesList",
+      "summary": "Retrieves the list of available Stability AI engines for image generation.",
+      "howItWorks": "The Get Engines List node queries the Stability AI API to retrieve information about all available image generation engines. When executed, the node: 1. Validates the connection or creates a temporary client using provided credentials 2. Sends a request to the Stability AI engines endpoint 3. Retrieves the list of available engines 4. Returns the engine details as a structured object",
+      "usage": [
+        "Either a valid Connection Id from Connect node OR direct API Key credentials",
+        "Active Stability AI account with API access"
+      ],
+      "bestPractices": [
+        "You can use this node in two ways:",
+        "The engine list helps you discover available models for image generation",
+        "Different engines have different capabilities, costs, and performance characteristics",
+        "Engine IDs from this list can be used in TextToImages, ImageToImages, and other generation nodes",
+        "The engine list may change as Stability AI adds or deprecates models"
+      ],
+      "tips": [
+        "Use this node at the start of your flow to validate engine availability",
+        "Store the engines list in a variable for reference throughout your flow",
+        "Compare engine features to choose the best one for your use case",
+        "Check Stability AI's documentation for detailed engine specifications",
+        "Some engines are optimized for specific tasks (text-to-image, inpainting, upscaling)"
+      ]
+    },
+    "GetUserAccount": {
+      "namespace": "Core.StabilityAi.GetUserAccount",
+      "name": "GetUserAccount",
+      "summary": "Retrieves the current user's Stability AI account information.",
+      "howItWorks": "The Get User Account node retrieves account information from Stability AI. When executed, the node: 1. Validates the connection or creates a temporary client using provided credentials 2. Sends a request to the Stability AI user account endpoint 3. Retrieves the account information 4. Returns the account details as a structured object",
+      "usage": [
+        "Either a valid Connection Id from Connect node OR direct API Key credentials",
+        "Active Stability AI account with API access",
+        "Valid API key with appropriate permissions"
+      ],
+      "bestPractices": [
+        "You can use this node in two ways:",
+        "The account information helps verify API key ownership",
+        "Useful for account validation before processing",
+        "Can be used to display user information in reports or dashboards",
+        "Account information includes the email associated with the API key"
+      ]
+    },
+    "GetUserCredit": {
+      "namespace": "Core.StabilityAi.GetUserCredit",
+      "name": "GetUserCredit",
+      "summary": "Retrieves the current user's Stability AI credit balance.",
+      "howItWorks": "The Get User Credit node retrieves the credit balance from Stability AI. When executed, the node: 1. Validates the connection or creates a temporary client using provided credentials 2. Sends a request to the Stability AI user balance endpoint 3. Retrieves the credit balance 4. Returns the credit amount as a numeric value",
+      "usage": [
+        "Either a valid Connection Id from Connect node OR direct API Key credentials",
+        "Active Stability AI account with API access",
+        "Valid API key with appropriate permissions"
+      ],
+      "bestPractices": [
+        "You can use this node in two ways:",
+        "Credits are consumed by image generation, upscaling, and other operations",
+        "Different operations consume different amounts of credits",
+        "Check credits before starting expensive batch operations",
+        "Credit balance is updated in real-time after each operation",
+        "Useful for cost monitoring and budget management"
+      ]
+    },
+    "ImageToImages": {
+      "namespace": "Core.StabilityAi.ImageToImages",
+      "name": "ImageToImages",
+      "summary": "Generates new images based on an input image and text prompt using Stability AI's image-to-image generation.",
+      "howItWorks": "The Create Images From Image node transforms an existing image based on a text prompt. When executed, the node: 1. Validates the connection or creates a temporary client using provided credentials 2. Validates the prompt, init image path, and save path 3. Reads the init image file from the specified path 4. Constructs the generation request with: - Main prompt (positive weight) - Negative prompt if provided (negative weight) - Init image data - Init image mode and strength/schedule parameters - Generation parameters (steps, cfg_scale, seed, etc.) - Style and sampler settings 5. Sends the multipart request to Stability AI API 6. Receives base64-encoded images from the API 7. Decodes and saves images to the specified directory 8. Images are named sequentially: img2img_0.png, img2img_1.png, etc.",
+      "usage": [
+        "Either a valid Connection Id from Connect node OR direct API Key credentials",
+        "Non-empty Prompt",
+        "Valid Init Image Path (file must exist and be a valid image)",
+        "Valid Image Save Path (directory must exist)",
+        "Sufficient Stability AI credits for image generation"
+      ]
+    },
+    "Masking": {
+      "namespace": "Core.StabilityAi.Masking",
+      "name": "Masking",
+      "summary": "Generates images with masked inpainting - selectively regenerates specific areas of an image while preserving the rest.",
+      "howItWorks": "The Masking node performs selective image regeneration (inpainting) on specific areas. When executed, the node: 1. Validates the connection or creates a temporary client using provided credentials 2. Validates the prompt, engine ID, init image path, and save path 3. Determines the mask source and reads required files: - For MASK_IMAGE_WHITE/BLACK: Reads both init image and mask image - For INIT_IMAGE_ALPHA: Reads init image with alpha channel 4. Constructs the multipart request with: - Init image data - Mask image data (if applicable) - Mask source mode - Prompt for masked area - Generation parameters 5. Sends the request to Stability AI inpainting endpoint 6. Receives base64-encoded images with inpainted regions 7. Saves images to the specified directory 8. Images are named sequentially: img2img_masking_0.png, img2img_masking_1.png, etc.",
+      "usage": [
+        "Either a valid Connection Id from Connect node OR direct API Key credentials",
+        "Non-empty Prompt",
+        "Valid Init Image Path (file must exist)",
+        "Valid Engine Id (must be an inpainting-capable engine like stable-inpainting-512-v2-0)",
+        "Valid Image Save Path (directory must exist)",
+        "For MASK_IMAGE_WHITE/BLACK modes: Valid Mask Image Path",
+        "Mask image must have same dimensions as init image",
+        "Sufficient Stability AI credits for inpainting"
+      ]
+    },
+    "TextToImages": {
+      "namespace": "Core.StabilityAi.TextToImages",
+      "name": "TextToImages",
+      "summary": "Generates images from text prompts using Stability AI's Stable Diffusion models.",
+      "howItWorks": "The Create Images From Text node generates images from text descriptions using Stable Diffusion. When executed, the node: 1. Validates the connection or creates a temporary client using provided credentials 2. Validates the prompt and image save path 3. Constructs the generation request with: - Main prompt (positive weight) - Negative prompt if provided (negative weight) - Dimension settings (width/height) - Generation parameters (steps, cfg_scale, seed, etc.) - Style and sampler settings 4. Sends the request to Stability AI API 5. Receives base64-encoded images from the API 6. Decodes and saves images to the specified directory 7. Images are named sequentially: txt2img_0.png, txt2img_1.png, etc.",
+      "usage": [
+        "Either a valid Connection Id from Connect node OR direct API Key credentials",
+        "Non-empty Prompt",
+        "Valid Image Save Path (directory must exist)",
+        "Sufficient Stability AI credits for image generation"
+      ]
+    },
+    "Upscale": {
+      "namespace": "Core.StabilityAi.Upscale",
+      "name": "Upscale",
+      "summary": "Upscales an image to higher resolution using Stability AI's upscaling engines.",
+      "howItWorks": "The Create Upscale node enhances image resolution using advanced upscaling techniques. When executed, the node: 1. Validates the connection or creates a temporary client using provided credentials 2. Validates the init image path and save path 3. Validates dimension settings (width OR height, not both) 4. Reads the source image file 5. Constructs the upscaling request: - For ESRGAN: Simple upscaling with dimension specification - For SD x4: Includes prompt and generation parameters 6. Sends the multipart request to Stability AI upscaling endpoint 7. Receives the upscaled image 8. Saves the image as `upscaled_img.png` in the specified directory",
+      "usage": [
+        "Either a valid Connection Id from Connect node OR direct API Key credentials",
+        "Valid Init Image Path (file must exist)",
+        "Valid Image Save Path (directory must exist)",
+        "Either Width OR Height specified (not both)",
+        "For Stable Diffusion x4: Non-empty Prompt",
+        "Sufficient Stability AI credits for upscaling"
+      ]
+    }
+  }
+}

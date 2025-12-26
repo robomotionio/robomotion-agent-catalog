@@ -1,0 +1,486 @@
+{
+  "package": "Ftp",
+  "summary": "Transfer files using FTP (File Transfer Protocol) and SFTP connections in your automation workflows.",
+  "description": "## Overview The FTP package provides file transfer capabilities using FTP and SFTP protocols. Use it when you need to upload, download, or manage files on remote servers, integrate with legacy systems, or automate file exchanges with external partners.",
+  "nodes": {
+    "connect": {
+      "namespace": "Core.Ftp.Connect",
+      "name": "Connect",
+      "summary": "Connects to a remote FTP server",
+      "howItWorks": "The Connect node establishes a connection to a remote FTP server and creates a session that can be used by other FTP nodes: 1. **Credential Validation**: Retrieves username and password from the specified Vault 2. **Session Creation**: Creates a new session based on the selected FTP type (FTP, FTPS, or SFTP) 3. **Connection Establishment**: Connects to the server using the provided host and port 4. **Authentication**: Logs in using the credentials and any additional security parameters 5. **Session ID Generation**: Returns a unique session ID for use with subsequent FTP operations",
+      "usage": [
+        "Valid FTP server hostname or IP address",
+        "Port number (default: 21 for FTP, 990 for FTPS, 22 for SFTP)",
+        "Login credentials stored in a Robomotion Vault",
+        "Network connectivity to the FTP server",
+        "For SFTP: SSH access enabled on the server",
+        "For FTPS: TLS/SSL support on the server"
+      ],
+      "bestPractices": [
+        "The session ID must be passed to all other FTP nodes to perform operations",
+        "Always use the Disconnect node to close the session when done to free server resources",
+        "For versions prior to 23.6.1, TLS verification is automatically skipped for backward compatibility",
+        "FTPS supports client certificate authentication via Private Key and Certificate options",
+        "SFTP supports both password and private key authentication",
+        "Connection timeout is set to 10 seconds",
+        "The same session can be reused for multiple operations"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrCredentials",
+        "ErrUsername",
+        "ErrHost",
+        "ErrPort",
+        "ErrFtpType",
+        "ErrLogin"
+      ],
+      "relatedNodes": [
+        "Disconnect",
+        "Upload",
+        "Download",
+        "List Directory",
+        "Create Directory",
+        "Delete File",
+        "Delete Directory",
+        "Move File",
+        "File Exists"
+      ],
+      "tips": [
+        "Store the Session ID output in a flow variable for reuse across multiple FTP operations",
+        "Use Vault credentials instead of hardcoding usernames and passwords for security",
+        "Test connections with \"Skip TLS Verification\" enabled first, then disable it for production",
+        "For SFTP, ensure your private key file is accessible and has proper permissions",
+        "Use the Disconnect node in a Try-Catch-Finally pattern to ensure sessions are always closed",
+        "For FTPS with self-signed certificates, enable \"Skip TLS Verification\" or add the certificate to your trusted store",
+        "Monitor connection timeouts in high-latency networks and adjust retry logic accordingly"
+      ]
+    },
+    "create-directory": {
+      "namespace": "Core.Ftp.CreateDirectory",
+      "name": "CreateDirectory",
+      "summary": "Creates a directory on the remote FTP server.",
+      "howItWorks": "The Create Directory node creates a new directory on the remote FTP server: 1. **Session Validation**: Verifies the session ID is valid and active 2. **Path Validation**: Ensures the directory path is not empty 3. **Directory Creation**: Creates the directory at the specified path on the FTP server 4. **Path Output**: Returns the created directory path for confirmation",
+      "usage": [
+        "Active FTP session from the [Connect](/reference/packages/ftp/connect) node",
+        "Valid directory path on the FTP server",
+        "Write permissions on the parent directory",
+        "Parent directory must exist (some FTP servers don't support recursive creation)"
+      ],
+      "bestPractices": [
+        "The node creates a single directory, not a recursive path (parent directories must exist)",
+        "If the directory already exists, the operation will fail with an error",
+        "Use forward slashes (/) in paths, even on Windows FTP servers",
+        "Relative paths are based on the current working directory of the FTP session",
+        "Some FTP servers may have restrictions on directory names (special characters, length)",
+        "The created path is returned as output, which can be used in subsequent nodes"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrSession",
+        "ErrPath",
+        "ErrCreate"
+      ],
+      "relatedNodes": [
+        "Connect",
+        "List Directory",
+        "Delete Directory",
+        "Upload",
+        "Move File",
+        "Disconnect"
+      ],
+      "tips": [
+        "Check if a directory exists using List Directory before attempting to create it",
+        "Use the Continue On Error property if directory existence should not halt the workflow",
+        "Combine with Date/Time nodes to create timestamped directory structures",
+        "Use variables to construct dynamic directory paths based on workflow data",
+        "For nested directory structures, create each level separately in sequence",
+        "Store the output path for later cleanup operations",
+        "Consider server permissions when choosing directory locations"
+      ]
+    },
+    "delete-directory": {
+      "namespace": "Core.Ftp.DeleteDirectory",
+      "name": "DeleteDirectory",
+      "summary": "Allows removal of a directory from an FTP server.",
+      "howItWorks": "The Delete Directory node removes a directory from the remote FTP server: 1. **Session Validation**: Verifies the session ID is valid and active 2. **Path Validation**: Ensures the directory path is not empty 3. **Directory Deletion**: Removes the directory at the specified path 4. **Recursive Removal**: For FTP, removes the directory and all its contents recursively",
+      "usage": [
+        "Active FTP session from the [Connect](/reference/packages/ftp/connect) node",
+        "Valid directory path on the FTP server",
+        "Delete permissions on the directory",
+        "For FTPS and SFTP: Directory must be empty (non-recursive deletion)",
+        "For FTP: Directory can contain files (recursive deletion supported)"
+      ],
+      "bestPractices": [
+        "For FTP connections: Directory is deleted recursively with all contents (files and subdirectories)",
+        "For FTPS/SFTP connections: Directory must be empty before deletion",
+        "If the directory contains files in FTPS/SFTP, delete files first using Delete File node",
+        "Use forward slashes (/) in paths regardless of server OS",
+        "The operation is permanent and cannot be undone",
+        "Some FTP servers may restrict deletion of certain directories",
+        "Root directory and system directories typically cannot be deleted"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrSession",
+        "ErrPath"
+      ],
+      "relatedNodes": [
+        "Connect",
+        "Delete File",
+        "List Directory",
+        "Create Directory",
+        "File Exists",
+        "Disconnect"
+      ],
+      "tips": [
+        "Always verify the directory path before deletion to avoid accidental data loss",
+        "Use List Directory first to check directory contents",
+        "For FTPS/SFTP, create a loop to delete all files before deleting the directory",
+        "Use Continue On Error if the directory might not exist",
+        "Combine with conditional logic to only delete directories meeting certain criteria",
+        "Keep logs of deleted directories for audit purposes",
+        "Test deletion operations with non-critical directories first",
+        "Be aware of FTP server quota calculations after deletion"
+      ]
+    },
+    "delete-file": {
+      "namespace": "Core.Ftp.DeleteFile",
+      "name": "DeleteFile",
+      "summary": "Deletes a file from FTP server",
+      "howItWorks": "The Delete File node removes a file from the remote FTP server: 1. **Session Validation**: Verifies the session ID is valid and active 2. **Path Validation**: Ensures the file path is not empty 3. **File Existence Check**: Verifies the file exists on the server 4. **File Deletion**: Removes the file from the FTP server",
+      "usage": [
+        "Active FTP session from the [Connect](/reference/packages/ftp/connect) node",
+        "Valid file path on the FTP server",
+        "Delete permissions on the file",
+        "File must exist at the specified path"
+      ],
+      "bestPractices": [
+        "The file is permanently deleted and cannot be recovered",
+        "The node checks if the file exists before attempting deletion",
+        "If the file doesn't exist, an error is thrown",
+        "Use forward slashes (/) in file paths regardless of server OS",
+        "Ensure you have proper permissions to delete the file",
+        "Some FTP servers may move deleted files to trash instead of permanent deletion",
+        "File deletion is immediate and not transactional"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrSession",
+        "ErrPath"
+      ],
+      "relatedNodes": [
+        "Connect",
+        "File Exists",
+        "Download",
+        "List Directory",
+        "Move File",
+        "Disconnect"
+      ],
+      "tips": [
+        "Always verify the file path before deletion to avoid data loss",
+        "Use File Exists node to check before deleting if file might not exist",
+        "Enable Continue On Error if file non-existence should not halt workflow",
+        "Keep audit logs of deleted files for compliance purposes",
+        "Use List Directory with filters to identify files to delete",
+        "Test deletion logic with non-critical files first",
+        "Consider archiving important files before deletion",
+        "Use conditional logic to implement retention policies"
+      ]
+    },
+    "disconnect": {
+      "namespace": "Core.Ftp.Disconnect",
+      "name": "Disconnect",
+      "summary": "Disconnects FTP session",
+      "howItWorks": "The Disconnect node closes an active FTP session and releases server resources: 1. **Session Validation**: Verifies the session ID is valid and active 2. **Logout Operation**: Sends logout command to the FTP server 3. **Connection Closure**: Closes the network connection 4. **Resource Cleanup**: Releases session resources from memory",
+      "usage": [
+        "Valid session ID from an active FTP connection",
+        "Session must have been created by the [Connect](/reference/packages/ftp/connect) node"
+      ],
+      "bestPractices": [
+        "Always disconnect when FTP operations are complete to free server resources",
+        "Each Connect node requires a corresponding Disconnect node",
+        "Sessions are automatically cleaned up if disconnect fails, but explicit disconnect is recommended",
+        "Disconnecting an already closed session will result in an error",
+        "Use Finally block to ensure disconnect happens even if operations fail",
+        "Network interruptions may cause disconnect to fail, use Continue On Error if needed"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrSession",
+        "ErrLogout"
+      ],
+      "relatedNodes": [
+        "Connect",
+        "Upload",
+        "Download",
+        "List Directory",
+        "Delete File",
+        "Move File"
+      ],
+      "tips": [
+        "Place Disconnect node in a Finally block to guarantee execution",
+        "Use the same Session ID variable throughout the workflow for consistency",
+        "Don't reuse a Session ID after disconnecting - create a new connection instead",
+        "Monitor for connection leaks if automations fail before disconnect",
+        "Set reasonable timeouts for FTP operations to avoid hanging sessions",
+        "Consider connection pooling for high-frequency FTP operations",
+        "Log successful disconnections for debugging and monitoring"
+      ]
+    },
+    "download": {
+      "namespace": "Core.Ftp.Download",
+      "name": "Download",
+      "summary": "Downloads a file from an FTP server to the local machine.",
+      "howItWorks": "The Download node retrieves a file from the remote FTP server to the local machine: 1. **Session Validation**: Verifies the session ID is valid and active 2. **Path Validation**: Ensures both FTP and local paths are provided 3. **File Existence Check**: Verifies the file exists on the FTP server 4. **File Download**: Reads the file from the server 5. **Local Storage**: Writes the file to the specified local path",
+      "usage": [
+        "Active FTP session from the [Connect](/reference/packages/ftp/connect) node",
+        "Valid file path on the FTP server",
+        "Read permissions on the remote file",
+        "Write permissions on the local directory",
+        "Sufficient disk space on the local machine",
+        "Local directory must exist (file will be created automatically)"
+      ],
+      "bestPractices": [
+        "If the local file already exists, it will be overwritten without warning",
+        "The local directory path must exist; the node doesn't create parent directories",
+        "Use absolute paths for both FTP and local file paths",
+        "File permissions are set to 0644 (rw-r--r--) on the local file",
+        "Large files are downloaded in memory, ensure sufficient RAM",
+        "Use forward slashes (/) in FTP paths, backslashes (\\) in Windows local paths",
+        "Network interruptions will cause the download to fail completely"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrSession",
+        "ErrFTPPath",
+        "ErrLocalPath"
+      ],
+      "relatedNodes": [
+        "Connect",
+        "Upload",
+        "File Exists",
+        "List Directory",
+        "Delete File",
+        "Move File",
+        "Disconnect"
+      ],
+      "tips": [
+        "Check if the file exists using File Exists node before downloading",
+        "Use unique local file names to avoid overwriting important files",
+        "Implement error handling for network failures during large downloads",
+        "Monitor disk space before downloading large files",
+        "Create local directories before download using File System nodes",
+        "Log successful downloads for audit trails",
+        "Consider download timeouts for very large files",
+        "Use temporary directories for downloads, then move files after validation",
+        "Verify file integrity after download (size, checksum) for critical files"
+      ]
+    },
+    "file-exists": {
+      "namespace": "Core.Ftp.FileExists",
+      "name": "FileExists",
+      "summary": "Checks if a file exists in the specified FTP path",
+      "howItWorks": "The File Exists node verifies whether a file is present on the remote FTP server: 1. **Session Validation**: Verifies the session ID is valid and active 2. **Path Validation**: Ensures the file path is not empty 3. **File Check**: Queries the FTP server for file existence 4. **Result Output**: Returns boolean true if file exists, false otherwise",
+      "usage": [
+        "Active FTP session from the [Connect](/reference/packages/ftp/connect) node",
+        "Valid file path on the FTP server",
+        "Read permissions on the remote directory",
+        "Network connectivity to the FTP server"
+      ],
+      "bestPractices": [
+        "The node does not distinguish between files and directories (both return true if they exist)",
+        "Returns false for non-existent paths without throwing an error",
+        "File path is case-sensitive on most FTP servers (especially Unix/Linux)",
+        "Some FTP servers may restrict file listing in certain directories",
+        "The check is performed at the moment the node executes (file may change immediately after)",
+        "Use forward slashes (/) in file paths regardless of server OS"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrSession",
+        "ErrPath"
+      ],
+      "relatedNodes": [
+        "Connect",
+        "Download",
+        "Upload",
+        "Delete File",
+        "List Directory",
+        "Move File",
+        "Disconnect"
+      ],
+      "tips": [
+        "Use this node before download operations to prevent errors",
+        "Combine with If/Else nodes for conditional workflows",
+        "Check file existence before attempting to delete files",
+        "Use in loops to filter existing files from a list",
+        "Implement retry logic for files that should exist but might be delayed",
+        "Consider timing in workflows where files are created by other processes",
+        "Cache results temporarily if checking the same file multiple times",
+        "Use for implementing idempotent file operations"
+      ]
+    },
+    "list-directory": {
+      "namespace": "Core.Ftp.ListDirectory",
+      "name": "ListDirectory",
+      "summary": "Lists the files in a directory on an FTP server.",
+      "howItWorks": "The List Directory node retrieves a listing of files and directories from the remote FTP server: 1. **Session Validation**: Verifies the session ID is valid and active 2. **Path Validation**: Ensures the directory path is not empty 3. **Directory Listing**: Retrieves all files and subdirectories from the specified path 4. **Sorting**: Applies the selected sort order (ascend, descend, modifiedlatest, modifiedearlier) 5. **Limit Application**: Returns only the top N files if Top option is set 6. **Result Output**: Returns an array of file objects with properties (Name, IsDir, Size, Date)",
+      "usage": [
+        "Active FTP session from the [Connect](/reference/packages/ftp/connect) node",
+        "Valid directory path on the FTP server",
+        "Read/List permissions on the directory",
+        "Directory must exist on the server"
+      ],
+      "bestPractices": [
+        "The output is an array of file objects, each containing Name, IsDir, Size, and Date properties",
+        "IsDir property is true for directories, false for files",
+        "Size is in bytes",
+        "Date is in ISO format (varies by FTP server)",
+        "Sort options: \"ascend\", \"descend\", \"modifiedlatest\", \"modifiedearlier\"",
+        "If Top is 0 or not set, all files are returned",
+        "The list includes both files and subdirectories",
+        "Hidden files may or may not be included depending on FTP server settings",
+        "Use forward slashes (/) in directory paths"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrSession",
+        "ErrPath"
+      ],
+      "relatedNodes": [
+        "Connect",
+        "Download",
+        "Delete File",
+        "Move File",
+        "File Exists",
+        "Create Directory",
+        "Disconnect"
+      ],
+      "tips": [
+        "Set Top to a reasonable number when listing large directories to improve performance",
+        "Use \"Date - Last Modified\" sort to find newest files quickly",
+        "Combine with ForEach loop to process multiple files",
+        "Filter the output array using conditions to select specific files",
+        "Store the file list in a variable for use in multiple subsequent operations",
+        "Use IsDir property to distinguish between files and directories",
+        "Check Size property to avoid processing empty files",
+        "Consider pagination for directories with thousands of files",
+        "Cache directory listings if checking multiple times in a workflow"
+      ]
+    },
+    "move-file": {
+      "namespace": "Core.Ftp.MoveFile",
+      "name": "MoveFile",
+      "summary": "Moves a file from one FTP location to another.",
+      "howItWorks": "The Move File node relocates or renames a file on the remote FTP server: 1. **Session Validation**: Verifies the session ID is valid and active 2. **Source Path Validation**: Ensures source file path is not empty 3. **File Existence Check**: Verifies the source file exists and is not a directory 4. **Destination Path Validation**: Ensures destination path is not empty 5. **Destination Check**: Verifies destination file doesn't already exist 6. **File Move/Rename**: Performs the rename operation on the FTP server",
+      "usage": [
+        "Active FTP session from the [Connect](/reference/packages/ftp/connect) node",
+        "Valid source file path that exists on the server",
+        "Source path must be a file, not a directory",
+        "Valid destination file path",
+        "Destination file must not already exist",
+        "Write permissions on both source and destination directories"
+      ],
+      "bestPractices": [
+        "This is effectively a rename operation on the FTP server (same as UNIX mv command)",
+        "If destination file exists, the operation fails with an error",
+        "Moving across different file systems may not be supported on some FTP servers",
+        "Use forward slashes (/) in paths regardless of server OS",
+        "The operation is atomic on most FTP servers",
+        "Source file is validated to ensure it's not a directory",
+        "Both source and destination paths must be files, not directories",
+        "File metadata (permissions, timestamps) may be preserved or reset depending on server"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrSession",
+        "ErrPath"
+      ],
+      "relatedNodes": [
+        "Connect",
+        "File Exists",
+        "Download",
+        "Upload",
+        "Delete File",
+        "List Directory",
+        "Disconnect"
+      ],
+      "tips": [
+        "Use File Exists node to check if destination already exists before moving",
+        "Implement error handling for cases where move fails due to existing destination",
+        "Combine with timestamp variables to create unique destination names",
+        "Use move operations to implement file processing workflows (incoming -\u003e processing -\u003e completed)",
+        "Consider the network overhead when moving large files (it's still a server-side operation)",
+        "Log move operations for audit trails",
+        "Use consistent naming conventions for archived files",
+        "Test move operations with non-critical files first",
+        "Implement retry logic for transient network failures"
+      ]
+    },
+    "upload": {
+      "namespace": "Core.Ftp.Upload",
+      "name": "Upload",
+      "summary": "Uploads a file to an FTP server",
+      "howItWorks": "The Upload node transfers a file from the local machine to the remote FTP server: 1. **Session Validation**: Verifies the session ID is valid and active 2. **Path Validation**: Ensures both local and FTP paths are provided 3. **Local File Read**: Reads the file from the local file system 4. **File Upload**: Transfers the file data to the FTP server 5. **Server Storage**: Writes the file to the specified path on the server Note: For FTPS, large files are uploaded in 64KB chunks with retry logic (3 retries per chunk).",
+      "usage": [
+        "Active FTP session from the [Connect](/reference/packages/ftp/connect) node",
+        "Valid local file path with read permissions",
+        "Local file must exist on the machine",
+        "Valid FTP destination path",
+        "Write permissions on the remote directory",
+        "Sufficient disk space on the FTP server",
+        "Network connectivity with adequate bandwidth for file size"
+      ],
+      "bestPractices": [
+        "If a file with the same name exists on the server, it will be overwritten without warning",
+        "For FTP and SFTP: Files are uploaded as a single operation",
+        "For FTPS: Large files are uploaded in 64KB chunks with automatic retry (up to 3 attempts per chunk)",
+        "FTPS creates a temporary .part file during upload, which is renamed on completion",
+        "File upload is performed in memory, ensure sufficient RAM for large files",
+        "Use forward slashes (/) in FTP paths",
+        "Windows local paths can use backslashes (\\) or forward slashes (/)",
+        "Network interruptions during upload may result in partial files on the server"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrSession",
+        "ErrPath"
+      ],
+      "relatedNodes": [
+        "Connect",
+        "Download",
+        "File Exists",
+        "Create Directory",
+        "List Directory",
+        "Move File",
+        "Delete File",
+        "Disconnect"
+      ],
+      "tips": [
+        "Check if the file exists on server using File Exists before uploading to avoid overwrites",
+        "Implement error handling for network failures during large uploads",
+        "Monitor available disk space on the FTP server before uploading",
+        "Use unique file names or timestamps to prevent overwriting important files",
+        "Create destination directories before upload using Create Directory node",
+        "Log successful uploads for audit trails",
+        "Consider upload bandwidth and time for very large files",
+        "Validate file integrity after upload (compare sizes)",
+        "Use temporary upload directories, then move files to final location",
+        "Delete local files only after confirming successful upload",
+        "For FTPS, the chunked upload with retry provides better reliability for large files"
+      ]
+    }
+  }
+}

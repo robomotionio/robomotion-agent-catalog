@@ -1,0 +1,288 @@
+{
+  "package": "Forms",
+  "summary": "Create and manage web forms through the Robomotion platform for collecting user input.",
+  "description": "## Overview The Forms package enables you to create, manage, and collect data from web forms hosted on the Robomotion platform. Use it when you need to gather input from users, create approval workflows, or build interactive data collection processes.",
+  "nodes": {
+    "create-form": {
+      "namespace": "Core.Forms.CreateForm",
+      "name": "CreateForm",
+      "summary": "This node allows you to create a new form using the provided title, description, and queue. Optionally, you can also specify a color and a logo URL.",
+      "howItWorks": "1. The node validates required inputs: Form Name, Queue Name, and Form UI schema must not be empty 2. RSA credentials are retrieved from the specified vault to encrypt submitted form data 3. The Form UI JSON is processed, replacing any Mustache template variables (`{{variable}}`) with values from the message 4. A theme configuration (color and logo URL) is added to the form UI structure 5. The complete form data is sent to the Robomotion Forms API via `/v1/forms.create` endpoint 6. If creation succeeds, the new Form ID is extracted from the API response 7. The Form ID is assigned to the configured output variable and the message passes through 8. If creation fails, an error is raised with details from the API response",
+      "usage": [
+        "A valid queue must exist with the specified Queue Name",
+        "RSA Key Pair credentials must be configured in a vault (for encrypting form submissions)",
+        "Credentials vault and item must be selected (not \"_\")",
+        "The Form UI must be valid JSON matching the expected schema/ui_schema format",
+        "Form Name and Queue Name cannot be empty",
+        "The Form UI field cannot be empty"
+      ],
+      "bestPractices": [
+        "The Form UI supports Mustache-style template variables: `{{variableName}}`",
+        "Template variables are replaced with values from the incoming message object",
+        "String variables in templates keep quotes, non-string variables (numbers, objects) have quotes removed",
+        "The queue specified in Queue Name must already exist in your Robomotion workspace",
+        "Form data submitted through the created form will be encrypted using the RSA public key",
+        "Only RSA Key Pair credential types are accepted - other credential types will fail",
+        "The generated Form ID is unique and can be used with other Form nodes (Update, Delete, Get Instance)",
+        "Form schemas follow the JSON Schema specification format"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrCredentials",
+        "ErrParse"
+      ],
+      "relatedNodes": [
+        "Update Form",
+        "Delete Form",
+        "Create Form Instance",
+        "Get Form Instance",
+        "List Forms"
+      ],
+      "tips": [
+        "Store RSA Key Pairs in a dedicated vault for forms to keep credentials organized",
+        "Use descriptive Queue Names that reflect the form's purpose (e.g., \"contact-forms\", \"survey-responses\")",
+        "Validate your Form UI JSON in a JSON validator before using it in automation",
+        "Save the Form ID to a global variable if you need to reference it in other flows",
+        "Use template variables to create reusable form templates that can be customized per execution",
+        "Set meaningful descriptions - they help users understand the form's purpose",
+        "Add branding with Color and Logo URL options to match your organization's identity",
+        "Test form creation in development before deploying to production"
+      ]
+    },
+    "create-form-instance": {
+      "namespace": "Core.Forms.CreateFormInstance",
+      "name": "CreateFormInstance",
+      "summary": "Creates a new form instance based on a given form ID.",
+      "howItWorks": "1. The node validates that Form ID is provided and not empty 2. The node checks that a valid Form Instance Type (Disposable or Permanent) is selected 3. A request is sent to the Robomotion Forms API at `/v1/forms.create.instance` endpoint 4. The API creates a new form instance with a unique instance ID 5. The instance ID is converted to a short encoded ID for the URL 6. A publicly accessible form URL is generated using the format: `{FormsURL}/#/{shortID}` 7. Both the Form Instance ID and Form URL are set in the output variables 8. The message passes through with the new form instance information",
+      "usage": [
+        "A valid Form ID must be provided (from Create Form node output)",
+        "Form Instance Type must be selected (cannot be \"_\" or empty)",
+        "The form referenced by Form ID must exist in the workspace"
+      ],
+      "bestPractices": [
+        "**Disposable** forms are automatically invalidated after the first submission - ideal for one-time use cases",
+        "**Permanent** forms remain accessible and can be submitted multiple times - useful for recurring data collection",
+        "The Form URL uses a shortened encoded ID for cleaner, shareable links",
+        "Each form instance has a unique ID, even when created from the same Form ID",
+        "Form instances inherit all properties (fields, validation, theme) from the parent form",
+        "The Form URL is publicly accessible - no authentication required to view or submit",
+        "Disposable forms cannot be accessed again after submission (returns error page)"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage"
+      ],
+      "relatedNodes": [
+        "Create Form",
+        "Get Form Instance",
+        "Delete Form Instance",
+        "List Forms"
+      ],
+      "tips": [
+        "Use Disposable instances for sensitive operations like password resets or one-time approvals",
+        "Use Permanent instances for public forms like contact forms or surveys",
+        "Store Form Instance IDs in a database to track which customers received which forms",
+        "Include the Form URL in notification emails or SMS for easy access",
+        "Monitor form submissions using the Get Form Instance node with the Instance ID",
+        "For multi-step processes, create multiple disposable instances in sequence",
+        "Test form URLs immediately after creation to ensure proper configuration"
+      ]
+    },
+    "delete-form": {
+      "namespace": "Core.Forms.DeleteForm",
+      "name": "DeleteForm",
+      "summary": "Deletes a created Form",
+      "howItWorks": "1. The node validates that Form ID is provided and not empty 2. A delete request is sent to the Robomotion Forms API at `/v1/forms.delete` endpoint 3. The API permanently removes the form and all its associated instances 4. If deletion succeeds (response.OK = true), the message passes through unchanged 5. If deletion fails, an error is raised with the API error message",
+      "usage": [
+        "A valid Form ID must be provided",
+        "The Form ID must correspond to an existing form in the workspace",
+        "User must have permissions to delete forms"
+      ],
+      "bestPractices": [
+        "**WARNING**: Deleting a form also deletes all its instances and submitted data - this action is irreversible",
+        "Ensure you have backed up or processed all form submissions before deletion",
+        "Form URLs shared with users will become invalid after deletion",
+        "The deletion is permanent - there is no recycle bin or undo functionality",
+        "Consider archiving important form data before deletion"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage"
+      ],
+      "relatedNodes": [
+        "Create Form",
+        "List Forms",
+        "Get Form Instance",
+        "Delete Form Instance"
+      ],
+      "tips": [
+        "Always verify the Form ID before deletion to avoid accidentally deleting the wrong form",
+        "Implement a confirmation step in production flows before deleting forms",
+        "Export or archive form submissions before deletion if data retention is required",
+        "Use List Forms to verify a form exists before attempting deletion",
+        "Set \"Continue On Error\" to true if deletion failures should not stop the workflow",
+        "For temporary/test forms, delete them promptly to keep the workspace clean",
+        "Consider implementing a \"soft delete\" pattern by marking forms as inactive instead"
+      ]
+    },
+    "delete-form-instance": {
+      "namespace": "Core.Forms.DeleteFormInstance",
+      "name": "DeleteFormInstance",
+      "summary": "Deletes a form instance",
+      "howItWorks": "1. The node validates that Form Instance ID is provided and not empty 2. A delete request is sent to the Robomotion Forms API at `/v1/forms.instance.delete` endpoint 3. The API removes the specific form instance and its submitted data (if any) 4. If deletion succeeds (response.OK = true), the message passes through unchanged 5. If deletion fails, an error is raised with the API error message",
+      "usage": [
+        "A valid Form Instance ID must be provided",
+        "The Form Instance ID must correspond to an existing instance",
+        "User must have permissions to delete form instances"
+      ],
+      "bestPractices": [
+        "**WARNING**: Deleting a form instance permanently removes its submitted data - this action is irreversible",
+        "Unlike deleting a form (which removes all instances), this only deletes a specific instance",
+        "The form template remains intact - only the instance is deleted",
+        "Form URLs pointing to the deleted instance will return an error page",
+        "Ensure submitted data is processed/backed up before deletion if needed"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage"
+      ],
+      "relatedNodes": [
+        "Create Form Instance",
+        "Get Form Instance",
+        "Delete Form",
+        "List Forms"
+      ],
+      "tips": [
+        "Always retrieve and process form instance data before deletion if you need to preserve it",
+        "Use this node to implement \"one-time use\" patterns for sensitive forms",
+        "Delete submitted disposable instances promptly to prevent unauthorized access",
+        "Set \"Continue On Error\" to true when batch deleting to avoid stopping on missing instances",
+        "Consider implementing data retention policies that auto-delete old instances",
+        "Use Get Form Instance before deletion to verify the instance exists and check its status"
+      ]
+    },
+    "get-form-instance": {
+      "namespace": "Core.Forms.GetFormInstance",
+      "name": "GetFormInstance",
+      "summary": "Gets the form by Form Instance ID",
+      "howItWorks": "1. The node validates that Form Instance ID is provided and not empty 2. A GET request is sent to the Robomotion Forms API at `/v1/forms.get?instance_id={id}` endpoint 3. The API retrieves the form instance data, including: - Form schema and UI configuration - Submitted form data (if the instance has been submitted) - Instance metadata (creation time, status, type, etc.) 4. The form instance object is extracted from the API response 5. The form data is set in the configured output variable 6. The message passes through with the form instance information",
+      "usage": [
+        "A valid Form Instance ID must be provided",
+        "The Form Instance ID must correspond to an existing instance in the workspace",
+        "User must have permissions to access form instances"
+      ],
+      "bestPractices": [
+        "The output contains the complete form instance object including schema, UI, metadata, and submitted data",
+        "Submitted data is encrypted using the RSA public key specified when creating the form",
+        "Access the submitted data via `msg.formData.data` (structure depends on your form schema)",
+        "If the instance hasn't been submitted yet, the data field may be empty or null",
+        "The status field indicates whether the form is \"pending\" or \"submitted\"",
+        "For disposable forms, the instance becomes inaccessible after the first submission retrieval"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage"
+      ],
+      "relatedNodes": [
+        "Create Form Instance",
+        "Delete Form Instance",
+        "List Forms",
+        "Update Form"
+      ],
+      "tips": [
+        "Use this node to verify form submission before processing data",
+        "Implement polling loops with Sleep nodes to wait for form submissions",
+        "Check the status field to determine if the form has been submitted",
+        "Decrypt the submitted data using the corresponding RSA private key if needed",
+        "Store the retrieved form data in a database for record-keeping",
+        "Use with Create Form Instance to build complete form submission workflows",
+        "Combine with Delete Form Instance to clean up after retrieving data"
+      ]
+    },
+    "list-forms": {
+      "namespace": "Core.Forms.ListForms",
+      "name": "ListForms",
+      "summary": "Lists all available forms",
+      "howItWorks": "1. A GET request is sent to the Robomotion Forms API at `/v1/forms.list` endpoint 2. The API retrieves all forms accessible to the current workspace 3. The forms array is extracted from the API response 4. Each form object in the array contains metadata like ID, name, description, queue name, creation date, etc. 5. The forms list is set in the configured output variable 6. The message passes through with the complete forms list",
+      "usage": [
+        "User must have permissions to list forms in the workspace",
+        "An active API connection to Robomotion Forms service"
+      ],
+      "bestPractices": [
+        "The output is an array of form objects, even if only one or zero forms exist",
+        "Each form object includes complete metadata but not instance-level data",
+        "Use this node to discover Form IDs when you don't have them stored",
+        "The list includes all forms in the workspace regardless of who created them",
+        "Forms are not sorted by default - sort them in a Function node if needed"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage"
+      ],
+      "relatedNodes": [
+        "Create Form",
+        "Delete Form",
+        "Update Form",
+        "Get Form Instance"
+      ],
+      "tips": [
+        "Cache the forms list in a global variable to avoid repeated API calls",
+        "Use Function nodes to filter or search through the forms array",
+        "Combine with For Each to process all forms in batch operations",
+        "Check the array length to determine if any forms exist before processing",
+        "Store frequently-used Form IDs in variables or databases to avoid listing",
+        "Use the form metadata to implement form management dashboards",
+        "Filter by queue name to find forms associated with specific workflows"
+      ]
+    },
+    "update-form": {
+      "namespace": "Core.Forms.UpdateForm",
+      "name": "UpdateForm",
+      "summary": "Updates a form with the provided properties.",
+      "howItWorks": "1. The node validates that Form ID is provided and not empty 2. Input values are retrieved for Form Name, Description, and Queue Name 3. If credentials are provided and valid: - The RSA Key Pair is retrieved from the vault - The public key is extracted for form encryption 4. If Form UI data is provided: - Mustache template variables (`{{variable}}`) are replaced with message values - The JSON is parsed and validated 5. All form data (name, description, queue, public key, UI) is packaged into an update request 6. The request is sent to the Robomotion Forms API at `/v1/forms.update` endpoint 7. The form is updated with the new properties 8. The message passes through unchanged",
+      "usage": [
+        "A valid Form ID must be provided (form must exist)",
+        "If updating credentials, a valid RSA Key Pair must be selected from a vault",
+        "If updating Form UI, it must be valid JSON matching the expected schema/ui_schema format",
+        "All input fields can be updated individually or together"
+      ],
+      "bestPractices": [
+        "Updating a form does not affect existing form instances - they retain their original configuration",
+        "Only fields with non-empty values are updated; blank fields preserve existing values",
+        "The Form UI supports Mustache-style template variables: `{{variableName}}`",
+        "Updating credentials changes the encryption key for future submissions only (past submissions remain encrypted with old key)",
+        "Form instances created before the update will continue to use the original form configuration",
+        "The update operation is atomic - either all changes succeed or none are applied"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrCredentials",
+        "ErrParse"
+      ],
+      "relatedNodes": [
+        "Create Form",
+        "List Forms",
+        "Delete Form",
+        "Create Form Instance"
+      ],
+      "tips": [
+        "To update only specific fields, leave other input fields empty/blank",
+        "Test form UI updates in development before applying to production forms",
+        "When rotating encryption keys, ensure you have backups of old private keys for accessing historical data",
+        "Use List Forms to find the Form ID if you don't have it stored",
+        "Consider version control for form schemas - store UI configurations before updating",
+        "Update form descriptions to include version numbers or change logs",
+        "Schedule periodic form updates to refresh branding or add new fields"
+      ]
+    }
+  }
+}

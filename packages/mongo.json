@@ -1,0 +1,327 @@
+{
+  "package": "Mongo",
+  "summary": "The MongoDB package provides comprehensive NoSQL database automation capabilities for Robomotion RPA. MongoDB is a source-available, cross-platform, document-oriented database program classified as a NoSQL database. This package enables you to perform database operations, manage collections, and manipulate documents programmatically within your automation flows.",
+  "description": "## Key Features - **Connection Management**: Establish and manage connections to MongoDB servers with support for authentication",
+  "nodes": {
+    "Connect": {
+      "namespace": "Core.Mongo.Connect",
+      "name": "Connect",
+      "summary": "Establishes a connection to a MongoDB database server using database credentials and returns a client ID for use in subsequent MongoDB operations.",
+      "howItWorks": "The Connect node is the first step when using the explicit connection approach in MongoDB automation flows. When executed, the node: 1. Retrieves database credentials from the provided credential object 2. Constructs the MongoDB connection URL based on the credential fields 3. Establishes a connection to the MongoDB server 4. Verifies the connection with a ping operation 5. Stores the client connection internally with a unique client ID 6. Returns the client ID for use in other MongoDB nodes",
+      "usage": [
+        "A running MongoDB server (local or remote)",
+        "Valid database credentials stored in Robomotion",
+        "Network access to the MongoDB server",
+        "Proper authentication if the server requires it"
+      ],
+      "bestPractices": [
+        "The Connect node should be executed before any other MongoDB operations when using the client ID approach",
+        "The returned Client Id must be passed to subsequent MongoDB nodes",
+        "Port defaults to 27017 (MongoDB default) if not specified in credentials",
+        "Authentication database (authSource) is optional and only used when username/password are provided",
+        "Each Connect node creates a new client connection that should be cleaned up with a Disconnect node",
+        "The connection is maintained in memory until explicitly disconnected or the flow stops"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrConnection"
+      ]
+    },
+    "CreateCollection": {
+      "namespace": "Core.Mongo.CreateCollection",
+      "name": "CreateCollection",
+      "summary": "Creates a new collection within a MongoDB database.",
+      "howItWorks": "The Create Collection node explicitly creates a new collection in a MongoDB database. When executed, the node: 1. Validates that both database name and collection name are not empty 2. Obtains a MongoDB client (either from client ID or by creating one from credentials) 3. Accesses the specified database 4. Calls the CreateCollection command with the specified collection name 5. The new collection is created and becomes immediately available for use",
+      "usage": [
+        "Either a valid client ID from Connect node OR database credentials",
+        "Valid database name (non-empty) - the database must already exist",
+        "Valid collection name (non-empty)",
+        "Appropriate permissions to create collections in the database"
+      ],
+      "bestPractices": [
+        "MongoDB also creates collections automatically when you first insert data",
+        "Use this node when you need to explicitly create a collection before inserting data",
+        "Collection names are case-sensitive",
+        "Collections in the same database must have unique names",
+        "You can use either the client ID approach or direct credentials approach",
+        "The database must exist before creating a collection in it",
+        "Special characters and spaces in collection names should be avoided"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrConnection"
+      ]
+    },
+    "CreateDatabase": {
+      "namespace": "Core.Mongo.CreateDatabase",
+      "name": "CreateDatabase",
+      "summary": "Creates a new MongoDB database. In MongoDB, databases are created implicitly when you first store data in them, so this node creates a database by creating and immediately removing a temporary collection.",
+      "howItWorks": "MongoDB creates databases lazily - a database doesn't physically exist until it contains data. This node creates a database by: 1. Validates the database name is not empty 2. Obtains a MongoDB client (either from client ID or by creating one from credentials) 3. Accesses the database with the specified name 4. Creates a temporary collection called \"defaultcollection\" 5. Inserts a temporary document into the collection 6. Immediately deletes the temporary document 7. The database now exists in MongoDB's database list",
+      "usage": [
+        "Either a valid client ID from Connect node OR database credentials",
+        "A valid database name (non-empty)",
+        "Appropriate permissions to create databases on the MongoDB server"
+      ],
+      "bestPractices": [
+        "MongoDB database names are case-sensitive",
+        "Database names cannot contain spaces or special characters like `/\\. \"$*\u003c\u003e:|?`",
+        "The database will appear in the database list after this operation",
+        "If a database with the same name already exists, this operation is harmless (idempotent)",
+        "You can use either the client ID approach or direct credentials approach",
+        "The temporary collection creation/deletion happens automatically and atomically"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrConnection"
+      ]
+    },
+    "DeleteDocument": {
+      "namespace": "Core.Mongo.DeleteDocument",
+      "name": "DeleteDocument",
+      "summary": "Deletes one or more documents from a MongoDB collection that match a specified query filter.",
+      "howItWorks": "The Delete Document node removes documents from a MongoDB collection based on a query filter. When executed, the node: 1. Validates that database name and collection name are not empty 2. Obtains a MongoDB client (either from client ID or by creating one from credentials) 3. Processes the MongoDB Query input with Handlebars template rendering 4. Parses the rendered JSON into BSON format 5. Accesses the specified collection 6. Executes DeleteMany operation with the provided filter 7. Returns the count of deleted documents",
+      "usage": [
+        "Either a valid client ID from Connect node OR database credentials",
+        "Valid database name (non-empty)",
+        "Valid collection name (non-empty)",
+        "Valid JSON query filter",
+        "Appropriate permissions to delete documents in the collection"
+      ],
+      "bestPractices": [
+        "Uses DeleteMany operation, which deletes all documents matching the filter",
+        "Returns the number of documents deleted, which can be zero if no matches found",
+        "An empty filter `{}` will delete ALL documents in the collection",
+        "The MongoDB Query field supports Handlebars templates for dynamic values",
+        "The operation is atomic for each document",
+        "You can use either the client ID approach or direct credentials approach",
+        "Deleted documents cannot be recovered unless you have backups"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrConnection"
+      ]
+    },
+    "Disconnect": {
+      "namespace": "Core.Mongo.Disconnect",
+      "name": "Disconnect",
+      "summary": "Disconnects from a MongoDB database server and releases the client connection resources.",
+      "howItWorks": "The Disconnect node properly closes a MongoDB connection and releases associated resources. When executed, the node: 1. Validates the provided client ID 2. Retrieves the MongoDB client connection from the internal registry 3. Calls the disconnect method on the MongoDB client 4. Removes the client from the internal registry 5. Releases all associated resources",
+      "usage": [
+        "A valid client ID from a previous Connect node execution",
+        "The connection must still be active (not already disconnected)"
+      ],
+      "bestPractices": [
+        "Always use Disconnect to properly close MongoDB connections",
+        "The client ID becomes invalid after disconnection",
+        "Attempting to use a disconnected client ID in other nodes will result in errors",
+        "Resources are automatically cleaned up when a flow stops, but explicit disconnection is recommended",
+        "Disconnect should typically be the last MongoDB operation in your flow"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg"
+      ]
+    },
+    "DropCollection": {
+      "namespace": "Core.Mongo.DropCollection",
+      "name": "DropCollection",
+      "summary": "Permanently deletes a collection and all of its documents from a MongoDB database.",
+      "howItWorks": "The Drop Collection node permanently removes a collection from a MongoDB database. When executed, the node: 1. Validates that both database name and collection name are not empty 2. Obtains a MongoDB client (either from client ID or by creating one from credentials) 3. Accesses the specified database and collection 4. Calls the drop operation to delete the entire collection 5. All documents, indexes, and metadata associated with the collection are permanently removed",
+      "usage": [
+        "Either a valid client ID from Connect node OR database credentials",
+        "Valid database name (non-empty)",
+        "Valid collection name (non-empty)",
+        "Appropriate permissions to drop collections in the database",
+        "The collection must exist in the specified database"
+      ],
+      "bestPractices": [
+        "This operation is permanent and cannot be undone",
+        "All documents in the collection are deleted",
+        "All indexes on the collection are also removed",
+        "Dropping a non-existent collection may result in an error",
+        "Consider backing up data before dropping collections",
+        "You can use either the client ID approach or direct credentials approach",
+        "The database remains after the collection is dropped"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrConnection"
+      ]
+    },
+    "DropDatabase": {
+      "namespace": "Core.Mongo.DropDatabase",
+      "name": "DropDatabase",
+      "summary": "Permanently deletes a MongoDB database and all of its collections and documents.",
+      "howItWorks": "The Drop Database node permanently removes a database from the MongoDB server. When executed, the node: 1. Validates that the database name is not empty 2. Obtains a MongoDB client (either from client ID or by creating one from credentials) 3. Accesses the specified database 4. Calls the drop operation to delete the entire database 5. All collections and documents within the database are permanently removed",
+      "usage": [
+        "Either a valid client ID from Connect node OR database credentials",
+        "A valid database name (non-empty)",
+        "Appropriate permissions to drop databases on the MongoDB server",
+        "The database must exist (attempting to drop a non-existent database will succeed without error)"
+      ],
+      "bestPractices": [
+        "This operation is permanent and cannot be undone",
+        "All collections and documents in the database are deleted",
+        "The operation succeeds even if the database doesn't exist",
+        "System databases (admin, local, config) should not be dropped",
+        "Always verify the database name before executing this operation",
+        "Consider backing up data before dropping databases",
+        "You can use either the client ID approach or direct credentials approach"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrConnection"
+      ]
+    },
+    "InsertDocument": {
+      "namespace": "Core.Mongo.InsertDocument",
+      "name": "InsertDocument",
+      "summary": "Inserts one or more documents into a MongoDB collection.",
+      "howItWorks": "The Insert Document node adds new documents to a MongoDB collection. When executed, the node: 1. Validates that database name and collection name are not empty 2. Obtains a MongoDB client (either from client ID or by creating one from credentials) 3. Processes the MongoDB Query input with Handlebars template rendering 4. Parses the rendered JSON into BSON format 5. Determines if it's a single document or multiple documents 6. Calls InsertOne for a single document or InsertMany for multiple documents 7. The documents are added to the collection with auto-generated ObjectIds if not provided",
+      "usage": [
+        "Either a valid client ID from Connect node OR database credentials",
+        "Valid database name (non-empty)",
+        "Valid collection name (non-empty)",
+        "Valid JSON document(s) in the MongoDB Query field",
+        "Appropriate permissions to insert documents in the collection"
+      ],
+      "bestPractices": [
+        "The collection will be created automatically if it doesn't exist",
+        "MongoDB automatically adds an `_id` field with a unique ObjectId if not provided",
+        "You can insert a single document (object) or multiple documents (array)",
+        "The MongoDB Query field supports Handlebars templates for dynamic values",
+        "Field values can be strings, numbers, booleans, arrays, nested objects, dates, etc.",
+        "Large batch inserts are more efficient with the array format",
+        "You can use either the client ID approach or direct credentials approach"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrConnection"
+      ]
+    },
+    "ListDatabases": {
+      "namespace": "Core.Mongo.ListDatabases",
+      "name": "ListDatabases",
+      "summary": "Retrieves a list of all databases available on the MongoDB server along with their metadata.",
+      "howItWorks": "The List Databases node queries the MongoDB server for database information. When executed, the node: 1. Obtains a MongoDB client (either from client ID or by creating one from credentials) 2. Calls the ListDatabases command with an empty filter 3. Retrieves metadata about all databases the user has access to 4. Returns the complete database list with size and status information 5. Stores the result in the specified output variable",
+      "usage": [
+        "Either a valid client ID from Connect node OR database credentials",
+        "Appropriate permissions to list databases on the MongoDB server",
+        "The user must have the listDatabases privilege"
+      ],
+      "bestPractices": [
+        "System databases (admin, local, config) are included in the list",
+        "The size information reflects the current disk usage",
+        "Empty databases (with no data) may still show a small size due to metadata",
+        "You can use either the client ID approach or direct credentials approach",
+        "The output is useful for monitoring, reporting, and automation decisions",
+        "Database names are returned as they exist on the server (case-sensitive)"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrConnection"
+      ]
+    },
+    "ReadAll": {
+      "namespace": "Core.Mongo.ReadAll",
+      "name": "ReadAll",
+      "summary": "Retrieves all documents from a MongoDB collection without any filtering.",
+      "howItWorks": "The Read All node retrieves every document from a MongoDB collection. When executed, the node: 1. Validates that database name and collection name are not empty 2. Obtains a MongoDB client (either from client ID or by creating one from credentials) 3. Accesses the specified collection 4. Executes a Find operation with an empty filter `{}` 5. Retrieves all documents from the collection 6. Returns the complete array of documents 7. Stores the result in the specified output variable",
+      "usage": [
+        "Either a valid client ID from Connect node OR database credentials",
+        "Valid database name (non-empty)",
+        "Valid collection name (non-empty)",
+        "Appropriate permissions to read documents from the collection",
+        "Sufficient memory to load all documents"
+      ],
+      "bestPractices": [
+        "Retrieves ALL documents without any filtering",
+        "Returns an empty array if the collection is empty",
+        "All document fields including `_id` are returned",
+        "Entire result set is loaded into memory",
+        "Use Read Document node instead if you need filtering",
+        "You can use either the client ID approach or direct credentials approach",
+        "Not recommended for collections with millions of documents",
+        "Consider using pagination or Read Document with filters for large datasets"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrConnection"
+      ]
+    },
+    "ReadDocument": {
+      "namespace": "Core.Mongo.ReadDocument",
+      "name": "ReadDocument",
+      "summary": "Queries and retrieves documents from a MongoDB collection based on a filter.",
+      "howItWorks": "The Read Document node retrieves documents from a MongoDB collection based on a query filter. When executed, the node: 1. Validates that database name and collection name are not empty 2. Obtains a MongoDB client (either from client ID or by creating one from credentials) 3. Processes the MongoDB Query input with Handlebars template rendering 4. Parses the rendered JSON into BSON format 5. Accesses the specified collection 6. Executes a Find operation with the provided filter 7. Retrieves all matching documents 8. Returns the documents as an array",
+      "usage": [
+        "Either a valid client ID from Connect node OR database credentials",
+        "Valid database name (non-empty)",
+        "Valid collection name (non-empty)",
+        "Valid JSON query filter",
+        "Appropriate permissions to read documents from the collection"
+      ],
+      "bestPractices": [
+        "Returns an array of documents, even if only one or zero documents match",
+        "An empty filter `{}` returns all documents in the collection",
+        "The MongoDB Query field supports Handlebars templates for dynamic values",
+        "Results include all document fields including the `_id` field",
+        "Large result sets are loaded entirely into memory",
+        "You can use either the client ID approach or direct credentials approach",
+        "For retrieving all documents without filtering, use the Read All node instead"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrConnection"
+      ]
+    },
+    "ShowCollections": {
+      "namespace": "Core.Mongo.ShowCollections",
+      "name": "ShowCollections",
+      "summary": "Retrieves a list of all collection names in a specified MongoDB database.",
+      "howItWorks": "The Show Collections node queries a MongoDB database for its collection names. When executed, the node: 1. Validates that the database name is not empty 2. Obtains a MongoDB client (either from client ID or by creating one from credentials) 3. Accesses the specified database 4. Calls the ListCollectionNames command 5. Retrieves all collection names that the user has access to 6. Returns the collection names as an array 7. Stores the result in the specified output variable",
+      "usage": [
+        "Either a valid client ID from Connect node OR database credentials",
+        "Valid database name (non-empty) - the database must exist",
+        "Appropriate permissions to list collections in the database"
+      ],
+      "bestPractices": [
+        "The output is an array of collection name strings",
+        "System collections (those starting with \"system.\") are included in the list",
+        "Empty databases return an empty array",
+        "Collection names are returned as they exist on the server (case-sensitive)",
+        "You can use either the client ID approach or direct credentials approach",
+        "The output can be used to iterate through collections or check for existence"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrConnection"
+      ]
+    },
+    "UpdateDocument": {
+      "namespace": "Core.Mongo.UpdateDocument",
+      "name": "UpdateDocument",
+      "summary": "Updates one or more documents in a MongoDB collection that match a specified filter.",
+      "howItWorks": "The Update Document node modifies documents in a MongoDB collection based on a filter and update specification. When executed, the node: 1. Validates that database name and collection name are not empty 2. Obtains a MongoDB client (either from client ID or by creating one from credentials) 3. Processes the MongoDB Query input with Handlebars template rendering 4. Parses the rendered JSON into Filter and Update components 5. Validates that both Filter and Update are provided 6. Accesses the specified collection 7. Executes UpdateMany operation with the provided filter and update 8. Returns the count of modified documents",
+      "usage": [
+        "Either a valid client ID from Connect node OR database credentials",
+        "Valid database name (non-empty)",
+        "Valid collection name (non-empty)",
+        "Valid JSON with both Filter and Update fields",
+        "Appropriate permissions to update documents in the collection"
+      ],
+      "bestPractices": [
+        "Uses UpdateMany operation, which updates all documents matching the filter",
+        "Returns the number of documents actually modified (not just matched)",
+        "If no documents match the filter, the result will be 0",
+        "The MongoDB Query field supports Handlebars templates for dynamic values",
+        "Must use MongoDB update operators like $set, $inc, $push, etc.",
+        "You can use either the client ID approach or direct credentials approach",
+        "Documents matched but not changed (already have target values) are not counted as modified"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrConnection"
+      ]
+    }
+  }
+}

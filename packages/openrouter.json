@@ -1,0 +1,160 @@
+{
+  "package": "Openrouter",
+  "summary": "OpenRouter is a unified AI gateway that provides access to 480+ AI models from multiple providers including Google Gemini, Anthropic Claude, OpenAI GPT, xAI Grok, DeepSeek, and many more through a single API. This package enables you to build powerful multi-model AI automation workflows in Robomotion.",
+  "description": "## Key Features - **Multi-Model Access**: Access 480+ AI models from leading providers through one unified API",
+  "nodes": {
+    "chat-completion": {
+      "namespace": "Core.Openrouter.ChatCompletion",
+      "name": "ChatCompletion",
+      "summary": "Generates chat responses with conversation history support, enabling multi-turn conversational AI applications through OpenRouter.",
+      "howItWorks": "When executed, the node: 1. Validates the connection or creates a temporary client using provided credentials 2. Prepares the system prompt (defaults to \"You are a helpful assistant\" if empty) 3. Validates that the user prompt is not empty 4. Processes the input Chat History array (if provided) 5. Builds the complete messages array: - Starts with the system message - Adds all history messages (maintains conversation context) - Appends the new user message 6. Configures all generation parameters (streaming, JSON mode, reasoning, etc.) 7. Makes the API request 8. For non-streaming: Extracts text from response 9. For streaming: Reads tokens in real-time and assembles complete response 10. Updates the Chat History with the assistant's response 11. Returns the text, updated history, and optional raw response",
+      "usage": [
+        "Either a valid Connection Id from Connect node OR direct API Key credentials",
+        "Non-empty User Prompt"
+      ]
+    },
+    "connect": {
+      "namespace": "Core.Openrouter.Connect",
+      "name": "Connect",
+      "summary": "Establishes a connection to OpenRouter API and creates a client session for accessing 480+ AI models from multiple providers.",
+      "howItWorks": "The Connect node is the first step in OpenRouter automation flows that require persistent sessions. When executed, the node: 1. Validates the authentication method (API key or Robomotion AI Credits) 2. If using API key: Tests the connection by making a request to list models 3. Creates an HTTP client with 30-second timeout 4. Generates a unique connection ID (UUID) 5. Stores the client session in memory for reuse by other nodes 6. Returns the connection ID for use in subsequent operations",
+      "usage": [
+        "An OpenRouter account (sign up at https://openrouter.ai)",
+        "An OpenRouter API key stored as a credential in Robomotion",
+        "Active credits in your OpenRouter account",
+        "No OpenRouter account needed",
+        "Robomotion AI credits available in your workspace"
+      ],
+      "bestPractices": [
+        "The Connect node should be executed before other OpenRouter operations when using persistent sessions",
+        "The returned Connection Id must be passed to subsequent OpenRouter nodes",
+        "Each Connect node creates a new session entry that should be cleaned up with a Disconnect node",
+        "For security, always use the Disconnect node to remove the stored session when no longer needed",
+        "Sessions are stored in memory only and automatically removed when the flow stops"
+      ]
+    },
+    "create-api-key": {
+      "namespace": "Core.Openrouter.CreateApiKey",
+      "name": "CreateApiKey",
+      "summary": "Creates a new API key in your OpenRouter account programmatically. Requires a Provisioning API key.",
+      "howItWorks": "When executed, the node: 1. Validates inputs (name cannot be empty) 2. Validates that a Provisioning API key is being used (blocks Robomotion AI Credits) 3. Builds the request with name and optional parameters 4. Makes POST request to `/keys` endpoint 5. Returns both the key metadata and the actual key string 6. The key string is only available in this response - it cannot be retrieved later",
+      "usage": [
+        "**Provisioning API Key** (not a regular API key)",
+        "Non-empty key name",
+        "OpenRouter account with key creation permissions"
+      ]
+    },
+    "delete-api-key": {
+      "namespace": "Core.Openrouter.DeleteApiKey",
+      "name": "DeleteApiKey",
+      "summary": "Permanently deletes an API key from your OpenRouter account. Requires a Provisioning API key.",
+      "howItWorks": "When executed, the node: 1. Validates inputs 2. Makes DELETE request to `/keys/{hash}` endpoint 3. Returns success status :::danger This operation is **permanent** and cannot be undone. The deleted key will immediately stop working. :::"
+    },
+    "disconnect": {
+      "namespace": "Core.Openrouter.Disconnect",
+      "name": "Disconnect",
+      "summary": "Closes the OpenRouter API connection and releases the client session to free up resources.",
+      "howItWorks": "The Disconnect node performs cleanup operations for OpenRouter connections. When executed, the node: 1. Validates that the Connection Id is not empty 2. Looks up the stored client session using the Connection Id 3. Removes the client session from memory 4. Frees up associated resources The node completes successfully even if the Connection Id doesn't exist in storage (idempotent behavior).",
+      "usage": [
+        "A valid Connection Id from a previous Connect node execution",
+        "The connection should still be active (not already disconnected)"
+      ],
+      "bestPractices": [
+        "Always use Disconnect at the end of your OpenRouter workflow",
+        "Disconnect is optional but recommended for proper resource management",
+        "Sessions are automatically cleaned up when flows stop, but explicit cleanup is best practice",
+        "Safe to call even if the connection is already closed",
+        "Does not require an active internet connection"
+      ]
+    },
+    "generate-image": {
+      "namespace": "Core.Openrouter.GenerateImage",
+      "name": "GenerateImage",
+      "summary": "Generates images using AI models like Gemini Nano Banana or FLUX.2 through OpenRouter with support for reference images and custom aspect ratios.",
+      "howItWorks": "When executed, the node: 1. Validates the connection or creates a temporary client using provided credentials 2. Validates that the prompt is not empty 3. Processes reference images (if provided): - If URL: Uses directly - If local file path: Reads file and converts to base64 data URL - Determines MIME type from file extension 4. Builds multimodal content array with images and text prompt 5. Configures the request with modalities set to [\"text\", \"image\"] 6. Sets aspect ratio in image_config (if not 1:1) 7. Makes the API request with specified timeout 8. Extracts image data from response (base64 or URLs) 9. Downloads or decodes images 10. Saves images to temporary directory with timestamped folder 11. Returns file path(s) to saved images Images are saved to: `/tmp/openrouter/images/YYYYMMDD-HHMMSS/image_0.png`",
+      "usage": [
+        "Either a valid Connection Id from Connect node OR direct API Key credentials",
+        "Non-empty Prompt",
+        "Reference images (if provided) must be:",
+        "Valid URLs (http/https)",
+        "Valid local file paths to image files",
+        "Supported formats: PNG, JPEG, GIF, WebP"
+      ]
+    },
+    "generate-text": {
+      "namespace": "Core.Openrouter.GenerateText",
+      "name": "GenerateText",
+      "summary": "Generates text using AI models through OpenRouter with support for reasoning mode, structured outputs, and multi-generation capabilities.",
+      "howItWorks": "When executed, the node: 1. Validates the connection or creates a temporary client using provided credentials 2. Prepares the system prompt (defaults to \"You are a helpful assistant\" if empty) 3. Validates that the user prompt is not empty 4. Determines the model to use (handles custom model selection) 5. Builds the request with all specified parameters 6. Configures streaming, JSON mode, reasoning, and other options 7. Makes the API request with the specified timeout 8. Extracts text from the response (handles both single and multiple generations) 9. Returns the text output and optional raw response",
+      "usage": [
+        "Either a valid Connection Id from Connect node OR direct API Key credentials",
+        "Non-empty User Prompt"
+      ]
+    },
+    "get-api-key": {
+      "namespace": "Core.Openrouter.GetApiKey",
+      "name": "GetApiKey",
+      "summary": "Retrieves information about a specific API key by its hash. Requires a Provisioning API key."
+    },
+    "get-credits": {
+      "namespace": "Core.Openrouter.GetCredits",
+      "name": "GetCredits",
+      "summary": "Retrieves your OpenRouter account's credit balance and total usage information.",
+      "howItWorks": "When executed, the node: 1. Validates the connection or credentials 2. Blocks execution if using Robomotion AI Credits (not supported) 3. Makes GET request to `/credits` endpoint 4. Parses the response and extracts credit information 5. Returns the credits data object",
+      "usage": [
+        "Valid OpenRouter API Key (Robomotion AI Credits NOT supported)",
+        "Active OpenRouter account with credit information"
+      ]
+    },
+    "get-current-api-key": {
+      "namespace": "Core.Openrouter.GetCurrentApiKey",
+      "name": "GetCurrentApiKey",
+      "summary": "Retrieves information about the currently authenticated API key including usage limits and remaining quota.",
+      "howItWorks": "When executed, the node: 1. Validates the connection or credentials 2. Blocks execution if using Robomotion AI Credits (not supported) 3. Makes GET request to `/key` endpoint 4. Parses the response and extracts API key information 5. Returns the key metadata object",
+      "usage": [
+        "Valid OpenRouter API Key (Robomotion AI Credits NOT supported)",
+        "Active OpenRouter account"
+      ]
+    },
+    "get-generation": {
+      "namespace": "Core.Openrouter.GetGeneration",
+      "name": "GetGeneration",
+      "summary": "Retrieves generation metadata including cost, token usage, and performance metrics from OpenRouter for a specific generation ID.",
+      "howItWorks": "When executed, the node: 1. Validates the connection or credentials 2. Ensures Generation Id is not empty 3. Blocks execution if using Robomotion AI Credits (not supported) 4. Builds the API request URL with generation ID as query parameter 5. Makes GET request to `/generation?id={generation_id}` 6. Parses the response and extracts generation metadata 7. Returns the complete generation data object",
+      "usage": [
+        "Valid OpenRouter API Key (Robomotion AI Credits NOT supported)",
+        "Valid Generation Id from a previous API call",
+        "The generation must exist in your OpenRouter account"
+      ]
+    },
+    "list-api-keys": {
+      "namespace": "Core.Openrouter.ListApiKeys",
+      "name": "ListApiKeys",
+      "summary": "Lists all API keys in your OpenRouter account. Requires a Provisioning API key."
+    },
+    "list-model-endpoints": {
+      "namespace": "Core.Openrouter.ListModelEndpoints",
+      "name": "ListModelEndpoints",
+      "summary": "Lists available provider endpoints for a specific AI model, including pricing and capabilities information for each provider.",
+      "howItWorks": "When executed, the node: 1. Validates the connection or creates a temporary client 2. Validates that Author and Slug are not empty 3. Builds the API request URL: `/models/{author}/{slug}/endpoints` 4. Makes GET request to fetch endpoint information 5. Parses and returns the complete endpoint data",
+      "usage": [
+        "Either a valid Connection Id from Connect node OR direct API Key credentials OR Robomotion AI Credits",
+        "Valid model author and slug"
+      ]
+    },
+    "list-models": {
+      "namespace": "Core.Openrouter.ListModels",
+      "name": "ListModels",
+      "summary": "Lists all available AI models from OpenRouter with optional category filtering and RSS feed support.",
+      "howItWorks": "When executed, the node: 1. Validates the connection or creates a temporary client 2. Builds query parameters with optional category filter and RSS options 3. Makes GET request to `/models` endpoint 4. For JSON: Parses and returns model list 5. For RSS: Returns raw XML feed in structured format",
+      "usage": [
+        "Either a valid Connection Id from Connect node OR direct API Key credentials OR Robomotion AI Credits"
+      ]
+    },
+    "update-api-key": {
+      "namespace": "Core.Openrouter.UpdateApiKey",
+      "name": "UpdateApiKey",
+      "summary": "Updates an existing API key's settings. Requires a Provisioning API key."
+    }
+  }
+}

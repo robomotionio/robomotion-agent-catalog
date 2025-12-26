@@ -1,0 +1,315 @@
+{
+  "package": "Whatsapp",
+  "summary": "Integrate with WhatsApp Business API for messaging, media sharing, and customer communication.",
+  "description": "## Overview The WhatsApp package provides integration with the WhatsApp Business API. Use it when you need to send messages, share media, receive incoming messages, or build WhatsApp-based customer communication workflows.",
+  "nodes": {
+    "get-media-url": {
+      "namespace": "Core.Whatsapp.GetMediaUrl",
+      "name": "GetMediaUrl",
+      "summary": "Retrieves the download URL for a WhatsApp media file via the WhatsApp Business Cloud API. Use this to download media files received in messages.",
+      "howItWorks": "The Get Media URL node retrieves download information for media files. When executed, the node: 1. Validates the Media ID input 2. Retrieves the access token from the credential 3. Calls the WhatsApp API to get media information 4. Extracts the download URL, MIME type, and file size 5. Returns all media information in outputs",
+      "usage": [
+        "A WhatsApp Business Account in Meta Developer Portal",
+        "Access Token with appropriate permissions",
+        "Valid Media ID from a received message",
+        "Media must be available (not expired or deleted)"
+      ],
+      "bestPractices": [
+        "Download URLs expire after 5 minutes",
+        "You must include the access token in download request headers",
+        "Downloaded files should be processed or stored immediately",
+        "Media IDs are unique per file",
+        "Original filename is not included (use MIME type to determine extension)",
+        "File size is in bytes",
+        "MIME type helps determine how to process the file"
+      ]
+    },
+    "mark-as-read": {
+      "namespace": "Core.Whatsapp.MarkAsRead",
+      "name": "MarkAsRead",
+      "summary": "Marks a WhatsApp message as read via the WhatsApp Business Cloud API. This updates the message status and displays read receipts to the sender.",
+      "howItWorks": "The Mark As Read node updates a message's read status. When executed, the node: 1. Validates all required inputs 2. Retrieves the access token from the credential 3. Constructs the read status payload with message ID 4. Sends a POST request to the WhatsApp API 5. Returns the API response confirming the status update",
+      "usage": [
+        "A WhatsApp Business Account in Meta Developer Portal",
+        "Access Token with appropriate permissions",
+        "Valid message ID from a received message",
+        "The message must have been sent to your business number"
+      ],
+      "bestPractices": [
+        "Message IDs have the format `wamid.xxxxx...`",
+        "Marking a message as read displays blue checkmarks to the sender",
+        "You can only mark messages sent to your business number",
+        "Message IDs are unique and valid indefinitely",
+        "Read receipts respect user privacy settings",
+        "Multiple calls with the same message ID are safe (idempotent)"
+      ]
+    },
+    "receive-events": {
+      "namespace": "Core.Whatsapp.ReceiveEvents",
+      "name": "ReceiveEvents",
+      "summary": "Receives incoming WhatsApp messages and events via webhook from the WhatsApp Business Cloud API.",
+      "howItWorks": "The Receive Events node creates a webhook server that listens for incoming WhatsApp messages. When a message is received, the node: 1. Starts an HTTP server on the specified IP address and port 2. Listens for webhook events at the specified endpoint 3. Handles Meta webhook verification (GET requests with hub.verify_token) 4. Receives and parses incoming message events (POST requests) 5. Extracts relevant information from the webhook payload 6. Emits the message data to trigger the flow This node has no input connectors as it serves as a trigger that initiates flows based on incoming WhatsApp messages.",
+      "usage": [
+        "A WhatsApp Business Account set up in Meta Developer Portal",
+        "A WhatsApp Business Phone Number configured",
+        "The webhook URL must be publicly accessible (use ngrok or similar for local testing)",
+        "Webhook URL configured in Meta Developer Portal with the verify token"
+      ],
+      "bestPractices": [
+        "The server runs continuously while the flow is active",
+        "Multiple webhook nodes can share the same IP/port but must use different endpoints",
+        "For webhook verification, Meta will send a GET request with `hub.mode=subscribe`, `hub.verify_token`, and `hub.challenge`",
+        "The verify token must match what you set in Meta Developer Portal",
+        "Use ngrok or similar tools to expose your local server for testing: `ngrok http 3000`",
+        "The webhook URL in Meta should be: `https://your-domain.com/webhook` (or your ngrok URL)"
+      ]
+    },
+    "send-audio-message": {
+      "namespace": "Core.Whatsapp.SendAudioMessage",
+      "name": "SendAudioMessage",
+      "summary": "Sends an audio file via the WhatsApp Business Cloud API. Audio files can be sent using a public URL or a Media ID from uploaded media.",
+      "howItWorks": "The Send Audio Message node sends an audio file to a WhatsApp user. When executed, the node: 1. Validates all required inputs 2. Retrieves the access token from the credential 3. Constructs the message payload with either URL or Media ID 4. Sends a POST request to the WhatsApp API 5. Returns the API response with message details",
+      "usage": [
+        "A WhatsApp Business Account in Meta Developer Portal",
+        "Access Token with appropriate permissions",
+        "For URLs: Audio must be publicly accessible via HTTPS",
+        "For Media IDs: Media must be uploaded using Upload Media node",
+        "Audio must be in supported format and size"
+      ],
+      "bestPractices": [
+        "Audio messages display as a playable audio player in WhatsApp",
+        "No caption support for audio messages (unlike images/videos)",
+        "Recipients can play audio inline without downloading",
+        "Audio quality is preserved but may be transcoded",
+        "Duration is automatically detected and displayed",
+        "Media IDs expire after 30 days",
+        "For voice recordings, use AAC or MP3 format"
+      ]
+    },
+    "send-contact-message": {
+      "namespace": "Core.Whatsapp.SendContactMessage",
+      "name": "SendContactMessage",
+      "summary": "Sends contact information as a vCard via the WhatsApp Business Cloud API. Recipients can save the contact directly to their phone.",
+      "howItWorks": "The Send Contact Message node sends contact information in vCard format. When executed, the node: 1. Validates all required inputs 2. Parses the contact data (supports single contact or array) 3. Constructs contact objects with name, phones, emails, addresses, etc. 4. Builds the vCard message payload 5. Sends a POST request to the WhatsApp API 6. Returns the API response",
+      "usage": [
+        "A WhatsApp Business Account in Meta Developer Portal",
+        "Access Token with appropriate permissions",
+        "Valid contact object(s) with at least a formatted name",
+        "Properly structured contact data"
+      ],
+      "bestPractices": [
+        "Recipients can save contacts directly to their phone",
+        "Contact appears as a vCard that can be tapped to save",
+        "Multiple contacts can be sent in a single message",
+        "Formatted name is required, all other fields are optional",
+        "Phone numbers should include country code",
+        "Birthday format: YYYY-MM-DD",
+        "Organization information helps identify business contacts"
+      ]
+    },
+    "send-document-message": {
+      "namespace": "Core.Whatsapp.SendDocumentMessage",
+      "name": "SendDocumentMessage",
+      "summary": "Sends a document file via the WhatsApp Business Cloud API. Documents can be sent using a public URL or a Media ID from uploaded media.",
+      "howItWorks": "The Send Document Message node sends a document file to a WhatsApp user. When executed, the node: 1. Validates all required inputs 2. Retrieves the access token from the credential 3. Constructs the message payload with either URL or Media ID 4. Adds optional caption and filename if provided 5. Sends a POST request to the WhatsApp API 6. Returns the API response with message details",
+      "usage": [
+        "A WhatsApp Business Account in Meta Developer Portal",
+        "Access Token with appropriate permissions",
+        "For URLs: Document must be publicly accessible via HTTPS",
+        "For Media IDs: Media must be uploaded using Upload Media node",
+        "Document must be in supported format and size"
+      ],
+      "bestPractices": [
+        "Always specify a meaningful filename for better user experience",
+        "Captions help provide context about the document",
+        "PDF is the most widely compatible format",
+        "Large documents may take time to upload and download",
+        "Media IDs expire after 30 days",
+        "Documents are downloaded to the recipient's device when opened",
+        "File extension in filename helps users identify the file type"
+      ]
+    },
+    "send-image-message": {
+      "namespace": "Core.Whatsapp.SendImageMessage",
+      "name": "SendImageMessage",
+      "summary": "Sends an image message via the WhatsApp Business Cloud API. Images can be sent using a public URL or a Media ID from uploaded media.",
+      "howItWorks": "The Send Image Message node sends an image to a WhatsApp user. When executed, the node: 1. Validates all required inputs 2. Retrieves the access token from the credential 3. Constructs the message payload with either URL or Media ID 4. Adds optional caption if provided 5. Sends a POST request to the WhatsApp API 6. Returns the API response with message details",
+      "usage": [
+        "A WhatsApp Business Account in Meta Developer Portal",
+        "Access Token with appropriate permissions",
+        "For URLs: Image must be publicly accessible via HTTPS",
+        "For Media IDs: Media must be uploaded using Upload Media node",
+        "Image must be in supported format and size"
+      ],
+      "bestPractices": [
+        "Captions support WhatsApp markdown formatting (bold, italic, strikethrough, monospace)",
+        "Images are automatically compressed by WhatsApp if needed",
+        "Aspect ratios are preserved",
+        "Very large images may take longer to send and receive",
+        "For better performance, optimize images before sending (reduce resolution, compress)",
+        "Media IDs expire after 30 days, use URLs for long-term storage",
+        "Consider image dimensions: 640x640 to 1024x1024 works well for most use cases"
+      ]
+    },
+    "send-list-message": {
+      "namespace": "Core.Whatsapp.SendListMessage",
+      "name": "SendListMessage",
+      "summary": "Sends an interactive list message via the WhatsApp Business Cloud API. Recipients can tap a button to view and select from a list of options organized in sections.",
+      "howItWorks": "The Send List Message node sends an interactive list menu. When executed, the node: 1. Validates all required inputs 2. Parses the sections array with rows 3. Constructs the interactive list payload 4. Adds optional header and footer if provided 5. Sends a POST request to the WhatsApp API 6. Returns the API response When a recipient taps the button and selects an item, their response is received in the Receive Events node with the item ID.",
+      "usage": [
+        "A WhatsApp Business Account in Meta Developer Portal",
+        "Access Token with appropriate permissions",
+        "Valid sections array with at least 1 section",
+        "Each section must have at least 1 row",
+        "Maximum 10 sections",
+        "Maximum 10 rows per section"
+      ],
+      "bestPractices": [
+        "Lists are ideal for more than 3 options (use Reply Buttons for 3 or fewer)",
+        "Sections help organize related options",
+        "Descriptions provide additional context",
+        "Button text should be action-oriented (\"Select\", \"Choose\", \"View\")",
+        "Maximum 10 sections and 10 rows per section",
+        "Interactive messages only work within the 24-hour window",
+        "Cannot be used in template messages",
+        "Users see a scrollable list when they tap the button"
+      ]
+    },
+    "send-location-message": {
+      "namespace": "Core.Whatsapp.SendLocationMessage",
+      "name": "SendLocationMessage",
+      "summary": "Sends a location message with geographic coordinates via the WhatsApp Business Cloud API. Recipients can view the location on a map within WhatsApp.",
+      "howItWorks": "The Send Location Message node sends geographic coordinates to a WhatsApp user. When executed, the node: 1. Validates all required inputs (coordinates must be valid) 2. Retrieves the access token from the credential 3. Constructs the location message payload with coordinates 4. Adds optional name and address if provided 5. Sends a POST request to the WhatsApp API 6. Returns the API response with message details",
+      "usage": [
+        "A WhatsApp Business Account in Meta Developer Portal",
+        "Access Token with appropriate permissions",
+        "Valid latitude and longitude coordinates",
+        "Optional: Location name and address for better context"
+      ],
+      "bestPractices": [
+        "Coordinates should use decimal degrees format (not degrees/minutes/seconds)",
+        "Name and address are optional but highly recommended for clarity",
+        "Recipients can tap the location to open in their preferred maps app",
+        "Location messages show a map preview in the chat",
+        "Accuracy depends on coordinate precision (6 decimal places is typical)",
+        "The map provider used depends on the recipient's device and settings"
+      ]
+    },
+    "send-reply-buttons": {
+      "namespace": "Core.Whatsapp.SendReplyButtons",
+      "name": "SendReplyButtons",
+      "summary": "Sends an interactive message with reply buttons via the WhatsApp Business Cloud API. Recipients can tap buttons to respond with predefined options.",
+      "howItWorks": "The Send Reply Buttons node sends interactive buttons for quick replies. When executed, the node: 1. Validates all required inputs 2. Parses the buttons array (max 3 buttons) 3. Constructs the interactive message payload 4. Adds optional header and footer if provided 5. Sends a POST request to the WhatsApp API 6. Returns the API response When a recipient taps a button, their response is received in the Receive Events node with the button ID.",
+      "usage": [
+        "A WhatsApp Business Account in Meta Developer Portal",
+        "Access Token with appropriate permissions",
+        "Valid button array with at least 1 button (max 3)",
+        "Each button must have an id and title"
+      ],
+      "bestPractices": [
+        "Buttons provide a better user experience than free-text responses",
+        "Button IDs are returned in responses, not titles",
+        "Use descriptive button IDs for easier flow logic",
+        "Maximum 3 buttons per message",
+        "Button titles should be concise (max 20 characters)",
+        "Header and footer are optional but recommended for context",
+        "Interactive messages only work within the 24-hour window",
+        "Cannot be used in template messages"
+      ]
+    },
+    "send-template-message": {
+      "namespace": "Core.Whatsapp.SendTemplateMessage",
+      "name": "SendTemplateMessage",
+      "summary": "Sends an approved template message via the WhatsApp Business Cloud API. Template messages are pre-approved message formats that can be sent to users outside the 24-hour messaging window.",
+      "howItWorks": "The Send Template Message node sends pre-approved template messages. When executed, the node: 1. Validates all required inputs 2. Retrieves the access token from the credential 3. Builds the template payload with components (header, body, buttons) 4. Constructs body parameters from the Template Parameters input 5. Adds optional header and button components if provided 6. Sends a POST request to the WhatsApp API 7. Returns the API response",
+      "usage": [
+        "A WhatsApp Business Account in Meta Developer Portal",
+        "Approved message templates created in Meta Business Manager",
+        "Template must be approved by Meta before use",
+        "Access Token with appropriate permissions",
+        "Correct template name and language code"
+      ],
+      "bestPractices": [
+        "Template names must be lowercase with underscores only",
+        "Parameters are 1-indexed: `{{1}}`, `{{2}}`, `{{3}}`, etc.",
+        "Templates can have up to 4096 characters in the body",
+        "Header can be text (max 60 chars), image, video, or document",
+        "Footer is optional and supports up to 60 characters",
+        "Templates must be approved by Meta before use",
+        "Each language variant must be approved separately",
+        "Template messages can be sent outside the 24-hour window",
+        "Template messages have higher delivery priority"
+      ]
+    },
+    "send-text-message": {
+      "namespace": "Core.Whatsapp.SendTextMessage",
+      "name": "SendTextMessage",
+      "summary": "Sends a text message via the WhatsApp Business Cloud API.",
+      "howItWorks": "The Send Text Message node sends a text message to a WhatsApp user. When executed, the node: 1. Validates all required inputs (Phone Number ID, recipient, message text) 2. Retrieves the access token from the credential 3. Constructs the WhatsApp Cloud API endpoint URL 4. Builds the message payload with text content 5. Sends a POST request to the WhatsApp API 6. Returns the API response with message details",
+      "usage": [
+        "A WhatsApp Business Account in Meta Developer Portal",
+        "A WhatsApp Business Phone Number configured and verified",
+        "Access Token with appropriate permissions from Meta",
+        "Recipient must have a WhatsApp account",
+        "Your business number must comply with WhatsApp Business messaging policies"
+      ],
+      "bestPractices": [
+        "Phone numbers should include country code without the + sign (e.g., `14155551234` for US)",
+        "Messages can contain up to 4096 characters",
+        "URLs in messages are automatically detected and can be previewed if Preview URL is enabled",
+        "Line breaks are supported using `\\n` in the message text",
+        "WhatsApp markdown formatting is supported for text styling:",
+        "Bold: `*text*`",
+        "Italic: `_text_`",
+        "Strikethrough: `~text~`",
+        "Monospace: ` ```text``` `",
+        "The first message to a user must be initiated by the user or use a template message",
+        "After a user messages you, you have a 24-hour window to send freeform messages"
+      ]
+    },
+    "send-video-message": {
+      "namespace": "Core.Whatsapp.SendVideoMessage",
+      "name": "SendVideoMessage",
+      "summary": "Sends a video message via the WhatsApp Business Cloud API. Videos can be sent using a public URL or a Media ID from uploaded media.",
+      "howItWorks": "The Send Video Message node sends a video to a WhatsApp user. When executed, the node: 1. Validates all required inputs 2. Retrieves the access token from the credential 3. Constructs the message payload with either URL or Media ID 4. Adds optional caption if provided 5. Sends a POST request to the WhatsApp API 6. Returns the API response with message details",
+      "usage": [
+        "A WhatsApp Business Account in Meta Developer Portal",
+        "Access Token with appropriate permissions",
+        "For URLs: Video must be publicly accessible via HTTPS",
+        "For Media IDs: Media must be uploaded using Upload Media node",
+        "Video must be in supported format and size"
+      ],
+      "bestPractices": [
+        "Videos are automatically transcoded by WhatsApp if needed",
+        "H.264 codec provides best compatibility",
+        "Very large videos may take longer to upload and send",
+        "Consider video length: shorter videos (under 1 minute) work better for messaging",
+        "Video quality is automatically adjusted for mobile delivery",
+        "Media IDs expire after 30 days",
+        "First frame of video is used as thumbnail"
+      ]
+    },
+    "upload-media": {
+      "namespace": "Core.Whatsapp.UploadMedia",
+      "name": "UploadMedia",
+      "summary": "Uploads a local media file to WhatsApp servers and returns a Media ID that can be used to send media messages via the WhatsApp Business Cloud API.",
+      "howItWorks": "The Upload Media node uploads files to WhatsApp's servers. When executed, the node: 1. Validates all required inputs 2. Opens and reads the file from the specified path 3. Creates a multipart form upload request 4. Includes the file, MIME type, and messaging product 5. Uploads to WhatsApp API 6. Returns the Media ID for use in sending messages",
+      "usage": [
+        "A WhatsApp Business Account in Meta Developer Portal",
+        "Access Token with appropriate permissions",
+        "Valid local file path",
+        "File must be in supported format and within size limits",
+        "Sufficient permissions to read the file"
+      ],
+      "bestPractices": [
+        "Use absolute file paths, not relative paths",
+        "Verify file exists before uploading",
+        "MIME type must match the actual file type",
+        "Media IDs can be reused for 30 days",
+        "Same file can be uploaded multiple times (creates new Media ID each time)",
+        "Files are automatically validated by WhatsApp",
+        "Upload is synchronous (waits for completion)"
+      ]
+    }
+  }
+}

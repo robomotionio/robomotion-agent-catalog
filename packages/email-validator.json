@@ -1,0 +1,71 @@
+{
+  "package": "EmailValidator",
+  "summary": "The Email Validator package provides comprehensive email address validation capabilities for RPA workflows. Verify email addresses using multiple validation methods including regex pattern matching, DNS MX record lookup, MX blacklist checking, and SMTP server verification.",
+  "description": "## Key Features - **Multiple Validation Methods** - Choose from regex, MX, MX blacklist, or SMTP validation",
+  "nodes": {
+    "configuration": {
+      "namespace": "Core.EmailValidator.Configuration",
+      "name": "Configuration",
+      "summary": "Creates an email validation configuration with customizable parameters for verifier identity, timeouts, validation rules, and domain management. This configuration is used by all validation nodes in the Email Validator package.",
+      "howItWorks": "The Configuration node creates a validation configuration object that stores all your validation parameters. When executed: 1. Validates the verifier email address (required) 2. Processes all optional configuration parameters 3. Creates a configuration object with the truemail library 4. Stores the configuration in memory 5. Returns a unique Configuration ID This Configuration ID is then passed to validation nodes, which use the stored configuration to perform email validation.",
+      "usage": [
+        "A valid verifier email address",
+        "The verifier email should be from a domain you control for SMTP validation",
+        "For SMTP validation, ensure your server can make outbound connections on port 25 (or custom SMTP port)"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrInternal",
+        "ErrRuntime"
+      ]
+    },
+    "validate-mx": {
+      "namespace": "Core.EmailValidator.ValidateMx",
+      "name": "ValidateMx",
+      "summary": "Validates an email address by checking its domain's MX (Mail Exchange) DNS records. This method verifies that the email domain has valid mail servers configured and can potentially receive emails.",
+      "howItWorks": "The Validate MX node performs DNS-based email validation: 1. Retrieves the Configuration ID and email address 2. Extracts the domain from the email address 3. Performs DNS MX record lookup for the domain 4. Validates that at least one MX record exists 5. Optionally checks MX records against configured rules 6. Returns the validation result with mail server details This validation method: - Makes DNS queries to check MX records - Verifies the domain can receive email - Does not verify if the specific mailbox exists - Faster than SMTP validation but more thorough than regex - Can detect domains without mail servers",
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound",
+        "ErrInternal",
+        "ErrRuntime"
+      ]
+    },
+    "validate-mx-blacklist": {
+      "namespace": "Core.EmailValidator.ValidateMxBlacklist",
+      "name": "ValidateMxBlacklist",
+      "summary": "Validates an email address by checking its MX (Mail Exchange) records against a blacklist of known bad mail servers. This method helps identify disposable email addresses, temporary mailboxes, and known spam sources by examining the mail server infrastructure.",
+      "howItWorks": "The Validate MX Blacklist node performs comprehensive blacklist checking: 1. Retrieves the Configuration ID and email address 2. Performs DNS MX record lookup for the email domain 3. Resolves MX records to IP addresses 4. Checks domain against blacklisted domains (if configured) 5. Checks MX IP addresses against blacklisted IPs (if configured) 6. Returns validation result with blacklist match details This validation method: - Performs MX record lookup (like Validate MX) - Additionally checks against configured blacklists - Can detect disposable email services - Can identify known spam sources - Validates both domain and IP-level blacklists",
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound",
+        "ErrInternal",
+        "ErrRuntime"
+      ]
+    },
+    "validate-regex": {
+      "namespace": "Core.EmailValidator.ValidateRegex",
+      "name": "ValidateRegex",
+      "summary": "Validates an email address format using regex pattern matching. This is the fastest validation method, checking if the email address follows standard email syntax patterns without making any network calls.",
+      "howItWorks": "The Validate Regex node performs fast client-side validation: 1. Retrieves the Configuration ID and email address 2. Looks up the configuration object 3. Applies the regex pattern from the configuration to the email address 4. Checks if the email matches the pattern 5. Returns the validation result This validation method: - Does not make any network requests - Checks only the format/syntax of the email - Cannot verify if the email address actually exists - Is the fastest validation method available",
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound",
+        "ErrInternal",
+        "ErrRuntime"
+      ]
+    },
+    "validate-smtp": {
+      "namespace": "Core.EmailValidator.ValidateSmtp",
+      "name": "ValidateSmtp",
+      "summary": "Validates an email address by connecting to the mail server via SMTP and verifying the mailbox actually exists. This is the most thorough validation method, providing the highest accuracy by performing real-time verification with the destination mail server.",
+      "howItWorks": "The Validate SMTP node performs comprehensive real-time verification: 1. Retrieves the Configuration ID and email address 2. Performs DNS MX record lookup for the domain 3. Connects to the mail server(s) via SMTP 4. Initiates SMTP conversation using verifier email 5. Executes RCPT TO command to verify mailbox exists 6. Analyzes server response codes 7. Returns detailed validation result This validation process: - Makes actual SMTP connections to mail servers - Verifies the specific mailbox exists - Does not send any email - Provides highest accuracy validation - Slowest validation method (network-dependent) - May be detected by mail servers",
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound",
+        "ErrInternal",
+        "ErrRuntime"
+      ]
+    }
+  }
+}

@@ -1,0 +1,362 @@
+{
+  "package": "AgentTools",
+  "summary": "Comprehensive toolset for AI agents to perform file operations, code editing, web research, and task management across platforms.",
+  "description": "## Overview The Agent Tools package provides a complete suite of automation nodes designed for AI-powered workflows. These tools enable file system operations, text processing, web interactions, and task management with advanced features like encoding support, regex matching, and background process management.",
+  "nodes": {
+    "bash_output": {
+      "namespace": "Core.AgentTools.Bash_output",
+      "name": "Bash_output",
+      "summary": "Retrieves output from a running or completed background bash shell.",
+      "howItWorks": "The Bash Output node retrieves output from background shells started by the Shell node. When executed, the node: 1. Validates the shell ID is provided 2. Looks up the background shell in the registry 3. Retrieves new output since the last read: - Tracks read position for stdout - Tracks read position for stderr - Returns only new lines since last call 4. Applies optional regex filter to output lines 5. Returns new output, status, and metadata 6. Updates read positions for next call",
+      "usage": [
+        "Valid shell ID from a Shell node background execution",
+        "Background shell must exist in the registry"
+      ],
+      "bestPractices": [
+        "Each call returns only NEW output since the last call",
+        "The node maintains separate read positions for stdout and stderr",
+        "Filter regex is applied to individual lines",
+        "Empty result means no new output since last check",
+        "Status values: \"running\", \"completed\", \"failed\"",
+        "Exit code is only meaningful when status is \"completed\" or \"failed\"",
+        "The shell must be started with \"Run in Background: true\" in the Shell node",
+        "Output is line-buffered - complete lines are returned",
+        "Very long lines may be split"
+      ]
+    },
+    "edit": {
+      "namespace": "Core.AgentTools.Edit",
+      "name": "Edit",
+      "summary": "Performs exact string replacements in files with atomic writes for safe editing.",
+      "howItWorks": "The Edit node performs exact string replacements in files using atomic write operations. When executed, the node: 1. Validates all required inputs (file path, old string, new string) 2. Ensures old and new strings are different 3. Verifies the file exists 4. Reads the entire file content 5. Performs replacement operation: - **Replace All = false:** Finds the first occurrence - Validates the string is unique (appears only once) - Replaces only that occurrence - **Replace All = true:** Finds all occurrences - Replaces every occurrence in the file 6. Writes the modified content atomically: - Creates temporary file in same directory - Writes new content to temporary file - Preserves original file permissions - Atomically renames temporary file to target 7. Returns the number of replacements made",
+      "usage": [
+        "Valid absolute file path",
+        "File must exist",
+        "Old string and new string must be different",
+        "Write permissions on the file",
+        "For single replacement: old string must appear exactly once"
+      ],
+      "bestPractices": [
+        "The edit operation uses exact string matching (not regex)",
+        "Old string must be different from new string",
+        "When Replace All is false, the string must appear exactly once",
+        "If multiple occurrences exist, use Replace All or provide more context in the old string",
+        "Line endings are preserved exactly as they appear in the original file",
+        "The operation is atomic - the file is never in an incomplete state",
+        "Original file permissions are preserved",
+        "Whitespace and special characters must match exactly",
+        "For regex-based replacements, use a different approach or preprocess with Grep"
+      ]
+    },
+    "glob": {
+      "namespace": "Core.AgentTools.Glob",
+      "name": "Glob",
+      "summary": "Fast file pattern matching tool that works with any codebase size using glob syntax.",
+      "howItWorks": "The Glob node matches files and directories using glob patterns. When executed, the node: 1. Validates the glob pattern 2. Determines the search path (uses current directory if not specified) 3. Walks the directory tree recursively 4. For each file/directory: - Checks hidden file filter - Checks symlink settings - Matches against the glob pattern - Collects matching entries up to max results 5. Sorts matches by modification time (newest first) 6. Returns detailed file information for each match",
+      "usage": [
+        "Valid glob pattern",
+        "Read access to search directory",
+        "Executable permissions on directories to traverse"
+      ],
+      "bestPractices": [
+        "Pattern matching uses forward slashes (/) regardless of OS",
+        "Hidden files/directories (starting with .) are skipped by default",
+        "Symlinks are not followed by default (prevents infinite loops)",
+        "Results are always sorted by modification time (newest first)",
+        "The search stops when max results is reached",
+        "Truncated flag indicates if more matches exist beyond the limit",
+        "All returned paths are absolute paths",
+        "Directories can also match if pattern allows",
+        "Pattern is matched against relative path from search root"
+      ],
+      "errorCodes": [
+        "Error"
+      ]
+    },
+    "grep": {
+      "namespace": "Core.AgentTools.Grep",
+      "name": "Grep",
+      "summary": "A powerful search tool for finding patterns in files with full regex support and multiple output modes.",
+      "howItWorks": "The Grep node searches for regex patterns across files and directories. When executed, the node: 1. Validates and compiles the regex pattern 2. Determines the search scope (file or directory) 3. Applies filters: glob pattern, file type, max file size 4. Searches through matched files 5. Returns results based on output mode: - **content:** Returns matching lines with optional context - **files_with_matches:** Returns paths of files containing matches - **count:** Returns match count per file 6. Applies head_limit if specified 7. Returns statistics (match count, file count)",
+      "usage": [
+        "Valid regex pattern",
+        "Read access to search path",
+        "For directory searches: traversable directory structure"
+      ],
+      "bestPractices": [
+        "Regex uses Go's RE2 syntax (similar to PCRE but safer)",
+        "Hidden files (starting with .) are automatically skipped",
+        "Search stops at max file size to prevent memory issues",
+        "Context lines are numbered differently (marked with space instead of colon)",
+        "Multiline mode allows patterns to span multiple lines",
+        "File type filter is more efficient than glob for standard types",
+        "Head limit applies to output lines/entries, not matches",
+        "Results are returned immediately as they're found (up to head limit)"
+      ],
+      "errorCodes": [
+        "Error"
+      ]
+    },
+    "kill_bash": {
+      "namespace": "Core.AgentTools.Kill_bash",
+      "name": "Kill_bash",
+      "summary": "Terminates a running background bash shell by its ID.",
+      "howItWorks": "The Kill Bash node terminates background shell processes. When executed, the node: 1. Validates the shell ID is provided 2. Looks up the background shell in the registry 3. Checks if the process exists and is running 4. Attempts graceful termination: - Sends SIGTERM signal first (graceful shutdown) - If SIGTERM fails, sends SIGKILL signal (force kill) 5. Updates shell status in registry 6. Removes shell from registry if killed or already completed 7. Returns success status and detailed information",
+      "usage": [
+        "Valid shell ID from a Shell node background execution",
+        "Background shell must exist in the registry",
+        "Appropriate permissions to send signals to the process"
+      ],
+      "bestPractices": [
+        "SIGTERM is always tried first for graceful shutdown",
+        "SIGKILL is used only if SIGTERM fails",
+        "The shell is removed from registry after successful kill",
+        "Already completed/failed shells are cleaned up without error",
+        "Exit codes: -15 for SIGTERM, -9 for SIGKILL",
+        "Process children may not be killed (depends on process group)",
+        "On Windows, the termination approach may differ"
+      ]
+    },
+    "ls": {
+      "namespace": "Core.AgentTools.Ls",
+      "name": "Ls",
+      "summary": "Lists files and directories in a given path with powerful filtering and sorting options.",
+      "howItWorks": "The LS node lists directory contents with flexible filtering. When executed, the node: 1. Validates the path is absolute and exists 2. Checks that the path is a directory 3. Parses ignore patterns if provided 4. Lists directory entries: - **Non-recursive:** Lists immediate children only - **Recursive:** Lists all entries up to max depth 5. Applies filters: - Hidden file filter (based on name starting with .) - Ignore patterns (glob matching) - Files only / Directories only 6. Sorts entries based on sort criteria 7. Returns entry details and directory metadata",
+      "usage": [
+        "Valid absolute directory path",
+        "Read permissions on the directory",
+        "For recursive listing: read permissions on subdirectories"
+      ],
+      "bestPractices": [
+        "All paths in output are absolute paths",
+        "Hidden files/directories start with a dot (.)",
+        "Size is always 0 for directories",
+        "Total Size includes only files, not directory overhead",
+        "Sorting always places directories before files within each group",
+        "Max Depth of 1 means current directory only (no recursion)",
+        "Ignore patterns use glob syntax (*, **, ?, etc.)",
+        "Symlinks are identified but not followed by default",
+        "Permissions use Unix format (e.g., drwxr-xr-x)"
+      ],
+      "errorCodes": [
+        "Error"
+      ]
+    },
+    "multi_edit": {
+      "namespace": "Core.AgentTools.Multi_edit",
+      "name": "Multi_edit",
+      "summary": "Performs multiple find-and-replace operations on a single file efficiently in one atomic operation.",
+      "howItWorks": "The Multi Edit node performs multiple string replacements in sequence on a single file. When executed, the node: 1. Validates the file path and edits array 2. Verifies each edit operation has valid old_string and new_string 3. Ensures old_string and new_string are different for each edit 4. Reads the file content once 5. Applies each edit operation sequentially: - Searches for old_string in the current file state - For replace_all=false: Validates uniqueness - Performs the replacement - Updates the file content for the next edit 6. Writes the modified content atomically only once 7. Returns detailed results for each edit operation",
+      "usage": [
+        "Valid absolute file path",
+        "File must exist",
+        "At least one edit operation",
+        "Each edit must have non-empty old_string",
+        "Each old_string must be different from its new_string",
+        "For single replacements: old_string must be unique"
+      ],
+      "bestPractices": [
+        "Edits are applied sequentially, not simultaneously",
+        "Each edit sees the result of all previous edits",
+        "The file is only written once, after all edits complete",
+        "If any edit fails, no changes are written to the file",
+        "All edits must succeed for the operation to complete",
+        "Edit order matters when changes affect subsequent searches",
+        "The operation is atomic - the file is never in an incomplete state",
+        "Original file permissions are preserved",
+        "Each edit in the results array shows success status and details"
+      ]
+    },
+    "notebook_edit": {
+      "namespace": "Core.AgentTools.Notebook_edit",
+      "name": "Notebook_edit",
+      "summary": "Completely replaces the contents of a specific cell in a Jupyter notebook with support for insert and delete operations.",
+      "howItWorks": "The Notebook Edit node modifies Jupyter notebook cells. When executed, the node: 1. Validates the notebook path is absolute and ends with .ipynb 2. Reads and parses the existing notebook 3. Performs the requested operation:",
+      "usage": [
+        "Valid absolute path to .ipynb file",
+        "File must be a valid Jupyter notebook",
+        "Write permissions on the file",
+        "Valid cell ID (required for delete mode)",
+        "Non-empty new source (except for delete mode)"
+      ],
+      "bestPractices": [
+        "Cell IDs are auto-generated for new cells (8-character UUID)",
+        "Notebooks are written with pretty-printing (indented JSON)",
+        "Original notebook format version is preserved",
+        "Metadata is preserved for both notebook and cells",
+        "Empty source strings are handled correctly",
+        "Multi-line source is properly formatted",
+        "The operation is atomic - either succeeds completely or fails"
+      ]
+    },
+    "notebook_read": {
+      "namespace": "Core.AgentTools.Notebook_read",
+      "name": "Notebook_read",
+      "summary": "Reads a Jupyter notebook file and returns all cells with their outputs.",
+      "howItWorks": "The Notebook Read node reads Jupyter notebook files (.ipynb format). When executed, the node: 1. Validates the notebook path is absolute and ends with .ipynb 2. Checks if the file exists 3. Reads and parses the JSON notebook format 4. If Cell ID is provided: - Finds the specific cell by ID - Returns only that cell 5. If Cell ID is not provided: - Returns all cells in the notebook 6. Converts source to string format (handles array and string formats) 7. Includes outputs and execution counts for code cells 8. Returns notebook metadata (kernel info, language version, etc.)",
+      "usage": [
+        "Valid absolute path to .ipynb file",
+        "File must be a valid Jupyter notebook (JSON format)",
+        "Read permissions on the file",
+        "Valid cell ID (if reading specific cell)"
+      ],
+      "bestPractices": [
+        "All paths must be absolute",
+        "Only .ipynb files are supported",
+        "Cell IDs are unique within a notebook",
+        "Source is always returned as string (arrays are joined)",
+        "Markdown cells don't have outputs or execution counts",
+        "Metadata structure varies by notebook version and kernel",
+        "Empty notebooks return empty cells array",
+        "Cell order is preserved from the notebook"
+      ]
+    },
+    "read": {
+      "namespace": "Core.AgentTools.Read",
+      "name": "Read",
+      "summary": "Reads a file from the local filesystem with line numbers and encoding support.",
+      "howItWorks": "The Read node reads files from the filesystem and returns formatted content with line numbers. When executed, the node: 1. Validates the file path is absolute 2. Checks if the file exists and is accessible 3. Detects if the file is binary or text 4. For binary files: Returns base64-encoded content (limited to 10MB) 5. For text files: - Detects or uses the specified encoding - Reads lines with optional offset and limit - Formats each line with line number (6-digit, tab-separated) - Truncates lines exceeding max length 6. Returns comprehensive file metadata",
+      "usage": [
+        "Valid absolute file path",
+        "Read permissions on the file",
+        "For text files: Valid encoding (auto-detected or specified)"
+      ],
+      "bestPractices": [
+        "The node automatically detects file encoding by checking for BOM (Byte Order Mark)",
+        "Binary detection checks for null bytes and non-printable characters",
+        "Line numbers are formatted as 6-digit numbers followed by a tab",
+        "Lines longer than Max Line Length are truncated with \"...\" appended",
+        "Binary files larger than 10MB are truncated with a size note",
+        "The default limit of 2000 lines prevents memory issues with large files",
+        "Output format is compatible with standard cat -n format",
+        "File Info includes: size (bytes), modTime (ISO 8601), permissions (Unix format), name"
+      ],
+      "errorCodes": [
+        "Error"
+      ]
+    },
+    "shell": {
+      "namespace": "Core.AgentTools.Shell",
+      "name": "Shell",
+      "summary": "Executes shell commands with timeout control, environment management, and background execution support.",
+      "howItWorks": "The Shell node executes commands in a shell environment. When executed, the node:",
+      "usage": [
+        "Non-empty command string",
+        "Appropriate shell available on the system",
+        "Execute permissions for the command",
+        "Read/write access to working directory"
+      ],
+      "bestPractices": [
+        "Commands run in the specified or current working directory",
+        "Output is truncated at 30,000 characters to prevent memory issues",
+        "Background processes are not subject to timeout",
+        "Environment variables are merged with system environment",
+        "Exit code 0 typically indicates success",
+        "Non-zero exit codes may indicate errors (but not always)",
+        "Use Bash Output node to retrieve background process output",
+        "Use Kill Bash node to terminate background processes",
+        "The command is passed to the shell, so shell features work (pipes, redirects, etc.)"
+      ]
+    },
+    "todo_write": {
+      "namespace": "Core.AgentTools.Todo_write",
+      "name": "Todo_write",
+      "summary": "Creates and manages a structured task list for tracking progress with status tracking, priority levels, and persistence.",
+      "howItWorks": "The Todo Write node manages structured task lists. When executed, the node: 1. Validates the todos array format 2. Parses each todo item: - Validates required content field - Validates status (pending/in_progress/completed) - Validates priority (high/medium/low) - Extracts optional id and timestamps 3. Processes todos: - Generates IDs for todos without them (if autoID enabled) - Checks for duplicate IDs - Sets created timestamp if not provided - Updates updated timestamp 4. Sorts todos based on sort criteria 5. Calculates status counts 6. If persist path provided: - Creates TodoList structure with metadata - Writes to JSON file atomically 7. Returns processed todos and statistics",
+      "usage": [
+        "Valid todos array with at least one item",
+        "Each todo must have non-empty content",
+        "Status values must be: pending, in_progress, or completed",
+        "Priority values must be: high, medium, or low",
+        "IDs must be unique within the list",
+        "Persist path must be absolute (if provided)",
+        "Maximum todos limit (default 100, max 1000)"
+      ],
+      "bestPractices": [
+        "IDs are automatically generated as UUIDs if not provided",
+        "Timestamps use ISO 8601 format",
+        "Persistence uses atomic writes (temp file + rename)",
+        "Parent directories are created if they don't exist",
+        "Sort order is stable (preserves input order for equal items)",
+        "Validation checks happen before any persistence",
+        "Status counts are always calculated even without persistence",
+        "Max todos limit prevents memory issues"
+      ],
+      "errorCodes": [
+        "Error"
+      ]
+    },
+    "web_fetch": {
+      "namespace": "Core.AgentTools.Web_fetch",
+      "name": "Web_fetch",
+      "summary": "Fetches content from a URL, converts it to markdown, and processes it using an AI model.",
+      "howItWorks": "The Web Fetch node retrieves and processes web content. When executed, the node: 1. Validates the URL format 2. Upgrades HTTP URLs to HTTPS automatically 3. Creates HTTP client with specified options: - Sets timeout - Configures redirect following - Optionally uses proxy 4. Sends GET request with appropriate headers: - User-Agent - Accept (HTML and XML) - Accept-Language 5. Checks for cross-domain redirects: - If redirected to different host, returns redirect info 6. Validates HTTP status code (200-299) 7. Reads response body up to max size limit 8. Converts HTML content to markdown format 9. Processes content with AI model using the provided prompt 10. Returns markdown content, AI response, and metadata",
+      "usage": [
+        "Valid HTTP or HTTPS URL",
+        "Network connectivity",
+        "Target server accessibility",
+        "For proxied requests: Robomotion proxy configuration"
+      ],
+      "bestPractices": [
+        "HTTP URLs are automatically upgraded to HTTPS",
+        "Content larger than Max Size is truncated",
+        "Output includes truncation indicator in metadata",
+        "Cookies are handled automatically when enabled",
+        "Redirects within same host are followed automatically",
+        "Cross-host redirects are reported but not followed",
+        "User-Agent can be customized for site compatibility",
+        "Markdown conversion removes scripts and styles",
+        "AI processing is simulated (placeholder in current implementation)"
+      ]
+    },
+    "web_search": {
+      "namespace": "Core.AgentTools.Web_search",
+      "name": "Web_search",
+      "summary": "Searches the web using various search engines and returns formatted results with domain filtering.",
+      "howItWorks": "The Web Search node performs web searches using various search engines. When executed, the node: 1. Validates the search query (minimum 2 characters) 2. Parses domain filter lists (allowed and blocked) 3. Determines search parameters (max results, region, etc.) 4. Performs search based on selected engine: - **Mock:** Returns demo results for testing - **Google:** Uses Google Custom Search JSON API - **Bing:** Uses Bing Web Search API v7 - **DuckDuckGo:** Uses available DuckDuckGo API 5. Applies domain filters: - Removes results from blocked domains - Keeps only results from allowed domains (if specified) 6. Formats results with title, URL, snippet, domain, and date 7. Returns filtered results and search metadata",
+      "usage": [
+        "Non-empty search query (minimum 2 characters)",
+        "For Google: Valid Google Custom Search API key",
+        "For Bing: Valid Bing Search API subscription key",
+        "For Google: Custom Search Engine ID configured",
+        "Network connectivity",
+        "For proxied requests: Robomotion proxy configuration"
+      ],
+      "bestPractices": [
+        "Query must be at least 2 characters long",
+        "Results are limited to Max Results setting (max 100)",
+        "Domain filters accept domain names without protocol",
+        "Domain matching is case-insensitive",
+        "Allowed Domains can be array or comma-separated string",
+        "Blocked Domains can be array or comma-separated string",
+        "Mock engine is useful for testing workflows",
+        "Real search engines require valid API keys",
+        "Search results include snippets (descriptions)",
+        "Publish dates are included when available from the search engine"
+      ]
+    },
+    "write": {
+      "namespace": "Core.AgentTools.Write",
+      "name": "Write",
+      "summary": "Writes content to a file with atomic write support for data integrity.",
+      "howItWorks": "The Write node writes content to a file using atomic write operations to ensure data integrity. When executed, the node: 1. Validates the file path is absolute 2. Checks for directory traversal attempts (blocks \"..\" in paths) 3. Creates parent directories if they don't exist 4. Writes content atomically using a temporary file: - Creates a temporary file in the same directory - Writes content to the temporary file - Syncs data to disk - Preserves original file permissions (if file exists) - Atomically renames temporary file to target path 5. Returns file metadata after successful write",
+      "usage": [
+        "Valid absolute file path",
+        "Write permissions in the target directory",
+        "No \"..\" directory traversal in path",
+        "Sufficient disk space"
+      ],
+      "bestPractices": [
+        "The atomic write operation prevents data corruption if the process is interrupted",
+        "Parent directories are created automatically with 0755 permissions",
+        "If the file already exists, its permissions are preserved",
+        "For new files, permissions are set to 0644",
+        "The temporary file is automatically cleaned up even if the rename fails",
+        "Directory traversal (..) is blocked for security",
+        "All file paths must be absolute (no relative paths allowed)",
+        "The operation is thread-safe due to atomic rename",
+        "Content is synced to disk before the rename operation"
+      ]
+    }
+  }
+}

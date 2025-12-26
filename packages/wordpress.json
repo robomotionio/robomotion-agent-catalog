@@ -1,0 +1,234 @@
+{
+  "package": "Wordpress",
+  "summary": "Integrate with WordPress sites for content management, post creation, and media handling.",
+  "description": "## Overview The WordPress package provides integration with WordPress sites via the REST API. Use it when you need to create or update posts, manage media, handle categories, or automate content publishing workflows.",
+  "nodes": {
+    "connect": {
+      "namespace": "Core.Wordpress.Connect",
+      "name": "Connect",
+      "summary": "Establishes a connection to WordPress using Basic Authentication and returns a client ID for subsequent WordPress operations.",
+      "howItWorks": "The Connect node is the first step in any WordPress automation flow. It establishes an authenticated connection to your WordPress site using the REST API. When executed, the node: 1. Validates the provided URL and credentials 2. Creates an HTTP client with Basic Authentication 3. Tests the connection by making a simple API request to verify credentials 4. Stores the authenticated client in memory 5. Returns a unique client ID that references the stored connection 6. This client ID is then used by other WordPress nodes to access the API",
+      "usage": [
+        "A WordPress site with REST API enabled (enabled by default in WordPress 4.7+)",
+        "An application password generated for a WordPress user account",
+        "The WordPress user must have appropriate permissions for the operations you want to perform",
+        "HTTPS connection is strongly recommended for security"
+      ],
+      "bestPractices": [
+        "The Connect node should be executed before any other WordPress operations",
+        "The returned Client Id must be passed to subsequent WordPress nodes",
+        "Each Connect node creates a new client connection",
+        "For security, always use the Disconnect node to remove the stored connection when it's no longer needed",
+        "The client connection is stored in memory only and is automatically removed when the flow stops",
+        "Modern WordPress installations (4.7+) have the REST API enabled by default"
+      ]
+    },
+    "createcategory": {
+      "namespace": "Core.Wordpress.Createcategory",
+      "name": "Createcategory",
+      "summary": "Creates a new category in WordPress with specified name, slug, description, and parent category.",
+      "howItWorks": "The Create Category node creates a new WordPress category using the WordPress REST API. When executed, the node: 1. Retrieves the authentication (either from Client Id or direct credentials) 2. Validates the category data 3. Sends a POST request to `/wp-json/wp/v2/categories` endpoint 4. Returns the created category object with all metadata",
+      "usage": [
+        "A WordPress site with REST API enabled (WordPress 4.7+)",
+        "Appropriate user permissions (editor role or higher to manage categories)",
+        "Unique category name (WordPress won't create duplicate category names)"
+      ],
+      "bestPractices": [
+        "Category names must be unique - WordPress will return an error if a category with the same name exists",
+        "If slug is not provided, WordPress auto-generates it from the name",
+        "Slugs must be unique and URL-safe (lowercase, no spaces or special characters)",
+        "Parent category must exist before creating child categories",
+        "The count field in the result shows 0 for newly created categories",
+        "Categories are immediately available for use in posts"
+      ]
+    },
+    "createmedia": {
+      "namespace": "Core.Wordpress.Createmedia",
+      "name": "Createmedia",
+      "summary": "Uploads a media file to the WordPress media library, making it available for use in posts, pages, and as featured images.",
+      "howItWorks": "The Create Media node uploads a file to the WordPress media library using the WordPress REST API. When executed, the node: 1. Retrieves the authentication (either from Client Id or direct credentials) 2. Reads the file from the specified local path 3. Validates the file path and file name 4. Sends a POST request to `/wp-json/wp/v2/media` endpoint with the file data 5. Sets the appropriate Content-Type header 6. Returns the created media object with URLs and metadata",
+      "usage": [
+        "A WordPress site with REST API enabled (WordPress 4.7+)",
+        "Appropriate user permissions (author role or higher to upload media)",
+        "Valid local file path with read permissions",
+        "Supported file type (check WordPress media settings)",
+        "File size within WordPress upload limits"
+      ],
+      "bestPractices": [
+        "The File Path must be a valid local file system path",
+        "File Name determines how the file appears in the WordPress media library",
+        "Using \"default\" content type allows WordPress to auto-detect the file type",
+        "The returned media object includes multiple image sizes for images",
+        "Media files are immediately available after upload",
+        "The media ID can be used as featured_media in posts",
+        "WordPress may generate thumbnail and other sizes for images"
+      ]
+    },
+    "createpost": {
+      "namespace": "Core.Wordpress.Createpost",
+      "name": "Createpost",
+      "summary": "Creates a new post in WordPress with specified content, title, status, and other properties.",
+      "howItWorks": "The Create Post node creates a new WordPress post using the WordPress REST API. When executed, the node: 1. Retrieves the authentication (either from Client Id or direct credentials) 2. Validates the post data 3. Sends a POST request to `/wp-json/wp/v2/posts` endpoint 4. Returns the created post object with all metadata",
+      "usage": [
+        "A WordPress site with REST API enabled (WordPress 4.7+)",
+        "Appropriate user permissions to create posts",
+        "For draft posts: contributor level or higher",
+        "For published posts: author level or higher"
+      ],
+      "bestPractices": [
+        "The post content can include HTML markup",
+        "Images can be included using HTML `\u003cimg\u003e` tags with URLs",
+        "To set a featured image, upload it first using Create Media node and use the returned media ID",
+        "Draft posts can be created by any authenticated user with contributor role or higher",
+        "Published posts require author role or higher",
+        "The returned result includes the full post object with WordPress-generated metadata"
+      ]
+    },
+    "delete": {
+      "namespace": "Core.Wordpress.Delete",
+      "name": "Delete",
+      "summary": "Permanently deletes a post, media file, or category from WordPress.",
+      "howItWorks": "The Delete node permanently removes a WordPress object using the WordPress REST API. When executed, the node: 1. Validates the Object type is selected 2. Validates the Object Id is provided 3. Retrieves the authentication (either from Client Id or direct credentials) 4. Sends a DELETE request to `/wp-json/wp/v2/{object_type}/{id}` endpoint 5. For categories and media, automatically sets `force=true` to bypass trash 6. Permanently deletes the object",
+      "usage": [
+        "A WordPress site with REST API enabled (WordPress 4.7+)",
+        "Valid object ID that exists",
+        "Appropriate user permissions:",
+        "To delete posts: author role or higher (must be post author or editor/admin)",
+        "To delete media: author role or higher (must be uploader or editor/admin)",
+        "To delete categories: editor role or higher",
+        "Object must exist before deletion"
+      ],
+      "bestPractices": [
+        "Deletion is immediate and cannot be undone (except posts in trash)",
+        "Always verify the Object Id before deleting",
+        "Consider archiving instead of deleting for important content",
+        "Media deletion removes files from server - check usage before deleting",
+        "Category deletion reassigns posts to \"Uncategorized\"",
+        "Cannot delete the default \"Uncategorized\" category",
+        "No output is returned on successful deletion"
+      ]
+    },
+    "disconnect": {
+      "namespace": "Core.Wordpress.Disconnect",
+      "name": "Disconnect",
+      "summary": "Disconnects from WordPress and releases the client connection, freeing up system resources.",
+      "howItWorks": "The Disconnect node terminates an active WordPress connection and removes the stored client from memory. When executed, the node: 1. Validates the provided Client Id 2. Locates the stored connection using the Client Id 3. Removes the connection from the internal connection pool 4. Frees up memory resources",
+      "usage": [
+        "A valid Client Id from a previous Connect node execution",
+        "An active WordPress connection that hasn't already been disconnected"
+      ],
+      "bestPractices": [
+        "The Disconnect node should be executed after all WordPress operations are complete",
+        "Once disconnected, the Client Id can no longer be used",
+        "If you need to perform more operations after disconnecting, you must create a new connection with the Connect node",
+        "The node gracefully handles already-disconnected clients",
+        "Connections are automatically cleaned up when the flow stops, but explicitly disconnecting is still recommended"
+      ]
+    },
+    "get": {
+      "namespace": "Core.Wordpress.Get",
+      "name": "Get",
+      "summary": "Retrieves a single post or category from WordPress by its ID, returning the complete object with all metadata.",
+      "howItWorks": "The Get node retrieves a specific WordPress object by ID using the WordPress REST API. When executed, the node: 1. Validates the Object type is selected 2. Validates the Object Id is provided 3. Retrieves the authentication (either from Client Id or direct credentials) 4. Sends a GET request to `/wp-json/wp/v2/{object_type}/{id}` endpoint 5. Returns the complete object with all metadata",
+      "usage": [
+        "A WordPress site with REST API enabled (WordPress 4.7+)",
+        "Valid object ID",
+        "Appropriate permissions:",
+        "Published posts can be viewed by anyone",
+        "Draft, pending, and private posts require authentication",
+        "Categories are publicly accessible"
+      ],
+      "bestPractices": [
+        "Object Id must be a numeric ID",
+        "Published posts can be retrieved without authentication",
+        "Draft and private posts require authentication",
+        "Categories are always publicly accessible",
+        "The Object option is required - you must select Post or Category",
+        "Returns complete object data in a single API call",
+        "More efficient than listing all objects and filtering"
+      ]
+    },
+    "listcategories": {
+      "namespace": "Core.Wordpress.Listcategories",
+      "name": "Listcategories",
+      "summary": "Retrieves all categories from WordPress including their metadata, hierarchy, and post counts.",
+      "howItWorks": "The List Categories node retrieves all categories from WordPress using the WordPress REST API. When executed, the node: 1. Retrieves the authentication (either from Client Id or direct credentials) 2. Sends a GET request to `/wp-json/wp/v2/categories/` endpoint 3. Returns an array of all category objects with their complete metadata",
+      "usage": [
+        "A WordPress site with REST API enabled (WordPress 4.7+)",
+        "No special permissions required - categories are publicly accessible"
+      ],
+      "bestPractices": [
+        "Returns all categories, including those with 0 posts",
+        "Categories are publicly accessible - no authentication required for basic retrieval",
+        "The result includes the complete category hierarchy information",
+        "Empty categories (count: 0) are included in the results",
+        "The default \"Uncategorized\" category is included",
+        "Results are sorted by name by default"
+      ]
+    },
+    "listmedia": {
+      "namespace": "Core.Wordpress.Listmedia",
+      "name": "Listmedia",
+      "summary": "Retrieves all media files from the WordPress media library including images, videos, documents, and other attachments.",
+      "howItWorks": "The List Media node retrieves all media items from WordPress using the WordPress REST API. When executed, the node: 1. Retrieves the authentication (either from Client Id or direct credentials) 2. Sends a GET request to `/wp-json/wp/v2/media` endpoint 3. Returns an array of all media objects with their complete metadata",
+      "usage": [
+        "A WordPress site with REST API enabled (WordPress 4.7+)",
+        "No special permissions required for public media",
+        "Authentication may be required for private or draft attachments"
+      ],
+      "bestPractices": [
+        "Returns all media items in the media library",
+        "Includes images, videos, documents, and other file types",
+        "Returns both used and unused media",
+        "The source_url provides the direct link to download/view the file",
+        "For images, multiple sizes are available in media_details.sizes",
+        "Default WordPress pagination may apply (typically 100 items per page)"
+      ]
+    },
+    "listposts": {
+      "namespace": "Core.Wordpress.Listposts",
+      "name": "Listposts",
+      "summary": "Retrieves a list of posts from WordPress with optional filtering by status and pagination support.",
+      "howItWorks": "The List Posts node retrieves posts from WordPress using the WordPress REST API with filtering and pagination. When executed, the node: 1. Validates the status parameter is selected 2. Constructs the API request with status, page, and per-page parameters 3. Sends a GET request to `/wp-json/wp/v2/posts` endpoint 4. Retrieves pagination metadata from response headers 5. Returns the posts array along with total count and page information",
+      "usage": [
+        "A WordPress site with REST API enabled (WordPress 4.7+)",
+        "Appropriate user permissions:",
+        "Published posts can be viewed by anyone",
+        "Draft, pending, and private posts require authentication",
+        "User must be the author or have edit permissions to see their own drafts"
+      ],
+      "bestPractices": [
+        "Published posts can be retrieved without authentication",
+        "Draft, pending, and private posts require authentication",
+        "The Status option is required - you must select a value",
+        "The maximum per-page value may be limited by WordPress settings (typically 100)",
+        "Empty arrays are returned if no posts match the criteria",
+        "Posts are returned in reverse chronological order by default",
+        "Total Posts and Total Pages help with pagination logic"
+      ]
+    },
+    "update": {
+      "namespace": "Core.Wordpress.Update",
+      "name": "Update",
+      "summary": "Updates an existing post or category in WordPress with new properties and metadata.",
+      "howItWorks": "The Update node modifies an existing WordPress object using the WordPress REST API. When executed, the node: 1. Validates the Object type is selected 2. Validates the Object Id is provided 3. Validates the Object data is provided 4. Retrieves the authentication (either from Client Id or direct credentials) 5. Sends a POST request to `/wp-json/wp/v2/{object_type}/{id}` endpoint 6. Returns the updated object with all metadata",
+      "usage": [
+        "A WordPress site with REST API enabled (WordPress 4.7+)",
+        "Valid object ID that exists",
+        "Appropriate user permissions:",
+        "To update posts: author role or higher (must be post author or editor/admin)",
+        "To update categories: editor role or higher",
+        "Object must exist before updating"
+      ],
+      "bestPractices": [
+        "Only include properties you want to change - omitted properties remain unchanged",
+        "You cannot change the object ID",
+        "Updating a post updates the modified date automatically",
+        "Status changes are subject to user permissions",
+        "Categories can be renamed but slug may need manual update",
+        "All fields are optional - update only what you need",
+        "Returns the complete updated object"
+      ]
+    }
+  }
+}

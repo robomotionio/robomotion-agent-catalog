@@ -1,0 +1,519 @@
+{
+  "package": "String",
+  "summary": "Comprehensive string manipulation - split, join, replace, format, and transform text data.",
+  "description": "## Overview The String package provides extensive string manipulation capabilities. Use it when you need to process, transform, validate, or format text data in your automation workflows.",
+  "nodes": {
+    "Assign": {
+      "namespace": "Core.String.Assign",
+      "name": "Assign",
+      "summary": "Assigns a string value to a variable with configurable scope (Global, Flow, Local, Message, or Custom).",
+      "howItWorks": "The Assign node allows you to store a string value in a variable with different scope levels: 1. **Global** - Variable is accessible across all flows in the project 2. **Flow** - Variable is accessible within the current flow only 3. **Local** - Variable is accessible within the current execution context 4. **Message** - Variable is attached to the message object (default) 5. **Custom** - Variable is stored in a custom scope When using Global or Flow scope, the node uses mutex locks to ensure thread-safe operations when multiple executions access the same variable.",
+      "relatedNodes": [
+        "ToString",
+        "Concatenate",
+        "Template"
+      ],
+      "tips": [
+        "Use **Message scope** for most cases - it keeps variables attached to the message flow",
+        "Use **Global scope** sparingly for configuration values that need to be shared across all flows",
+        "Use **Flow scope** for values that should persist within a single flow execution",
+        "Variable names should be descriptive and follow camelCase convention",
+        "Consider using the **ToString** node if you need to convert non-string values before assigning"
+      ]
+    },
+    "Compare": {
+      "namespace": "Core.String.Compare",
+      "name": "Compare",
+      "summary": "Compares two strings lexicographically and returns -1, 0, or 1 indicating the relationship between them.",
+      "howItWorks": "The Compare node performs lexicographical (dictionary order) comparison between two strings: 1. Takes two input strings 2. Optionally converts both to lowercase if \"Ignore Case\" is enabled 3. Compares character by character using Unicode values 4. Returns an integer indicating the relationship Lexicographical comparison works like dictionary ordering: * \"apple\" \u003c \"banana\" (returns -1) * \"hello\" = \"hello\" (returns 0) * \"zebra\" \u003e \"apple\" (returns 1)",
+      "relatedNodes": [
+        "Lowercase",
+        "Uppercase",
+        "Trim",
+        "ToNumber"
+      ],
+      "tips": [
+        "Use **Ignore Case** option for user-facing comparisons where case shouldn't matter",
+        "For numeric comparisons, convert strings to numbers first using **ToNumber** node",
+        "Combine with **If** node to create conditional logic based on comparison results",
+        "Lexicographical comparison is byte-by-byte, so \"10\" \u003c \"2\" (string order, not numeric)",
+        "Empty strings are considered less than non-empty strings"
+      ]
+    },
+    "Concatenate": {
+      "namespace": "Core.String.Concatenate",
+      "name": "Concatenate",
+      "summary": "Joins two strings together into a single string.",
+      "howItWorks": "The Concatenate node performs simple string concatenation by appending the second string immediately after the first string with no separator or space between them. If you need to join strings with a separator, use the [Join](/reference/packages/string/Join) node instead.",
+      "relatedNodes": [
+        "Join",
+        "Template",
+        "Replace",
+        "ToString"
+      ],
+      "tips": [
+        "**Include separators** in one of the input strings if needed (spaces, slashes, etc.)",
+        "For joining more than two strings, use the **Join** node with an array",
+        "For complex string building with variables, use the **Template** node",
+        "Chain multiple Concatenate nodes for joining more than two strings",
+        "Consider using **Template** node for more readable multi-part string construction"
+      ]
+    },
+    "Count": {
+      "namespace": "Core.String.Count",
+      "name": "Count",
+      "summary": "Counts the number of non-overlapping occurrences of a substring within a string.",
+      "howItWorks": "The Count node searches through the entire string and counts how many times the substring appears. The search is: * **Case-sensitive:** \"Hello\" and \"hello\" are different * **Non-overlapping:** In \"aaa\", searching for \"aa\" returns 1, not 2 * **Exact match:** Must match the substring exactly If the substring is empty, the count will be the length of the string + 1.",
+      "relatedNodes": [
+        "Includes",
+        "LastIndex",
+        "Split",
+        "Replace"
+      ],
+      "tips": [
+        "Count is **case-sensitive** - use Lowercase node first for case-insensitive counting",
+        "Empty substring returns `length + 1`",
+        "Great for validating data format (e.g., checking number of commas in CSV)",
+        "Use for detecting repetition patterns in text",
+        "Combine with conditional logic to validate input",
+        "Count can be 0 if substring is not found"
+      ]
+    },
+    "Cut": {
+      "namespace": "Core.String.Cut",
+      "name": "Cut",
+      "summary": "Splits a string at the first occurrence of a separator into \"before\" and \"after\" parts.",
+      "howItWorks": "The Cut node finds the first occurrence of the separator and splits the string into two parts: 1. Everything before the separator → `result.before` 2. Everything after the separator → `result.after` 3. The separator itself is not included in either part 4. If separator not found: entire string goes to `before`, `after` is empty",
+      "relatedNodes": [
+        "Split",
+        "Replace",
+        "Join"
+      ],
+      "tips": [
+        "Only splits at the **first occurrence** of separator",
+        "The separator itself is **removed** from the result",
+        "Perfect for simple **key-value parsing**",
+        "Use **Split** node if you need to split at all occurrences",
+        "Access results using `${msg.result.before}` and `${msg.result.after}`",
+        "If separator not found, check if `after` is empty"
+      ]
+    },
+    "GenerateString": {
+      "namespace": "Core.String.GenerateString",
+      "name": "GenerateString",
+      "summary": "Generates a random alphanumeric string of specified length.",
+      "howItWorks": "The Generate String node creates a random string using: * **Character set:** Letters only (a-z, A-Z) - 52 possible characters * **Random selection:** Each character is randomly selected * **No numbers or special characters** - only alphabetic characters * **Case-mixed:** Contains both uppercase and lowercase letters * **Length specified by input**",
+      "errorCodes": [
+        "Error"
+      ],
+      "relatedNodes": [
+        "GenerateUUID",
+        "Uppercase",
+        "Lowercase",
+        "Concatenate"
+      ],
+      "tips": [
+        "Use for **generating temporary identifiers**",
+        "Great for **test data generation**",
+        "Perfect for **verification codes** (if letters-only is acceptable)",
+        "**Not cryptographically secure** - don't use for passwords or tokens",
+        "Each call generates a **different random string**",
+        "Only contains **letters** (no numbers or special characters)",
+        "For unique IDs across systems, use **GenerateUUID** instead"
+      ]
+    },
+    "GenerateUUID": {
+      "namespace": "Core.String.GenerateUUID",
+      "name": "GenerateUUID",
+      "summary": "Generates a new random UUID (Universally Unique Identifier) in standard format.",
+      "howItWorks": "The Generate UUID node creates a new UUID (Version 4): * **Format:** 8-4-4-4-12 hexadecimal digits separated by hyphens * **Length:** Always 36 characters (32 hex digits + 4 hyphens) * **Randomness:** 122 bits of randomness * **Uniqueness:** Virtually guaranteed to be globally unique * **Standard:** Follows RFC 4122 specification Example UUID: `550e8400-e29b-41d4-a716-446655440000`",
+      "relatedNodes": [
+        "GenerateString",
+        "Concatenate",
+        "Assign",
+        "Uppercase"
+      ],
+      "tips": [
+        "Use for **unique identifiers** across distributed systems",
+        "Perfect for **database primary keys**",
+        "Great for **correlation IDs** in logs and traces",
+        "**Globally unique** - can be generated independently without coordination",
+        "**Random** - Version 4 UUID (not timestamp-based)",
+        "**No collisions** - probability of collision is negligible",
+        "Use for **file naming** when uniqueness is critical"
+      ]
+    },
+    "GetLength": {
+      "namespace": "Core.String.GetLength",
+      "name": "GetLength",
+      "summary": "Returns the length of a string in bytes (number of characters).",
+      "howItWorks": "The Get Length node counts the number of bytes in a string: * **Returns integer** - the byte count * **Empty string** returns 0 * **Spaces count** as characters * **Multi-byte characters** (Unicode) may count as multiple bytes * **ASCII characters** are 1 byte each :::note This measures byte length. Some Unicode characters use multiple bytes, so byte length may be different from visual character count. :::",
+      "relatedNodes": [
+        "Trim",
+        "Split",
+        "Count",
+        "Includes"
+      ],
+      "tips": [
+        "Use for **validation** (minimum/maximum length checks)",
+        "Great for **limiting input** (username, password length)",
+        "Use for **progress indicators** (characters typed)",
+        "Perfect for **truncation logic** (if too long, truncate)",
+        "Combine with **If** node for conditional logic based on length",
+        "Empty string has length 0"
+      ]
+    },
+    "HasPrefix": {
+      "namespace": "Core.String.HasPrefix",
+      "name": "HasPrefix",
+      "summary": "Checks if a string starts with a specified prefix, returning true or false.",
+      "howItWorks": "The Has Prefix node checks if a string begins with the specified prefix: * **Case-sensitive:** \"Hello\" and \"hello\" are different * **Exact match:** Prefix must match exactly from the start * **Returns boolean:** true if starts with prefix, false otherwise * **Empty prefix:** Always returns true",
+      "relatedNodes": [
+        "HasSuffix",
+        "Includes",
+        "Lowercase",
+        "Trim"
+      ],
+      "tips": [
+        "Use for **protocol validation** (http://, https://, ftp://)",
+        "Great for **path validation** (check if starts with /home, C:\\, etc.)",
+        "Useful for **format validation** (phone numbers, IDs, codes)",
+        "Search is **case-sensitive** - use Lowercase node first for case-insensitive check",
+        "More specific than **Includes** - only checks the beginning",
+        "Use with **If** node for conditional routing"
+      ]
+    },
+    "HasSuffix": {
+      "namespace": "Core.String.HasSuffix",
+      "name": "HasSuffix",
+      "summary": "Checks if a string ends with a specified suffix, returning true or false.",
+      "howItWorks": "The Has Suffix node checks if a string ends with the specified suffix: * **Case-sensitive:** \".PDF\" and \".pdf\" are different * **Exact match:** Suffix must match exactly at the end * **Returns boolean:** true if ends with suffix, false otherwise * **Empty suffix:** Always returns true",
+      "relatedNodes": [
+        "HasPrefix",
+        "Includes",
+        "LastIndex",
+        "Lowercase",
+        "Trim"
+      ],
+      "tips": [
+        "Perfect for **file extension validation**",
+        "Use for **domain validation** (email, URLs)",
+        "Great for **endpoint checking** in APIs",
+        "Search is **case-sensitive** - use Lowercase node first for case-insensitive check",
+        "More specific than **Includes** - only checks the end",
+        "Use with **If** node for conditional file processing"
+      ]
+    },
+    "Includes": {
+      "namespace": "Core.String.Includes",
+      "name": "Includes",
+      "summary": "Checks if a string contains a specified substring, returning true or false.",
+      "howItWorks": "The Includes node performs a simple substring search: * **Case-sensitive:** \"Hello\" and \"hello\" are different * **Returns boolean:** true if found anywhere in string, false otherwise * **Exact match:** Must match the substring exactly * **Empty substring:** Always returns true",
+      "relatedNodes": [
+        "Count",
+        "HasPrefix",
+        "HasSuffix",
+        "Lowercase"
+      ],
+      "tips": [
+        "Use for **quick existence checks** - no position information needed",
+        "Combine with **If** node for conditional logic",
+        "Search is **case-sensitive** - use Lowercase node first for case-insensitive search",
+        "More efficient than Index when you only need true/false",
+        "Use for filtering, validation, and conditional routing",
+        "Empty substring always returns true"
+      ]
+    },
+    "IndexAny": {
+      "namespace": "Core.String.IndexAny",
+      "name": "IndexAny",
+      "summary": "Finds the index of the first occurrence of any character from a specified set of characters.",
+      "howItWorks": "The Index Any node searches for the first occurrence of ANY character from the provided character set: * **0-based indexing:** First character is at index 0 * **Finds earliest match:** Returns position of whichever character appears first * **Case-sensitive:** 'A' and 'a' are different characters * **Returns -1:** If none of the characters are found Unlike **Index** which finds a substring, **IndexAny** finds individual characters.",
+      "relatedNodes": [
+        "LastIndex",
+        "Includes",
+        "HasPrefix",
+        "HasSuffix"
+      ],
+      "tips": [
+        "Useful for finding **any** of multiple possible delimiters",
+        "Great for validation (checking if string contains unwanted characters)",
+        "More flexible than **Index** when you have multiple possible characters",
+        "Characters string order doesn't matter - earliest match wins",
+        "Use for finding first whitespace, punctuation, or special character",
+        "Case-sensitive - include both 'A' and 'a' if you want both"
+      ]
+    },
+    "Join": {
+      "namespace": "Core.String.Join",
+      "name": "Join",
+      "summary": "Joins an array of strings into a single string with a separator between elements.",
+      "howItWorks": "The Join node combines an array of strings into one string: 1. Takes all elements from the **Elements** array 2. Adds any **Custom Elements** specified 3. Joins them with the **Separator** between each element 4. Returns the combined string * **Empty separator** - elements are concatenated without spacing * **Array with one element** - returns that element (no separator added) * **Empty array** - returns empty string",
+      "relatedNodes": [
+        "Split",
+        "Concatenate",
+        "Template",
+        "Replace"
+      ],
+      "tips": [
+        "Use for **creating CSV lines** from field arrays",
+        "Perfect for **building file paths** from directory arrays",
+        "Great for **creating delimited strings**",
+        "Opposite operation of **Split** node",
+        "Empty separator creates concatenated string",
+        "Use custom elements to add static values to the array",
+        "Separator appears **between** elements, not at start or end"
+      ]
+    },
+    "LastIndex": {
+      "namespace": "Core.String.LastIndex",
+      "name": "LastIndex",
+      "summary": "Finds the index (position) of the last occurrence of a substring within a string.",
+      "howItWorks": "The Last Index node searches for the last occurrence of a substring and returns its starting position: * **0-based indexing:** First character is at index 0 * **Case-sensitive:** \"Hello\" and \"hello\" are different * **Returns -1:** If substring is not found * **Last occurrence only:** Use Index for the first occurrence",
+      "relatedNodes": [
+        "IndexAny",
+        "Includes",
+        "Cut",
+        "Split"
+      ],
+      "tips": [
+        "Index is **0-based** - first character is at position 0",
+        "Result of **-1** means substring was not found",
+        "Perfect for finding file extensions (last dot in filename)",
+        "Useful for finding last path separator",
+        "Search is **case-sensitive** - convert to same case first if needed",
+        "Use **Index** to find the first occurrence instead",
+        "Great for parsing paths, URLs, and hierarchical data"
+      ]
+    },
+    "Lowercase": {
+      "namespace": "Core.String.Lowercase",
+      "name": "Lowercase",
+      "summary": "Converts all characters in a string to lowercase.",
+      "howItWorks": "The Lowercase node converts all uppercase letters to their lowercase equivalents: * **Uppercase letters** (A-Z) → lowercase (a-z) * **Already lowercase** letters remain unchanged * **Numbers and special characters** remain unchanged * **Unicode characters** are properly converted",
+      "relatedNodes": [
+        "Uppercase",
+        "Trim",
+        "Compare",
+        "Replace"
+      ],
+      "tips": [
+        "Use for **case-insensitive comparisons** - convert both strings to lowercase first",
+        "Essential for **normalizing user input** (emails, usernames)",
+        "Great for **search functionality** - make search case-insensitive",
+        "Use before **sorting** for alphabetical order",
+        "Combine with **Trim** for complete input normalization",
+        "Database keys often require lowercase"
+      ]
+    },
+    "Repeat": {
+      "namespace": "Core.String.Repeat",
+      "name": "Repeat",
+      "summary": "Repeats a string a specified number of times.",
+      "howItWorks": "The Repeat node creates a new string by repeating the input string: * **Concatenates** the string Count times * **Count of 0** returns empty string * **Count of 1** returns the original string * **Negative count** causes an error * **Empty string** repeated returns empty string",
+      "errorCodes": [
+        "Error"
+      ],
+      "relatedNodes": [
+        "Concatenate",
+        "GetLength",
+        "Join"
+      ],
+      "tips": [
+        "Use for **creating separators** and dividers",
+        "Great for **padding** strings",
+        "Perfect for **visual formatting** in reports",
+        "Use for **creating patterns**",
+        "Combine with **GetLength** for dynamic padding",
+        "Count of 0 is valid and returns empty string"
+      ]
+    },
+    "Replace": {
+      "namespace": "Core.String.Replace",
+      "name": "Replace",
+      "summary": "Replaces all occurrences of a substring with another string.",
+      "howItWorks": "The Replace node finds all occurrences of the old string and replaces them with the new string: * **Replaces all occurrences** - not just the first one * **Case-sensitive** - \"Hello\" and \"hello\" are different * **Exact match** - must match the old string exactly * **New string can be empty** - effectively removes the old string * **Old string can be repeated** - continues until no more matches",
+      "relatedNodes": [
+        "Trim",
+        "Split",
+        "Lowercase",
+        "Uppercase"
+      ],
+      "tips": [
+        "Replaces **all occurrences**, not just the first one",
+        "Use empty New String to **remove** text",
+        "Great for **cleaning data** (remove unwanted characters)",
+        "Perfect for **normalizing formats** (dates, phone numbers, paths)",
+        "**Case-sensitive** - use Lowercase/Uppercase first if needed",
+        "Can be chained - multiple Replace nodes for complex transformations"
+      ]
+    },
+    "Reverse": {
+      "namespace": "Core.String.Reverse",
+      "name": "Reverse",
+      "summary": "Reverses the characters in a string, returning the string backwards.",
+      "howItWorks": "The Reverse node reverses the order of characters in a string: * First character becomes last * Last character becomes first * Handles Unicode characters correctly * Empty string returns empty string",
+      "relatedNodes": [
+        "Compare",
+        "Lowercase",
+        "Trim",
+        "Split",
+        "Join"
+      ],
+      "tips": [
+        "Useful for **palindrome validation**",
+        "Can be used in **obfuscation techniques** (not security)",
+        "Works correctly with **Unicode characters**",
+        "Combine with Compare to check if string is a palindrome",
+        "Not commonly used in business automation, more for text manipulation",
+        "Reversing twice returns the original string"
+      ]
+    },
+    "Split": {
+      "namespace": "Core.String.Split",
+      "name": "Split",
+      "summary": "Splits a string into an array of substrings using a separator.",
+      "howItWorks": "The Split node divides a string into multiple parts based on a separator: * **Splits at all occurrences** of the separator * **Separator is removed** from the result * **Empty parts are included** (if separator appears consecutively) * **Returns array** - can be iterated or accessed by index * **Empty separator** splits into individual characters",
+      "relatedNodes": [
+        "Join",
+        "Cut",
+        "Replace",
+        "Trim"
+      ],
+      "tips": [
+        "Use for **parsing delimited data** (CSV, TSV, etc.)",
+        "Perfect for **breaking down file paths**",
+        "Great for **processing multi-line text**",
+        "Use with **For Each** loop to process each part",
+        "Access parts by index: `${msg.result[0]}`, `${msg.result[1]}`, etc.",
+        "Empty separator splits into individual characters",
+        "Consecutive separators create empty strings in array"
+      ]
+    },
+    "Template": {
+      "namespace": "Core.String.Template",
+      "name": "Template",
+      "summary": "Renders a Handlebars template string with dynamic values from a context object.",
+      "howItWorks": "The Template node uses Handlebars templating engine to render dynamic strings: 1. Takes a template string with placeholders in `{{variable}}` format 2. Takes a context object with values 3. Replaces each `{{placeholder}}` with the corresponding value from context 4. Returns the rendered string **Handlebars Features:** * Simple variable substitution: `{{name}}` * Nested properties: `{{user.email}}` * Array access: `{{items.[0]}}` * Conditionals: `{{#if condition}}...{{/if}}` * Loops: `{{#each items}}...{{/each}}` * Helpers: `{{uppercase name}}`",
+      "relatedNodes": [
+        "Concatenate",
+        "Join",
+        "Replace",
+        "ToString"
+      ],
+      "tips": [
+        "Use for **email templates** with dynamic content",
+        "Perfect for **generating reports** with variable data",
+        "Great for **building dynamic messages**",
+        "Use for **URL construction** with parameters",
+        "Supports **nested objects** and **arrays**",
+        "**Escape HTML** automatically in Handlebars (use triple braces `{{{raw}}}` for unescaped)",
+        "More powerful than simple concatenation for complex strings"
+      ]
+    },
+    "ToBoolean": {
+      "namespace": "Core.String.ToBoolean",
+      "name": "ToBoolean",
+      "summary": "Converts a string to a boolean value (true/false).",
+      "howItWorks": "The To Boolean node converts string representations to boolean values using standard parsing rules: **Accepted values for `true`:** * \"true\", \"True\", \"TRUE\", \"t\", \"T\" * \"1\" **Accepted values for `false`:** * \"false\", \"False\", \"FALSE\", \"f\", \"F\" * \"0\" The conversion is case-insensitive and follows Go's `strconv.ParseBool` behavior.",
+      "errorCodes": [
+        "Error"
+      ],
+      "relatedNodes": [
+        "ToNumber",
+        "ToString",
+        "Compare"
+      ],
+      "tips": [
+        "Input is **case-insensitive**: \"TRUE\", \"True\", and \"true\" all work",
+        "Use for parsing configuration files, API responses, or user inputs",
+        "Combine with conditional nodes to create boolean-based logic",
+        "Common in form processing where checkboxes return \"true\"/\"false\" strings",
+        "Alternative representations: \"1\" for true, \"0\" for false"
+      ]
+    },
+    "ToNumber": {
+      "namespace": "Core.String.ToNumber",
+      "name": "ToNumber",
+      "summary": "Converts a string to a numeric value (float64).",
+      "howItWorks": "The To Number node parses string representations of numbers and converts them to float64 values: **Supported formats:** * Integers: \"42\", \"-17\", \"0\" * Decimals: \"3.14\", \"-0.5\", \"99.99\" * Scientific notation: \"1.23e10\", \"5e-3\" * Leading/trailing spaces are not automatically trimmed The conversion uses Go's `strconv.ParseFloat` with 64-bit precision.",
+      "errorCodes": [
+        "Error"
+      ],
+      "relatedNodes": [
+        "ToBoolean",
+        "ToString",
+        "Replace",
+        "Trim"
+      ],
+      "tips": [
+        "Use **Trim** node first to remove leading/trailing whitespace",
+        "The result is always a float64, even for whole numbers",
+        "For currency values, consider precision limitations of floating-point",
+        "Supports scientific notation for very large or small numbers",
+        "Use for processing numerical data from CSV files, forms, or APIs",
+        "Combine with mathematical operations after conversion"
+      ]
+    },
+    "ToString": {
+      "namespace": "Core.String.ToString",
+      "name": "ToString",
+      "summary": "Converts any value to its string representation.",
+      "howItWorks": "The To String node converts any data type to its string representation using Go's formatting: * **Numbers:** Converted to decimal string representation * **Booleans:** Converted to \"true\" or \"false\" * **Objects:** Formatted with field names and values * **Arrays:** Formatted as list with brackets * **Null/undefined:** Converted to string representation The node uses Go's `fmt.Sprintf(\"%+v\")` format, which includes field names for structs.",
+      "relatedNodes": [
+        "ToNumber",
+        "ToBoolean",
+        "Concatenate",
+        "Template"
+      ],
+      "tips": [
+        "Use before concatenating non-string values",
+        "Useful for logging and debugging - convert any value to see its contents",
+        "Object and array conversion is for display/logging, not for JSON serialization",
+        "For JSON output, use a dedicated JSON serialization node",
+        "Automatically handles all data types without errors",
+        "Great for creating descriptive error messages or logs"
+      ]
+    },
+    "Trim": {
+      "namespace": "Core.String.Trim",
+      "name": "Trim",
+      "summary": "Removes specified characters from the beginning and/or end of a string.",
+      "howItWorks": "The Trim node removes specified characters from string edges based on the trim type: **When Cut Set is empty:** * Removes whitespace characters: spaces, tabs (`\\t`), newlines (`\\n`), carriage returns (`\\r`) * Uses `Left + Right Trim` mode (ignores Trim Type option) **When Cut Set is specified:** * Removes any characters that appear in the Cut Set string * Respects the Trim Type option (Left, Right, or Both) * Removes characters from edges only, not from the middle",
+      "relatedNodes": [
+        "Replace",
+        "Lowercase",
+        "Uppercase",
+        "Split"
+      ],
+      "tips": [
+        "**Leave Cut Set empty** for standard whitespace trimming",
+        "Cut Set removes **any** of the specified characters, not the exact string",
+        "Great for cleaning user input",
+        "Use before parsing or validation",
+        "Removes from edges only - middle characters are preserved",
+        "Combine with Replace to remove characters from anywhere"
+      ]
+    },
+    "Uppercase": {
+      "namespace": "Core.String.Uppercase",
+      "name": "Uppercase",
+      "summary": "Converts all characters in a string to uppercase.",
+      "howItWorks": "The Uppercase node converts all lowercase letters to their uppercase equivalents: * **Lowercase letters** (a-z) → uppercase (A-Z) * **Already uppercase** letters remain unchanged * **Numbers and special characters** remain unchanged * **Unicode characters** are properly converted",
+      "relatedNodes": [
+        "Lowercase",
+        "Trim",
+        "Replace",
+        "Concatenate"
+      ],
+      "tips": [
+        "Use for **emphasis** in output messages",
+        "Great for **constant definitions** and **codes**",
+        "Use for **standardizing identifiers** (product codes, reference numbers)",
+        "Combine with **Trim** for complete normalization",
+        "Useful for **display formatting** (headers, titles)",
+        "Database lookup keys sometimes require uppercase"
+      ]
+    }
+  }
+}

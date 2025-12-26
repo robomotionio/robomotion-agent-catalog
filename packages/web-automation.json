@@ -1,0 +1,392 @@
+{
+  "package": "WebAutomation",
+  "summary": "The Web Automation package provides comprehensive browser automation capabilities powered by Selenium WebDriver. Use this package to automate web-based tasks, scrape data, fill forms, and interact with web applications.",
+  "description": "## Key Features - Multiple browser support (Chrome, Firefox, Edge, Brave, Opera, Incogniton)",
+  "nodes": {
+    "Alert": {
+      "namespace": "Core.WebAutomation.Alert",
+      "name": "Alert",
+      "summary": "Handles browser alert dialogs, confirmations, and prompts. Can accept, cancel, or retrieve text from alert boxes.",
+      "tips": [
+        "Add a small delay before the Alert node to ensure the alert appears",
+        "Use Get Text to verify alert content before accepting/canceling",
+        "Modern websites often use custom modals instead of native alerts",
+        "For custom modals, use regular element interactions instead of Alert node",
+        "Alert, Confirm, and Prompt dialogs block all other browser interactions"
+      ]
+    },
+    "ClickElement": {
+      "namespace": "Core.WebAutomation.ClickElement",
+      "name": "ClickElement",
+      "summary": "Clicks on a web element using XPath or CSS selector. Supports different click types including left click, right click, double click, and more.",
+      "tips": [
+        "Use browser developer tools (F12) to inspect elements and find selectors",
+        "XPath is more powerful for complex element relationships",
+        "CSS selectors are generally faster for simple selections",
+        "Wait for elements to be clickable before interacting",
+        "Use specific selectors to avoid clicking the wrong element",
+        "For dynamic elements, increase the Wait Timeout value"
+      ]
+    },
+    "CloseBrowser": {
+      "namespace": "Core.WebAutomation.CloseBrowser",
+      "name": "CloseBrowser",
+      "summary": "Closes an open browser session and terminates the browser process.",
+      "tips": [
+        "Always close browsers when automation is complete to free system resources",
+        "Use this node in error handlers to ensure browsers are closed even when errors occur",
+        "Multiple browsers can be opened and each closed individually using their respective Browser IDs"
+      ]
+    },
+    "DragAndDrop": {
+      "namespace": "Core.WebAutomation.DragAndDrop",
+      "name": "DragAndDrop",
+      "summary": "Performs drag and drop operations by dragging an element from one location and dropping it onto another element.",
+      "tips": [
+        "Both source and target elements must be visible and enabled",
+        "Some drag and drop implementations use HTML5 drag API, which may require custom JavaScript",
+        "Ensure elements are fully loaded before attempting drag and drop",
+        "The operation moves the mouse smoothly from source to target",
+        "Add delay after operation to allow animations to complete"
+      ]
+    },
+    "FileUpload": {
+      "namespace": "Core.WebAutomation.FileUpload",
+      "name": "FileUpload",
+      "summary": "Uploads a file to a file input element by providing the file path.",
+      "tips": [
+        "Use absolute file paths for reliability",
+        "Ensure the file exists before attempting upload",
+        "The file must be accessible from the machine running the automation",
+        "Works with standard HTML `\u003cinput type=\"file\"\u003e` elements",
+        "For drag-and-drop uploads, use [Drag And Drop](DragAndDrop.md)",
+        "Some websites process uploads immediately, others need a submit button click",
+        "File size limits are enforced by the website, not this node"
+      ]
+    },
+    "Focus": {
+      "namespace": "Core.WebAutomation.Focus",
+      "name": "Focus",
+      "summary": "Sets focus on a web element, making it the active element for keyboard input.",
+      "tips": [
+        "Use Focus before Send Keys to ensure keyboard input goes to the right element",
+        "Some form fields trigger validation or autocomplete when focused",
+        "Focus is automatically set when using Click Element or Type Text",
+        "Useful for keyboard navigation workflows"
+      ]
+    },
+    "GetCookies": {
+      "namespace": "Core.WebAutomation.GetCookies",
+      "name": "GetCookies",
+      "summary": "Retrieves all cookies from the current browser session as an array of cookie objects.",
+      "tips": [
+        "Use to save and restore browser sessions",
+        "Helpful for debugging authentication issues",
+        "Cookies are domain-specific",
+        "Session cookies may not have an expires property",
+        "Use to transfer sessions between automation runs",
+        "Store cookies securely if they contain sensitive data"
+      ]
+    },
+    "GetPageSource": {
+      "namespace": "Core.WebAutomation.GetPageSource",
+      "name": "GetPageSource",
+      "summary": "Retrieves the complete HTML source code of the current page.",
+      "tips": [
+        "Returns the rendered HTML including JavaScript-generated content",
+        "Different from viewing page source (Ctrl+U) which shows original HTML",
+        "Useful for advanced data extraction when selectors are complex",
+        "Can be parsed with DOM Parser or Regular Expression nodes",
+        "Large pages will return large amounts of text data",
+        "Save to file for offline analysis"
+      ]
+    },
+    "GetSelectOptions": {
+      "namespace": "Core.WebAutomation.GetSelectOptions",
+      "name": "GetSelectOptions",
+      "summary": "Retrieves all available options from a dropdown (select) element as an array of text values.",
+      "tips": [
+        "Use to validate available options before selecting",
+        "Helpful for dynamic dropdowns where options change",
+        "Returns text values, not option values",
+        "Empty select elements return an empty array",
+        "Use in conditional logic to handle different option sets",
+        "Combine with loops to process all options"
+      ]
+    },
+    "GetTitle": {
+      "namespace": "Core.WebAutomation.GetTitle",
+      "name": "GetTitle",
+      "summary": "Retrieves the title of the current browser page (the text shown in the browser tab).",
+      "tips": [
+        "Use to verify successful page loads",
+        "Helpful for confirming navigation to the correct page",
+        "Page titles are defined in HTML `\u003ctitle\u003e` tags",
+        "Use in conditional logic to handle different pages",
+        "Useful with Switch Window to find specific tabs"
+      ]
+    },
+    "GetURL": {
+      "namespace": "Core.WebAutomation.GetURL",
+      "name": "GetURL",
+      "summary": "Retrieves the current URL of the browser page.",
+      "tips": [
+        "Use to verify successful navigation",
+        "Extract URL parameters for data processing",
+        "Log URLs for debugging and monitoring",
+        "Useful in conditional logic to check current page",
+        "Can be used to detect redirects"
+      ]
+    },
+    "GetValue": {
+      "namespace": "Core.WebAutomation.GetValue",
+      "name": "GetValue",
+      "summary": "Retrieves the value or attribute from a web element. Use this to extract data from input fields, get element attributes, or read element text.",
+      "tips": [
+        "Use \"value\" for input fields, textareas, and select elements",
+        "For element text content, use \"value\" and the node will fallback to text if no value attribute exists",
+        "Custom data attributes are accessed as \"data-attribute-name\"",
+        "Store output in variables for use in later nodes",
+        "Use in loops to extract data from multiple elements"
+      ]
+    },
+    "GoBack": {
+      "namespace": "Core.WebAutomation.GoBack",
+      "name": "GoBack",
+      "summary": "Navigates to the previous page in the browser's history, similar to clicking the back button.",
+      "tips": [
+        "Use after navigating through multiple pages to return to previous content",
+        "Add Wait Element after Go Back to ensure the previous page loaded",
+        "Browser history is maintained during the session",
+        "Going back beyond the first page has no effect",
+        "Combine with Get URL to verify the current page after navigation"
+      ]
+    },
+    "GoForward": {
+      "namespace": "Core.WebAutomation.GoForward",
+      "name": "GoForward",
+      "summary": "Navigates to the next page in the browser's history, similar to clicking the forward button.",
+      "tips": [
+        "Only works if you previously went back in history",
+        "Going forward beyond the latest page has no effect",
+        "Add Wait Element after Go Forward to ensure the page loaded",
+        "Browser history is cleared when navigating to a new URL",
+        "Useful for testing browser navigation flows"
+      ]
+    },
+    "Highlight": {
+      "namespace": "Core.WebAutomation.Highlight",
+      "name": "Highlight",
+      "summary": "Highlights a web element with a yellow background and red border for visual identification. Useful for debugging and demonstrations.",
+      "tips": [
+        "Use before screenshots to visually mark important elements",
+        "Helpful for debugging selector issues",
+        "Good for creating tutorial videos and documentation",
+        "The highlight persists until the page is refreshed",
+        "Multiple elements can be highlighted on the same page"
+      ]
+    },
+    "Hover": {
+      "namespace": "Core.WebAutomation.Hover",
+      "name": "Hover",
+      "summary": "Moves the mouse cursor over a web element, triggering hover effects like dropdown menus, tooltips, or element state changes.",
+      "tips": [
+        "Many dropdown menus require hover before submenu items become visible",
+        "Use Hover to reveal elements that appear on mouse over",
+        "Combine with Click Element for nested menu navigation",
+        "Some websites display additional information on hover",
+        "Add a small delay after hover to allow CSS transitions to complete"
+      ]
+    },
+    "ListWindows": {
+      "namespace": "Core.WebAutomation.ListWindows",
+      "name": "ListWindows",
+      "summary": "Retrieves the titles of all open browser windows and tabs as an array.",
+      "tips": [
+        "Use before [Switch Window](SwitchWindow.md) to verify window titles",
+        "Helpful for debugging multi-window scenarios",
+        "The current window remains active after listing",
+        "Window order matches the order they were opened",
+        "Use in conditional logic to handle different window states",
+        "Combine with loops to process all windows"
+      ]
+    },
+    "OpenBrowser": {
+      "namespace": "Core.WebAutomation.OpenBrowser",
+      "name": "OpenBrowser",
+      "summary": "Opens a new browser session for web automation. This is the starting point for all web automation workflows.",
+      "tips": [
+        "Always store the Browser ID output in a variable to use with other web automation nodes",
+        "Use Headless Chrome for automation running on servers without displays",
+        "Enable User Data Dir to persist login sessions between automation runs",
+        "For proxy authentication, store credentials securely in the Vault",
+        "Incogniton browser must be running before executing this node"
+      ]
+    },
+    "OpenLink": {
+      "namespace": "Core.WebAutomation.OpenLink",
+      "name": "OpenLink",
+      "summary": "Navigates the browser to a specified URL.",
+      "tips": [
+        "The browser automatically switches to the new tab when New Tab is enabled",
+        "URLs without protocol will have http:// added - use full URLs with https:// for secure sites",
+        "Use variables to construct dynamic URLs based on your data",
+        "Wait for page load using [Wait Element](WaitElement.md) after navigation"
+      ]
+    },
+    "Refresh": {
+      "namespace": "Core.WebAutomation.Refresh",
+      "name": "Refresh",
+      "summary": "Reloads the current page in the browser, similar to pressing F5 or clicking the refresh button.",
+      "tips": [
+        "Add a Wait Element node after Refresh to ensure the page has loaded",
+        "Refreshing clears any JavaScript state and resets the page",
+        "Use with polling patterns to check for updated content",
+        "Unsaved form data will be lost on refresh",
+        "Add appropriate delays after refresh for page load completion"
+      ]
+    },
+    "RunScript": {
+      "namespace": "Core.WebAutomation.RunScript",
+      "name": "RunScript",
+      "summary": "Executes custom JavaScript code in the browser context. Provides full access to the DOM and browser APIs for advanced automation scenarios.",
+      "tips": [
+        "Use return statement to pass data back to the workflow",
+        "Access workflow data through the `msg` variable",
+        "Ideal for operations not available in standard nodes",
+        "Can manipulate page elements directly",
+        "Supports both synchronous and asynchronous code",
+        "Use console.log for debugging (visible in browser console)",
+        "Errors will be caught and reported to the workflow"
+      ]
+    },
+    "Screenshot": {
+      "namespace": "Core.WebAutomation.Screenshot",
+      "name": "Screenshot",
+      "summary": "Captures screenshots of the entire page or specific elements. Useful for documentation, debugging, and visual verification.",
+      "tips": [
+        "Use PNG format for better quality and transparency support",
+        "Include timestamps in filenames to avoid overwriting: `screenshot_{{timestamp}}.png`",
+        "Full page screenshots may take longer for long pages",
+        "Element screenshots are faster and smaller in file size",
+        "Ensure the directory exists before saving screenshots",
+        "Use absolute paths for reliability"
+      ]
+    },
+    "Scroll": {
+      "namespace": "Core.WebAutomation.Scroll",
+      "name": "Scroll",
+      "summary": "Scrolls the page vertically by a specified number of pixels.",
+      "tips": [
+        "Use positive values to scroll down, negative to scroll up",
+        "Scroll in increments for infinite scroll pages to load content",
+        "Add delays after scrolling to allow dynamic content to load",
+        "For precise element scrolling, use [Run Script](RunScript.md) with scrollIntoView()",
+        "Large pixel values will scroll to the end of the page",
+        "Scrolling doesn't wait for content to load"
+      ]
+    },
+    "Select": {
+      "namespace": "Core.WebAutomation.Select",
+      "name": "Select",
+      "summary": "Selects an option from a dropdown (select) element by its visible text.",
+      "tips": [
+        "Use the exact text as it appears in the dropdown",
+        "Text matching is case-sensitive",
+        "Works only with standard HTML `\u003cselect\u003e` elements",
+        "For custom dropdowns (div-based), use Click Element instead",
+        "Use [Get Select Options](GetSelectOptions.md) to retrieve available options first",
+        "Whitespace in option text matters"
+      ]
+    },
+    "SendKeys": {
+      "namespace": "Core.WebAutomation.SendKeys",
+      "name": "SendKeys",
+      "summary": "Sends keyboard keys or shortcuts to a web element. Supports special keys and modifier combinations like Ctrl+C, Alt+Tab, etc.",
+      "tips": [
+        "The element is automatically focused before sending keys",
+        "Multiple modifiers can be combined (e.g., Ctrl+Shift+key)",
+        "Use this for keyboard shortcuts that can't be achieved with Type Text",
+        "For simple text input, use [Type Text](TypeText.md) instead",
+        "The Key field can contain regular text characters combined with modifiers"
+      ]
+    },
+    "SetCookie": {
+      "namespace": "Core.WebAutomation.SetCookie",
+      "name": "SetCookie",
+      "summary": "Sets a cookie in the browser session with configurable name, value, expiration, and security options.",
+      "tips": [
+        "Cookies must be set for the current domain",
+        "Use session cookies (expires: 0) for temporary data",
+        "Enable Secure for authentication cookies on HTTPS sites",
+        "Enable Http Only to prevent JavaScript access (security best practice)",
+        "Use [Get Cookies](GetCookies.md) to verify the cookie was set",
+        "Refresh the page after setting cookies for them to take effect in some cases"
+      ]
+    },
+    "SetValue": {
+      "namespace": "Core.WebAutomation.SetValue",
+      "name": "SetValue",
+      "summary": "Sets the value of a web element directly using JavaScript. This is faster than typing and bypasses input events, making it ideal for filling forms programmatically.",
+      "tips": [
+        "Set Value is significantly faster than Type Text",
+        "Does not trigger input events (onChange, onKeyPress, etc.)",
+        "Works on hidden and disabled elements",
+        "Use empty string \"\" to clear a field",
+        "Combine with [Click Element](ClickElement.md) to trigger validation after setting value"
+      ]
+    },
+    "SwitchFrame": {
+      "namespace": "Core.WebAutomation.SwitchFrame",
+      "name": "SwitchFrame",
+      "summary": "Switches the browser context to an iframe element or back to the main document. Required before interacting with elements inside iframes.",
+      "tips": [
+        "Always switch to an iframe before interacting with its content",
+        "Use Switch To Root to return to the main document",
+        "Browser stays in iframe context until you switch back",
+        "For nested iframes, switch to each level sequentially",
+        "Use browser dev tools to identify iframes on the page",
+        "After switching to root, you can switch to a different iframe"
+      ]
+    },
+    "SwitchWindow": {
+      "namespace": "Core.WebAutomation.SwitchWindow",
+      "name": "SwitchWindow",
+      "summary": "Switches to another browser window or tab by matching the window title with a regex pattern.",
+      "tips": [
+        "Window Name supports regular expressions for flexible matching",
+        "Use [List Windows](ListWindows.md) to see all available window titles",
+        "Next Window cycles through windows in order",
+        "Browser remembers which window is active after switching",
+        "Use [Get Title](GetTitle.md) to verify you switched to the correct window",
+        "Switching doesn't close or affect other windows"
+      ]
+    },
+    "TypeText": {
+      "namespace": "Core.WebAutomation.TypeText",
+      "name": "TypeText",
+      "summary": "Types text into a web element with optional human-like typing simulation. Ideal for filling form fields, search boxes, and text inputs.",
+      "tips": [
+        "Use Clear Before Typing to ensure no leftover text from previous runs",
+        "Enable Press Enter for search boxes to submit the query",
+        "Use Simulate Human Typing when websites detect automated behavior",
+        "Adjust Keys Per Minute to control typing speed (slower is more human-like)",
+        "Store sensitive data like passwords in the Vault and reference them with variables",
+        "For multi-line text, use `\\n` for line breaks in the text"
+      ]
+    },
+    "WaitElement": {
+      "namespace": "Core.WebAutomation.WaitElement",
+      "name": "WaitElement",
+      "summary": "Waits for a web element to appear, disappear, or both. Essential for handling dynamic content and ensuring elements are ready before interaction.",
+      "tips": [
+        "Always wait for elements before interacting with them",
+        "Use \"Disappear\" for loading indicators and spinners",
+        "\"Appear \u0026 Disappear\" is perfect for toast notifications and temporary messages",
+        "Increase timeout for slow-loading pages",
+        "Use specific selectors to wait for the right element",
+        "Most other nodes have built-in waits, but this provides more control"
+      ]
+    }
+  }
+}

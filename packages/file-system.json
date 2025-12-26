@@ -1,0 +1,439 @@
+{
+  "package": "FileSystem",
+  "summary": "Perform file and directory operations on the local file system in your automation workflows.",
+  "description": "## Overview The File System package provides essential operations for working with files and directories. Use it when you need to read, write, copy, move, or delete files and folders as part of your automation.",
+  "nodes": {
+    "change-encoding": {
+      "namespace": "Core.FileSystem.ChangeEncoding",
+      "name": "ChangeEncoding",
+      "summary": "Allows changing of file encoding.",
+      "howItWorks": "The Change Encoding node performs file encoding conversion through the following steps: 1. Opens the source file at the specified path in read-only mode 2. Reads the file content using the selected \"Open with Encoding\" decoder 3. Converts the content from the source encoding to an internal representation 4. Creates a new file at the specified save path 5. Writes the content using the selected \"Save with Encoding\" encoder 6. Handles unsupported characters by replacing them during conversion",
+      "usage": [
+        "Valid file path to the source file",
+        "Valid save path for the converted file (can be the same as source to overwrite)",
+        "Read permissions on the source file",
+        "Write permissions on the save path directory",
+        "Source file must exist and be readable"
+      ],
+      "bestPractices": [
+        "The node supports a wide range of encodings including UTF-8, UTF-16, Windows (1250-1258), ISO-8859 (1-16), Macintosh, and KOI8-R",
+        "Unsupported characters in the target encoding are automatically replaced during conversion",
+        "If the source and destination paths are the same, the original file will be overwritten",
+        "UTF-8 is used as the default encoding if an invalid encoding is specified",
+        "The node preserves file content but does not preserve file metadata or permissions"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrInPath",
+        "ErrInSavePath",
+        "ErrOpenFile",
+        "ErrCreateFile",
+        "ErrConvertEncoding"
+      ],
+      "tips": [
+        "Always backup important files before performing in-place encoding conversions",
+        "Test encoding conversion on a sample file first to ensure proper character mapping",
+        "Use UTF-8 as the target encoding for maximum compatibility with modern systems",
+        "When converting from single-byte encodings (like Windows-1250) to UTF-8, file sizes may increase",
+        "Verify the source file's actual encoding before conversion to avoid corrupted output",
+        "Some character sets may not have equivalent characters in the target encoding"
+      ]
+    },
+    "copy-file-dir": {
+      "namespace": "Core.FileSystem.CopyFileDir",
+      "name": "CopyFileDir",
+      "summary": "Copies the content of a source file/directory to destination file/directory",
+      "howItWorks": "The Copy File/Dir node duplicates files or directories through the following process: 1. Validates that both source and destination paths are provided 2. Checks if the source path exists 3. Uses the copy library to recursively copy the source to the destination 4. Preserves file contents, directory structure, and subdirectories 5. Creates parent directories at the destination if they don't exist",
+      "usage": [
+        "Valid source path to an existing file or directory",
+        "Valid destination path (directory will be created if it doesn't exist)",
+        "Read permissions on the source file/directory",
+        "Write permissions on the destination directory",
+        "Sufficient disk space at the destination location"
+      ],
+      "bestPractices": [
+        "The copy operation is recursive by default - all subdirectories and files are copied",
+        "If the destination file already exists, it will be overwritten",
+        "Parent directories in the destination path are automatically created if they don't exist",
+        "File permissions and timestamps are preserved during the copy operation",
+        "The source path remains unchanged after the copy operation",
+        "Network paths (UNC paths) are supported for both source and destination"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrSourcePath",
+        "ErrDestPath",
+        "ErrNotExist",
+        "ErrCopy"
+      ],
+      "tips": [
+        "Use timestamped destination paths to avoid overwriting previous backups",
+        "Verify sufficient disk space before copying large directories",
+        "For large file operations, consider using the Continue On Error property to handle edge cases",
+        "Combine with Path Exists node to check if destination already exists before copying",
+        "Use forward slashes (/) or escaped backslashes (\\\\\\\\) in paths for cross-platform compatibility",
+        "Consider using Copy instead of Move when you need to preserve the original"
+      ]
+    },
+    "create-file-dir": {
+      "namespace": "Core.FileSystem.CreateFileDir",
+      "name": "CreateFileDir",
+      "summary": "Creates a file or directory in a specified path",
+      "howItWorks": "The Create File/Dir node creates new files or directories through the following process: 1. Validates that the path is not empty 2. Verifies that a file type (File or Directory) has been selected 3. Checks if the file or directory already exists at the specified path 4. For directories: Creates all necessary parent directories using MkdirAll (permissions: 0755) 5. For files: Creates an empty file (permissions: 0644) 6. Returns the created path in the output variable",
+      "usage": [
+        "Valid path for the file or directory to be created",
+        "Type selection (File or Directory) must be specified",
+        "Write permissions in the parent directory",
+        "Parent directories in the path will be automatically created for directories",
+        "The specified path must not already exist (files and directories cannot be overwritten)"
+      ],
+      "bestPractices": [
+        "Files are created as empty files (0 bytes) with read/write permissions (0644)",
+        "Directories are created with execute permissions (0755) allowing file creation inside them",
+        "For directories, all parent directories in the path are automatically created if they don't exist",
+        "For files, parent directories must already exist or the operation will fail",
+        "The node will fail if a file or directory already exists at the specified path",
+        "Created path is returned in the output variable for use in subsequent nodes",
+        "Both absolute and relative paths are supported"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrPath",
+        "ErrFileType",
+        "ErrExists",
+        "ErrMkdirAll",
+        "ErrCreate"
+      ],
+      "tips": [
+        "Use Path Exists node before Create File/Dir to check if the path already exists",
+        "For file creation, ensure parent directories exist or create them first",
+        "Directory creation is more forgiving as it creates all parent directories automatically",
+        "Use dynamic paths with variables to create unique files/directories for each execution",
+        "Consider using timestamped paths for logs and reports to avoid conflicts",
+        "Combine with Delete File/Dir node to implement file rotation strategies",
+        "Use Continue On Error when creating directories that might already exist"
+      ]
+    },
+    "delete-file-dir": {
+      "namespace": "Core.FileSystem.DeleteFileDir",
+      "name": "DeleteFileDir",
+      "summary": "Deletes the file/directory from specified path",
+      "howItWorks": "The Delete File/Dir node removes files or directories through the following process: 1. Validates that the path is not empty 2. Checks if the specified path exists 3. If a name filter is provided: - Uses filepath.Glob to match files based on the filter pattern - Deletes all matched files/directories 4. If no name filter is provided: - Deletes the specified file or directory directly 5. Uses recursive deletion (RemoveAll) if Recursive option is enabled 6. Uses single-level deletion (Remove) if Recursive is disabled",
+      "usage": [
+        "Valid path to an existing file or directory",
+        "Write/delete permissions on the target file or directory",
+        "For recursive deletion, permissions on all subdirectories and files",
+        "Path must exist (node will fail if path is invalid)"
+      ],
+      "bestPractices": [
+        "When Recursive is false, only empty directories can be deleted; directories with contents will fail",
+        "When Recursive is true, the entire directory tree is deleted, including all files and subdirectories",
+        "The Name Filter field supports glob patterns (e.g., `*.txt`, `report_*.csv`)",
+        "Name Filter is appended to the path, so ensure the path ends with a separator if filtering files in a directory",
+        "Files currently in use by other processes cannot be deleted and will cause an error",
+        "Deletion is permanent and cannot be undone",
+        "The node was enhanced to support Name Filter for backward compatibility with older versions"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrPath",
+        "ErrInvalidPath",
+        "ErrDelete"
+      ],
+      "tips": [
+        "Always use Path Exists node before deletion to verify the path exists",
+        "Enable Continue On Error when deleting files that might not exist",
+        "Use Name Filter to delete specific file types without affecting others",
+        "Test deletion operations on non-critical data first",
+        "Consider moving files to a trash/archive folder instead of permanent deletion",
+        "For log rotation, combine with List Directory to identify old files before deletion",
+        "Be extremely careful with recursive deletion on important directories",
+        "Verify the path is correct before executing to avoid accidental data loss"
+      ]
+    },
+    "list-directory": {
+      "namespace": "Core.FileSystem.ListDirectory",
+      "name": "ListDirectory",
+      "summary": "Lists the contents of a given directory",
+      "howItWorks": "The List Directory node retrieves directory contents through the following process: 1. Validates that the directory path is not empty 2. Reads all files and directories from the specified path 3. Applies the selected sorting method (ascending, descending, modified latest, or modified earliest) 4. Filters results using the Name Filter regex pattern if provided 5. Constructs file objects with the selected properties (name, isDir, size, modTime, createTime, mode) 6. Returns the filtered and sorted list of files in the output variable",
+      "usage": [
+        "Valid path to an existing directory",
+        "Read permissions on the directory",
+        "Sort Type must be selected",
+        "For older versions (pre-23.1.0), name, isDir, and size are always included"
+      ],
+      "bestPractices": [
+        "The Name Filter uses regex patterns (e.g., `.*pdf` matches all files containing \"pdf\")",
+        "Size is returned in bytes",
+        "The isDir property is true for directories and false for files",
+        "Sorting is case-sensitive for file names",
+        "The node only lists direct children of the directory (not recursive)",
+        "For version 23.1.0+, you can select which file properties to include in the output",
+        "Absolute Path option (23.1.0+) returns full paths instead of just filenames",
+        "Directory path should be trimmed of whitespace automatically"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrDirPath",
+        "ErrReadDir",
+        "ErrSortType",
+        "ErrConvert"
+      ],
+      "tips": [
+        "Use regex patterns in Name Filter to select specific file types (e.g., `.*\\\\.xlsx$` for Excel files)",
+        "Sort by \"Last Modified\" to process the most recent files first in automation workflows",
+        "Combine with Loop node to iterate through each file for processing",
+        "Use the size property to filter out empty files or identify large files",
+        "For recursive directory listing, use the Tree node instead",
+        "The output can be directly used with ForEach loops to process multiple files",
+        "Consider using Path Exists before List Directory to verify the directory exists"
+      ]
+    },
+    "move-file-dir": {
+      "namespace": "Core.FileSystem.MoveFileDir",
+      "name": "MoveFileDir",
+      "summary": "Moves file/folder from source path to destination path.\u0026#x20;",
+      "howItWorks": "The Move File/Dir node relocates files or directories through the following process: 1. Validates that both source and destination paths are not empty 2. Checks if the source is a directory or a file 3. For directories: Uses os.Rename to move the directory atomically 4. For files: Uses a utility function (MoveFile) to move the file 5. The source file/directory is removed after the move completes successfully",
+      "usage": [
+        "Valid source path to an existing file or directory",
+        "Valid destination path",
+        "Write permissions on both source and destination locations",
+        "Destination path should not already exist (will be overwritten for files)",
+        "Source and destination should be on the same filesystem for atomic moves"
+      ],
+      "bestPractices": [
+        "Move is faster than Copy + Delete as it doesn't copy data, just updates file system metadata",
+        "For directories, os.Rename is used which is an atomic operation on the same filesystem",
+        "Moving across different drives/partitions may be slower as it requires copying data",
+        "The source file or directory is removed after a successful move",
+        "If the destination exists, the behavior depends on the underlying system (may overwrite or fail)",
+        "Network paths are supported but may be slower",
+        "Moving files is atomic on the same filesystem, preventing partial moves"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrPath"
+      ],
+      "tips": [
+        "Use Move instead of Copy + Delete for better performance and atomicity",
+        "Test move operations on non-critical data first",
+        "Use Path Exists to verify the source exists before moving",
+        "Combine with List Directory to batch move multiple files",
+        "For cross-drive moves, expect slower performance as data must be copied",
+        "Use timestamped destination paths to avoid overwriting existing files",
+        "Consider using Move for file renaming operations within the same directory",
+        "Enable Continue On Error when moving files that might not exist"
+      ]
+    },
+    "path-exists": {
+      "namespace": "Core.FileSystem.PathExists",
+      "name": "PathExists",
+      "summary": "Checks if the file/directory in the specified path exists or not",
+      "howItWorks": "The Path Exists node checks file or directory existence through the following process: 1. Validates that the path is not empty 2. Uses os.Stat to check if the path exists in the filesystem 3. Returns true if the path exists (file or directory) 4. Returns false if the path does not exist 5. Sets the result in the output variable",
+      "usage": [
+        "Valid path string to check",
+        "Read permissions on the parent directory",
+        "Path can be either a file or directory"
+      ],
+      "bestPractices": [
+        "The node checks both files and directories - it doesn't distinguish between them",
+        "Returns false for paths with insufficient permissions (treated as non-existent)",
+        "Network paths (UNC paths) are supported",
+        "Symbolic links are followed - checks if the target exists",
+        "The node never throws errors for non-existent paths, only returns false",
+        "Path validation happens before existence check"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrPath"
+      ],
+      "tips": [
+        "Use before Read File, Delete, Move, or Copy operations to prevent errors",
+        "Combine with If node to implement conditional logic based on file existence",
+        "Use with Create File/Dir to check before creating to avoid overwrite errors",
+        "Helpful for implementing file-watching patterns in automation",
+        "Consider using Wait File instead if you need to wait for a file to appear",
+        "Use in loops to verify multiple files before batch processing",
+        "Good practice to check paths received from external sources or user input"
+      ]
+    },
+    "read-file": {
+      "namespace": "Core.FileSystem.ReadFile",
+      "name": "ReadFile",
+      "summary": "Reads the text file content at specified path.",
+      "howItWorks": "The Read File node retrieves file content through the following process: 1. Validates that the path is not empty 2. Reads the entire file content into memory using ioutil.ReadFile 3. If Base64 option is enabled: - Encodes the binary data to base64 string format 4. If Base64 option is disabled: - Converts the bytes directly to a UTF-8 string 5. Sets the content in the output variable",
+      "usage": [
+        "Valid path to an existing file",
+        "Read permissions on the file",
+        "Sufficient memory to load the entire file content",
+        "For text files, content should be in a readable encoding (UTF-8 recommended)"
+      ],
+      "bestPractices": [
+        "The entire file is loaded into memory - be cautious with very large files",
+        "For text files, Base64 should be false to get readable string content",
+        "For binary files (images, PDFs, executables), enable Base64 to preserve data integrity",
+        "File encoding is assumed to be UTF-8 when Base64 is false",
+        "The node does not support streaming - entire file is read at once",
+        "Empty files return an empty string",
+        "Binary data without Base64 encoding may result in corrupted text"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrPath",
+        "ErrReadFile"
+      ],
+      "tips": [
+        "Use Path Exists before Read File to verify the file exists",
+        "Enable Base64 for binary files (images, PDFs, executables) to avoid data corruption",
+        "For large files, consider alternative approaches like reading line by line",
+        "Combine with JSON Parse or XML Parse nodes to process structured file content",
+        "Use with Loop nodes to read multiple files from a directory listing",
+        "For CSV files, use the CSV package nodes instead for better parsing",
+        "Cache file content in variables if you need to reference it multiple times",
+        "Consider file size limits of your environment when reading large files"
+      ]
+    },
+    "tree": {
+      "namespace": "Core.FileSystem.Tree",
+      "name": "Tree",
+      "summary": "Lists files and directories in the given directory.",
+      "howItWorks": "The Tree node recursively traverses directory structures through the following process: 1. Validates that the directory path is not empty 2. Parses the Created After and Modified After date filters (format: ISO 8601) 3. Walks the entire directory tree using filepath.Walk 4. For each item found: - Checks creation time against Created After filter - Checks modification time against Modified After filter - If Only Directories is enabled, skips files - Builds a hierarchical tree structure 5. Returns a nested tree of files and directories with their properties",
+      "usage": [
+        "Valid path to an existing directory",
+        "Read permissions on the directory and all subdirectories",
+        "Date filters must be in ISO 8601 format: `2006-01-02T15:04:05.999Z`",
+        "Valid date values for Created After and Modified After filters"
+      ],
+      "bestPractices": [
+        "The output is a hierarchical tree structure with nested files arrays",
+        "Each item contains: `isDir`, `name`, `size`, and `files` (array of children)",
+        "Date filters use ISO 8601 format with milliseconds and timezone (Z for UTC)",
+        "Created After filter applies to directories; Modified After applies to files",
+        "The walk operation is recursive and traverses all subdirectories",
+        "Files and directories are organized hierarchically, preserving the folder structure",
+        "Empty date filters are treated as the beginning of time (no filtering)",
+        "Symbolic links are followed during the tree walk"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrDirPath",
+        "ErrCreatedAfter",
+        "ErrModifiedAfter",
+        "ErrWalk",
+        "ErrUnmarshalTree"
+      ],
+      "tips": [
+        "Use date filters to find recently created or modified files in large directory trees",
+        "Set Only Directories to true to map out folder structures without file clutter",
+        "The tree structure is ideal for displaying in UI or generating reports",
+        "Combine with JSON operations to search for specific files in the tree",
+        "Be cautious with very large directory trees as they can consume significant memory",
+        "Use List Directory instead if you only need a flat list of files in one directory",
+        "Date filters are particularly useful for incremental backups or change detection",
+        "The hierarchical structure preserves the complete directory organization"
+      ]
+    },
+    "wait-file": {
+      "namespace": "Core.FileSystem.WaitFile",
+      "name": "WaitFile",
+      "summary": "Checks if file at given path is exist or not.",
+      "howItWorks": "The Wait File node monitors the filesystem and waits for conditions through the following process: 1. Validates that the path is not empty and timeout is specified 2. Starts a ticker that checks every 150 milliseconds 3. For each check: - If Name Filter is provided, uses filepath.Glob to find matching files - If no Name Filter, checks the specific path - For \"To Exist\" condition: Returns when file(s) appear - For \"Until Deleted\" condition: Returns when file(s) disappear 4. If timeout is reached before condition is met, returns an error 5. Returns matched file information with selected properties",
+      "usage": [
+        "Valid path to check (can include wildcards if using Name Filter)",
+        "Timeout value must be greater than 0 (in seconds)",
+        "Read permissions on the directory being monitored",
+        "For version 23.1.0+, file properties to include can be selected"
+      ],
+      "bestPractices": [
+        "The node checks every 150 milliseconds for the specified condition",
+        "Timeout is specified in seconds",
+        "Name Filter supports glob patterns (e.g., `*.txt`, `report_*.csv`)",
+        "Name Filter is appended to the path, so ensure path ends with separator for directory checks",
+        "For \"To Exist\" with Name Filter, returns when any matching file appears",
+        "For \"Until Deleted\" with Name Filter, returns when all matching files are removed",
+        "For version 23.1.0+, you can select which file properties to include in output",
+        "The node was enhanced to support Name Filter for backward compatibility",
+        "File information is returned in the Files output for matched files"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrPath",
+        "ErrNoTimeout",
+        "ErrTimeout"
+      ],
+      "tips": [
+        "Use generous timeout values to avoid premature failures in production environments",
+        "Combine with error handling to gracefully handle timeout scenarios",
+        "Name Filter is useful for waiting on dynamically named files (e.g., timestamped reports)",
+        "Use \"Until Deleted\" to implement file-based locks and synchronization",
+        "Consider using Path Exists for immediate checks without waiting",
+        "Ideal for monitoring file drops from external systems or applications",
+        "Use with Loop nodes to continuously monitor for new files",
+        "Set appropriate timeout based on expected file generation time"
+      ]
+    },
+    "write-file": {
+      "namespace": "Core.FileSystem.WriteFile",
+      "name": "WriteFile",
+      "summary": "Writes a text content to the specified file path",
+      "howItWorks": "The Write File node saves content to files through the following process: 1. Validates that the file path is not empty 2. Validates that the write mode is either \"append\" or \"truncate\" 3. If Base64 option is enabled: - Decodes the base64 string to binary data 4. If Base64 option is disabled: - Uses the text content as-is 5. Opens or creates the file with the appropriate flags: - Append mode: Opens file and adds content to the end (O_APPEND) - Truncate mode: Clears existing content and writes new data (O_TRUNC) 6. Writes the content to the file (permissions: 0644) 7. Closes the file",
+      "usage": [
+        "Valid file path (file will be created if it doesn't exist)",
+        "Write permissions in the target directory",
+        "Write Mode must be selected (append or truncate)",
+        "For Base64 mode, content must be valid base64-encoded data",
+        "Sufficient disk space for the content"
+      ],
+      "bestPractices": [
+        "Files are created with 0644 permissions (owner read/write, group/others read)",
+        "Append mode adds content to the end without modifying existing content",
+        "Truncate mode completely replaces the file content",
+        "If the file doesn't exist, it will be created regardless of the write mode",
+        "Parent directories must exist; the node does not create parent directories",
+        "Base64 mode is essential for writing binary files (images, PDFs, executables)",
+        "Text content is written as UTF-8 when Base64 is disabled",
+        "Both Base64 and non-Base64 modes use the Write method internally"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrFilePath",
+        "ErrWriteMode",
+        "ErrBase",
+        "ErrOpenFile",
+        "ErrWrite",
+        "ErrClose"
+      ],
+      "tips": [
+        "Use Truncate mode when creating new files or replacing file content",
+        "Use Append mode for log files to preserve historical data",
+        "Enable Base64 when writing binary data received from APIs or web services",
+        "Create parent directories with Create File/Dir node before writing if needed",
+        "For large content, ensure sufficient disk space is available",
+        "Use Path Exists to check if you're about to overwrite an important file",
+        "Combine with Read File to implement file transformation workflows",
+        "Add timestamps to log entries for better traceability",
+        "Consider file locking mechanisms when multiple processes write to the same file"
+      ]
+    }
+  }
+}

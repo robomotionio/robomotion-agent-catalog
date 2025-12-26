@@ -1,0 +1,227 @@
+{
+  "package": "Json",
+  "summary": "Parse, create, manipulate, and serialize JSON data structures for working with APIs, configuration files, and data interchange.",
+  "description": "## Overview The JSON package provides comprehensive JSON handling capabilities. Use it when you need to parse JSON responses from APIs, create JSON payloads for requests, manipulate JSON objects, or read/write JSON files.",
+  "nodes": {
+    "clone": {
+      "namespace": "Core.Json.Clone",
+      "name": "Clone",
+      "summary": "Creates a copy of a JSON object payload.",
+      "howItWorks": "The Clone node creates an exact copy of a JSON object. When executed, the node: 1. Receives a JSON object through the Payload input 2. Passes the same object to the Clone output without modification 3. Preserves all key-value pairs and nested structures",
+      "usage": [
+        "Valid JSON object as input"
+      ],
+      "bestPractices": [
+        "This node is useful for creating copies of JSON objects when you need to preserve the original while modifying a copy",
+        "The cloned object is independent of the original, so modifications to one won't affect the other",
+        "Works with nested JSON objects and arrays",
+        "Useful in scenarios where multiple nodes need to work with the same data structure",
+        "Can be used to create backup copies of JSON data before processing",
+        "The node performs a shallow copy of the JSON object",
+        "Works with any valid JSON structure including objects, arrays, strings, numbers, and booleans"
+      ]
+    },
+    "create": {
+      "namespace": "Core.Json.Create",
+      "name": "Create",
+      "summary": "Creates a new empty JSON object.",
+      "howItWorks": "The Create node initializes a new empty JSON object. When executed, the node: 1. Creates an empty JSON object using \"{}\" 2. Outputs the empty object through the Payload output",
+      "bestPractices": [
+        "This node is useful for initializing JSON objects at the beginning of a workflow",
+        "The created object is empty and can be populated using other JSON nodes like Set",
+        "Works as a starting point for building JSON structures programmatically",
+        "Can be combined with Set node to add key-value pairs to the empty object",
+        "Useful when you need a clean JSON object to work with",
+        "The output is a valid JSON object that can be used with other JSON processing nodes",
+        "Can be used multiple times in a workflow to create separate JSON objects"
+      ]
+    },
+    "decode": {
+      "namespace": "Core.Json.Decode",
+      "name": "Decode",
+      "summary": "Converts a JSON string to a JSON object.",
+      "howItWorks": "The Decode node converts a JSON string to a JSON object. When executed, the node: 1. Receives a JSON string through the Value input 2. Uses JSON unmarshaling to parse the string into an object 3. Outputs the parsed object through the Payload output",
+      "usage": [
+        "Valid JSON string as input"
+      ],
+      "bestPractices": [
+        "This node is useful for converting JSON strings from external sources into objects for processing",
+        "The input string must be in valid JSON format",
+        "Works with nested JSON objects and arrays",
+        "Useful when reading JSON data from files or API responses",
+        "Can be combined with Encode node to convert objects back to strings",
+        "The parsed object can be used with other JSON processing nodes like Get, Set, and Delete",
+        "Works with any valid JSON structure including objects, arrays, strings, numbers, and booleans",
+        "Handles standard JSON formatting with proper quotes and braces"
+      ]
+    },
+    "delete": {
+      "namespace": "Core.Json.Delete",
+      "name": "Delete",
+      "summary": "Removes a key-value pair from a JSON object.",
+      "howItWorks": "The Delete Value node removes a specified key-value pair from a JSON object. When executed, the node: 1. Receives a JSON object through the Payload input 2. Receives a key name through the Key input 3. Optionally escapes dots in the key name if the Escape option is enabled 4. Removes the specified key-value pair from the JSON object 5. Outputs the modified JSON object through the Payload output",
+      "usage": [
+        "Valid JSON object as input",
+        "Valid key name to delete"
+      ],
+      "bestPractices": [
+        "This node is useful for removing unwanted data from JSON objects",
+        "Works with nested JSON objects using dot notation (e.g., \"user.name\")",
+        "The Escape option is useful when key names contain dots that should be treated as literal characters",
+        "The node preserves all other key-value pairs in the object",
+        "Can be used multiple times in sequence to remove multiple keys",
+        "Works with any valid JSON structure including objects, arrays, strings, numbers, and booleans",
+        "The output object maintains the same structure as the input with only the specified key removed",
+        "Useful for data cleaning and privacy protection by removing sensitive information"
+      ]
+    },
+    "encode": {
+      "namespace": "Core.Json.Encode",
+      "name": "Encode",
+      "summary": "Converts a JSON object to its string representation.",
+      "howItWorks": "The Encode node converts a JSON object to its string format. When executed, the node: 1. Receives a JSON object through the Payload input 2. Uses JSON marshaling to convert the object to a string 3. Outputs the string representation through the Value output",
+      "usage": [
+        "Valid JSON object as input"
+      ],
+      "bestPractices": [
+        "This node is useful for converting JSON objects to strings for storage or transmission",
+        "The output string is in standard JSON format",
+        "Works with nested JSON objects and arrays",
+        "Useful when you need to store JSON data as text or send it over networks",
+        "Can be combined with Decode node to convert strings back to JSON objects",
+        "The string output can be used with file writing or API request nodes",
+        "Works with any valid JSON structure including objects, arrays, strings, numbers, and booleans",
+        "The output string includes proper JSON formatting with quotes and braces"
+      ]
+    },
+    "get": {
+      "namespace": "Core.Json.Get",
+      "name": "Get",
+      "summary": "Retrieves a value from a JSON object using a specified key.",
+      "howItWorks": "The Get Value node retrieves a value from a JSON object using a specified key. When executed, the node: 1. Receives a JSON object through the Payload input 2. Receives a key name through the Key input 3. Optionally escapes dots in the key name if the Escape option is enabled 4. Retrieves the value associated with the specified key from the JSON object 5. Outputs the retrieved value through the Value output",
+      "usage": [
+        "Valid JSON object as input",
+        "Valid key name to retrieve"
+      ],
+      "bestPractices": [
+        "This node is useful for extracting specific data from JSON objects",
+        "Works with nested JSON objects using dot notation (e.g., \"user.name\")",
+        "The Escape option is useful when key names contain dots that should be treated as literal characters",
+        "Can retrieve any type of value including strings, numbers, objects, arrays, and booleans",
+        "Works with any valid JSON structure",
+        "If the key doesn't exist, the node will return a null value",
+        "Useful for data extraction and processing workflows",
+        "Can be combined with other JSON nodes to build complex data processing pipelines",
+        "Supports deep nesting with multiple levels of dot notation (e.g., \"user.profile.name\")"
+      ]
+    },
+    "keys": {
+      "namespace": "Core.Json.Keys",
+      "name": "Keys",
+      "summary": "Retrieves all keys from a JSON object.",
+      "howItWorks": "The Get Keys node extracts all key names from a JSON object. When executed, the node: 1. Receives a JSON object through the Payload input 2. Iterates through all key-value pairs in the object 3. Collects all key names into an array 4. Outputs the array of keys through the Keys output",
+      "usage": [
+        "Valid JSON object as input"
+      ],
+      "bestPractices": [
+        "This node is useful for inspecting JSON object structures",
+        "Returns only the top-level keys, not nested keys",
+        "The order of keys in the output array matches the order in the JSON object",
+        "Works with any valid JSON object structure",
+        "Useful for data analysis and validation workflows",
+        "Can be combined with other JSON nodes to build dynamic processing pipelines",
+        "The output array can be used with array processing nodes",
+        "If the input object is empty, the node will return an empty array",
+        "Works with objects containing any type of values including nested objects and arrays"
+      ]
+    },
+    "read": {
+      "namespace": "Core.Json.Read",
+      "name": "Read",
+      "summary": "Reads a JSON file from the file system and converts it to a JSON object.",
+      "howItWorks": "The Read node loads a JSON file from the file system and converts it to a JSON object. When executed, the node: 1. Receives a file path through the Path input 2. Reads the file content from the specified path 3. Removes any Byte Order Mark (BOM) if present 4. Parses the file content as JSON 5. Outputs the parsed JSON object through the Payload output",
+      "usage": [
+        "Valid file path to a JSON file",
+        "Read permissions for the specified file",
+        "Valid JSON format in the file"
+      ],
+      "bestPractices": [
+        "This node is useful for loading JSON configuration files or data files",
+        "Works with any valid JSON file format",
+        "Automatically handles UTF-8 BOM characters if present",
+        "The file path can be absolute or relative",
+        "Useful for data import and configuration loading workflows",
+        "Can be combined with other JSON nodes to process file data",
+        "The output object can be used with Get, Set, Delete and other JSON processing nodes",
+        "Works with nested JSON objects and arrays",
+        "Supports standard JSON formatting with proper indentation"
+      ]
+    },
+    "set": {
+      "namespace": "Core.Json.Set",
+      "name": "Set",
+      "summary": "Sets or updates a key-value pair in a JSON object.",
+      "howItWorks": "The Set Value node sets or updates a key-value pair in a JSON object. When executed, the node: 1. Receives a JSON object through the Payload input 2. Receives a key name through the Key input 3. Receives a value through the Value input 4. Optionally escapes dots in the key name if the Escape option is enabled 5. Sets or updates the specified key-value pair in the JSON object 6. Outputs the modified JSON object through the Payload output",
+      "usage": [
+        "Valid JSON object as input",
+        "Valid key name to set or update",
+        "Valid value to set"
+      ],
+      "bestPractices": [
+        "This node is useful for adding new data to JSON objects or updating existing values",
+        "Works with nested JSON objects using dot notation (e.g., \"user.name\")",
+        "The Escape option is useful when key names contain dots that should be treated as literal characters",
+        "Can set any type of value including strings, numbers, objects, arrays, and booleans",
+        "If the key already exists, its value will be updated; if not, a new key-value pair will be added",
+        "Works with any valid JSON structure",
+        "Useful for data manipulation and transformation workflows",
+        "Can be combined with other JSON nodes to build complex data processing pipelines",
+        "Supports deep nesting with multiple levels of dot notation (e.g., \"user.profile.name\")",
+        "The output object maintains the same structure as the input with the specified key-value pair added or updated"
+      ]
+    },
+    "values": {
+      "namespace": "Core.Json.Values",
+      "name": "Values",
+      "summary": "Retrieves all values from a JSON object.",
+      "howItWorks": "The Get Values node extracts all values from a JSON object. When executed, the node: 1. Receives a JSON object through the Payload input 2. Iterates through all key-value pairs in the object 3. Collects all values into an array 4. Outputs the array of values through the Values output",
+      "usage": [
+        "Valid JSON object as input"
+      ],
+      "bestPractices": [
+        "This node is useful for extracting all data values from a JSON object",
+        "Returns only the top-level values, not nested object values",
+        "The order of values in the output array matches the order in the JSON object",
+        "Works with any valid JSON object structure",
+        "Useful for data extraction and processing workflows",
+        "Can be combined with other JSON nodes to build comprehensive data processing pipelines",
+        "The output array can be used with array processing nodes",
+        "If the input object is empty, the node will return an empty array",
+        "Works with objects containing any type of values including nested objects and arrays",
+        "Values maintain their original data types (string, number, boolean, object, array, null)"
+      ]
+    },
+    "write": {
+      "namespace": "Core.Json.Write",
+      "name": "Write",
+      "summary": "Writes a JSON object to a file in the file system.",
+      "howItWorks": "The Write node converts a JSON object to its string representation and writes it to a file. When executed, the node: 1. Receives a JSON object through the Payload input 2. Receives a file path through the Path input 3. Converts the JSON object to a formatted string with indentation 4. Creates or overwrites the file at the specified path 5. Writes the JSON string to the file",
+      "usage": [
+        "Valid JSON object as input",
+        "Valid file path for writing",
+        "Write permissions for the specified directory"
+      ],
+      "bestPractices": [
+        "This node is useful for saving JSON data to files for storage or export",
+        "The output file will be formatted with proper indentation for readability",
+        "If the file already exists, it will be overwritten",
+        "The file path can be absolute or relative",
+        "Useful for data export, configuration saving, and logging workflows",
+        "Can be combined with other JSON nodes to prepare data before writing",
+        "Works with nested JSON objects and arrays",
+        "The output file will be in standard JSON format with proper quotes and braces",
+        "Supports any valid JSON structure including objects, arrays, strings, numbers, and booleans"
+      ]
+    }
+  }
+}

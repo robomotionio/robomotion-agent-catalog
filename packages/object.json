@@ -1,0 +1,145 @@
+{
+  "package": "Object",
+  "summary": "Manipulate JavaScript objects - add, remove, and access properties for data structure operations.",
+  "description": "## Overview The Object package provides utilities for working with JavaScript objects in your automation. Use it when you need to create objects, add or remove properties, or inspect object contents.",
+  "nodes": {
+    "add-property": {
+      "namespace": "Core.Object.AddProperty",
+      "name": "AddProperty",
+      "summary": "Adds a new property with a specified key and value to an object.",
+      "howItWorks": "The Add Property node adds or updates a property in an object. When executed, the node: 1. Receives an object through the Object input 2. Receives a property key name through the Key input 3. Receives a value through the Value input 4. Validates that the key is not empty 5. Adds the property to the object (or updates if it already exists) 6. Applies appropriate thread-safety locks for Global or Flow scopes 7. Outputs the modified object through the Object output",
+      "usage": [
+        "Valid object as input",
+        "Non-empty string for the key name",
+        "Value can be any valid data type"
+      ],
+      "bestPractices": [
+        "If the property key already exists, the value will be updated",
+        "If the property key does not exist, a new property will be created",
+        "The node modifies the original object and returns it",
+        "Global and Flow scope objects are protected with mutex locks for thread-safe updates",
+        "Can add nested objects and arrays as property values",
+        "Useful for building objects incrementally in automation flows",
+        "Can be chained with other Add Property nodes to build complex objects",
+        "Works with objects from any source including API responses, database records, or constructed objects"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg"
+      ]
+    },
+    "assign": {
+      "namespace": "Core.Object.Assign",
+      "name": "Assign",
+      "summary": "Assigns an object value to a variable with configurable scope.",
+      "howItWorks": "The Assign node assigns an object value to a variable with thread-safe scope management. When executed, the node: 1. Receives an object value through the Value input 2. Validates that the input value is not null 3. Applies appropriate thread-safety locks for Global or Flow scopes 4. Assigns the object to the output variable in the specified scope 5. Outputs the assigned object through the Object output The node supports multiple variable scopes: * **Message -** Variable exists only within the current message context * **Flow -** Variable shared across all nodes in the flow (thread-safe) * **Global -** Variable shared across all flows in the robot (thread-safe) * **Local -** Variable scoped to the current node execution * **Custom -** Custom variable scope defined by the user",
+      "usage": [
+        "Valid object value as input (cannot be null)"
+      ],
+      "bestPractices": [
+        "Use this node to store objects in variables for later use in your automation flow",
+        "The node automatically wraps JavaScript object literals in parentheses to ensure proper parsing",
+        "Global and Flow scopes use mutex locks to ensure thread-safe concurrent access",
+        "Message scope is the most common choice for temporary object storage within a flow",
+        "Global scope is useful when you need to share object data across multiple flows",
+        "Flow scope is ideal for sharing object data across nodes in the same flow execution",
+        "Can accept objects from various sources including API responses, database queries, or constructed objects",
+        "Useful as the starting point for object manipulation workflows",
+        "Combine with other Object nodes to build complex data transformation pipelines"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg"
+      ]
+    },
+    "get-keys": {
+      "namespace": "Core.Object.GetKeys",
+      "name": "GetKeys",
+      "summary": "Retrieves all property keys from an object as an array.",
+      "howItWorks": "The Get Keys node extracts all property key names from an object. When executed, the node: 1. Receives an object through the Object input 2. Validates that the input is a valid object and not null 3. Iterates through all properties in the object 4. Collects all property key names into an array 5. Outputs the array of keys through the Keys output",
+      "usage": [
+        "Valid object as input (cannot be null)"
+      ],
+      "bestPractices": [
+        "Returns only the top-level property keys, not nested keys",
+        "The order of keys in the output array may vary as object properties are unordered in most implementations",
+        "If the input object is empty, returns an empty array",
+        "Works with any valid object structure",
+        "Useful for object inspection and dynamic processing workflows",
+        "The output array can be used with array processing nodes for iteration",
+        "Can be combined with Get Values node to process key-value pairs",
+        "Helpful for validating object structure before processing",
+        "Useful for debugging and logging object contents"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg"
+      ]
+    },
+    "get-length": {
+      "namespace": "Core.Object.GetLength",
+      "name": "GetLength",
+      "summary": "Returns the number of properties in an object.",
+      "howItWorks": "The Get Length node counts the number of properties in an object. When executed, the node: 1. Receives an object through the Object input 2. Validates that the input is a valid object and not null 3. Counts all top-level properties in the object 4. Outputs the count through the Length output",
+      "usage": [
+        "Valid object as input (cannot be null)"
+      ],
+      "bestPractices": [
+        "Counts only top-level properties, not nested properties",
+        "Returns 0 for empty objects",
+        "Faster than getting keys and checking array length",
+        "Useful for quick object validation and conditional logic",
+        "Can be used in decision nodes to check if an object has data",
+        "Helpful for monitoring and logging object sizes",
+        "Works with any valid object structure",
+        "Count includes all property types (strings, numbers, objects, arrays, etc.)"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg"
+      ]
+    },
+    "get-values": {
+      "namespace": "Core.Object.GetValues",
+      "name": "GetValues",
+      "summary": "Retrieves all property values from an object as an array.",
+      "howItWorks": "The Get Values node extracts all property values from an object. When executed, the node: 1. Receives an object through the Object input 2. Validates that the input is a valid object and not null 3. Iterates through all properties in the object 4. Collects all property values into an array 5. Outputs the array of values through the Values output",
+      "usage": [
+        "Valid object as input (cannot be null)"
+      ],
+      "bestPractices": [
+        "Returns only the top-level property values, not nested values",
+        "The order of values in the output array may vary as object properties are unordered",
+        "If the input object is empty, returns an empty array",
+        "Values can be of mixed types (strings, numbers, objects, arrays, booleans, null)",
+        "Works with any valid object structure",
+        "Useful for bulk data processing workflows",
+        "The output array can be used with array processing nodes for further operations",
+        "Can be combined with Get Keys node to process key-value pairs together",
+        "Helpful for data extraction and transformation tasks"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg"
+      ]
+    },
+    "remove-property": {
+      "namespace": "Core.Object.RemoveProperty",
+      "name": "RemoveProperty",
+      "summary": "Removes a property from an object by its key.",
+      "howItWorks": "The Remove Property node removes a property from an object. When executed, the node: 1. Receives an object through the Object input 2. Validates that the object is not null 3. Receives a property key name through the Key input 4. Validates that the key is not empty 5. Removes the property with the specified key from the object 6. Applies appropriate thread-safety locks for Global or Flow scopes 7. Outputs the modified object through the Object output",
+      "usage": [
+        "Valid object as input (cannot be null)",
+        "Non-empty string for the key name"
+      ],
+      "bestPractices": [
+        "If the specified key does not exist, the object remains unchanged (no error is thrown)",
+        "The node modifies the original object and returns it",
+        "Global and Flow scope objects are protected with mutex locks for thread-safe updates",
+        "Only removes top-level properties, not nested properties",
+        "Can be chained with other Remove Property nodes to remove multiple properties",
+        "Useful for data sanitization and filtering workflows",
+        "Helps reduce object size by removing unnecessary properties",
+        "Can be used to remove sensitive data before logging or sending objects"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg"
+      ]
+    }
+  }
+}

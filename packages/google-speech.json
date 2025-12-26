@@ -1,0 +1,42 @@
+{
+  "package": "GoogleSpeech",
+  "summary": "The Google Speech package provides powerful cloud-based speech recognition and synthesis capabilities, enabling you to convert speech to text and text to speech in your RPA workflows using Google Cloud's advanced AI models.",
+  "description": "```mdx-code-block import DocCardList from '@theme/DocCardList';",
+  "nodes": {
+    "speechtotext": {
+      "namespace": "Core.GoogleSpeech.Speechtotext",
+      "name": "Speechtotext",
+      "summary": "Converts speech audio files stored in Google Cloud Storage to text using Google Cloud Speech-to-Text API with advanced recognition features and multiple language support.",
+      "howItWorks": "The Speech to Text node uses Google Cloud's long-running recognition method to convert audio to text. When executed: 1. Validates the GCS URI format and ensures it's not empty 2. Authenticates with Google Cloud Speech-to-Text API using provided credentials 3. Configures recognition parameters: - Sets audio encoding to LINEAR16 (WAV format) - Applies specified sample rate and language code - Selects the appropriate recognition model - Enables requested features (punctuation, word offsets) 4. Submits long-running recognition request to Google Cloud 5. Waits for recognition operation to complete 6. Returns detailed transcription results with metadata",
+      "usage": [
+        "Valid Google Cloud Storage URI (gs://bucket/file.wav)",
+        "Audio file in supported format (WAV/LINEAR16 recommended)",
+        "Google Cloud service account with Speech-to-Text API enabled",
+        "Service account with Storage Object Viewer permissions",
+        "Internet connectivity to Google Cloud services"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrCredentials"
+      ]
+    },
+    "texttospeech": {
+      "namespace": "Core.GoogleSpeech.Texttospeech",
+      "name": "Texttospeech",
+      "summary": "Converts text or SSML content to natural-sounding speech audio using Google Cloud Text-to-Speech API with support for multiple languages, voices, and audio formats.",
+      "howItWorks": "The Text to Speech node generates natural-sounding audio from text using Google Cloud's advanced neural networks. When executed: 1. Validates the input text is not empty (max 5,000 characters) 2. Authenticates with Google Cloud Text-to-Speech API using provided credentials 3. Configures synthesis parameters: - Selects the specified voice (language code + voice name) - Sets audio encoding (WAV, MP3, or OGG Opus) - Applies the specified sample rate - Processes input as plain text or SSML 4. Sends synthesis request to Google Cloud 5. Receives generated audio content 6. Saves audio to the specified path (or temporary file if no path provided) 7. Returns the file path for further processing",
+      "usage": [
+        "Valid Google Cloud credentials with Text-to-Speech API enabled",
+        "Non-empty text content (max 5,000 characters)",
+        "Writable file path (or system temp directory access)",
+        "Internet connectivity to Google Cloud services"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrCredentials",
+        "ErrFilePath",
+        "ErrWriteFile"
+      ]
+    }
+  }
+}

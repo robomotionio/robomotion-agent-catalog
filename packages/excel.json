@@ -1,0 +1,684 @@
+{
+  "package": "Excel",
+  "summary": "Read, write, and manipulate Excel files (.xlsx, .xls) in your automation workflows without requiring Microsoft Excel.",
+  "description": "## Overview The Excel package provides comprehensive spreadsheet manipulation capabilities. Unlike the Microsoft Excel package which requires Excel installed, this package works directly with Excel file formats. Use it for processing Excel files on any system, regardless of Office installation.",
+  "nodes": {
+    "append-excel": {
+      "namespace": "Core.Excel.AppendExcel",
+      "name": "AppendExcel",
+      "summary": "Appends data from a sheet in one excel file to another excel file.",
+      "howItWorks": "1. **Validates Input**: Checks that both file descriptors and sheet names are provided 2. **Sets Active Sheets**: Activates cell A1 in both source and destination sheets 3. **Retrieves Handles**: Gets the Excel file handles for both files 4. **Reads Headers**: Reads the first row (column headers) from both sheets 5. **Validates Columns**: Compares column headers to ensure they match exactly (same names in same order) 6. **Counts Rows**: Determines the total number of rows in the destination sheet 7. **Copies Data**: Iterates through all data rows in the source sheet (skipping the header) and appends them to the destination sheet starting after the last row 8. **Preserves Values**: Each cell value is copied individually from source to destination",
+      "usage": [
+        "Both Excel files must be opened using the [Open Excel](/reference/packages/excel/open-excel) node first",
+        "Both sheets must have identical column headers (same names in same order)",
+        "Both sheets must exist in their respective files",
+        "The files can be either .xlsx or .xls format"
+      ],
+      "bestPractices": [
+        "The operation appends data from the first file to the second file (first file remains unchanged)",
+        "Column headers must match exactly - both the names and the order",
+        "Only data rows are copied; the header row from the source sheet is not duplicated",
+        "The node automatically handles finding the last row in the destination sheet",
+        "Cell formatting is not copied, only values",
+        "Formulas are converted to their calculated values during the append operation"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrFileDescriptor",
+        "ErrSheetName",
+        "ErrSetActiveCell",
+        "ErrGetRows",
+        "ErrGetColumns",
+        "ErrDifferentColumns"
+      ],
+      "relatedNodes": [
+        "Open Excel",
+        "Save Excel",
+        "Close Excel",
+        "Get Sheets",
+        "Get Range",
+        "Set Range"
+      ],
+      "tips": [
+        "Always validate that your source and destination sheets have matching columns before appending",
+        "Use [Get Sheets](/reference/packages/excel/get-sheets) to verify sheet names exist before appending",
+        "Consider creating a backup of the destination file before large append operations",
+        "For better performance with large datasets, ensure the Excel files are on local storage",
+        "Remember to save the destination file after appending to persist the changes",
+        "Close files when done to free system resources"
+      ]
+    },
+    "close-excel": {
+      "namespace": "Core.Excel.CloseExcel",
+      "name": "CloseExcel",
+      "summary": "Closes an opened excel file",
+      "howItWorks": "1. **Validates Input**: Checks that the file descriptor is provided and not empty 2. **Verifies Handle**: Confirms that the file descriptor exists and corresponds to an open Excel file 3. **Closes File**: Releases the Excel file handle and frees associated system resources 4. **Cleanup**: Removes the file descriptor from the internal handle registry",
+      "usage": [
+        "The Excel file must have been previously opened with [Open Excel](/reference/packages/excel/open-excel) or created with [Create Excel](/reference/packages/excel/create-excel)",
+        "A valid file descriptor must be provided",
+        "Any unsaved changes should be saved using [Save Excel](/reference/packages/excel/save-excel) before closing"
+      ],
+      "bestPractices": [
+        "Always close Excel files when you're done to free system resources",
+        "Closing a file without saving will discard all changes made since the last save",
+        "You cannot perform operations on a file after it has been closed",
+        "If you try to close an already closed file, you'll receive an error",
+        "The Close Excel node does not save changes automatically - use Save Excel first",
+        "File descriptors become invalid after closing and cannot be reused"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrFileDescriptor"
+      ],
+      "relatedNodes": [
+        "Open Excel",
+        "Create Excel",
+        "Save Excel"
+      ],
+      "tips": [
+        "Follow the pattern: Open/Create -\u003e Modify -\u003e Save -\u003e Close for every Excel workflow",
+        "Close files as soon as you're done with them to prevent resource leaks",
+        "In long-running automations, close files between processing batches",
+        "Use error handling (try-catch) to ensure files are closed even if errors occur",
+        "Consider using a Finally block to guarantee files are closed",
+        "Don't reuse file descriptors after closing - open/create a new file instead"
+      ]
+    },
+    "copy-sheet": {
+      "namespace": "Core.Excel.CopySheet",
+      "name": "CopySheet",
+      "summary": "Copies a sheet from an excel file and creates a copy in the same file.",
+      "howItWorks": "1. **Validates Input**: Checks that file descriptor, source sheet name are provided 2. **Verifies Source Sheet**: Confirms the sheet to be copied exists in the file 3. **Checks Target Name**: If a copied sheet name is provided, verifies it doesn't already exist 4. **Generates Name**: If no copied sheet name is provided, automatically generates one (e.g., \"Sheet2\", \"Sheet3\") 5. **Creates New Sheet**: Creates a new sheet with the specified or generated name 6. **Copies Content**: Duplicates all content, formatting, and formulas from the source sheet 7. **Switches Sheet** (Optional): If the Switch To Sheet option is enabled, activates the newly copied sheet at cell A1",
+      "usage": [
+        "The Excel file must be opened using [Open Excel](/reference/packages/excel/open-excel) or created with [Create Excel](/reference/packages/excel/create-excel)",
+        "The source sheet must exist in the file",
+        "The copied sheet name (if provided) must not already exist in the file",
+        "File must be saved after copying to persist the changes"
+      ],
+      "bestPractices": [
+        "If the copied sheet name is left empty, the system automatically generates a name like \"Sheet2\", \"Sheet3\", based on the total number of sheets",
+        "The copy operation duplicates all content, including data, formulas, formatting, and styles",
+        "The copied sheet name must be unique within the workbook",
+        "The original sheet remains unchanged",
+        "Charts and images are also copied to the new sheet",
+        "The Switch To Sheet option is useful when you want to immediately work on the copied sheet",
+        "Remember to save the file after copying to persist the changes"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrFileDescriptor",
+        "ErrSheet",
+        "ErrSwitch"
+      ],
+      "relatedNodes": [
+        "Create Sheet",
+        "Switch To Sheet",
+        "Get Sheets",
+        "Open Excel",
+        "Save Excel"
+      ],
+      "tips": [
+        "Use descriptive names for copied sheets to make your workbook more organized",
+        "When creating multiple copies in a loop, use dynamic naming with variables",
+        "Leave the copied sheet name empty if you just need a quick duplicate",
+        "Use the Switch To Sheet option when you plan to modify the copy immediately",
+        "Consider copying a template sheet at the start of your automation workflow",
+        "Always verify the source sheet exists before attempting to copy (use Get Sheets)",
+        "Save the file after copying to ensure the new sheet persists"
+      ]
+    },
+    "create-excel": {
+      "namespace": "Core.Excel.CreateExcel",
+      "name": "CreateExcel",
+      "summary": "Creates a new excel file",
+      "howItWorks": "1. **Validates Input**: Checks that the file path is provided and not empty 2. **Checks Existence**: Verifies if a file already exists at the specified path 3. **Handles Overwrite**: If the file exists and Overwrite If Exists is enabled, deletes the existing file; otherwise returns an error 4. **Creates File**: Creates a new Excel file using the excelize library 5. **Generates Descriptor**: Creates a unique file descriptor for the new Excel file 6. **Saves File**: Saves the new Excel file to the specified path 7. **Sets Active Sheet**: Activates the default sheet (usually \"Sheet1\") 8. **Returns Descriptor**: Outputs the file descriptor for use in subsequent Excel operations",
+      "usage": [
+        "A valid file path must be provided (can be absolute or relative)",
+        "The directory where the file will be created must exist",
+        "Write permissions are required for the target directory",
+        "If a file exists at the path and Overwrite If Exists is false, the operation will fail"
+      ],
+      "bestPractices": [
+        "The created Excel file includes one default sheet (usually named \"Sheet1\")",
+        "The file is saved immediately upon creation, so it exists on disk right away",
+        "The file descriptor returned is required for all subsequent Excel operations on this file",
+        "If Overwrite If Exists is false and the file exists, an error will be thrown",
+        "The file path can be absolute (C:/path/file.xlsx) or relative (./file.xlsx)",
+        "Supported file extensions are .xlsx and .xls",
+        "The file is created in memory and then saved to disk",
+        "You must call Close Excel when done to release resources"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrCreateExcelFile"
+      ],
+      "relatedNodes": [
+        "Open Excel",
+        "Save Excel",
+        "Close Excel",
+        "Create Sheet",
+        "Set Range"
+      ],
+      "tips": [
+        "Use Overwrite If Exists: true for automated processes that run on schedules",
+        "Include timestamps in file names to avoid conflicts (e.g., \"report_2025-01-15_143000.xlsx\")",
+        "Ensure the target directory exists before creating the file",
+        "Store the file descriptor in a variable for use throughout your workflow",
+        "Always close the file when done to prevent resource leaks",
+        "Consider using relative paths for portability across environments",
+        "Create files in a temporary directory first, then move them to final location if needed"
+      ]
+    },
+    "create-sheet": {
+      "namespace": "Core.Excel.CreateSheet",
+      "name": "CreateSheet",
+      "summary": "Creates a new sheet in an existing Excel file.",
+      "howItWorks": "1. **Validates Input**: Checks that both file descriptor and sheet name are provided and not empty 2. **Verifies Handle**: Confirms that the file descriptor exists and corresponds to an open Excel file 3. **Checks Existence**: Verifies that a sheet with the same name doesn't already exist in the file 4. **Creates Sheet**: Creates a new blank sheet with the specified name in the Excel file 5. **Switches Sheet** (Optional): If Switch To Sheet is enabled, activates the newly created sheet at cell A1 6. **Returns Descriptor**: Outputs the same file descriptor for continued operations",
+      "usage": [
+        "The Excel file must be opened with [Open Excel](/reference/packages/excel/open-excel) or created with [Create Excel](/reference/packages/excel/create-excel)",
+        "The sheet name must be unique within the workbook",
+        "Sheet name must not be empty",
+        "The file must be saved after creating the sheet to persist changes"
+      ],
+      "bestPractices": [
+        "The newly created sheet is blank and has no data or formatting initially",
+        "Sheet names must be unique within a workbook - you cannot create two sheets with the same name",
+        "Excel has naming restrictions: sheet names cannot exceed 31 characters and cannot contain: \\ / ? * [ ]",
+        "If Switch To Sheet is false, the currently active sheet remains active",
+        "The new sheet is added to the end of the sheet list in the workbook",
+        "Remember to save the file after creating sheets to persist the changes",
+        "The same file descriptor is returned as output for chaining operations"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrFileDescriptor",
+        "ErrSheet",
+        "ErrSwitch"
+      ],
+      "relatedNodes": [
+        "Copy Sheet",
+        "Switch To Sheet",
+        "Get Sheets",
+        "Set Range",
+        "Save Excel",
+        "Create Excel"
+      ],
+      "tips": [
+        "Use descriptive sheet names that clearly indicate the content or purpose",
+        "Enable Switch To Sheet when you plan to immediately add data to the new sheet",
+        "Create all sheets first, then populate them with data for better workflow organization",
+        "Validate sheet names before creating to avoid special characters that Excel doesn't allow",
+        "Use Get Sheets before creating to verify the sheet doesn't already exist",
+        "Consider a naming convention for sheets in automated processes (e.g., \"Report_2025_01\")",
+        "Keep sheet names under 31 characters to comply with Excel's limits"
+      ]
+    },
+    "delete-cell": {
+      "namespace": "Core.Excel.DeleteCell",
+      "name": "DeleteCell",
+      "summary": "This node deletes the specified cell from an Excel file.",
+      "howItWorks": "1. **Validates Input**: Checks that file descriptor and target option are provided 2. **Verifies Target**: Ensures a valid target option is selected (active-cell or specific-cell) 3. **Checks Cell Input**: If specific-cell is selected, validates that a cell reference is provided 4. **Retrieves Handle**: Gets the Excel file handle from the descriptor 5. **Validates Cell**: If specific-cell, validates the cell reference format (e.g., A1, B5) 6. **Deletes Content**: Sets the cell value to empty string (\"\"), effectively clearing the cell 7. **Preserves Structure**: The cell remains in the sheet but its content is removed",
+      "usage": [
+        "The Excel file must be opened with [Open Excel](/reference/packages/excel/open-excel) or created with [Create Excel](/reference/packages/excel/create-excel)",
+        "A valid file descriptor must be provided",
+        "When using specific-cell target, a valid cell reference must be provided (e.g., A1, B5, C10)",
+        "When using active-cell target, an active cell must be set (use Set Active Cell if needed)"
+      ],
+      "bestPractices": [
+        "Delete Cell only clears the cell content, it does not remove the cell from the sheet structure",
+        "The cell remains in place but contains an empty value",
+        "Cell formatting, borders, and styles are preserved",
+        "To completely remove a cell and shift others, use Delete Row or Delete Column instead",
+        "When deleting the active cell, make sure an active cell is set first",
+        "The operation affects only the currently active sheet",
+        "Multiple cells can be deleted by calling the node multiple times",
+        "Remember to save the file to persist the changes"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrTarget",
+        "ErrCell",
+        "ErrFileDescriptor"
+      ],
+      "relatedNodes": [
+        "Delete Row",
+        "Delete Column",
+        "Set Cell Value",
+        "Get Cell Value",
+        "Set Active Cell",
+        "Save Excel"
+      ],
+      "tips": [
+        "Use Delete Cell for clearing individual cell values while preserving structure",
+        "For removing entire rows or columns, use Delete Row or Delete Column nodes instead",
+        "Consider using Set Cell Value with empty string as an alternative approach",
+        "When deleting multiple cells, process them in a loop for efficiency",
+        "Verify cell references before deletion to avoid clearing wrong data",
+        "Use Get Cell Value before deletion if you need to backup the data first",
+        "Remember that deleted (cleared) cells will show as empty in formulas",
+        "Save the file after deletion to make changes permanent"
+      ]
+    },
+    "delete-column": {
+      "namespace": "Core.Excel.DeleteColumn",
+      "name": "DeleteColumn",
+      "summary": "Deletes a column in an Excel file.",
+      "howItWorks": "1. **Validates Input**: Checks that file descriptor and target option are provided 2. **Verifies Target**: Ensures a valid target option is selected (active-column or specific-column) 3. **Checks Column Input**: If specific-column is selected, validates that a column letter is provided 4. **Retrieves Handle**: Gets the Excel file handle from the descriptor 5. **Validates Column**: If specific-column, validates the column reference format (e.g., A, B, Z, AA) 6. **Determines Column**: For active-column, extracts the column letter from the active cell 7. **Removes Column**: Deletes the entire column and shifts remaining columns to the left 8. **Preserves Data**: All columns to the right of the deleted column shift left by one position",
+      "usage": [
+        "The Excel file must be opened with [Open Excel](/reference/packages/excel/open-excel) or created with [Create Excel](/reference/packages/excel/create-excel)",
+        "A valid file descriptor must be provided",
+        "When using specific-column target, a valid column letter must be provided (e.g., A, B, Z, AA)",
+        "When using active-column target, an active cell must be set",
+        "The file must be saved after deletion to persist changes"
+      ],
+      "bestPractices": [
+        "Deleting a column removes the entire column and all its data from the sheet",
+        "Columns to the right of the deleted column automatically shift left",
+        "Column references in formulas are NOT automatically updated",
+        "When deleting multiple columns, work from right to left to avoid reference shifting issues",
+        "The active-column target uses the column of the currently active cell",
+        "Column letters can be single (A-Z) or multiple (AA, AB, etc.)",
+        "There is no undo operation - deletion is permanent once saved",
+        "Remember to save the file to persist the changes"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrTarget",
+        "ErrColumn",
+        "ErrFileDescriptor",
+        "ErrCell"
+      ],
+      "relatedNodes": [
+        "Delete Row",
+        "Delete Cell",
+        "Insert Column",
+        "Get Column",
+        "Set Active Cell",
+        "Save Excel"
+      ],
+      "tips": [
+        "Always backup important data before deleting columns",
+        "When deleting multiple columns, delete from right to left (Z to A direction)",
+        "Use Get Range to backup column data before deletion if needed",
+        "Be aware that formulas referencing deleted columns will show #REF! errors",
+        "Consider hiding columns instead of deleting if you might need the data later",
+        "Verify column letter before deletion to avoid removing wrong data",
+        "Use Get Column to inspect column contents before deletion",
+        "Test on a copy of the file first when automating column deletions"
+      ]
+    },
+    "delete-row": {
+      "namespace": "Core.Excel.DeleteRow",
+      "name": "DeleteRow",
+      "summary": "Deletes a row from an Excel file",
+      "howItWorks": "1. **Validates Input**: Checks that file descriptor and target option are provided 2. **Verifies Target**: Ensures a valid target option is selected 3. **Checks Row Input**: If specific-row is selected, validates that a row number is provided 4. **Retrieves Handle**: Gets the Excel file handle from the descriptor 5. **Determines Row**: Based on target option, identifies which row to delete: - Active Row: Uses the row number from the active cell - Specific Row: Uses the provided row number - First Row: Uses row 1 - Last Row: Counts all rows to find the last one 6. **Removes Row**: Deletes the entire row and shifts remaining rows upward 7. **Preserves Data**: All rows below the deleted row shift up by one position",
+      "usage": [
+        "The Excel file must be opened with [Open Excel](/reference/packages/excel/open-excel) or created with [Create Excel](/reference/packages/excel/create-excel)",
+        "A valid file descriptor must be provided",
+        "When using specific-row target, a valid row number must be provided (must be greater than 0)",
+        "When using active-row target, an active cell must be set",
+        "The file must be saved after deletion to persist changes"
+      ],
+      "bestPractices": [
+        "Deleting a row removes the entire row and all its data from the sheet",
+        "Rows below the deleted row automatically shift upward",
+        "Row numbers in formulas are NOT automatically updated",
+        "When deleting multiple rows, work from bottom to top to avoid shifting issues",
+        "The active-row target uses the row number from the currently active cell",
+        "Row numbers start from 1 (not 0)",
+        "Deleting the last row requires iterating through all rows to count them",
+        "There is no undo operation - deletion is permanent once saved",
+        "Remember to save the file to persist the changes"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrTarget",
+        "ErrCell",
+        "ErrFileDescriptor",
+        "ErrRow"
+      ],
+      "relatedNodes": [
+        "Delete Column",
+        "Delete Cell",
+        "Insert Row",
+        "Get Row",
+        "Set Active Cell",
+        "Save Excel"
+      ],
+      "tips": [
+        "Always backup important data before deleting rows",
+        "When deleting multiple rows, delete from bottom to top (highest to lowest row numbers)",
+        "Use Get Row to backup row data before deletion if needed",
+        "Be aware that formulas referencing deleted rows will show #REF! errors",
+        "Consider hiding rows instead of deleting if you might need the data later",
+        "Verify row number before deletion to avoid removing wrong data",
+        "For conditional deletion, use Get Cell Value to check row content first",
+        "Test on a copy of the file first when automating row deletions",
+        "Use first-row target to remove headers quickly",
+        "Use last-row target to remove totals or summary rows"
+      ]
+    },
+    "excel-to-csv": {
+      "namespace": "Core.Excel.ExcelToCsv",
+      "name": "ExcelToCsv",
+      "summary": "Converts an Excel file's Sheets into CSV files"
+    },
+    "find-and-replace": {
+      "namespace": "Core.Excel.FindAndReplace",
+      "name": "FindAndReplace",
+      "summary": "Finds and replaces a specific value in an excel file."
+    },
+    "get-cell-value": {
+      "namespace": "Core.Excel.GetCellValue",
+      "name": "GetCellValue",
+      "summary": "Retrieves the value in a specific cell of an opened Excel file.",
+      "howItWorks": "1. **Validates Input**: Checks that file descriptor is provided 2. **Verifies Cell**: If specific-cell target, validates that cell reference is provided 3. **Retrieves Handle**: Gets the Excel file handle from the descriptor 4. **Determines Cell**: Based on target option, uses either active cell or specified cell 5. **Reads Value**: Retrieves the cell value from the active sheet 6. **Processes Options**: Applies optional processing: - Raw Value: Returns numeric values as numbers instead of strings - Is Formula: Calculates formula result instead of formula text - Include Hyperlinks: Returns value with hyperlink if present 7. **Returns Value**: Outputs the cell value",
+      "usage": [
+        "The Excel file must be opened with [Open Excel](/reference/packages/excel/open-excel) or created with [Create Excel](/reference/packages/excel/create-excel)",
+        "A valid file descriptor must be provided",
+        "When using specific-cell target, a valid cell reference must be provided",
+        "When using active-cell target, an active cell must be set"
+      ],
+      "bestPractices": [
+        "By default, cell values are returned as strings",
+        "Use Raw Value option to get numeric values as numbers",
+        "Use Is Formula option to calculate formulas and get results",
+        "Include Hyperlinks returns an object with Text and Hyperlink properties",
+        "Empty cells return empty string (\"\")",
+        "The node reads from the currently active sheet",
+        "For formula cells, default behavior returns the formula text, not the result",
+        "DateTime values are returned in Excel's internal format unless formatted"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrFileDescriptor",
+        "ErrCell",
+        "ErrCalCellValue",
+        "ErrCellValue",
+        "ErrCellType"
+      ],
+      "relatedNodes": [
+        "Set Cell Value",
+        "Get Range",
+        "Get Row",
+        "Get Column",
+        "Set Active Cell",
+        "Set Formula"
+      ],
+      "tips": [
+        "Use specific-cell target when you know the exact cell address",
+        "Use active-cell target when iterating through cells or after searching",
+        "Enable Raw Value when reading numbers for calculations or comparisons",
+        "Enable Is Formula to get calculated results from formula cells",
+        "Use Get Range instead for reading multiple cells at once",
+        "Combine with conditional logic to process cell values",
+        "For reading multiple values, consider using Get Row or Get Column",
+        "Use Set Active Cell before Get Cell Value for dynamic cell reading"
+      ]
+    },
+    "get-column": {
+      "namespace": "Core.Excel.GetColumn",
+      "name": "GetColumn",
+      "summary": "Retrieves data from a specific column of an Excel file."
+    },
+    "get-range": {
+      "namespace": "Core.Excel.GetRange",
+      "name": "GetRange",
+      "summary": "Gets data from a specific range of an Excel file.",
+      "howItWorks": "1. **Validates Input**: Checks that file descriptor is provided 2. **Verifies Cells**: If specific-range, validates From Cell and To Cell references 3. **Retrieves Handle**: Gets the Excel file handle from the descriptor 4. **Determines Range**: Based on target option: - all-range: Reads all data from the active sheet - specific-range: Reads only the specified cell range 5. **Reads Rows**: Retrieves all rows from the sheet or specified range 6. **Processes Headers**: If Headers is true, uses first row as column names; otherwise uses column letters (A, B, C...) 7. **Builds Data Table**: Constructs a data table structure with columns and rows 8. **Applies Jsonify**: If enabled, converts header names to lowercase and replaces spaces with underscores 9. **Returns Data**: Outputs the data in data table format",
+      "usage": [
+        "The Excel file must be opened with [Open Excel](/reference/packages/excel/open-excel) or created with [Create Excel](/reference/packages/excel/create-excel)",
+        "For specific-range target, valid cell references must be provided",
+        "The active sheet must contain data",
+        "Cell references must be in valid Excel format (e.g., A1, B5, Z100)"
+      ],
+      "bestPractices": [
+        "The data is returned as a data table object with Columns and Rows properties",
+        "When Headers is true, the first row is used as column names and excluded from data rows",
+        "When Headers is false, columns are named with their Excel letters (A, B, C, etc.)",
+        "Jsonify option is useful for preparing data for API calls or JSON processing",
+        "The all-range target reads from A1 to the last cell with data",
+        "Empty cells in the range are included as empty strings in the result",
+        "The node returns an empty table if the sheet has no data",
+        "Cell values are returned as strings by default (use Raw Value option for numbers)"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrFileDescriptor",
+        "ErrInvalidCell",
+        "ErrEmptySheet"
+      ],
+      "relatedNodes": [
+        "Set Range",
+        "Get Cell Value",
+        "Get Row",
+        "Get Column",
+        "Open Excel",
+        "Switch To Sheet"
+      ],
+      "tips": [
+        "Use Headers: true when your Excel sheet has a header row for cleaner data processing",
+        "Enable Jsonify when sending data to APIs that expect JSON-formatted property names",
+        "Use specific-range to read only the data you need for better performance",
+        "Leave From Cell empty to start from A1, leave To Cell empty to read until last cell",
+        "For large datasets, consider reading in smaller ranges and processing in batches",
+        "The data table format integrates seamlessly with For Each loops",
+        "Use all-range for dynamic sheets where the data size varies",
+        "Combine with Set Range to copy data between files or sheets"
+      ]
+    },
+    "get-row": {
+      "namespace": "Core.Excel.GetRow",
+      "name": "GetRow",
+      "summary": "Gets a row from an Excel file"
+    },
+    "get-sheets": {
+      "namespace": "Core.Excel.GetSheets",
+      "name": "GetSheets",
+      "summary": "Retrieves all the sheets of an excel file"
+    },
+    "insert-column": {
+      "namespace": "Core.Excel.InsertColumn",
+      "name": "InsertColumn",
+      "summary": "Inserts a new column in a specified location in an Excel sheet."
+    },
+    "insert-row": {
+      "namespace": "Core.Excel.InsertRow",
+      "name": "InsertRow",
+      "summary": "Inserts a row into an excel file."
+    },
+    "merge-excel": {
+      "namespace": "Core.Excel.MergeExcel",
+      "name": "MergeExcel",
+      "summary": "Merges contents of two excel sheets side by side. If the first Excel has Name, Location, Age columns and the second Excel has Surname and Company columns the final Excel will have all the columns."
+    },
+    "open-excel": {
+      "namespace": "Core.Excel.OpenExcel",
+      "name": "OpenExcel",
+      "summary": "Opens an existing excel file or creates a new one.",
+      "howItWorks": "1. **Validates Input**: Checks that the file path is provided and not empty 2. **Checks File Type**: Verifies the file extension (.xls, .xlsx, .xlsm, .xlam, .xltm, .xltx) 3. **Handles Legacy Format**: If .xls file, converts it to .xlsx format automatically 4. **Processes Password**: If credentials are provided, retrieves password from vault or uses provided password 5. **Opens File**: Attempts to open the Excel file with or without password 6. **Creates If Missing**: If file doesn't exist and Create If Not Exists is true, creates a new file 7. **Generates Descriptor**: Creates a unique file descriptor for the opened Excel file 8. **Sets Active Sheet**: Activates the first sheet at cell A1 9. **Returns Descriptor**: Outputs the file descriptor for use in subsequent Excel operations",
+      "usage": [
+        "A valid file path must be provided",
+        "The file must have a supported extension (.xls, .xlsx, .xlsm, .xlam, .xltm, .xltx)",
+        "For password-protected files, correct credentials must be provided",
+        "Read permissions are required for the file",
+        "If Create If Not Exists is false, the file must already exist"
+      ],
+      "bestPractices": [
+        "The Open Excel node automatically converts .xls files to .xlsx format in memory",
+        "If Create If Not Exists is true and the file doesn't exist, a new blank Excel file is created",
+        "The file descriptor must be stored in a variable for use in subsequent Excel operations",
+        "The first sheet in the workbook is automatically activated at cell A1",
+        "Supported formats: .xls, .xlsx, .xlsm (macro-enabled), .xlam, .xltm, .xltx",
+        "For password-protected files, you can use vault credentials or provide password directly",
+        "The file remains open until explicitly closed with Close Excel node",
+        "Multiple files can be opened simultaneously with different descriptors"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrPath",
+        "ErrCredentials",
+        "ErrOpenFile"
+      ],
+      "relatedNodes": [
+        "Create Excel",
+        "Close Excel",
+        "Save Excel",
+        "Get Sheets",
+        "Switch To Sheet"
+      ],
+      "tips": [
+        "Always store the file descriptor in a variable for later use",
+        "Use Create If Not Exists: true for automated processes that may run before files are created",
+        "Close files as soon as you're done to free system resources",
+        "For password-protected files, use vault credentials instead of hardcoding passwords",
+        "When working with legacy .xls files, consider saving them as .xlsx for better compatibility",
+        "Check file exists before opening if Create If Not Exists is false to handle errors gracefully",
+        "Use absolute paths for reliability, or relative paths for portability",
+        "Remember that opening doesn't lock the file - other processes can still modify it"
+      ]
+    },
+    "save-excel": {
+      "namespace": "Core.Excel.SaveExcel",
+      "name": "SaveExcel",
+      "summary": "Saves an Excel file to the specified location.",
+      "howItWorks": "1. **Validates Input**: Checks that the file descriptor is provided and not empty 2. **Retrieves Handle**: Gets the Excel file handle from the descriptor 3. **Updates Linked Values**: Refreshes any linked values or formulas in the workbook 4. **Determines Save Path**: If Save File Path is provided, uses it; otherwise saves to original file location 5. **Saves File**: Writes the Excel file to disk at the specified or original location 6. **Persists Changes**: All modifications made to the file are written to disk",
+      "usage": [
+        "The Excel file must be opened with [Open Excel](/reference/packages/excel/open-excel) or created with [Create Excel](/reference/packages/excel/create-excel)",
+        "A valid file descriptor must be provided",
+        "Write permissions are required for the target directory",
+        "If saving to a new location, the directory must exist"
+      ],
+      "bestPractices": [
+        "If Save File Path is empty, the file is saved to its original location (where it was opened from)",
+        "If Save File Path is provided, the file is saved to that new location (Save As)",
+        "Saving does not close the file - you can continue working with it after saving",
+        "All changes are only persisted when Save Excel is executed",
+        "The node updates linked values and formulas before saving",
+        "You can save multiple times to different locations without reopening the file",
+        "Original file remains unchanged if you use Save As with a different path",
+        "File descriptor remains valid after saving"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrFileDescriptor",
+        "ErrUpdate",
+        "ErrSave"
+      ],
+      "relatedNodes": [
+        "Open Excel",
+        "Create Excel",
+        "Close Excel",
+        "Set Range",
+        "Set Cell Value"
+      ],
+      "tips": [
+        "Always save before closing to persist your changes",
+        "Use empty Save File Path to update the original file",
+        "Provide a Save File Path to create a backup or new version",
+        "Save periodically during long automation processes to avoid data loss",
+        "Use dynamic filenames with timestamps for archiving or versioning",
+        "Verify the target directory exists before saving to a new location",
+        "Consider saving to a temporary location first, then moving to final destination",
+        "Use Save As to preserve the original file while creating modified versions"
+      ]
+    },
+    "set-active-cell": {
+      "namespace": "Core.Excel.SetActiveCell",
+      "name": "SetActiveCell",
+      "summary": "Sets the active cell in an Excel file."
+    },
+    "set-cell-value": {
+      "namespace": "Core.Excel.SetCellValue",
+      "name": "SetCellValue",
+      "summary": "Sets the value of a cell in an Excel spreadsheet.",
+      "howItWorks": "1. **Validates Input**: Checks that file descriptor and format are provided 2. **Retrieves Handle**: Gets the Excel file handle from the descriptor 3. **Processes Value**: Converts the input value based on the selected format: - String: Keeps value as text - Number: Parses as floating-point number - Boolean: Converts to true/false - DateTime: Parses in \"YYYY-MM-DD HH:MM\" format 4. **Determines Cell**: Based on target option, uses either active cell or specified cell 5. **Sets Active Cell**: If specific-cell, sets it as the new active cell 6. **Writes Value**: Updates the cell with the formatted value 7. **Persists in Memory**: Changes are stored in memory until Save Excel is called",
+      "usage": [
+        "The Excel file must be opened with [Open Excel](/reference/packages/excel/open-excel) or created with [Create Excel](/reference/packages/excel/create-excel)",
+        "A valid file descriptor must be provided",
+        "When using specific-cell target, a valid cell reference must be provided",
+        "Format must be selected (string, number, bool, or datetime)",
+        "DateTime values must be in \"YYYY-MM-DD HH:MM\" format",
+        "File must be saved to persist changes"
+      ],
+      "bestPractices": [
+        "Changes are not persisted until Save Excel is called",
+        "When using specific-cell target, that cell becomes the new active cell",
+        "The format option must match the value type you're providing",
+        "DateTime format must be exactly \"YYYY-MM-DD HH:MM\" (24-hour format)",
+        "Boolean values can be \"true\" or \"false\" as strings",
+        "Number format accepts integers and decimals",
+        "Setting a value to an existing cell overwrites the previous content",
+        "Cell formatting (colors, borders) is preserved when setting values"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrFileDescriptor",
+        "ErrFormat",
+        "ErrDateType",
+        "ErrSetActiveCell",
+        "ErrSetValue"
+      ],
+      "relatedNodes": [
+        "Get Cell Value",
+        "Set Active Cell",
+        "Set Range",
+        "Set Formula",
+        "Save Excel"
+      ],
+      "tips": [
+        "Always select the appropriate format to ensure data is stored correctly",
+        "Use string format for mixed alphanumeric content",
+        "Use number format for calculations and numeric operations",
+        "For dates, use datetime format to enable Excel's date functions",
+        "When setting multiple cells, consider using Set Range for better performance",
+        "Validate data types before setting to avoid format errors",
+        "Remember to save the file to persist your changes",
+        "Use active-cell target when iterating through cells sequentially"
+      ]
+    },
+    "set-formula": {
+      "namespace": "Core.Excel.SetFormula",
+      "name": "SetFormula",
+      "summary": "Sets a formula in a designated cell of an already opened excel file."
+    },
+    "set-range": {
+      "namespace": "Core.Excel.SetRange",
+      "name": "SetRange",
+      "summary": "Sets a range of cells in excel with a [data table](/concepts/core/data-table/) input."
+    },
+    "set-style": {
+      "namespace": "Core.Excel.SetStyle",
+      "name": "SetStyle",
+      "summary": "Sets the style of a cell or range of cells in an Excel file."
+    },
+    "switch-to-sheet": {
+      "namespace": "Core.Excel.SwitchToSheet",
+      "name": "SwitchToSheet",
+      "summary": "Switches to a specific sheet in an Excel file."
+    }
+  }
+}

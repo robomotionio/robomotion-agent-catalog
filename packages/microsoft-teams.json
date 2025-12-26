@@ -1,0 +1,170 @@
+{
+  "package": "MicrosoftTeams",
+  "summary": "The Microsoft Teams package provides comprehensive automation capabilities for Microsoft Teams, enabling you to create teams, manage channels, send messages, and interact with chats programmatically.",
+  "description": "## Overview The Microsoft Teams package allows you to:",
+  "nodes": {
+    "connect": {
+      "namespace": "Core.MicrosoftTeams.Connect",
+      "name": "Connect",
+      "summary": "Connects to Microsoft Teams using OAuth2 credentials and establishes a session for subsequent operations.",
+      "howItWorks": "The Connect node handles the complete OAuth2 authentication flow: 1. **First-time authentication**: If no refresh token exists, opens OAuth2 dialog for user authorization 2. **Token refresh**: If access token is expired but refresh token exists, automatically refreshes the token 3. **Token reuse**: If access token is still valid, reuses it without additional authentication 4. **Automatic updates**: Updates the vault credentials with new tokens automatically"
+    },
+    "create-channel": {
+      "namespace": "Core.MicrosoftTeams.CreateChannel",
+      "name": "CreateChannel",
+      "summary": "Creates a new channel within a Microsoft Teams team with the specified name and description.",
+      "howItWorks": "The Create Channel node: 1. Validates the team ID and channel details 2. Creates a standard channel in the specified team 3. Returns the complete channel object with ID and metadata 4. Channel is immediately available for use :::note Channel names must be unique within a team. If a channel with the same name exists, the operation will fail. :::",
+      "relatedNodes": [
+        "Connect",
+        "ListChannels",
+        "GetChannel",
+        "UpdateChannel",
+        "DeleteChannel",
+        "SendMessage"
+      ]
+    },
+    "create-team": {
+      "namespace": "Core.MicrosoftTeams.CreateTeam",
+      "name": "CreateTeam",
+      "summary": "Creates a new Microsoft Teams team with specified name, description, and template.",
+      "howItWorks": "The Create Team node: 1. Sends a team creation request to Microsoft Graph API 2. Uses the specified template to configure default channels and settings 3. Returns immediately (actual team provisioning happens asynchronously) 4. Team will be available for use within a few seconds",
+      "relatedNodes": [
+        "Connect",
+        "ListTeams",
+        "GetTeam",
+        "CreateChannel"
+      ]
+    },
+    "delete-channel": {
+      "namespace": "Core.MicrosoftTeams.DeleteChannel",
+      "name": "DeleteChannel",
+      "summary": "Deletes a channel from a Microsoft Teams team.",
+      "howItWorks": "The Delete Channel node: 1. Validates the team and channel IDs 2. Sends a deletion request to Microsoft Graph API 3. Permanently removes the channel and all its contents 4. Returns when deletion is complete",
+      "relatedNodes": [
+        "Connect",
+        "ListChannels",
+        "GetChannel",
+        "CreateChannel",
+        "GetMessages"
+      ]
+    },
+    "disconnect": {
+      "namespace": "Core.MicrosoftTeams.Disconnect",
+      "name": "Disconnect",
+      "summary": "Disconnects from Microsoft Teams and releases the connection session.",
+      "howItWorks": "The Disconnect node: 1. Removes the connection from the active sessions pool 2. Releases any resources associated with the connection 3. Prevents further use of the client ID :::warning After disconnecting, the client ID cannot be used for any Teams operations. You must create a new connection using the Connect node. :::"
+    },
+    "get-channel": {
+      "namespace": "Core.MicrosoftTeams.GetChannel",
+      "name": "GetChannel",
+      "summary": "Retrieves detailed information about a specific channel within a Microsoft Teams team.",
+      "relatedNodes": [
+        "ListChannels",
+        "CreateChannel",
+        "UpdateChannel",
+        "DeleteChannel"
+      ]
+    },
+    "get-chat": {
+      "namespace": "Core.MicrosoftTeams.GetChat",
+      "name": "GetChat",
+      "summary": "Retrieves detailed information about a specific Microsoft Teams chat by its ID.",
+      "relatedNodes": [
+        "GetChats",
+        "GetChatMembers",
+        "GetMessages",
+        "SendMessage"
+      ]
+    },
+    "get-chat-members": {
+      "namespace": "Core.MicrosoftTeams.GetChatMembers",
+      "name": "GetChatMembers",
+      "summary": "Retrieves all members (participants) of a specific Microsoft Teams chat.",
+      "relatedNodes": [
+        "GetChat",
+        "GetChats",
+        "SendMessage",
+        "GetMessages"
+      ]
+    },
+    "get-chats": {
+      "namespace": "Core.MicrosoftTeams.GetChats",
+      "name": "GetChats",
+      "summary": "Lists all chats that the authenticated user is a member of.",
+      "relatedNodes": [
+        "GetChat",
+        "GetChatMembers",
+        "GetMessages",
+        "SendMessage"
+      ]
+    },
+    "get-messages": {
+      "namespace": "Core.MicrosoftTeams.GetMessages",
+      "name": "GetMessages",
+      "summary": "Retrieves messages from a Microsoft Teams chat or channel.",
+      "relatedNodes": [
+        "SendMessage",
+        "GetChats",
+        "ListChannels",
+        "GetChatMembers"
+      ]
+    },
+    "get-team": {
+      "namespace": "Core.MicrosoftTeams.GetTeam",
+      "name": "GetTeam",
+      "summary": "Retrieves detailed information about a specific Microsoft Teams team by its ID.",
+      "relatedNodes": [
+        "ListTeams",
+        "CreateTeam",
+        "ListChannels"
+      ]
+    },
+    "list-channels": {
+      "namespace": "Core.MicrosoftTeams.ListChannels",
+      "name": "ListChannels",
+      "summary": "Lists all channels within a Microsoft Teams team.",
+      "relatedNodes": [
+        "GetChannel",
+        "CreateChannel",
+        "UpdateChannel",
+        "DeleteChannel",
+        "SendMessage",
+        "GetMessages"
+      ]
+    },
+    "list-teams": {
+      "namespace": "Core.MicrosoftTeams.ListTeams",
+      "name": "ListTeams",
+      "summary": "Lists all Microsoft Teams teams that the authenticated user is a member of.",
+      "relatedNodes": [
+        "GetTeam",
+        "CreateTeam",
+        "ListChannels",
+        "SendMessage"
+      ]
+    },
+    "send-message": {
+      "namespace": "Core.MicrosoftTeams.SendMessage",
+      "name": "SendMessage",
+      "summary": "Sends a message to a Microsoft Teams chat or channel with customizable formatting and importance.",
+      "relatedNodes": [
+        "GetMessages",
+        "ListChannels",
+        "GetChats",
+        "Connect"
+      ]
+    },
+    "update-channel": {
+      "namespace": "Core.MicrosoftTeams.UpdateChannel",
+      "name": "UpdateChannel",
+      "summary": "Updates an existing Microsoft Teams channel's display name or description.",
+      "relatedNodes": [
+        "GetChannel",
+        "ListChannels",
+        "CreateChannel",
+        "DeleteChannel",
+        "Connect"
+      ]
+    }
+  }
+}

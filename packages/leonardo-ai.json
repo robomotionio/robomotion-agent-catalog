@@ -1,0 +1,478 @@
+{
+  "package": "LeonardoAi",
+  "summary": "Generate and upscale images using Leonardo AI's creative image generation platform.",
+  "description": "## Overview The Leonardo AI package provides integration with Leonardo AI's image generation platform. Use it when you need to generate images from text prompts, upscale images, create image variations, or train custom models for specific image styles.",
+  "nodes": {
+    "connect": {
+      "namespace": "Core.LeonardoAi.Connect",
+      "name": "Connect",
+      "summary": "Establishes a connection to the Leonardo AI API using an API key for authentication.",
+      "howItWorks": "The Connect node establishes an authenticated session with the Leonardo AI API. When executed, the node: 1. Retrieves the API key from the vault credentials 2. Validates that the API key is not empty 3. Creates a connection session with Leonardo AI 4. Returns a connection ID that can be used by other Leonardo AI nodes",
+      "usage": [
+        "Valid Leonardo AI API key",
+        "API key stored in vault credentials"
+      ],
+      "bestPractices": [
+        "The connection ID should be passed to subsequent Leonardo AI nodes to maintain the authenticated session",
+        "Store your API key securely in the Robomotion vault - never hardcode it in your flows",
+        "You can obtain an API key from your Leonardo AI account settings at https://app.leonardo.ai",
+        "The connection remains active throughout the flow execution",
+        "Use the Disconnect node to properly clean up the connection when done"
+      ]
+    },
+    "create_dataset": {
+      "namespace": "Core.LeonardoAi.Create_dataset",
+      "name": "Create_dataset",
+      "summary": "Creates a new dataset for training custom models with your own images.",
+      "howItWorks": "The Create Dataset node creates a new dataset container. When executed, the node: 1. Validates the dataset name is not empty 2. Builds the create dataset request with name and optional description 3. Sends the request to Leonardo AI API 4. Returns the dataset ID for uploading images and model training",
+      "usage": [
+        "Valid Leonardo AI API key (via Connection ID or credentials)",
+        "Non-empty dataset name",
+        "Sufficient permissions to create datasets"
+      ],
+      "bestPractices": [
+        "Choose descriptive names to easily identify datasets later",
+        "A good description helps remember the dataset's purpose",
+        "You need 5-15 images minimum to train a quality custom model",
+        "After creating the dataset, use Upload Dataset Image to add images",
+        "The dataset ID is required for uploading images and creating models",
+        "Datasets remain until you delete them",
+        "You can create multiple datasets for different subjects or styles",
+        "Best results with consistent, high-quality images in the dataset",
+        "Consider organizing datasets by subject, style, or project",
+        "The description is optional but recommended for organization"
+      ]
+    },
+    "create_generation": {
+      "namespace": "Core.LeonardoAi.Create_generation",
+      "name": "Create_generation",
+      "summary": "Generates images from a text prompt using Leonardo AI's powerful image generation models.",
+      "howItWorks": "The Create Generation node initiates an image generation job with Leonardo AI. When executed, the node: 1. Validates the prompt is not empty 2. Builds the generation request with your specified parameters 3. Sets default dimensions based on the selected model if not specified 4. Validates numeric parameters (width, height, guidance scale, etc.) 5. Sends the generation request to Leonardo AI API 6. Returns the generation ID for tracking and retrieval",
+      "usage": [
+        "Valid Leonardo AI API key (via Connection ID or credentials)",
+        "Non-empty text prompt",
+        "Valid parameter values within specified ranges",
+        "Sufficient API credits in your Leonardo AI account"
+      ],
+      "bestPractices": [
+        "Generation is asynchronous - use Get Generation node to check status and retrieve images",
+        "Higher guidance scales produce images that follow the prompt more closely",
+        "More inference steps improve quality but increase generation time",
+        "Each model has optimal dimensions - defaults are set automatically",
+        "ControlNet requires additional setup and compatible init images",
+        "Prompt Magic can enhance prompt interpretation but uses more credits",
+        "Keep prompts clear and descriptive for best results",
+        "Use negative prompts to exclude unwanted elements",
+        "The generation may take 10-60 seconds depending on parameters",
+        "Check your API credit balance before generating multiple images"
+      ]
+    },
+    "create_model": {
+      "namespace": "Core.LeonardoAi.Create_model",
+      "name": "Create_model",
+      "summary": "Creates a new custom model by training on a dataset of images.",
+      "howItWorks": "The Create Model node starts training a custom model. When executed, the node: 1. Validates dataset ID, instance prompt, and name are not empty 2. Configures training parameters (model type, resolution, strength, etc.) 3. Submits the training job to Leonardo AI 4. Returns the custom model ID for future use",
+      "usage": [
+        "Valid Leonardo AI API key (via Connection ID or credentials)",
+        "Valid dataset ID with at least 5 training images",
+        "Instance prompt identifying the subject",
+        "Model name",
+        "Sufficient API credits for model training"
+      ],
+      "bestPractices": [
+        "Model training takes 30-90 minutes depending on dataset size and resolution",
+        "Requires 5-15 high-quality training images minimum",
+        "The instance prompt should use a unique token (e.g., \"TOK\") to identify the subject",
+        "Higher resolution (768) produces better quality but takes longer",
+        "Higher strength makes the model more closely follow the training data",
+        "Model type should match your dataset content for best results",
+        "Training consumes API credits - check your balance first",
+        "The model ID can be used immediately in Create Generation once training completes",
+        "Monitor training status using Get Model node",
+        "Custom models remain in your account until deleted",
+        "Use consistent, high-quality images in your dataset",
+        "The model learns the style, subject, or concept from your training images",
+        "Good training data produces better models",
+        "Consider starting with MEDIUM strength and adjusting based on results"
+      ]
+    },
+    "create_upscale": {
+      "namespace": "Core.LeonardoAi.Create_upscale",
+      "name": "Create_upscale",
+      "summary": "Creates an upscaled version of a generated image with enhanced resolution and detail.",
+      "howItWorks": "The Create Upscale node initiates an upscaling job. When executed, the node: 1. Validates the generation ID is not empty 2. Sends an upscale request to Leonardo AI API 3. Starts the upscaling process 4. Returns a variation ID for tracking and retrieval",
+      "usage": [
+        "Valid Leonardo AI API key (via Connection ID or credentials)",
+        "Valid generation ID from a completed generation",
+        "The generation must contain at least one image",
+        "Sufficient API credits for upscaling"
+      ],
+      "bestPractices": [
+        "Upscaling is asynchronous - use Get Variation to check status and retrieve results",
+        "The process typically takes 10-30 seconds",
+        "Upscaled images have significantly higher resolution",
+        "Upscaling consumes API credits",
+        "Can only upscale images from your own generations",
+        "The generation must be complete before upscaling",
+        "Enhanced detail and sharpness in the upscaled version",
+        "Use for final outputs, prints, or detailed work",
+        "The variation ID is different from the generation ID",
+        "Original generation remains unchanged",
+        "Upscaling works best with good quality initial generations",
+        "May not improve images that are already low quality or blurry",
+        "Consider upscaling only your final selected images to save credits",
+        "Multiple images in a generation will all be upscaled"
+      ]
+    },
+    "delete_dataset": {
+      "namespace": "Core.LeonardoAi.Delete_dataset",
+      "name": "Delete_dataset",
+      "summary": "Deletes a dataset and all its associated images from Leonardo AI.",
+      "howItWorks": "The Delete Dataset node permanently removes a dataset. When executed, the node: 1. Validates the dataset ID is not empty 2. Sends a delete request to Leonardo AI API 3. Removes the dataset and all associated images 4. Returns the ID of the deleted dataset",
+      "usage": [
+        "Valid Leonardo AI API key (via Connection ID or credentials)",
+        "Valid dataset ID",
+        "Permission to delete the dataset (must be the owner)"
+      ],
+      "bestPractices": [
+        "Deletion is permanent and cannot be undone",
+        "All images in the dataset are also deleted",
+        "Models created from the dataset are NOT deleted",
+        "The dataset ID becomes invalid after deletion",
+        "Use caution when deleting - ensure you have backups if needed",
+        "Useful for managing storage quota",
+        "Deleting the dataset doesn't affect models already trained from it",
+        "You can only delete datasets you own",
+        "Consider downloading dataset images before deletion if they might be needed",
+        "Failed deletions indicate the dataset may not exist or you lack permission",
+        "Regular cleanup helps keep your account organized"
+      ]
+    },
+    "delete_generation": {
+      "namespace": "Core.LeonardoAi.Delete_generation",
+      "name": "Delete_generation",
+      "summary": "Deletes a generation and its associated images from Leonardo AI.",
+      "howItWorks": "The Delete Generation node permanently removes a generation from your account. When executed, the node: 1. Validates the generation ID is not empty 2. Sends a delete request to the Leonardo AI API 3. Removes the generation and all associated images",
+      "usage": [
+        "Valid Leonardo AI API key (via Connection ID or credentials)",
+        "Valid generation ID",
+        "Permission to delete the generation (must be the owner)"
+      ],
+      "bestPractices": [
+        "Deletion is permanent and cannot be undone",
+        "All images associated with the generation are also deleted",
+        "The generation ID becomes invalid after deletion",
+        "Use caution when deleting - consider backing up important generations first",
+        "Useful for managing storage and keeping your account organized",
+        "Consider implementing confirmation logic before deletion",
+        "Failed deletions may indicate the generation was already deleted",
+        "You can only delete generations you own"
+      ]
+    },
+    "delete_image": {
+      "namespace": "Core.LeonardoAi.Delete_image",
+      "name": "Delete_image",
+      "summary": "Deletes an uploaded image from Leonardo AI storage.",
+      "howItWorks": "The Delete Image node permanently removes an uploaded image. When executed, the node: 1. Validates the image ID is not empty 2. Sends a delete request to Leonardo AI API 3. Removes the image from storage",
+      "usage": [
+        "Valid Leonardo AI API key (via Connection ID or credentials)",
+        "Valid image ID from an uploaded image",
+        "Permission to delete the image (must be the owner)"
+      ],
+      "bestPractices": [
+        "Deletion is permanent and cannot be undone",
+        "The image ID becomes invalid after deletion",
+        "Deleting an image doesn't affect generations already created with it",
+        "Useful for managing storage quota and keeping account organized",
+        "Consider keeping a backup if the image might be needed later",
+        "Failed deletions may indicate the image was already deleted",
+        "You can only delete images you own",
+        "Regular cleanup helps optimize storage usage",
+        "Delete images after they're no longer needed for new generations"
+      ],
+      "errorCodes": [
+        "Error"
+      ]
+    },
+    "delete_model": {
+      "namespace": "Core.LeonardoAi.Delete_model",
+      "name": "Delete_model",
+      "summary": "Deletes a custom model from Leonardo AI.",
+      "howItWorks": "The Delete Model node permanently removes a custom model. When executed, the node: 1. Validates the model ID is not empty 2. Sends a delete request to Leonardo AI API 3. Removes the custom model from your account 4. Returns the deleted model's ID",
+      "usage": [
+        "Valid Leonardo AI API key (via Connection ID or credentials)",
+        "Valid model ID from a custom model you own",
+        "Permission to delete the model (must be the owner)"
+      ],
+      "bestPractices": [
+        "Deletion is permanent and cannot be undone",
+        "The model ID becomes invalid after deletion",
+        "Generations created with the model are NOT affected",
+        "You can only delete models you own",
+        "Failed models should be deleted to keep your account clean",
+        "Consider keeping a record of model parameters before deletion",
+        "Deleting a model doesn't delete the dataset it was trained from",
+        "Useful for managing your model library",
+        "Regular cleanup helps stay organized",
+        "Delete test or experimental models after validation",
+        "Keep production models until replaced with better versions",
+        "The dataset used to train the model remains available",
+        "You can retrain a model from the same dataset if needed"
+      ]
+    },
+    "disconnect": {
+      "namespace": "Core.LeonardoAi.Disconnect",
+      "name": "Disconnect",
+      "summary": "Disconnects from the Leonardo AI API and cleans up the connection session.",
+      "howItWorks": "The Disconnect node terminates the connection to the Leonardo AI API. When executed, the node: 1. Receives the connection ID from the Connect node 2. Validates that the connection ID is not empty 3. Removes the API key session from memory 4. Cleans up the connection resources",
+      "usage": [
+        "Valid connection ID from a Connect node"
+      ],
+      "bestPractices": [
+        "Always use this node at the end of your Leonardo AI workflows to properly clean up resources",
+        "The connection ID must come from a Connect node earlier in the flow",
+        "After disconnection, the connection ID can no longer be used",
+        "It's good practice to disconnect even if errors occur during the flow execution"
+      ]
+    },
+    "get_dataset": {
+      "namespace": "Core.LeonardoAi.Get_dataset",
+      "name": "Get_dataset",
+      "summary": "Retrieves details of a dataset including its images and metadata.",
+      "howItWorks": "The Get Dataset node retrieves complete information about a dataset. When executed, the node: 1. Validates the dataset ID is not empty 2. Sends a request to Leonardo AI API to fetch dataset details 3. Returns the dataset object with all images and metadata",
+      "usage": [
+        "Valid Leonardo AI API key (via Connection ID or credentials)",
+        "Valid dataset ID from a Create Dataset node"
+      ],
+      "bestPractices": [
+        "Use this to verify dataset contents before training models",
+        "The dataset_images array contains all images uploaded to the dataset",
+        "Image URLs can be used to download or preview the training images",
+        "Useful for debugging dataset issues",
+        "Check image count to ensure sufficient training data (5-15 images recommended)",
+        "Timestamps help track when the dataset was created and modified",
+        "The response structure is an array with one dataset object",
+        "Access dataset properties via `$.response[0]`",
+        "Can be used to build dataset management dashboards",
+        "Helpful for auditing and organizing your datasets"
+      ]
+    },
+    "get_generation": {
+      "namespace": "Core.LeonardoAi.Get_generation",
+      "name": "Get_generation",
+      "summary": "Retrieves the details and status of a generation job, including the generated images when complete.",
+      "howItWorks": "The Get Generation node retrieves information about a generation job. When executed, the node: 1. Validates the generation ID is not empty 2. Sends a request to the Leonardo AI API to retrieve generation details 3. Returns the complete generation object with status and images",
+      "usage": [
+        "Valid Leonardo AI API key (via Connection ID or credentials)",
+        "Valid generation ID from a Create Generation node"
+      ],
+      "bestPractices": [
+        "Generations are asynchronous - they may take 10-60 seconds to complete",
+        "Poll this node periodically to check status (recommended: every 5-10 seconds)",
+        "The status field indicates: PENDING (processing), COMPLETE (done), or FAILED (error)",
+        "Generated image URLs are temporary - download them promptly if needed",
+        "The generation object contains all parameters used for the generation",
+        "Use a loop or retry mechanism to wait for completion",
+        "Failed generations will include error details in the output",
+        "Image URLs in the response can be used directly or downloaded for storage"
+      ]
+    },
+    "get_image": {
+      "namespace": "Core.LeonardoAi.Get_image",
+      "name": "Get_image",
+      "summary": "Retrieves details and metadata of an uploaded image by its ID.",
+      "howItWorks": "The Get Image node retrieves information about an uploaded image. When executed, the node: 1. Validates the image ID is not empty 2. Sends a request to Leonardo AI API to fetch image details 3. Returns the complete image object with metadata",
+      "usage": [
+        "Valid Leonardo AI API key (via Connection ID or credentials)",
+        "Valid image ID from an Upload Image node"
+      ],
+      "bestPractices": [
+        "Use this node to verify successful uploads",
+        "The image object includes the URL where the image can be accessed",
+        "Image IDs remain valid until the image is deleted",
+        "Useful for debugging upload issues",
+        "Can be used to retrieve image URLs for downloading",
+        "Metadata includes upload timestamp and file information",
+        "The image URL can be used outside of Leonardo AI workflows",
+        "Consider caching image details if you need to reference them multiple times"
+      ]
+    },
+    "get_model": {
+      "namespace": "Core.LeonardoAi.Get_model",
+      "name": "Get_model",
+      "summary": "Retrieves details and status of a custom model by its ID.",
+      "howItWorks": "The Get Model node retrieves information about a custom model. When executed, the node: 1. Validates the model ID is not empty 2. Sends a request to Leonardo AI API to fetch model details 3. Returns the complete model object with status and configuration",
+      "usage": [
+        "Valid Leonardo AI API key (via Connection ID or credentials)",
+        "Valid model ID from a Create Model node"
+      ],
+      "bestPractices": [
+        "Model training is asynchronous - use this node to check status",
+        "Poll this node every 5-10 minutes to monitor training progress",
+        "Status values: TRAINING (in progress), COMPLETE (ready), FAILED (error)",
+        "The response is an array - access model via `$.response[0]`",
+        "Model dimensions indicate optimal size for generation",
+        "Instance prompt shows the token used during training",
+        "Use the model ID in Create Generation once status is COMPLETE",
+        "The public field indicates if the model is shared publicly",
+        "Created and updated timestamps help track model age",
+        "Useful for debugging training issues",
+        "Failed models may include error information",
+        "Check this before attempting to use a model for generation"
+      ]
+    },
+    "get_user_details": {
+      "namespace": "Core.LeonardoAi.Get_user_details",
+      "name": "Get_user_details",
+      "summary": "Retrieves details of the authenticated Leonardo AI user account.",
+      "howItWorks": "The Get User Details node retrieves the current user's account information. When executed, the node: 1. Sends a request to Leonardo AI API using the authenticated connection 2. Fetches complete user account details 3. Returns the user details object",
+      "usage": [
+        "Valid Leonardo AI API key (via Connection ID or credentials)",
+        "Active Leonardo AI account"
+      ],
+      "bestPractices": [
+        "This node requires minimal inputs - just authentication",
+        "Returns comprehensive account information",
+        "User ID is needed for listing generations",
+        "Check credit balance before starting batch operations",
+        "Subscription tier affects available features and limits",
+        "Email and username help verify correct account",
+        "Useful for workflow initialization and validation",
+        "Can be called multiple times without side effects",
+        "Account details update in real-time",
+        "Consider caching user details if needed frequently",
+        "The user details object structure may include additional fields",
+        "Different subscription tiers have different limits",
+        "Free tier has lower API credit allocation",
+        "Pro/Enterprise tiers have higher limits and more features"
+      ],
+      "errorCodes": [
+        "Error"
+      ]
+    },
+    "get_variation": {
+      "namespace": "Core.LeonardoAi.Get_variation",
+      "name": "Get_variation",
+      "summary": "Retrieves details and status of a variation job, including the upscaled image when complete.",
+      "howItWorks": "The Get Variation node retrieves information about a variation job. When executed, the node: 1. Validates the variation ID is not empty 2. Sends a request to Leonardo AI API to fetch variation details 3. Returns the complete variation object with status and image URL",
+      "usage": [
+        "Valid Leonardo AI API key (via Connection ID or credentials)",
+        "Valid variation ID from a Create Upscale node"
+      ],
+      "bestPractices": [
+        "Upscaling is asynchronous - poll this node to check status",
+        "Recommended polling interval: every 5-10 seconds",
+        "Status values: PENDING (processing), COMPLETE (ready), FAILED (error)",
+        "Image URL is available only when status is COMPLETE",
+        "The URL points to the high-resolution upscaled image",
+        "Download the image promptly as URLs may be temporary",
+        "Failed variations may include error details",
+        "Typical upscaling time: 10-30 seconds",
+        "Use in a loop to wait for completion",
+        "The variation object contains the upscaled image metadata",
+        "Original generation remains available separately",
+        "Multiple calls with same variation ID return same result",
+        "Useful for retrieving high-quality final outputs"
+      ]
+    },
+    "list_generations": {
+      "namespace": "Core.LeonardoAi.List_generations",
+      "name": "List_generations",
+      "summary": "Retrieves a list of all generations for a specific user with pagination support.",
+      "howItWorks": "The List Generations node retrieves a paginated list of generations for a user. When executed, the node: 1. Validates the user ID is not empty 2. Builds the API request URL with optional pagination parameters 3. Sends the request to Leonardo AI API 4. Returns an array of generation objects",
+      "usage": [
+        "Valid Leonardo AI API key (via Connection ID or credentials)",
+        "Valid user ID (typically from Get User Details node)"
+      ],
+      "bestPractices": [
+        "Use pagination (offset and limit) to handle large numbers of generations",
+        "Default limit is 10 - increase for better performance when retrieving many items",
+        "The user ID is typically obtained from the Get User Details node",
+        "Results are ordered by creation time (newest first)",
+        "Each generation object includes its current status",
+        "Combine with filtering to find specific generations by prompt, model, or date",
+        "Useful for auditing generation history or building generation dashboards",
+        "Consider caching results if you need to reference them multiple times"
+      ]
+    },
+    "upload_dataset_gen_image": {
+      "namespace": "Core.LeonardoAi.Upload_dataset_gen_image",
+      "name": "Upload_dataset_gen_image",
+      "summary": "Uploads a previously generated image from Leonardo AI to a dataset for training custom models.",
+      "howItWorks": "The Upload Dataset Generated Image node adds a previously generated image to a dataset. When executed, the node: 1. Validates the dataset ID and generated image ID are not empty 2. Sends a request to add the generated image to the dataset 3. Returns the image ID in the dataset 4. The image becomes part of the dataset for model training",
+      "usage": [
+        "Valid Leonardo AI API key (via Connection ID or credentials)",
+        "Valid dataset ID from a Create Dataset node",
+        "Valid generated image ID from a previous Create Generation",
+        "Permission to access the generated image (must be the owner)"
+      ],
+      "bestPractices": [
+        "Only images you generated can be added to your datasets",
+        "Generated image IDs come from the Create Generation output",
+        "Extract image IDs from the generation object's generated_images array",
+        "Useful for creating synthetic training datasets",
+        "Can combine with real images uploaded via Upload Dataset Image",
+        "Helps expand datasets without collecting more real images",
+        "The generated image must still exist (not deleted)",
+        "Good for creating variations of existing concepts",
+        "Can iteratively improve datasets by generating and adding better examples",
+        "Synthetic datasets can produce creative and consistent models",
+        "Consider the quality of generated images - only add good examples",
+        "The dataset can mix real and generated images",
+        "Generated images remain in their original generation as well"
+      ]
+    },
+    "upload_dataset_image": {
+      "namespace": "Core.LeonardoAi.Upload_dataset_image",
+      "name": "Upload_dataset_image",
+      "summary": "Uploads an image from your local file system to a dataset for training custom models.",
+      "howItWorks": "The Upload Dataset Image node adds an image to a dataset. When executed, the node: 1. Validates the dataset ID and image path are not empty 2. Requests upload credentials from Leonardo AI API 3. Uploads the image file to the dataset 4. The image becomes part of the dataset for model training",
+      "usage": [
+        "Valid Leonardo AI API key (via Connection ID or credentials)",
+        "Valid dataset ID from a Create Dataset node",
+        "Valid local file path to an image",
+        "Image file must exist and be readable",
+        "Supported image format (png, jpg, jpeg, webp)"
+      ],
+      "bestPractices": [
+        "Upload 5-15 images for best model training results",
+        "Images should be high quality and clearly show the subject",
+        "Consistent subject across images improves model quality",
+        "The dataset ID must be from a dataset you own",
+        "Image type should match your actual file format",
+        "Larger images may take longer to upload",
+        "No output means you should use Get Dataset to verify uploads",
+        "Use varied angles and lighting for better model versatility",
+        "Avoid blurry or low-quality images",
+        "Images should focus on the subject you want to train",
+        "Consider image resolution - higher quality generally produces better models",
+        "Upload images in batches using loops for efficiency",
+        "The image becomes permanently associated with the dataset"
+      ]
+    },
+    "upload_image": {
+      "namespace": "Core.LeonardoAi.Upload_image",
+      "name": "Upload_image",
+      "summary": "Uploads an image from your local file system to Leonardo AI for use as an init image in image-to-image generation.",
+      "howItWorks": "The Upload Image node uploads a local image file to Leonardo AI. When executed, the node: 1. Validates the image path is not empty 2. Checks that the file exists at the specified path 3. Requests upload credentials from Leonardo AI API 4. Uploads the image file to the provided URL 5. Returns the image ID for use in generation",
+      "usage": [
+        "Valid Leonardo AI API key (via Connection ID or credentials)",
+        "Valid local file path to an image",
+        "Image file must exist and be readable",
+        "Supported image format (png, jpg, jpeg, webp)"
+      ],
+      "bestPractices": [
+        "The image path must be an absolute path to a file on your local system",
+        "Uploaded images are stored temporarily in Leonardo AI for use in generations",
+        "The returned image ID can be used multiple times in different generations",
+        "Ensure the image type matches your actual file format",
+        "Large images may take longer to upload",
+        "Uploaded images count against your storage quota",
+        "Use Get Image to retrieve upload details",
+        "Use Delete Image to remove uploaded images and free up storage",
+        "The image must be accessible by the robot executing the flow",
+        "Common use cases: image-to-image generation, style transfer, image enhancement"
+      ]
+    }
+  }
+}

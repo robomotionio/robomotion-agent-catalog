@@ -1,0 +1,495 @@
+{
+  "package": "Web3",
+  "summary": "The Web3 package enables blockchain automation and interaction with Ethereum-compatible networks. This package provides comprehensive tools for managing wallets, executing smart contracts, monitoring transactions, and automating blockchain operations.",
+  "description": "## Key Features - **Wallet Management** - Generate, import, export, and manage cryptocurrency wallets",
+  "nodes": {
+    "abi-method": {
+      "namespace": "Core.Web3.AbiMethod",
+      "name": "AbiMethod",
+      "summary": "Encodes a smart contract method call with its arguments, preparing transaction data for execution via Call or Send Transaction nodes.",
+      "howItWorks": "The ABI Method node encodes a smart contract function call into transaction data. When executed, the node: 1. Validates the ABI ID and retrieves the parsed ABI 2. Finds the specified method in the ABI definition 3. Validates and encodes the provided arguments according to the method signature 4. Creates a transaction data payload 5. Returns a Transaction ID for use with execution nodes",
+      "usage": [
+        "A valid ABI ID from the Parse ABI node",
+        "The exact method name as defined in the contract",
+        "Arguments matching the method's parameter types and order",
+        "Properly formatted argument values"
+      ],
+      "bestPractices": [
+        "Method names are case-sensitive and must match exactly",
+        "Arguments must be provided in the exact order defined in the ABI",
+        "For methods with no parameters, pass an empty array `[]`",
+        "The Transaction ID is temporary and only valid during flow execution",
+        "Use Call node for read-only methods (view/pure functions)",
+        "Use Send Transaction node for state-changing methods"
+      ],
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "**Output:**\r\n* Transaction ID: `tx-9f8e7d6c-5b4a-3c2b-1a0e-f9d8c7b6a5e4`\r\n\r\n**Encoding a balanceOf query (no state change):**\r\n\r\n**Inputs:**\r\n* ABI: `a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6`\r\n* ABI Method: `balanceOf`\r\n* Args:"
+        },
+        {
+          "title": "Example 2",
+          "code": "**Encoding approve with unlimited allowance:**\r\n\r\n**Inputs:**\r\n* ABI: `a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6`\r\n* ABI Method: `approve`\r\n* Args:"
+        }
+      ]
+    },
+    "balance": {
+      "namespace": "Core.Web3.Balance",
+      "name": "Balance",
+      "summary": "Retrieves the native cryptocurrency balance of a wallet address on the blockchain network.",
+      "howItWorks": "The Balance node queries the blockchain for a wallet's native currency balance. When executed, the node: 1. Validates the Client ID and wallet address 2. Queries the blockchain for the address's balance in WEI 3. Converts the balance from WEI to ETH (or native currency) 4. Formats the result with the specified precision 5. Returns the balance as a string",
+      "usage": [
+        "A valid Client ID from the Create Client node",
+        "A valid wallet address (42 characters starting with \"0x\")",
+        "Active network connection"
+      ],
+      "bestPractices": [
+        "This node retrieves the native currency balance (ETH on Ethereum, MATIC on Polygon, BNB on BSC)",
+        "For ERC20 token balances, use the ABI Method node with the token's balanceOf function",
+        "The balance is returned in the native currency unit (ETH), not in WEI",
+        "Higher precision values show more decimal places but may include rounding errors",
+        "The balance reflects the confirmed state on the blockchain"
+      ]
+    },
+    "call": {
+      "namespace": "Core.Web3.Call",
+      "name": "Call",
+      "summary": "Executes a read-only smart contract method call without creating a blockchain transaction. Used for querying contract state without gas costs.",
+      "howItWorks": "The Call node executes a read-only contract method without sending a transaction. When executed, the node: 1. Validates all required inputs 2. Retrieves the encoded transaction data using the Transaction ID 3. Constructs a call message with the from address, to address, and data 4. Executes the call against the latest blockchain state 5. Returns the raw response data 6. Deletes the temporary transaction data",
+      "usage": [
+        "A valid Client ID from the Create Client node",
+        "A Transaction ID from the ABI Method node",
+        "Valid wallet and contract addresses",
+        "The contract must exist on the blockchain"
+      ],
+      "bestPractices": [
+        "This node is for read-only operations (view/pure functions)",
+        "No gas fees are charged for calls",
+        "Calls are executed against the current blockchain state",
+        "The response is raw hex data that may need decoding",
+        "Use the Decode node to parse complex return values",
+        "Calls do not modify blockchain state",
+        "Multiple calls can be made without waiting for confirmations"
+      ]
+    },
+    "cancel-transaction": {
+      "namespace": "Core.Web3.CancelTransaction",
+      "name": "CancelTransaction",
+      "summary": "Cancels a pending blockchain transaction by sending a replacement transaction with zero value and higher gas price.",
+      "howItWorks": "The Cancel Transaction node creates a replacement transaction to cancel a pending one. When executed, the node: 1. Retrieves the original transaction using its hash 2. Creates a new transaction with: - Same nonce as the original - Same destination (to address) - Zero value (no ETH transferred) - Higher gas price (to prioritize over original) 3. Signs the cancellation transaction 4. Broadcasts it to the network 5. Returns the new transaction hash",
+      "usage": [
+        "The original transaction must still be pending (not yet confirmed)",
+        "Gas price must be significantly higher than the original (typically 10-20% higher)",
+        "Sufficient balance to pay for gas fees",
+        "Same wallet that sent the original transaction"
+      ],
+      "bestPractices": [
+        "Only works for pending transactions (not yet mined)",
+        "Gas price must be meaningfully higher (10-30% recommended)",
+        "Once a transaction is confirmed, it cannot be cancelled",
+        "The cancellation itself costs gas fees",
+        "Both transactions cannot confirm (only one per nonce)",
+        "Cancellation is not guaranteed if original confirms first"
+      ],
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "originalGasPrice = 50 GWEI\r\nnewGasPrice = 65 GWEI (30% higher)\r\nnewGasPriceHex = \"0x00000000000000000000000000000000000000000000000000000f2b9ec5200\""
+        }
+      ]
+    },
+    "create-client": {
+      "namespace": "Core.Web3.CreateClient",
+      "name": "CreateClient",
+      "summary": "Establishes a connection to a blockchain network via an RPC endpoint and initializes a Web3 client with wallet credentials.",
+      "howItWorks": "The Create Client node establishes a blockchain connection and prepares your wallet for transactions. When executed, the node: 1. Validates the RPC URL and Chain ID 2. Retrieves and decrypts the encrypted private key using the AES key 3. Creates a Web3 client connection to the specified RPC endpoint 4. Initializes the wallet for signing transactions 5. Returns a Client ID for use with other Web3 nodes",
+      "usage": [
+        "A valid RPC endpoint URL (from providers like Infura, Alchemy, QuickNode, or your own node)",
+        "The correct Chain ID for your target network",
+        "An encrypted wallet private key stored in credentials",
+        "The corresponding AES key for decryption"
+      ]
+    },
+    "decode": {
+      "namespace": "Core.Web3.Decode",
+      "name": "Decode",
+      "summary": "Decodes transaction input or output data using a smart contract ABI, converting raw hexadecimal data into readable structured format.",
+      "howItWorks": "The Decode node converts encoded blockchain data to readable format. When executed, the node: 1. Validates the ABI ID and retrieves the parsed ABI 2. Finds the specified method in the ABI 3. Removes the function signature hash from the data (for input) 4. Decodes the remaining data according to the method's inputs or outputs 5. Returns a structured object with decoded values",
+      "usage": [
+        "A valid ABI ID from the Parse ABI node",
+        "The correct method name matching the encoded data",
+        "Valid hexadecimal data (with or without \"0x\" prefix)",
+        "The ABI must contain the specified method"
+      ],
+      "bestPractices": [
+        "The \"0x\" prefix is automatically handled and can be included or omitted",
+        "For input decoding, the function selector (first 4 bytes) is automatically removed",
+        "Output decoding expects just the return value data",
+        "Multiple return values are decoded into an array or object",
+        "Complex types (structs, arrays) are properly parsed"
+      ],
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "{\r\n  \"recipient\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\r\n  \"amount\": \"100000000\"\r\n}"
+        },
+        {
+          "title": "Example 2",
+          "code": "{\r\n  \"balance\": \"100000000\"\r\n}"
+        }
+      ]
+    },
+    "estimate-gas": {
+      "namespace": "Core.Web3.EstimateGas",
+      "name": "EstimateGas",
+      "summary": "Calculates the estimated gas units required for a transaction to execute successfully on the blockchain.",
+      "howItWorks": "The Estimate Gas node simulates transaction execution to determine gas requirements. When executed, the node: 1. Validates all inputs and retrieves transaction data 2. Constructs a call message with all transaction parameters 3. Simulates the transaction execution on the current blockchain state 4. Calculates the gas units that would be consumed 5. Returns the estimated gas limit",
+      "usage": [
+        "Valid Client ID and transaction data",
+        "Sufficient balance in the wallet for the transaction",
+        "Valid contract address (if calling a contract)",
+        "Correct transaction parameters"
+      ],
+      "bestPractices": [
+        "Always estimate before sending transactions",
+        "The estimate assumes current blockchain state",
+        "State changes between estimate and execution can affect actual usage",
+        "The estimate doesn't include the 21,000 gas base transaction fee for value transfers",
+        "Failed simulations indicate the transaction would fail",
+        "Use the output directly or with a safety buffer"
+      ],
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "estimatedGas = 65000\r\ngasLimit = Math.ceil(estimatedGas * 1.2) // 78000"
+        }
+      ]
+    },
+    "estimate-gas-price": {
+      "namespace": "Core.Web3.EstimateGasPrice",
+      "name": "EstimateGasPrice",
+      "summary": "Retrieves the current recommended gas price from the blockchain network in hexadecimal WEI format.",
+      "howItWorks": "The Estimate Gas Price node queries the blockchain network for current gas prices. When executed, the node: 1. Validates the Client ID 2. Queries the network for the current recommended gas price 3. Converts the price to hexadecimal format 4. Pads with zeros to create a 64-character hex string 5. Returns the gas price with \"0x\" prefix",
+      "usage": [
+        "A valid Client ID from the Create Client node",
+        "Active network connection",
+        "Functioning RPC endpoint"
+      ],
+      "bestPractices": [
+        "Always call this node before sending transactions",
+        "Gas prices fluctuate based on network congestion",
+        "The returned price is a recommendation, not a requirement",
+        "You can adjust the price up or down based on urgency",
+        "Higher prices don't guarantee immediate confirmation",
+        "Very low prices may result in stuck transactions"
+      ]
+    },
+    "export": {
+      "namespace": "Core.Web3.Export",
+      "name": "Export",
+      "summary": "Exports a wallet from Robomotion to a standard Ethereum keystore file for use with other wallet applications.",
+      "howItWorks": "The Export Wallet node creates a standard Ethereum keystore file. When executed, the node: 1. Retrieves the encrypted private key and AES key from credentials 2. Decrypts the private key using the AES key 3. Retrieves the export password from credentials 4. Derives the wallet address from the private key 5. Encrypts the private key using the password and standard keystore format 6. Writes the keystore JSON file to the specified path",
+      "usage": [
+        "An encrypted private key in the credential vault",
+        "The corresponding AES key for decryption",
+        "A password for the new keystore file",
+        "Write permissions for the target directory",
+        "Sufficient disk space for the keystore file"
+      ],
+      "bestPractices": [
+        "Creates a standard Ethereum keystore file (version 3)",
+        "Compatible with MetaMask, MEW, Geth, and other Ethereum wallets",
+        "The keystore file includes the wallet address in the filename",
+        "Uses standard scrypt parameters for encryption",
+        "File is written with 0777 permissions (should be restricted after creation)",
+        "The private key in Robomotion remains unchanged"
+      ]
+    },
+    "from-wei": {
+      "namespace": "Core.Web3.FromWei",
+      "name": "FromWei",
+      "summary": "Converts cryptocurrency amounts from WEI or GWEI (hexadecimal format) to human-readable decimal format (ETH).",
+      "howItWorks": "The From WEI node converts blockchain amounts to readable format. When executed, the node: 1. Validates the hex format (must start with \"0x\") 2. Converts hex to a big integer 3. Divides by the appropriate factor (10^18 for WEI, 10^9 for GWEI) 4. Formats to the specified precision 5. Returns as a decimal string",
+      "usage": [
+        "Amount in hexadecimal format starting with \"0x\"",
+        "Valid hex digits after the prefix"
+      ],
+      "bestPractices": [
+        "Use this node to display amounts to users in friendly format",
+        "The Balance node already returns amounts in ETH format",
+        "Useful for converting raw transaction values from blockchain queries",
+        "Higher precision shows more decimal places",
+        "Minimum precision is 1 (always show at least one decimal)"
+      ]
+    },
+    "generate-wallet": {
+      "namespace": "Core.Web3.GenerateWallet",
+      "name": "GenerateWallet",
+      "summary": "Generates a new cryptocurrency wallet with a random private key and returns the wallet address along with the encrypted private key.",
+      "howItWorks": "The Generate Wallet node creates a new Ethereum-compatible wallet. When executed, the node: 1. Retrieves the AES key from the credential vault 2. Generates a random cryptographically secure private key 3. Derives the public key and wallet address from the private key 4. Encrypts the private key using AES encryption 5. Returns both the wallet address and encrypted private key",
+      "usage": [
+        "An AES key stored in Robomotion's credential vault",
+        "Sufficient system entropy for secure random number generation"
+      ],
+      "bestPractices": [
+        "Each execution generates a completely new wallet",
+        "The wallet is compatible with all Ethereum-based chains",
+        "The same wallet address will work on Ethereum, Polygon, BSC, etc.",
+        "Newly generated wallets start with zero balance",
+        "You need to fund the wallet before it can send transactions",
+        "Store both outputs for future use"
+      ]
+    },
+    "get-transaction": {
+      "namespace": "Core.Web3.GetTransaction",
+      "name": "GetTransaction",
+      "summary": "Retrieves detailed information about a blockchain transaction using its transaction hash.",
+      "howItWorks": "The Get Transaction node queries the blockchain for transaction information. When executed, the node: 1. Validates the Client ID and transaction hash format 2. Queries the blockchain using the transaction hash 3. Retrieves the full transaction object 4. Returns all transaction details",
+      "usage": [
+        "A valid Client ID from the Create Client node",
+        "A valid transaction hash (66 characters starting with \"0x\")",
+        "The transaction must exist on the blockchain"
+      ],
+      "bestPractices": [
+        "This node retrieves transaction details, not the receipt",
+        "Use Transaction Receipt node to get execution results",
+        "Pending transactions may not have blockHash or blockNumber",
+        "The input field contains encoded function calls for contract interactions",
+        "Value is in WEI and may need conversion for display"
+      ],
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "{\r\n  \"hash\": \"0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\",\r\n  \"nonce\": 42,\r\n  \"blockHash\": \"0xabcd...\",\r\n  \"blockNumber\": 15123456,\r\n  \"from\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\r\n  \"to\": \"0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48\",\r\n  \"value\": \"0\",\r\n  \"gas\": 65000,\r\n  \"gasPrice\": \"50000000000\",\r\n  \"input\": \"0xa9059cbb...\"\r\n}"
+        }
+      ]
+    },
+    "get-wallet-address": {
+      "namespace": "Core.Web3.GetWalletAddress",
+      "name": "GetWalletAddress",
+      "summary": "Derives a wallet address from an encrypted private key without creating a blockchain connection.",
+      "howItWorks": "The Get Wallet Address node derives a wallet address from a private key. When executed, the node: 1. Retrieves the encrypted private key and AES key from credentials 2. Decrypts the private key using the AES key 3. Derives the public key from the private key 4. Computes the wallet address from the public key 5. Returns the wallet address",
+      "usage": [
+        "An encrypted private key stored in the credential vault",
+        "The corresponding AES key for decryption",
+        "Both credentials must be properly formatted"
+      ],
+      "bestPractices": [
+        "This operation is performed locally and doesn't require network access",
+        "The same private key always produces the same address",
+        "The address is compatible with all Ethereum-based chains",
+        "No blockchain connection is needed",
+        "This is faster than creating a full client connection",
+        "Use this when you only need the address, not transaction capabilities"
+      ]
+    },
+    "import": {
+      "namespace": "Core.Web3.Import",
+      "name": "Import",
+      "summary": "Imports a wallet from a keystore file and encrypts the private key for use in Robomotion automations.",
+      "howItWorks": "The Import Wallet node extracts a private key from a keystore file and re-encrypts it. When executed, the node: 1. Reads the keystore file from the specified path 2. Retrieves the keystore password from credentials 3. Decrypts the keystore using the password 4. Extracts the private key from the keystore 5. Re-encrypts the private key with your AES key 6. Returns the encrypted private key in hexadecimal format",
+      "usage": [
+        "A valid keystore file (JSON format)",
+        "The correct password for the keystore",
+        "An AES key for re-encryption",
+        "File read permissions for the keystore path"
+      ],
+      "bestPractices": [
+        "The keystore file remains unchanged by this operation",
+        "The output is encrypted with your AES key, not the keystore password",
+        "Supports standard Ethereum keystore format (version 3)",
+        "Compatible with keystores from MetaMask, Geth, MyEtherWallet, etc.",
+        "The private key is never exposed in plain text",
+        "Import is a one-time operation per wallet"
+      ]
+    },
+    "increase-gas": {
+      "namespace": "Core.Web3.IncreaseGas",
+      "name": "IncreaseGas",
+      "summary": "Speeds up a pending blockchain transaction by sending a replacement with the same data but higher gas price.",
+      "howItWorks": "The Increase Gas node creates a replacement transaction to speed up confirmation. When executed, the node: 1. Retrieves the original pending transaction 2. Creates a new transaction with: - Same nonce (replaces original) - Same destination address - Same value (amount being sent) - Same input data (same operation) - Higher gas price (to prioritize) 3. Signs the replacement transaction 4. Broadcasts it to the network 5. Returns the new transaction hash",
+      "usage": [
+        "The original transaction must still be pending (not confirmed)",
+        "Gas price must be higher than the original (typically 10-30% higher)",
+        "Sufficient wallet balance to cover gas fees",
+        "Same wallet that sent the original transaction"
+      ],
+      "bestPractices": [
+        "Only works for pending transactions (not yet mined)",
+        "New gas price should be meaningfully higher (10-30% recommended)",
+        "Both transactions have the same effect if confirmed",
+        "Only one will confirm (miners choose the higher paying one)",
+        "The replacement costs gas based on new gas price",
+        "Original transaction becomes invalid after replacement confirms"
+      ],
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "originalGasPrice = 50 GWEI\r\nincreasedGasPrice = 65 GWEI // 30% increase\r\ngasPriceHex = toWEI(65) // Convert to hex"
+        }
+      ]
+    },
+    "parse-abi": {
+      "namespace": "Core.Web3.ParseAbi",
+      "name": "ParseAbi",
+      "summary": "Parses a smart contract ABI (Application Binary Interface) file and creates a reference that can be used with other Web3 nodes for contract interaction.",
+      "howItWorks": "The Parse ABI node loads and validates a smart contract ABI definition. When executed, the node: 1. Reads the ABI JSON file from the specified path 2. Parses and validates the ABI structure 3. Stores the ABI in memory with a unique identifier 4. Returns the ABI ID for use with other nodes",
+      "usage": [
+        "A valid ABI JSON file saved locally or accessible by the automation",
+        "The file must contain a properly formatted smart contract ABI"
+      ],
+      "bestPractices": [
+        "The ABI must be parsed before calling contract methods or subscribing to events",
+        "One Parse ABI node can be used for multiple contract interactions",
+        "The ABI ID remains valid throughout the flow execution",
+        "Large ABIs with many functions are supported",
+        "Standard token ABIs (ERC20, ERC721, ERC1155) work out of the box"
+      ]
+    },
+    "pending-transactions": {
+      "namespace": "Core.Web3.PendingTransactions",
+      "name": "PendingTransactions",
+      "summary": "Subscribes to pending transactions in the blockchain mempool, with optional filtering by contract methods and addresses.",
+      "howItWorks": "The Pending Transactions node monitors the mempool for pending transactions. When executed, the node: 1. Connects to the blockchain via WebSocket 2. Subscribes to pending transaction hashes 3. For each pending transaction hash: - Retrieves transaction details - Applies filters (method, address) - If match, emits on output 2 4. Continues monitoring until stopped (unless \"Once\" is enabled)",
+      "usage": [
+        "WebSocket RPC endpoint (wss://)",
+        "Valid Client ID",
+        "Optional: HTTP provider for better reliability",
+        "Optional: Parsed ABI for method filtering"
+      ],
+      "bestPractices": [
+        "Requires WebSocket connection",
+        "Very high data volume without filters",
+        "Pending transactions may never confirm",
+        "Use filters to reduce noise",
+        "HTTP provider improves transaction lookup reliability",
+        "Memory intensive for high-volume monitoring"
+      ],
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "{\r\n  \"id\": \"unique-id\",\r\n  \"trx\": {\r\n    \"hash\": \"0x...\",\r\n    \"nonce\": 123,\r\n    \"from\": \"0x...\",\r\n    \"to\": \"0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D\",\r\n    \"value\": \"0\",\r\n    \"gas\": 200000,\r\n    \"gasPrice\": \"50000000000\",\r\n    \"input\": \"0x38ed1739...\"  // Encoded swap method\r\n  }\r\n}"
+        }
+      ]
+    },
+    "send-transaction": {
+      "namespace": "Core.Web3.SendTransaction",
+      "name": "SendTransaction",
+      "summary": "Signs and broadcasts a transaction to the blockchain network, executing state-changing operations like transfers or contract method calls.",
+      "howItWorks": "The Send Transaction node executes a blockchain transaction. When executed, the node: 1. Validates all inputs and retrieves the transaction data 2. Gets the wallet's current nonce if not provided 3. Constructs a transaction with all parameters 4. Signs the transaction with the wallet's private key 5. Broadcasts the signed transaction to the network 6. Returns the transaction hash 7. Cleans up temporary transaction data",
+      "usage": [
+        "Valid Client ID with sufficient balance for gas fees",
+        "Transaction ID from ABI Method or Transfer",
+        "Proper gas price and limit values",
+        "Network connectivity",
+        "Sufficient wallet balance (native currency + gas fees)"
+      ],
+      "bestPractices": [
+        "This node sends actual transactions that cost gas",
+        "Transactions are irreversible once confirmed",
+        "Use Estimate Gas and Estimate Gas Price before sending",
+        "Wait for Transaction Receipt to confirm success",
+        "Store transaction hashes for tracking and audit",
+        "Multiple transactions from the same wallet need sequential nonces"
+      ]
+    },
+    "subscribe": {
+      "namespace": "Core.Web3.Subscribe",
+      "name": "Subscribe",
+      "summary": "Subscribes to smart contract events in real-time, monitoring the blockchain for specific events and triggering automation when they occur.",
+      "howItWorks": "The Subscribe node monitors blockchain events in real-time. When executed, the node: 1. Connects to the blockchain via WebSocket 2. Sets up filters based on event signature and parameters 3. Subscribes to the contract's event logs 4. Waits for matching events 5. When an event occurs, processes it and emits on output 2 6. Continues monitoring until flow stops (unless \"Once\" is enabled)",
+      "usage": [
+        "A WebSocket RPC endpoint (wss://)",
+        "Valid Client ID and contract address",
+        "Parsed ABI with the event definition",
+        "Correct event name matching the ABI"
+      ],
+      "bestPractices": [
+        "Requires WebSocket connection (not HTTP)",
+        "Subscription persists until flow stops",
+        "Events are emitted on output 2",
+        "Use \"Once\" option for single-event triggers",
+        "Multiple subscriptions can run simultaneously",
+        "Events are delivered in near real-time (seconds delay)",
+        "Only indexed parameters can be filtered"
+      ],
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "{\r\n  \"id\": \"...\",\r\n  \"log\": {\r\n    \"address\": \"0xA0b869...\",\r\n    \"topics\": [\r\n      \"0xddf252ad...\",  // Transfer event signature\r\n      \"0x000...742d\",   // from address (indexed)\r\n      \"0x000...1234\"    // to address (indexed)\r\n    ],\r\n    \"data\": \"0x...05f5e100\",  // amount (non-indexed)\r\n    \"blockNumber\": 15123456,\r\n    \"transactionHash\": \"0x...\",\r\n    \"transactionIndex\": 45,\r\n    \"blockHash\": \"0x...\",\r\n    \"logIndex\": 67\r\n  }\r\n}"
+        },
+        {
+          "title": "Example 2",
+          "code": "[\r\n    null,  // Any from address\r\n    \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\"  // Specific to address\r\n  ]"
+        }
+      ]
+    },
+    "to-wei": {
+      "namespace": "Core.Web3.ToWei",
+      "name": "ToWei",
+      "summary": "Converts cryptocurrency amounts from decimal format (ETH) to WEI or GWEI in hexadecimal format for use in blockchain transactions.",
+      "howItWorks": "The To WEI node converts human-readable amounts to blockchain-compatible format. When executed, the node: 1. Parses the input amount (string or number) 2. Converts to a big float for precision 3. Multiplies by the appropriate factor (10^18 for WEI, 10^9 for GWEI) 4. Converts to a big integer 5. Formats as hexadecimal with \"0x\" prefix 6. Returns the hex-encoded value",
+      "usage": [
+        "A valid numeric amount (string or number)",
+        "Amount must be parseable as a decimal number"
+      ],
+      "bestPractices": [
+        "Always use this node before sending amounts in transactions",
+        "The output is in hexadecimal format required by blockchain operations",
+        "WEI is used for transaction values",
+        "GWEI is commonly used for gas prices",
+        "The conversion maintains full precision",
+        "Works with any decimal input up to 18 decimal places"
+      ]
+    },
+    "transaction-receipt": {
+      "namespace": "Core.Web3.TransactionReceipt",
+      "name": "TransactionReceipt",
+      "summary": "Retrieves the execution receipt for a confirmed blockchain transaction, including status, gas used, and emitted events.",
+      "howItWorks": "The Transaction Receipt node retrieves the execution result of a transaction. When executed, the node: 1. Validates the Client ID and transaction hash 2. Connects to the blockchain using an Ethereum client 3. Queries for the transaction receipt 4. Returns the complete receipt object with all execution details",
+      "usage": [
+        "A valid Client ID from the Create Client node",
+        "A transaction hash for a confirmed transaction",
+        "The transaction must be mined and included in a block"
+      ],
+      "bestPractices": [
+        "Only works for confirmed transactions (already mined)",
+        "Returns error if transaction is still pending",
+        "Use in a retry loop if checking recent transactions",
+        "The status field is critical for determining success",
+        "Logs contain emitted events from smart contracts",
+        "Gas used is the actual amount, often less than the limit",
+        "Contract deployments have contractAddress populated"
+      ],
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "{\r\n  \"transactionHash\": \"0x1234...\",\r\n  \"blockNumber\": 15123456,\r\n  \"from\": \"0x742d35...\",\r\n  \"to\": \"0xA0b869...\",\r\n  \"gasUsed\": 52341,\r\n  \"status\": 1,\r\n  \"logs\": [\r\n    {\r\n      \"address\": \"0xA0b869...\",\r\n      \"topics\": [\"0xddf252ad...\"],\r\n      \"data\": \"0x...\"\r\n    }\r\n  ]\r\n}"
+        },
+        {
+          "title": "Example 2",
+          "code": "{\r\n  \"transactionHash\": \"0xabcd...\",\r\n  \"blockNumber\": 15123457,\r\n  \"gasUsed\": 65000, // Used all gas\r\n  \"status\": 0,      // Failed!\r\n  \"logs\": []        // No events emitted\r\n}"
+        }
+      ]
+    },
+    "transfer": {
+      "namespace": "Core.Web3.Transfer",
+      "name": "Transfer",
+      "summary": "Creates a transfer transaction to send native cryptocurrency (ETH, MATIC, BNB, etc.) to another address.",
+      "howItWorks": "The Transfer node prepares a cryptocurrency transfer transaction. When executed, the node: 1. Validates the amount is in proper hex format 2. Converts the hex amount to a big integer value 3. Creates a transaction data structure with the amount 4. Generates a unique Transaction ID 5. Returns the Transaction ID for execution with Send Transaction",
+      "usage": [
+        "Valid wallet addresses for both source and destination",
+        "Amount in hexadecimal format starting with \"0x\"",
+        "Sufficient balance in the source wallet (checked when sending)"
+      ],
+      "bestPractices": [
+        "This node only prepares the transaction; use Send Transaction to execute it",
+        "The Transfer node is for native currency only (ETH, MATIC, BNB)",
+        "For ERC20 token transfers, use ABI Method with the token's transfer function",
+        "The Transaction ID is temporary and only valid during flow execution",
+        "Gas fees will be added automatically by Send Transaction",
+        "Always verify addresses before sending transactions"
+      ]
+    }
+  }
+}

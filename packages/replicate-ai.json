@@ -1,0 +1,179 @@
+{
+  "package": "ReplicateAi",
+  "summary": "Run AI models on Replicate's cloud platform for image generation, text processing, and more.",
+  "description": "## Overview The Replicate AI package provides integration with Replicate's AI model platform. Use it when you need to run machine learning models for image generation, text processing, audio generation, or other AI tasks without managing infrastructure.",
+  "nodes": {
+    "CancelPrediction": {
+      "namespace": "Core.ReplicateAi.CancelPrediction",
+      "name": "CancelPrediction",
+      "summary": "Cancels a running prediction on the Replicate AI platform.",
+      "howItWorks": "The Cancel Prediction node integrates with the Replicate AI platform to cancel a running prediction. When executed, the node: 1. Validates the provided Connection Id and Prediction Id 2. Makes an HTTP POST request to the Replicate API endpoint to cancel the specified prediction 3. Returns the response from the API as the output",
+      "usage": [
+        "A valid Replicate AI account",
+        "A configured Replicate AI connection in Robomotion",
+        "The Prediction Id of a running prediction to cancel"
+      ],
+      "bestPractices": [
+        "The Prediction Id must correspond to a currently running prediction",
+        "Canceling a prediction that has already completed or been canceled will result in an API error",
+        "The response will contain information about whether the cancellation was successful",
+        "Robomotion Credits cannot be used with this node - a direct Replicate API key is required"
+      ]
+    },
+    "CreatePrediction": {
+      "namespace": "Core.ReplicateAi.CreatePrediction",
+      "name": "CreatePrediction",
+      "summary": "Creates a new prediction using a specified model version on the Replicate AI platform.",
+      "howItWorks": "The Create Prediction node integrates with the Replicate AI platform to create a new prediction using a specified model. When executed, the node: 1. Validates the provided Connection Id, Version, and Input parameters 2. Processes any file inputs that start with \"@\" symbol 3. Creates a prediction either through the Replicate API directly or via Robomotion's gateway (depending on connection settings) 4. Returns the Prediction ID for tracking the prediction status",
+      "usage": [
+        "A valid Replicate AI account",
+        "A configured Replicate AI connection in Robomotion",
+        "The model version identifier",
+        "Valid input parameters for the specified model",
+        "Model Name (when using Robomotion Credits)"
+      ],
+      "bestPractices": [
+        "The Input object structure varies depending on the model being used",
+        "Refer to the Replicate AI model documentation for the required input parameters",
+        "File inputs should be prefixed with \"@\" symbol in the Input object",
+        "The returned Prediction ID can be used with Get Prediction or List Prediction nodes",
+        "When using Robomotion Credits, the Model Name option is mandatory",
+        "Predictions may take some time to complete depending on the model and input complexity"
+      ]
+    },
+    "CreateTraining": {
+      "namespace": "Core.ReplicateAi.CreateTraining",
+      "name": "CreateTraining",
+      "summary": "Creates a new training job for a model on the Replicate AI platform.",
+      "howItWorks": "The Create Training node integrates with the Replicate AI platform to create a new training job for a model. When executed, the node: 1. Validates all provided inputs (Connection Id, Model Owner, Model Name, Version, Destination, and Inputs) 2. Creates a training job using the Replicate API directly 3. Returns the Training Id and Training Result for tracking the training job status",
+      "usage": [
+        "A valid Replicate AI account",
+        "A configured Replicate AI connection in Robomotion",
+        "The model owner, name, and version identifiers",
+        "Valid training parameters and data in the Inputs object",
+        "A valid destination for the trained model"
+      ],
+      "bestPractices": [
+        "The Inputs object structure varies depending on the model being trained",
+        "Refer to the Replicate AI model documentation for the required training parameters",
+        "The Destination must be in the format \"owner/name\" where you have write permissions",
+        "The returned Training Id can be used with the Get Training node to check status",
+        "This node does not support Robomotion Credits - a direct Replicate API key is required",
+        "Training jobs may take a significant amount of time to complete depending on the model and data"
+      ]
+    },
+    "GetModel": {
+      "namespace": "Core.ReplicateAi.GetModel",
+      "name": "GetModel",
+      "summary": "Retrieves detailed information about a specific model on the Replicate AI platform.",
+      "howItWorks": "The Get Model node integrates with the Replicate AI platform to retrieve detailed information about a specific model. When executed, the node: 1. Validates the provided Connection Id, Model Owner, and Model Name 2. Retrieves model information using the Replicate API directly 3. Returns a structured object with the model's details",
+      "usage": [
+        "A valid Replicate AI account",
+        "A configured Replicate AI connection in Robomotion",
+        "The model owner and name identifiers"
+      ],
+      "bestPractices": [
+        "This node is useful for programmatically retrieving model information",
+        "The returned information can be used to understand model capabilities and requirements",
+        "This node does not support Robomotion Credits - a direct Replicate API key is required",
+        "The model must exist and be accessible to the authenticated user",
+        "The RunCount field shows how popular the model is on the platform"
+      ]
+    },
+    "GetPrediction": {
+      "namespace": "Core.ReplicateAi.GetPrediction",
+      "name": "GetPrediction",
+      "summary": "Retrieves detailed information about a specific prediction on the Replicate AI platform, including its status and output.",
+      "howItWorks": "The Get Prediction node integrates with the Replicate AI platform to retrieve detailed information about a specific prediction. When executed, the node: 1. Validates the provided Connection Id and Prediction Id 2. Retrieves prediction information either through the Replicate API directly or via Robomotion's gateway (depending on connection settings) 3. Returns a structured object with the prediction's details including status and output",
+      "usage": [
+        "A valid Replicate AI account",
+        "A configured Replicate AI connection in Robomotion",
+        "The Prediction Id of an existing prediction"
+      ],
+      "bestPractices": [
+        "This node is useful for checking the status of a prediction created with the Create Prediction node",
+        "The Status field indicates whether the prediction is still processing, completed, or failed",
+        "The Output field contains the actual result of the prediction when it's completed",
+        "This node works with both direct Replicate API keys and Robomotion Credits",
+        "Use this node in loops or conditional flows to wait for prediction completion",
+        "The prediction must exist and be accessible to the authenticated user"
+      ]
+    },
+    "GetTraining": {
+      "namespace": "Core.ReplicateAi.GetTraining",
+      "name": "GetTraining",
+      "summary": "Retrieves detailed information about a specific training job on the Replicate AI platform, including its status and output.",
+      "howItWorks": "The Get Training node integrates with the Replicate AI platform to retrieve detailed information about a specific training job. When executed, the node: 1. Validates the provided Connection Id and Training Id 2. Retrieves training information using the Replicate API directly 3. Returns a structured object with the training job's details including status and output",
+      "usage": [
+        "A valid Replicate AI account",
+        "A configured Replicate AI connection in Robomotion",
+        "The Training Id of an existing training job"
+      ],
+      "bestPractices": [
+        "This node is useful for checking the status of a training job created with the Create Training node",
+        "The Status field indicates whether the training job is still processing, completed, or failed",
+        "The Output field contains the actual result of the training job when it's completed",
+        "This node does not support Robomotion Credits - a direct Replicate API key is required",
+        "Use this node in loops or conditional flows to wait for training completion",
+        "The training job must exist and be accessible to the authenticated user"
+      ]
+    },
+    "ListPrediction": {
+      "namespace": "Core.ReplicateAi.ListPrediction",
+      "name": "ListPrediction",
+      "summary": "Retrieves a list of predictions from the Replicate AI platform, including their status and details.",
+      "howItWorks": "The List Prediction node integrates with the Replicate AI platform to retrieve a list of predictions. When executed, the node: 1. Validates the provided Connection Id 2. Retrieves a list of predictions using the Replicate API directly 3. Returns a structured object with the predictions and pagination information",
+      "usage": [
+        "A valid Replicate AI account",
+        "A configured Replicate AI connection in Robomotion"
+      ],
+      "bestPractices": [
+        "This node is useful for retrieving multiple predictions at once",
+        "The response includes pagination information for navigating through results",
+        "The node only returns information about the first prediction in the results list",
+        "This node does not support Robomotion Credits - a direct Replicate API key is required",
+        "Use this node to get an overview of recent predictions and their statuses",
+        "The predictions are listed in reverse chronological order (newest first)"
+      ]
+    },
+    "RunModel": {
+      "namespace": "Core.ReplicateAi.RunModel",
+      "name": "RunModel",
+      "summary": "Runs a model on the Replicate AI platform and waits for the prediction to complete, returning the result.",
+      "howItWorks": "The Run Model node integrates with the Replicate AI platform to run a model and wait for completion. When executed, the node: 1. Validates the provided Connection Id, Version, and Input parameters 2. Processes any file inputs that start with \"@\" symbol 3. Creates a prediction either through the Replicate API directly or via Robomotion's gateway (depending on connection settings) 4. Continuously polls the prediction status until it completes (succeeds, fails, or is canceled) 5. Returns the Prediction ID and the prediction's output as the response",
+      "usage": [
+        "A valid Replicate AI account",
+        "A configured Replicate AI connection in Robomotion",
+        "The model version identifier",
+        "Valid input parameters for the specified model",
+        "Model Name (when using Robomotion Credits)"
+      ],
+      "bestPractices": [
+        "The Input object structure varies depending on the model being used",
+        "Refer to the Replicate AI model documentation for the required input parameters",
+        "File inputs should be prefixed with \"@\" symbol in the Input object",
+        "This node blocks execution until the prediction completes, which may take some time",
+        "When using Robomotion Credits, the Model Name option is mandatory",
+        "The node automatically polls for prediction status every second",
+        "Predictions may take time to complete depending on the model and input complexity",
+        "Use the Create Prediction node if you don't want to wait for completion"
+      ]
+    },
+    "connect": {
+      "namespace": "Core.ReplicateAi.Connect",
+      "name": "Connect",
+      "summary": "Establishes a connection to the Replicate AI platform for use with other Replicate AI nodes.",
+      "howItWorks": "The Connect node establishes a connection to the Replicate AI platform and generates a connection identifier. When executed, the node: 1. Validates the provided API Key credential (if not using Robomotion Credits) 2. Creates a client connection to the Replicate API 3. Returns a Connection Id that can be used with other Replicate AI nodes",
+      "usage": [
+        "A valid Replicate AI account",
+        "Either a Replicate API key or Robomotion credits (depending on the selected option)"
+      ],
+      "bestPractices": [
+        "The Connection Id output should be connected to the Connection Id input of other Replicate AI nodes",
+        "When using Robomotion Credits, some features may be limited compared to using a direct API key",
+        "The connection is established each time the node is executed",
+        "Store the Connection Id in a variable if you need to reuse it across multiple nodes"
+      ]
+    }
+  }
+}

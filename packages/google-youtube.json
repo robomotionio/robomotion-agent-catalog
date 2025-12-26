@@ -1,0 +1,97 @@
+{
+  "package": "GoogleYoutube",
+  "summary": "Download videos, transcripts, and metadata from YouTube for content processing workflows.",
+  "description": "## Overview The Google YouTube package enables you to work with YouTube content programmatically. Use it when you need to download videos, extract transcripts, or gather video metadata for content analysis and processing.",
+  "nodes": {
+    "downloadTranscript": {
+      "namespace": "Core.GoogleYoutube.DownloadTranscript",
+      "name": "DownloadTranscript",
+      "summary": "Downloads and saves the transcript (captions) of a YouTube video in various formats.",
+      "howItWorks": "The Download Transcript node retrieves the captions/transcript of a YouTube video and saves them to a file in the specified format. When executed, the node: 1. Validates the required inputs (URL/ID, language code, and save path) 2. Extracts the video ID from the URL if a full URL is provided 3. Retrieves the list of available transcripts for the video 4. Either gets the transcript in the specified language or translates it if the \"If Not Exists Translate\" option is enabled 5. Formats the transcript according to the selected format 6. Saves the formatted transcript to the specified file path",
+      "usage": [
+        "A YouTube video URL or ID",
+        "Valid language code",
+        "Access to the file system for saving the transcript",
+        "Internet connection to access YouTube"
+      ],
+      "bestPractices": [
+        "The Video URL can be a full YouTube URL (e.g., https://www.youtube.com/watch?v=VIDEO_ID) or just the video ID",
+        "The Language Code should be a valid ISO 639-1 language code (e.g., \"en\" for English, \"es\" for Spanish)",
+        "If the \"If Not Exists Translate\" option is enabled, the node will translate the transcript to the specified language if it's not available in that language",
+        "The Format option determines how the transcript is saved:",
+        "JSON: Structured format with timing information",
+        "Text: Plain text format",
+        "Web VTT: Web Video Text Tracks format",
+        "SRT: SubRip Subtitle format",
+        "The saved file will be created or overwritten at the specified path",
+        "This node is useful for creating searchable transcripts, generating subtitles, or analyzing video content"
+      ]
+    },
+    "downloadVideo": {
+      "namespace": "Core.GoogleYoutube.DownloadVideo",
+      "name": "DownloadVideo",
+      "summary": "Downloads YouTube videos in various resolutions and formats.",
+      "howItWorks": "The Download Video node downloads a YouTube video using the pytube library. When executed, the node: 1. Validates the required inputs (Video URL and Path to Save) 2. Creates a YouTube object using the provided URL 3. Determines the download settings based on the options selected 4. Selects the appropriate video or audio stream based on the settings 5. Downloads the stream to the specified path with the optional custom file name",
+      "usage": [
+        "A valid YouTube video URL",
+        "Access to the file system for saving the video",
+        "Internet connection to access YouTube",
+        "Sufficient disk space for the downloaded video"
+      ],
+      "bestPractices": [
+        "The Video URL should be a full YouTube URL (e.g., https://www.youtube.com/watch?v=VIDEO_ID)",
+        "The Path to Save should be a valid directory path where the video will be saved",
+        "When using Custom Resolution, ensure the selected resolution is available for the video",
+        "When using Itag, you need to know the specific itag number for the desired video stream",
+        "Audio-only downloads are available with Audio-mp4 and Audio-webm options",
+        "The File Name option allows you to specify a custom name for the downloaded file",
+        "Download time depends on video length, resolution, and internet speed",
+        "This node respects YouTube's terms of service and only downloads publicly available content",
+        "Large video files may take significant time and disk space"
+      ]
+    },
+    "getVideos": {
+      "namespace": "Core.GoogleYoutube.GetVideos",
+      "name": "GetVideos",
+      "summary": "Retrieves a list of videos from a YouTube playlist.",
+      "howItWorks": "The Get Videos node retrieves information about videos in a YouTube playlist. When executed, the node: 1. Validates the required input (Playlist URL) 2. Creates a Playlist object using the provided URL 3. Extracts the playlist title and video URLs 4. Returns the information as a JSON object",
+      "usage": [
+        "A valid YouTube playlist URL",
+        "Internet connection to access YouTube"
+      ],
+      "bestPractices": [
+        "The Video URL should be a full YouTube playlist URL (e.g., https://www.youtube.com/playlist?list=PLAYLIST_ID)",
+        "The node currently only supports retrieving videos from playlists",
+        "The output contains the playlist title and an array of video URLs",
+        "Each video URL in the array is a full YouTube watch URL",
+        "The response is formatted as a JSON object for easy parsing",
+        "This node is useful for processing all videos in a playlist",
+        "Future versions may support retrieving videos from channels",
+        "The number of videos retrieved depends on the playlist size"
+      ]
+    },
+    "mediaInfo": {
+      "namespace": "Core.GoogleYoutube.MediaInfo",
+      "name": "MediaInfo",
+      "summary": "Retrieves detailed information about a YouTube video including metadata and available streams.",
+      "howItWorks": "The Media Info node retrieves comprehensive information about a YouTube video using the pytube library. When executed, the node: 1. Validates the required input (Video URL) 2. Creates a YouTube object using the provided URL 3. Extracts all available video and audio streams 4. Collects metadata information about the video 5. Formats all information as a JSON object and returns it",
+      "usage": [
+        "A valid YouTube video URL",
+        "Internet connection to access YouTube"
+      ],
+      "bestPractices": [
+        "The Video URL should be a full YouTube URL (e.g., https://www.youtube.com/watch?v=VIDEO_ID)",
+        "The response contains detailed information about the video and all available streams",
+        "Stream information includes properties like resolution, file type, and quality",
+        "The length is provided in seconds",
+        "The publish date is provided in ISO format",
+        "The age_restricted field indicates if the video has age restrictions",
+        "The rating field shows the video's average rating",
+        "This node is useful for analyzing video properties before downloading",
+        "Stream information can be used to select specific video or audio formats for download",
+        "The thumbnail URL provides access to the video's thumbnail image",
+        "The description field contains the full video description as text"
+      ]
+    }
+  }
+}

@@ -1,0 +1,245 @@
+{
+  "package": "Giphy",
+  "summary": "The Giphy package provides integration with the Giphy API, enabling you to search, retrieve, and work with GIFs and stickers in your automation workflows. This package is ideal for creating engaging content, building chatbots, automating social media posts, or adding visual elements to your RPA projects.",
+  "description": "## Features - Search for GIFs and stickers using keywords",
+  "nodes": {
+    "Autocomplete": {
+      "namespace": "Core.Giphy.Autocomplete",
+      "name": "Autocomplete",
+      "summary": "Provides autocomplete suggestions for search tag terms on Giphy. As users type, this node returns relevant tag suggestions to help them find GIFs more quickly and improve search accuracy.",
+      "howItWorks": "The Autocomplete node provides real-time search suggestions: 1. Validates that the query parameter is not empty 2. Retrieves authentication credentials from the credential manager 3. Sends the partial term to Giphy's autocomplete endpoint 4. Receives ranked suggestions based on popularity and relevance 5. Returns suggestions ordered by likelihood of user intent 6. Updates as the user types more characters",
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrCredentials",
+        "ErrRuntime"
+      ],
+      "tips": [
+        "**Minimum Characters** - Start autocomplete after 2-3 characters for best results",
+        "**Limit Suggestions** - Use 5-10 suggestions for clean UI; avoid overwhelming users",
+        "**Debounce Input** - Wait 200-500ms after typing stops to reduce API calls",
+        "**Highlight Match** - Bold or highlight the matching part of suggestions",
+        "**Handle Empty Results** - Some partial terms may return no suggestions",
+        "**Cache Popular Terms** - Store frequently requested autocompletes locally",
+        "**Show on Focus** - Display popular searches when input is focused but empty",
+        "**Keyboard Navigation** - Allow arrow keys to navigate suggestions"
+      ]
+    },
+    "Categories": {
+      "namespace": "Core.Giphy.Categories",
+      "name": "Categories",
+      "summary": "Retrieves a list of GIF categories from Giphy. This node returns all available categories that can be used to browse and discover GIFs organized by theme, making it perfect for building navigation menus or discovery features.",
+      "howItWorks": "The Categories node fetches all available GIF categories: 1. Retrieves authentication credentials from the credential manager 2. Sends GET request to Giphy's categories endpoint 3. Parses JSON response containing category information 4. Returns a structured list of categories with metadata 5. Each category includes name, subcategories, and sample GIFs",
+      "errorCodes": [
+        "ErrCredentials",
+        "ErrRuntime"
+      ],
+      "tips": [
+        "**Cache Results** - Categories don't change often; cache for 24 hours to reduce API calls",
+        "**Use for Navigation** - Categories are perfect for building intuitive browse experiences",
+        "**Extract Subcategories** - Many categories have subcategories for more specific browsing",
+        "**Preview Images** - Use the category's representative GIF as a visual icon",
+        "**Regular Updates** - Refresh category list weekly to catch new additions",
+        "**Combine with Search** - Use category names as search terms for more results",
+        "**Filter by Relevance** - Display only categories relevant to your application's context"
+      ]
+    },
+    "ChannelSearch": {
+      "namespace": "Core.Giphy.ChannelSearch",
+      "name": "ChannelSearch",
+      "summary": "Searches for Giphy channels using a query term. Channels are curated collections of GIFs created by artists, brands, and content creators on Giphy. This node helps discover channels that match specific themes or creators.",
+      "howItWorks": "1. Validates that the search query is not empty 2. Retrieves authentication credentials 3. Sends query to Giphy's channel search endpoint 4. Returns matching channels with their information 5. Channels are ranked by relevance to the search term"
+    },
+    "GetById": {
+      "namespace": "Core.Giphy.GetById",
+      "name": "GetById",
+      "summary": "Retrieves a specific GIF from Giphy using its unique ID. This node is essential when you need to fetch a particular GIF that you've previously identified, stored, or referenced.",
+      "howItWorks": "The Get by ID node retrieves a specific GIF using its unique identifier: 1. Validates that the ID parameter is not empty 2. Retrieves authentication credentials from the credential manager 3. Constructs API request to Giphy's GIF endpoint with the specific ID 4. Sends GET request to retrieve the GIF data 5. Parses JSON response containing complete GIF information 6. Stores the response in the output variable",
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrCredentials",
+        "ErrRuntime"
+      ],
+      "tips": [
+        "**Store IDs, Not URLs** - GIF IDs are permanent, but URLs may change; always store IDs in your database",
+        "**Extract ID from URL** - You can extract GIF IDs from Giphy URLs: `https://giphy.com/gifs/ID-HERE`",
+        "**Validate Before Use** - Check that `msg.resp.data` exists before accessing properties",
+        "**Use for Consistency** - When you need the exact same GIF every time, use Get by ID instead of Search",
+        "**Combine with Search** - Search first, store the IDs of good results, then retrieve them later",
+        "**Check Rating** - Even with a known ID, verify the rating matches your requirements",
+        "**Handle Deleted GIFs** - Some GIFs may be removed; implement error handling for missing content"
+      ]
+    },
+    "GetByIds": {
+      "namespace": "Core.Giphy.GetByIds",
+      "name": "GetByIds",
+      "summary": "Retrieves multiple GIFs from Giphy using a comma-separated list of unique IDs. This node is ideal for batch operations when you need to fetch several specific GIFs in a single API call.",
+      "howItWorks": "The Get by IDs node retrieves multiple GIFs in a single request: 1. Validates that the IDs parameter is not empty 2. Retrieves authentication credentials from the credential manager 3. Constructs API request with comma-separated IDs 4. Sends GET request to Giphy's bulk retrieval endpoint 5. Parses JSON response containing all matching GIFs 6. Returns GIFs in the same order as requested (when all IDs are valid)",
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrCredentials",
+        "ErrRuntime"
+      ],
+      "tips": [
+        "**Use Comma Separation** - Ensure IDs are separated by commas without spaces: \"id1,id2,id3\"",
+        "**Limit Batch Size** - While Giphy supports many IDs, keep batches reasonable (10-50) for performance",
+        "**Handle Missing GIFs** - Some IDs may be invalid or deleted; always check the returned count",
+        "**Preserve Order** - GIFs are typically returned in the order requested (when all are valid)",
+        "**Build from Arrays** - Use JavaScript's `join(',')` to convert ID arrays to comma-separated strings",
+        "**Validate Input** - Check that your ID string is properly formatted before calling the node",
+        "**Compare Counts** - Always compare requested vs returned count to detect missing GIFs"
+      ]
+    },
+    "Random": {
+      "namespace": "Core.Giphy.Random",
+      "name": "Random",
+      "summary": "Retrieves a random GIF from Giphy's vast library. This node can return completely random GIFs or filter results by a specific tag, making it ideal for adding unpredictable, entertaining content to your automations.",
+      "howItWorks": "The Random node retrieves a random GIF from Giphy: 1. Retrieves authentication credentials from the credential manager 2. Constructs API request with optional tag filter and rating 3. Sends GET request to Giphy's random endpoint 4. Receives a single random GIF that matches the criteria 5. Stores the response in the output variable 6. Each execution returns a different random GIF (with very rare duplicates)",
+      "errorCodes": [
+        "ErrCredentials",
+        "ErrRuntime"
+      ],
+      "tips": [
+        "**Use Tags for Context** - While fully random GIFs are fun, tagged random GIFs are more contextually appropriate",
+        "**Cache Avoidance** - Each call returns a different GIF, perfect for keeping content fresh",
+        "**Combine with Conditions** - Use different tags based on conditions (time of day, user preferences, etc.)",
+        "**Fallback Strategy** - Have a default GIF ready in case the API returns unexpected content",
+        "**Multiple Attempts** - If you don't like a random result, simply call the node again",
+        "**Tag Variety** - Use multiple related tags and randomize between them for more variety",
+        "**Preview Before Use** - When possible, show a preview before publishing random content",
+        "**Rating Filters** - Always use appropriate rating filters for your audience"
+      ]
+    },
+    "SearchGifs": {
+      "namespace": "Core.Giphy.SearchGifs",
+      "name": "SearchGifs",
+      "summary": "Searches for GIFs on Giphy using a query term or phrase. This node returns a collection of GIFs matching your search criteria, with support for pagination, rating filters, and multi-language results.",
+      "howItWorks": "The Search Gifs node queries the Giphy API with your search term and returns matching GIFs: 1. Validates that the search query is not empty 2. Retrieves authentication credentials from the credential manager 3. Constructs API request with query parameters (search term, limit, offset, rating, language, bundle) 4. Sends GET request to Giphy's search endpoint 5. Parses JSON response and stores it in the output variable 6. Each GIF object in the response includes multiple URL formats (original, downsized, preview, etc.)",
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrCredentials",
+        "ErrRuntime"
+      ],
+      "tips": [
+        "**Be Specific** - Use detailed search terms (e.g., \"dog playing piano\" vs \"dog\") for more relevant results",
+        "**Use Multiple Keywords** - Combine 2-3 keywords for better targeting (e.g., \"excited happy dance\")",
+        "**Check Total Count** - Use `msg.resp.pagination.total_count` to know if more results are available",
+        "**Implement Retry Logic** - Add error handling for network issues or rate limit errors",
+        "**Cache Popular Searches** - Store frequently searched GIF URLs to reduce API calls",
+        "**Test Different Ratings** - The same search term may yield different results with different rating filters",
+        "**Language Matters** - Some search terms work better in certain languages (e.g., \"kawaii\" in Japanese)"
+      ]
+    },
+    "SearchSuggestions": {
+      "namespace": "Core.Giphy.SearchSuggestions",
+      "name": "SearchSuggestions",
+      "summary": "Retrieves related search suggestions for a given term from Giphy. This node provides alternative or related search terms that can help users refine their searches or discover related content.",
+      "howItWorks": "1. Validates that the term parameter is not empty 2. Retrieves authentication credentials 3. Queries Giphy's related tags endpoint 4. Returns semantically related search terms 5. Suggestions are based on Giphy's understanding of tag relationships",
+      "tips": [
+        "Display suggestions as clickable chips or tags below search results",
+        "Use as \"Related Searches\" section in your UI",
+        "Combine with search results for a comprehensive search experience",
+        "Cache suggestions for popular terms to reduce API calls"
+      ]
+    },
+    "StickerRandom": {
+      "namespace": "Core.Giphy.StickerRandom",
+      "name": "StickerRandom",
+      "summary": "Retrieves a random sticker from Giphy's sticker library. Stickers have transparent backgrounds, making them perfect for overlaying on other content. This node can return completely random stickers or filter by a specific tag.",
+      "howItWorks": "1. Retrieves authentication credentials 2. Constructs API request with optional tag filter and rating 3. Sends GET request to Giphy's random sticker endpoint 4. Receives a single random sticker with transparent background 5. Each execution returns a different random sticker 6. Perfect for adding variety to automated responses",
+      "tips": [
+        "**Transparent Backgrounds** - All stickers work great as overlays",
+        "**Tag for Context** - Use tags when you need contextually appropriate stickers",
+        "**Multiple Attempts** - Run multiple times to see variety",
+        "**Cache Prevention** - Each call returns different sticker for fresh content",
+        "**Rating Filters** - Always use appropriate ratings for your audience",
+        "**Size Selection** - Choose appropriate image size for your use case",
+        "**Preview Option** - Show preview before applying to user content"
+      ]
+    },
+    "StickerSearch": {
+      "namespace": "Core.Giphy.StickerSearch",
+      "name": "StickerSearch",
+      "summary": "Searches for stickers on Giphy using a query term or phrase. Stickers are animated images with transparent backgrounds, perfect for overlaying on photos, messages, or other content. This node works identically to GIF search but returns sticker content.",
+      "howItWorks": "1. Validates that the search query is not empty 2. Retrieves authentication credentials 3. Constructs API request with query parameters 4. Sends GET request to Giphy's sticker search endpoint 5. Returns matching stickers with transparent backgrounds 6. Each sticker includes multiple size and format options",
+      "tips": [
+        "**Transparent Backgrounds** - All stickers have transparent backgrounds for overlaying",
+        "**Search Terms** - Use terms like \"emoji\", \"icon\", \"reaction\" for sticker-appropriate results",
+        "**Bundle Selection** - Use \"sticker_laying\" bundle for best overlay performance",
+        "**Size Formats** - Stickers include multiple sizes optimized for different uses",
+        "**Messaging Apps** - Stickers are ideal for WhatsApp, Telegram, Discord integrations",
+        "**Combine with Photos** - Layer stickers over user photos for enhanced UX",
+        "**Seasonal Content** - Search seasonal terms (\"christmas\", \"halloween\") for themed stickers"
+      ]
+    },
+    "StickerTrending": {
+      "namespace": "Core.Giphy.StickerTrending",
+      "name": "StickerTrending",
+      "summary": "Retrieves currently trending stickers from Giphy. Stickers are animated images with transparent backgrounds, and this node returns the most popular and viral stickers of the moment, perfect for staying current with trending reactions and expressions.",
+      "howItWorks": "1. Retrieves authentication credentials 2. Constructs API request with parameters 3. Sends GET request to Giphy's trending stickers endpoint 4. Returns the most popular stickers with transparent backgrounds 5. Trending data updates frequently to reflect current viral content 6. Perfect for discovering what reactions and expressions are currently popular",
+      "tips": [
+        "**Refresh Frequently** - Update every 1-2 hours for current trends",
+        "**Transparent Backgrounds** - All stickers work as overlays",
+        "**Bundle for Overlays** - Use \"sticker_laying\" bundle for best overlay performance",
+        "**Size Selection** - Choose appropriate sizes for your platform",
+        "**Cache Briefly** - Cache for 30-60 minutes to balance freshness and API usage",
+        "**Filter by Rating** - Ensure appropriate content for your audience",
+        "**Track Engagement** - Monitor which trending stickers users select"
+      ]
+    },
+    "Translate": {
+      "namespace": "Core.Giphy.Translate",
+      "name": "Translate",
+      "summary": "Translates a search term or phrase into a representative GIF using Giphy's special translation algorithm. Unlike regular search, this node returns a single, most relevant GIF that best represents the meaning or emotion of your input text.",
+      "howItWorks": "The Translate node uses Giphy's proprietary algorithm to convert text into GIFs: 1. Validates that the search term is not empty 2. Retrieves authentication credentials from the credential manager 3. Sends the term to Giphy's translate endpoint with the weirdness parameter 4. Giphy's algorithm analyzes the term's meaning, context, and sentiment 5. Returns the single most appropriate GIF based on the weirdness level 6. Stores the response in the output variable The algorithm considers factors like: - Semantic meaning of the text - Emotional context - Popular usage patterns - Weirdness preference",
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrCredentials",
+        "ErrRuntime"
+      ],
+      "tips": [
+        "**Start with Default Weirdness** - Begin at 4 and adjust based on results",
+        "**Short Phrases Work Best** - Keep input concise (1-5 words) for most accurate translations",
+        "**Test Different Levels** - The same term at different weirdness levels produces very different GIFs",
+        "**Emotions Translate Well** - Single emotion words (happy, sad, angry) consistently produce good results",
+        "**Consistent Results** - Same term + same weirdness = same GIF (mostly)",
+        "**Use for Consistency** - When you always want the same GIF for a term, use Translate instead of Search",
+        "**Cultural Context** - Some phrases translate better than others depending on GIF availability",
+        "**Combine with Conditions** - Set weirdness dynamically based on context or user preferences"
+      ]
+    },
+    "Trending": {
+      "namespace": "Core.Giphy.Trending",
+      "name": "Trending",
+      "summary": "Retrieves the current trending GIFs from Giphy. This node returns the most popular and viral GIFs of the moment, perfect for staying current with internet culture and creating timely, engaging content.",
+      "howItWorks": "The Trending node fetches currently viral GIFs from Giphy: 1. Retrieves authentication credentials from the credential manager 2. Constructs API request with parameters (limit, offset, rating, bundle) 3. Sends GET request to Giphy's trending endpoint 4. Parses JSON response containing the most popular GIFs 5. Stores the response in the output variable 6. Trending data updates frequently (typically hourly) to reflect current viral content",
+      "errorCodes": [
+        "ErrCredentials",
+        "ErrRuntime"
+      ],
+      "tips": [
+        "**Refresh Frequently** - Trending content changes quickly; run this node periodically (every 1-2 hours) for fresh content",
+        "**Save Trend History** - Store trending GIF IDs with timestamps to analyze trends over time",
+        "**Filter by Rating** - Always use appropriate rating filters for your audience and use case",
+        "**Check Ranking** - GIFs at offset 0 are the most viral; prioritize these for maximum impact",
+        "**Combine with Search** - Use trending GIFs to discover popular keywords, then search for more similar content",
+        "**Monitor Peak Times** - Different trends emerge at different times of day and days of the week",
+        "**Cross-Reference** - Compare trending GIFs with trending search terms for deeper insights"
+      ]
+    },
+    "TrendingSearchTerms": {
+      "namespace": "Core.Giphy.TrendingSearchTerms",
+      "name": "TrendingSearchTerms",
+      "summary": "Retrieves the current trending search terms on Giphy. This node returns the most popular search queries being used right now, perfect for discovering what's currently viral and engaging.",
+      "howItWorks": "1. Retrieves authentication credentials 2. Fetches current trending search terms from Giphy 3. Returns terms ordered by popularity 4. Updates frequently to reflect real-time trends",
+      "tips": [
+        "**Update Frequently** - Refresh every 1-2 hours to keep trends current",
+        "**Display Prominently** - Show trending terms in visible areas (homepage, search page)",
+        "**Make Clickable** - Allow users to click terms to search immediately",
+        "**Track Clicks** - Monitor which trending terms users engage with",
+        "**Cache Briefly** - Cache for 30-60 minutes to reduce API calls",
+        "**Combine with Trending GIFs** - Show both trending searches and trending GIFs",
+        "**Localization** - Trends may vary by region; consider user location"
+      ]
+    }
+  }
+}

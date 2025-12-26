@@ -1,0 +1,328 @@
+{
+  "package": "Flow",
+  "summary": "Control the execution flow of your automation with branching, logging, and sub-flows.",
+  "description": "## Overview The Flow package provides essential flow control nodes for managing automation execution. Use it to add comments, create reusable sub-flows, log messages, control branching, and manage workflow execution.",
+  "nodes": {
+    "comment": {
+      "namespace": "Core.Flow.Comment",
+      "name": "Comment",
+      "summary": "This node adds a comment without impacting the flow of your automation.",
+      "howItWorks": "The Comment node is a documentation tool that allows you to add explanatory notes to your automation workflow without affecting execution: 1. The node accepts markdown-formatted text input 2. During flow execution, the comment is stored but does not perform any operations 3. The flow continues immediately to the next node 4. Comments appear in the visual flow designer for documentation purposes",
+      "usage": [
+        "None - this is a passive node that requires no external resources or configuration"
+      ],
+      "bestPractices": [
+        "Comments support full markdown syntax including headers, lists, bold, italic, and code blocks",
+        "Comments are visible in the flow designer but do not appear in execution logs",
+        "Use comments liberally to make your automation easier to understand and maintain",
+        "Comments do not consume significant processing time or resources"
+      ],
+      "relatedNodes": [
+        "Log",
+        "Sub Flow"
+      ],
+      "tips": [
+        "Use markdown headers (##, ###) to create visual hierarchy in your comments",
+        "Add comments before complex node sequences to explain the overall purpose",
+        "Document variable names and their purposes for better code maintenance",
+        "Include references to business requirements or policy documents",
+        "Use bullet points for listing multiple related items",
+        "Consider adding timestamps or version numbers for important workflow changes"
+      ]
+    },
+    "fork-branch": {
+      "namespace": "Core.Flow.ForkBranch",
+      "name": "ForkBranch",
+      "summary": "Creates multiple branches of automation path.",
+      "howItWorks": "The Fork Branch node enables parallel execution by creating multiple independent automation paths: 1. The node receives input data and the number of branches to create 2. A wait group is created to synchronize all branches 3. For each branch (minimum 2): - A unique Branch ID is generated (format: `{index}.{waitGroupId}`) - The wait group counter is incremented - Input data is cloned and transmitted to the branch with its unique ID 4. The node waits for all branches to complete execution 5. Once all branches finish, the wait group is cleaned up 6. Flow continues to the next node with the original input data",
+      "usage": [
+        "**Number of Branches** must be at least 2",
+        "Each branch should eventually complete to avoid deadlock",
+        "Sufficient system resources to handle parallel execution"
+      ],
+      "bestPractices": [
+        "When `Continue On Error` is enabled, errors in branches are **not** caught even if a Catch node is present",
+        "Each branch receives a complete copy of the input data",
+        "The Wait Group ID and Branch ID are automatically added to the message payload",
+        "All branches must complete before the main flow continues",
+        "Branches execute independently and in parallel",
+        "The second output port fires only after all branches complete"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate"
+      ],
+      "relatedNodes": [
+        "Sub Flow",
+        "Go To",
+        "Stop"
+      ],
+      "tips": [
+        "Use Fork Branch when tasks are independent and can run simultaneously",
+        "Avoid using Fork Branch for sequential dependencies between tasks",
+        "Monitor system resources when creating many branches",
+        "Consider using variables to dynamically set the number of branches",
+        "Combine with decision nodes in each branch for conditional parallel processing",
+        "Each branch can have its own error handling logic",
+        "Use the Branch ID output to identify which branch is executing (useful for logging)",
+        "For best performance, ensure each branch has similar execution time"
+      ]
+    },
+    "go-to": {
+      "namespace": "Core.Flow.GoTo",
+      "name": "GoTo",
+      "summary": "Goes to a specific [Label](/reference/packages/flow/label) node in the workflow.",
+      "howItWorks": "The Go To node implements flow control by redirecting execution to a Label node: 1. During node creation, the Go To node registers itself with all selected Label nodes 2. When the Go To node receives a message during execution: - It processes any delay before execution - The message passes through without modification - Execution jumps to the registered Label node(s) 3. The flow continues from the Label node, bypassing nodes in between",
+      "usage": [
+        "At least one [Label](/reference/packages/flow/label) node must exist in the workflow",
+        "The selected Label node(s) must be configured in the **Nodes** option",
+        "Label nodes should be positioned where you want execution to continue"
+      ],
+      "bestPractices": [
+        "When `Continue On Error` is enabled, errors are **not** caught even if a Catch node is present",
+        "The Go To node does not modify the message payload",
+        "Multiple Go To nodes can target the same Label",
+        "A single Go To node can target multiple Labels (execution continues at all of them)",
+        "Jumping to a Label creates a subscription-based message routing",
+        "Go To creates a non-linear flow, so use with caution to maintain code readability"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage"
+      ],
+      "relatedNodes": [
+        "Label",
+        "Stop",
+        "Sub Flow",
+        "Fork Branch"
+      ],
+      "tips": [
+        "Use meaningful names for Label nodes to make flow logic clear (e.g., \"RetryStart\", \"ErrorHandler\", \"LoopEnd\")",
+        "Avoid creating infinite loops with Go To → Label combinations without exit conditions",
+        "Document the reason for using Go To with a Comment node for better maintainability",
+        "Consider using decision nodes before Go To for cleaner conditional logic",
+        "Be careful with nested loops using Go To - they can be difficult to debug",
+        "Use Go To sparingly - excessive jumping can make flows hard to understand",
+        "For complex branching, consider using Sub Flows instead",
+        "Test thoroughly to ensure Go To logic doesn't create unintended execution paths"
+      ]
+    },
+    "label": {
+      "namespace": "Core.Flow.Label",
+      "name": "Label",
+      "summary": "The Label activity is used as a marker for the workflow for the [Go To](/reference/packages/flow/go-to) nodes.",
+      "howItWorks": "The Label node serves as a destination marker for Go To nodes in your workflow: 1. During flow initialization, the Label node registers itself in the flow's label registry 2. The Label subscribes to messages from any Go To nodes that target it 3. When a Go To node executes and targets this Label: - The message is routed to this Label node - Execution continues from this point in the workflow 4. The Label node passes the message through unchanged 5. When the flow closes, the Label unsubscribes and clears its registrations",
+      "usage": [
+        "Label node must be present in the workflow before Go To nodes can reference it",
+        "The Label's name should be unique and descriptive for easy identification",
+        "At least one Go To node should target this Label for it to be useful"
+      ],
+      "bestPractices": [
+        "When `Continue On Error` is enabled, errors are **not** caught even if a Catch node is present",
+        "Label nodes do not modify the message payload",
+        "Multiple Go To nodes can target the same Label",
+        "The Label name (set via the Name property) is used by Go To nodes to identify it",
+        "Labels create subscription-based message routing for efficient execution",
+        "Unused Labels (not targeted by any Go To node) simply pass messages through"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrSubscribe",
+        "ErrOnMessage"
+      ],
+      "relatedNodes": [
+        "Go To",
+        "Comment",
+        "Sub Flow",
+        "Stop"
+      ],
+      "tips": [
+        "Use descriptive names for Labels that clearly indicate their purpose (e.g., \"RetryStart\", \"LoopBegin\", \"ErrorHandler\")",
+        "Place Labels at the beginning of logical workflow sections",
+        "Document the purpose of each Label with a Comment node",
+        "Avoid creating too many Labels - they can make the flow harder to follow",
+        "Consider using Labels to create reusable workflow sections that can be reached from multiple points",
+        "Use Labels in combination with decision nodes for clean conditional branching",
+        "Test all paths to Labels to ensure they work as expected",
+        "Name Labels consistently across your organization for better code maintainability"
+      ]
+    },
+    "log": {
+      "namespace": "Core.Flow.Log",
+      "name": "Log",
+      "summary": "Logs the provided text with the specified log level.",
+      "howItWorks": "The Log node outputs messages to both the runtime console and log files: 1. The node receives input text to be logged 2. Validates that a log level is selected (not empty or \"_\") 3. Converts the input to a string format 4. Writes to two destinations: - Runtime log with the specified level (visible in UI/console) - File log with mapped severity (info/trace/debug → Info, warn → Warn, error → Error) 5. The message passes through without modification",
+      "usage": [
+        "**Text** input must be provided (can be any data type - will be converted to string)",
+        "**Log Level** must be selected (cannot be empty)"
+      ],
+      "bestPractices": [
+        "When `Continue On Error` is enabled, errors are **not** caught even if a Catch node is present",
+        "The log level determines both console output and file logging",
+        "All log levels (trace, debug, info) write to the Info file logger",
+        "Warn and Error levels write to their respective severity levels in files",
+        "Input can be complex objects - they will be converted to string representation",
+        "Logs appear in real-time in the Robomotion UI during execution",
+        "File logs are stored persistently for audit purposes"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrLevel"
+      ],
+      "relatedNodes": [
+        "Comment",
+        "Stop",
+        "Should Stop"
+      ],
+      "tips": [
+        "Use **trace** for very detailed diagnostic information (rarely needed in production)",
+        "Use **debug** during development to track variable values and flow execution",
+        "Use **info** for general informational messages about process progress",
+        "Use **warn** for potentially problematic situations that don't stop execution",
+        "Use **error** for actual errors or critical issues",
+        "Include contextual information in log messages (variable values, step names, timestamps)",
+        "Use template strings to include variable values: `Processing ${itemCount} items`",
+        "Avoid logging sensitive information (passwords, API keys, personal data)",
+        "Consider log volume - excessive logging can impact performance",
+        "Use structured log messages for easier searching and analysis",
+        "Disable or remove debug/trace logs before deploying to production"
+      ]
+    },
+    "should-stop": {
+      "namespace": "Core.Flow.ShouldStop",
+      "name": "ShouldStop",
+      "summary": "This node checks if the flow execution should be halted. Its output is determined by whether a higher-priority Trigger or Schedule has been activated while the robot is executing the current flow. Though the running flow remains unaffected, the \"Should Stop\" node will return 'true' in such instances. The decision to either stop or continue the flow, post this check, is left to the discretion of the developer.",
+      "howItWorks": "The Should Stop node provides a graceful way to check if execution should be interrupted: 1. The node is called during flow execution 2. It queries the runtime to check if a stop signal has been set 3. The stop signal is typically set when: - A higher-priority Trigger is activated - A higher-priority Schedule starts - An external stop request is received 4. The node outputs a boolean value (`true` if should stop, `false` otherwise) 5. The flow developer can then use decision nodes to handle the stop gracefully 6. The current flow continues running unless explicitly stopped",
+      "usage": [
+        "None - this node works out of the box",
+        "Typically used with decision nodes to act on the result"
+      ],
+      "bestPractices": [
+        "When `Continue On Error` is enabled, errors are **not** caught even if a Catch node is present",
+        "The Should Stop check does **not** automatically stop the flow - you must implement the stop logic",
+        "The current flow keeps running even when Should Stop returns `true` unless you explicitly stop it",
+        "This is useful for cooperative multitasking where lower priority tasks yield to higher priority ones",
+        "The stop signal is set externally by the Robomotion runtime when priorities dictate",
+        "Use this node in long-running workflows to allow interruption",
+        "Should Stop returns immediately - it's a lightweight check"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate"
+      ],
+      "relatedNodes": [
+        "Stop",
+        "Log",
+        "Label",
+        "Go To"
+      ],
+      "tips": [
+        "Place Should Stop nodes at natural checkpoints in your workflow (e.g., between major steps, inside loops)",
+        "Always act on the result - don't check and ignore",
+        "Save progress/state before stopping to allow resuming later",
+        "Use with loops that process many items - check every N iterations",
+        "Combine with decision nodes to implement graceful shutdown logic",
+        "Log when stopping due to Should Stop for debugging and audit trails",
+        "Consider saving partial results before stopping",
+        "Test with multiple triggers of different priorities to ensure proper behavior",
+        "Don't check Should Stop too frequently - it adds overhead",
+        "Use Stop node with \"Success\" status when yielding to higher priority tasks"
+      ]
+    },
+    "stop": {
+      "namespace": "Core.Flow.Stop",
+      "name": "Stop",
+      "summary": "Stops the execution of the flow.",
+      "howItWorks": "The Stop node terminates flow execution with a specified status: 1. The node processes any delay before execution 2. If Status is set to \"Failed\": - Extracts the reason message (if provided) - Creates an error object with type \"Core.Robomotion.Stop\" - Includes the node's GUID and name as the error source 3. Logs the termination reason: - Success: \"Flow completed successfully\" - Failed: \"Flow stopped by failure (`{{reason}}`)\" 4. For Application Robots: Sends instance stop signal to the platform 5. Stops the robot execution (calls runtime.Stop) 6. Emits stop event to the server with status and reason 7. Updates logging status to \"Stopped\"",
+      "usage": [
+        "**Status** must be selected (Success or Failed)",
+        "**Reason** should be provided when Status is Failed (optional but recommended)"
+      ],
+      "bestPractices": [
+        "When `Continue On Error` is enabled, errors are **not** caught even if a Catch node is present",
+        "The Stop node immediately terminates the entire flow execution",
+        "No nodes after Stop will execute",
+        "For Application Robots, a stop signal is sent to the Robomotion platform",
+        "The Reason field supports variable interpolation for dynamic messages",
+        "Stop with Success is useful for early exit conditions that aren't errors",
+        "The stop event is emitted before the actual robot stops to ensure server receives the signal",
+        "Execution order is critical: robot stops first, then server notification is sent"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate"
+      ],
+      "relatedNodes": [
+        "Should Stop",
+        "Log",
+        "Catch"
+      ],
+      "tips": [
+        "Always provide a clear, descriptive Reason when using Status: Failed",
+        "Use Success status for intentional early exits (e.g., \"No data to process\")",
+        "Include contextual information in the Reason (variable values, current state)",
+        "Use template strings in Reason for dynamic error messages: `Failed at step ${stepName}`",
+        "Stop with Success when conditions don't warrant further processing",
+        "Consider logging before Stop to capture additional context",
+        "For debugging, include the approximate location in the workflow in the Reason",
+        "Use Stop instead of letting errors propagate when you want controlled termination",
+        "Test both Success and Failed paths to ensure proper cleanup",
+        "In production, avoid generic messages - be specific about why the flow stopped"
+      ]
+    },
+    "sub-flow": {
+      "namespace": "Core.Flow.SubFlow",
+      "name": "SubFlow",
+      "summary": "Allows the creation of subflows within a main flow, aiding in the development of more organized and streamlined flows.",
+      "howItWorks": "The Sub Flow node encapsulates a reusable workflow section with its own Begin and End nodes: 1. **Initialization (first message only)**: - Reads the subflow definition file from disk (.generated/subflows/`{{nodeGuid}}`.flow) - Tries Git-based storage path first, falls back to S3 path if not found - Identifies all Begin nodes within the subflow as entry points - Wires End nodes to the corresponding outputs of the Sub Flow node - Subscribes to error events from nodes within the subflow - Marks initialization complete 2. **Message Routing (every message)**: - Compresses the incoming message - Routes the message to all Begin nodes within the subflow - Each Begin node starts execution of its branch 3. **Error Handling**: - Catches errors from child nodes within the subflow - If Continue On Error is enabled: errors are swallowed and flow continues - If a Catch node exists in parent scope: error is propagated to parent - Otherwise: error is logged as unhandled 4. **Cleanup**: - Unsubscribes from all error subscriptions when the flow closes",
+      "usage": [
+        "A subflow definition file must exist at the expected path",
+        "The subflow should contain at least one Begin node (entry point)",
+        "The subflow should contain End nodes corresponding to the number of outputs",
+        "Adequate file system access to read subflow definitions"
+      ],
+      "bestPractices": [
+        "When `Continue On Error` is enabled, errors within the subflow are **not** caught even if a Catch node is present",
+        "The subflow file is loaded from `.generated/subflows/{nodeGuid}.flow`",
+        "Two storage paths are tried: Git-based path first, then S3-based path",
+        "Initialization happens only once on the first message for performance",
+        "Multiple Begin nodes in a subflow create parallel entry points",
+        "End nodes must have an `sfPort` property to map to the correct output",
+        "Subflows can be nested (subflows within subflows)",
+        "Each subflow execution is isolated with its own scope",
+        "Subflows can be part of libraries or specific to a flow/version"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrSubscribe",
+        "ErrOnReadFlow",
+        "ErrOnCompress"
+      ],
+      "relatedNodes": [
+        "Fork Branch",
+        "Go To",
+        "Stop",
+        "Catch"
+      ],
+      "tips": [
+        "Use Sub Flows to break complex workflows into manageable, testable pieces",
+        "Create reusable Sub Flows for common operations (validation, logging, notifications)",
+        "Name Sub Flows clearly to indicate their purpose",
+        "Document Sub Flow inputs and outputs with Comment nodes",
+        "Keep Sub Flows focused on a single responsibility",
+        "Test Sub Flows independently before integrating into main flows",
+        "Use multiple outputs to handle different result conditions (success, failure, etc.)",
+        "Consider creating a library of standard Sub Flows for your organization",
+        "Sub Flows improve maintainability - update once, affects all usages",
+        "Use Sub Flows instead of copy-pasting similar node sequences",
+        "Be mindful of nesting depth - too many levels can be hard to debug",
+        "Monitor file system paths when using versioned flows or libraries"
+      ]
+    }
+  }
+}

@@ -1,0 +1,440 @@
+{
+  "package": "ElevenlabsAi",
+  "summary": "Generate natural-sounding speech from text using AI-powered voice synthesis and cloning.",
+  "description": "## Overview The ElevenLabs AI package provides advanced text-to-speech capabilities using artificial intelligence. Use it when you need to convert text to natural-sounding speech, clone voices, transcribe audio, or manage voice libraries.",
+  "nodes": {
+    "add-voice": {
+      "namespace": "Core.ElevenlabsAi.AddVoice",
+      "name": "AddVoice",
+      "summary": "Creates a new custom voice in ElevenLabs using audio samples. This allows you to generate a unique voice from provided audio files.",
+      "howItWorks": "The Add Voice node creates a custom voice from audio samples. When executed, the node: 1. Validates that name and audio files are provided 2. Parses labels if provided (must be valid JSON) 3. Either uses the provided connection or creates a new client with direct API key 4. Prepares the audio file paths 5. Calls the ElevenLabs API to create the voice with all parameters 6. Returns the created voice information including its unique voice_id",
+      "usage": [
+        "Valid ElevenLabs API key (via Connect node or direct option)",
+        "Voice name",
+        "At least one audio file (multiple samples recommended for better quality)",
+        "Labels must be valid JSON if provided",
+        "Audio files should be clear, high-quality recordings"
+      ],
+      "bestPractices": [
+        "**Audio Quality** - Use high-quality, clear audio samples for best results:",
+        "Minimal background noise",
+        "Consistent volume levels",
+        "Clear speech without distortion",
+        "Sample length: 1-3 minutes of audio recommended",
+        "**Multiple Samples** - Providing multiple audio samples improves voice quality and consistency",
+        "**Labels** - Use labels to categorize and find voices easily:",
+        "accent: \"American\", \"British\", \"Australian\", etc.",
+        "age: \"young\", \"middle aged\", \"old\"",
+        "gender: \"male\", \"female\", \"neutral\"",
+        "use_case: \"narration\", \"conversational\", \"characters\"",
+        "The created voice can be used immediately in Text to Speech and other nodes",
+        "Save the returned voice_id for future use",
+        "Custom voices count toward your ElevenLabs account limits"
+      ]
+    },
+    "clone-voice": {
+      "namespace": "Core.ElevenlabsAi.CloneVoice",
+      "name": "CloneVoice",
+      "summary": "Creates a clone of a voice using audio samples. This creates a new voice that mimics the characteristics of the provided audio.",
+      "howItWorks": "The Clone Voice node creates a voice clone from audio samples. When executed, the node: 1. Validates that voice name and audio files are provided 2. Either uses the provided connection or creates a new client with direct API key 3. Opens each audio file for processing 4. Calls the ElevenLabs voice cloning API 5. Closes all file handles 6. Returns the cloned voice information with its unique voice_id",
+      "usage": [
+        "Valid ElevenLabs API key (via Connect node or direct option)",
+        "Voice name",
+        "At least one audio file (multiple recommended for better cloning)",
+        "Audio files must exist and be accessible",
+        "High-quality, clear audio for best results"
+      ],
+      "bestPractices": [
+        "**Audio Requirements** for best cloning results:",
+        "Clear, high-quality recordings",
+        "Minimal background noise",
+        "Natural, conversational speech",
+        "Varied emotional tones and pitch ranges",
+        "1-3 minutes total across all samples recommended",
+        "Consistent audio format and quality across samples",
+        "**Multiple Samples** - Using 2-5 audio samples typically produces better clones than a single file",
+        "Voice cloning captures the unique characteristics of the speaker",
+        "The cloned voice can be used immediately in Text to Speech and Speech to Speech nodes",
+        "Save the returned voice_id for future use",
+        "Cloned voices count toward your ElevenLabs account limits",
+        "Ensure you have permission to clone the voice you're using"
+      ]
+    },
+    "connect": {
+      "namespace": "Core.ElevenlabsAi.Connect",
+      "name": "Connect",
+      "summary": "Establishes a connection to ElevenLabs AI using API credentials. This node creates a connection session that can be reused across multiple operations.",
+      "howItWorks": "The Connect node authenticates with ElevenLabs AI and creates a connection session. When executed, the node: 1. Retrieves the API key from the vault 2. Creates an authenticated ElevenLabs client 3. Stores the client internally with a unique connection ID 4. Returns the connection ID for use in subsequent nodes",
+      "usage": [
+        "Valid ElevenLabs AI API key",
+        "API key must be stored in the Robomotion vault"
+      ],
+      "bestPractices": [
+        "Use this node at the beginning of your ElevenLabs workflow to establish authentication",
+        "The connection ID can be passed to other ElevenLabs nodes via message scope",
+        "Alternatively, many ElevenLabs nodes support direct API key authentication without using Connect",
+        "Using Connect is recommended when you need to perform multiple operations, as it reuses the same authenticated client",
+        "Don't forget to use the Disconnect node at the end of your workflow to release resources",
+        "Keep your API key secure by storing it in the Robomotion vault, not hardcoding it"
+      ]
+    },
+    "delete-history-item": {
+      "namespace": "Core.ElevenlabsAi.DeleteHistoryItem",
+      "name": "DeleteHistoryItem",
+      "summary": "Permanently deletes a history item from your ElevenLabs account.",
+      "howItWorks": "The Delete History Item node removes a history entry. When executed, the node: 1. Validates that a history item ID is provided 2. Either uses the provided connection or creates a new client with direct API key 3. Calls the ElevenLabs API to delete the history item 4. Removes the item from your generation history",
+      "usage": [
+        "Valid ElevenLabs API key (via Connect node or direct option)",
+        "Valid history item ID"
+      ],
+      "bestPractices": [
+        "**This action is permanent and cannot be undone**",
+        "Deleting a history item also deletes its associated audio",
+        "The audio file will no longer be available for download",
+        "Use this to manage your history and free up storage",
+        "History item IDs come from the Get History node",
+        "Consider downloading the audio before deletion if you might need it later",
+        "Deletion may help manage account storage limits",
+        "Useful for cleaning up test or unwanted generations"
+      ]
+    },
+    "delete-voice": {
+      "namespace": "Core.ElevenlabsAi.DeleteVoice",
+      "name": "DeleteVoice",
+      "summary": "Permanently deletes a custom voice from your ElevenLabs account by its ID.",
+      "howItWorks": "The Delete Voice node permanently removes a voice. When executed, the node: 1. Validates that a voice ID is provided 2. Either uses the provided connection or creates a new client with direct API key 3. Calls the ElevenLabs API to delete the voice 4. Removes the voice from your account",
+      "usage": [
+        "Valid ElevenLabs API key (via Connect node or direct option)",
+        "Valid voice ID of a custom voice",
+        "You can only delete custom voices, not pre-made ElevenLabs voices"
+      ],
+      "bestPractices": [
+        "**This action is permanent and cannot be undone**",
+        "Can only delete custom voices that you've created or cloned",
+        "Pre-made ElevenLabs voices cannot be deleted",
+        "After deletion, the voice_id becomes invalid and cannot be used",
+        "Any automations using the deleted voice will fail",
+        "Consider backing up voice information before deletion",
+        "Deleting a voice frees up space in your voice library",
+        "Make sure no active workflows are using the voice before deletion"
+      ]
+    },
+    "disconnect": {
+      "namespace": "Core.ElevenlabsAi.Disconnect",
+      "name": "Disconnect",
+      "summary": "Closes an existing ElevenLabs AI connection and releases resources. Use this node to properly clean up after completing your ElevenLabs operations.",
+      "howItWorks": "The Disconnect node properly closes an ElevenLabs AI connection. When executed, the node: 1. Retrieves the connection ID 2. Locates the stored ElevenLabs client 3. Removes the client from internal storage 4. Releases any associated resources",
+      "usage": [
+        "Valid connection ID from a Connect node"
+      ],
+      "bestPractices": [
+        "Use this node at the end of your ElevenLabs workflow to clean up resources",
+        "The connection ID should come from a Connect node earlier in your flow",
+        "After disconnecting, the connection ID can no longer be used",
+        "If you need to perform more operations, create a new connection",
+        "It's good practice to always disconnect when you're done with ElevenLabs operations",
+        "Consider using error handling to ensure disconnect runs even if earlier nodes fail"
+      ]
+    },
+    "edit-voice": {
+      "namespace": "Core.ElevenlabsAi.EditVoice",
+      "name": "EditVoice",
+      "summary": "Updates an existing voice's properties including name, description, labels, and audio samples.",
+      "howItWorks": "The Edit Voice node updates an existing voice. When executed, the node: 1. Validates that voice ID, name, and files are provided 2. Parses labels if provided (must be valid JSON) 3. Either uses the provided connection or creates a new client with direct API key 4. Prepares the audio file paths and parameters 5. Calls the ElevenLabs API to update the voice 6. Returns the updated voice information",
+      "usage": [
+        "Valid ElevenLabs API key (via Connect node or direct option)",
+        "Valid voice ID of an existing custom voice",
+        "Voice name",
+        "At least one audio file",
+        "Labels must be valid JSON if provided",
+        "You can only edit custom voices, not pre-made ElevenLabs voices"
+      ],
+      "bestPractices": [
+        "Can only edit custom voices that you've created or cloned",
+        "Pre-made ElevenLabs voices cannot be edited",
+        "Updating audio files will retrain the voice with new samples",
+        "Use this to improve voice quality by adding better audio samples",
+        "Updating labels helps organize and categorize your voice library",
+        "The voice_id remains the same after editing",
+        "Any existing usage of the voice will use the updated version",
+        "Consider the impact on existing automations when updating a voice"
+      ]
+    },
+    "edit-voice-settings": {
+      "namespace": "Core.ElevenlabsAi.EditVoiceSettings",
+      "name": "EditVoiceSettings",
+      "summary": "Updates the default generation settings (stability and similarity boost) for a specific voice.",
+      "howItWorks": "The Edit Voice Settings node updates a voice's default settings. When executed, the node: 1. Validates that voice ID, stability, and similarity boost are provided 2. Validates that both values are valid decimals between 0.0 and 1.0 3. Either uses the provided connection or creates a new client with direct API key 4. Calls the ElevenLabs API to update the voice settings 5. Updates the voice's default generation parameters",
+      "usage": [
+        "Valid ElevenLabs API key (via Connect node or direct option)",
+        "Valid voice ID",
+        "Stability must be a decimal number between 0.0 and 1.0",
+        "Similarity boost must be a decimal number between 0.0 and 1.0"
+      ],
+      "bestPractices": [
+        "**Stability** controls voice consistency:",
+        "0.0-0.3: More variable, expressive, emotional",
+        "0.4-0.6: Balanced (recommended starting point)",
+        "0.7-1.0: Very consistent, predictable, stable",
+        "**Similarity Boost** controls voice matching:",
+        "0.0-0.3: More creative interpretation",
+        "0.4-0.6: Balanced similarity",
+        "0.7-1.0: Close match to original samples",
+        "Updates the default settings for future generations",
+        "These become the new defaults when using this voice",
+        "You can still override these in individual Text to Speech calls",
+        "Changes affect all future uses of the voice unless overridden",
+        "Useful for standardizing voice output across workflows"
+      ]
+    },
+    "get-audio-from-history-item": {
+      "namespace": "Core.ElevenlabsAi.GetAudioFromHistoryItem",
+      "name": "GetAudioFromHistoryItem",
+      "summary": "Downloads the audio file from a previously generated history item and saves it to disk.",
+      "howItWorks": "The Get Audio from History Item node retrieves and saves audio. When executed, the node: 1. Validates that save path and history item ID are provided 2. Either uses the provided connection or creates a new client with direct API key 3. Calls the ElevenLabs API to retrieve the audio 4. Streams the audio chunks to the specified file path 5. Saves the complete audio file to disk",
+      "usage": [
+        "Valid ElevenLabs API key (via Connect node or direct option)",
+        "Valid history item ID",
+        "Writable file path for saving audio",
+        "The history item must have completed successfully"
+      ],
+      "bestPractices": [
+        "Retrieves previously generated audio without regenerating",
+        "Saves character quota by reusing existing generations",
+        "Audio format matches the original generation (typically MP3)",
+        "The save path directory must exist before running",
+        "Useful for downloading audio generated in previous sessions",
+        "History item IDs come from the Get History node",
+        "Audio is streamed in chunks, making it memory-efficient",
+        "Make sure the history item generation completed successfully",
+        "Failed generations won't have audio available"
+      ]
+    },
+    "get-history": {
+      "namespace": "Core.ElevenlabsAi.GetHistory",
+      "name": "GetHistory",
+      "summary": "Retrieves the generation history from your ElevenLabs account, showing all previously generated audio items.",
+      "howItWorks": "The Get History node retrieves your generation history. When executed, the node: 1. Validates that page size is a valid integer 2. Either uses the provided connection or creates a new client with direct API key 3. Calls the ElevenLabs API to retrieve history items 4. Handles pagination automatically if there are more items 5. Returns the complete list of history items",
+      "usage": [
+        "Valid ElevenLabs API key (via Connect node or direct option)",
+        "Page size must be a valid integer between 1 and 1000"
+      ],
+      "bestPractices": [
+        "Returns history from most recent to oldest",
+        "Use pagination for large histories to avoid timeouts",
+        "The Last History Item ID enables retrieving subsequent pages",
+        "History includes both successful and failed generations",
+        "Character count shows usage for billing tracking",
+        "History items can be used to download previously generated audio",
+        "The node automatically handles pagination if needed",
+        "Use the history_item_id with Get History Item or Get Audio from History Item nodes"
+      ]
+    },
+    "get-history-item": {
+      "namespace": "Core.ElevenlabsAi.GetHistoryItem",
+      "name": "GetHistoryItem",
+      "summary": "Retrieves detailed information about a specific history item by its ID.",
+      "howItWorks": "The Get History Item node retrieves detailed information about a specific generation. When executed, the node: 1. Validates that a history item ID is provided 2. Either uses the provided connection or creates a new client with direct API key 3. Calls the ElevenLabs API to retrieve the history item 4. Returns the complete history item details including generation settings",
+      "usage": [
+        "Valid ElevenLabs API key (via Connect node or direct option)",
+        "Valid history item ID"
+      ],
+      "bestPractices": [
+        "Returns more detailed information than Get History",
+        "Includes the exact settings used for generation",
+        "Useful for reproducing a specific generation",
+        "The text and settings can be used to regenerate similar audio",
+        "History item IDs come from the Get History node",
+        "Use this to inspect the parameters of past generations",
+        "The voice_settings show what stability and similarity boost were used"
+      ]
+    },
+    "get-models": {
+      "namespace": "Core.ElevenlabsAi.GetModels",
+      "name": "GetModels",
+      "summary": "Retrieves the list of available ElevenLabs AI speech synthesis models.",
+      "howItWorks": "The Get Models node retrieves available models. When executed, the node: 1. Either uses the provided connection or creates a new client with direct API key 2. Calls the ElevenLabs API to retrieve all available models 3. Returns the complete list of models with their capabilities",
+      "usage": [
+        "Valid ElevenLabs API key (via Connect node or direct option)"
+      ],
+      "bestPractices": [
+        "Returns all models available to your account",
+        "Different models have different capabilities:",
+        "Monolingual models optimized for specific languages (typically English)",
+        "Multilingual models supporting multiple languages",
+        "Some models support voice conversion (speech-to-speech)",
+        "Model selection affects generation quality and speed",
+        "Token cost factor indicates relative pricing for usage",
+        "Use model_id when calling Text to Speech or other generation nodes",
+        "Models may be added or updated by ElevenLabs over time",
+        "Check language support to ensure the model handles your content"
+      ]
+    },
+    "get-user-info": {
+      "namespace": "Core.ElevenlabsAi.GetUserInfo",
+      "name": "GetUserInfo",
+      "summary": "Retrieves the current user's ElevenLabs account information.",
+      "howItWorks": "The Get User Info node retrieves account information. When executed, the node: 1. Either uses the provided connection or creates a new client with direct API key 2. Calls the ElevenLabs API to retrieve user information 3. Returns the complete user account details",
+      "usage": [
+        "Valid ElevenLabs API key (via Connect node or direct option)"
+      ],
+      "bestPractices": [
+        "Returns general account information",
+        "Useful for verifying API key validity",
+        "Subscription details indicate account type and status",
+        "Use Get User Subscription Info for detailed usage and quota information",
+        "The user_id is unique to your account",
+        "API key validity is confirmed by successful retrieval",
+        "Can be used to check account status before operations"
+      ]
+    },
+    "get-user-subscription-info": {
+      "namespace": "Core.ElevenlabsAi.GetUserSubscriptionInfo",
+      "name": "GetUserSubscriptionInfo",
+      "summary": "Retrieves detailed subscription information including usage limits, character quotas, and plan details.",
+      "howItWorks": "The Get User Subscription Info node retrieves subscription details. When executed, the node: 1. Either uses the provided connection or creates a new client with direct API key 2. Calls the ElevenLabs API to retrieve subscription information 3. Returns detailed quota, usage, and plan information",
+      "usage": [
+        "Valid ElevenLabs API key (via Connect node or direct option)"
+      ],
+      "bestPractices": [
+        "Returns detailed usage and quota information",
+        "Character count shows current billing period usage",
+        "Character limit shows maximum allowed characters",
+        "Next reset timestamp shows when quota will refresh",
+        "Voice limits indicate how many custom voices you can create",
+        "Useful for monitoring usage to avoid exceeding limits",
+        "Check this before large batch operations",
+        "Different tiers have different capabilities and limits",
+        "Can use this to implement usage-based logic in automations"
+      ]
+    },
+    "get-voice": {
+      "namespace": "Core.ElevenlabsAi.GetVoice",
+      "name": "GetVoice",
+      "summary": "Retrieves detailed information for a specific voice by its ID, including settings and metadata.",
+      "howItWorks": "The Get Voice node retrieves detailed information about a specific voice. When executed, the node: 1. Validates that a voice ID is provided 2. Either uses the provided connection or creates a new client with direct API key 3. Calls the ElevenLabs API to retrieve the voice with settings 4. Returns the complete voice details including generation settings",
+      "usage": [
+        "Valid ElevenLabs API key (via Connect node or direct option)",
+        "Valid voice ID"
+      ],
+      "bestPractices": [
+        "Returns more detailed information than Get Voices, including settings",
+        "Useful for inspecting voice configuration before using it",
+        "The settings indicate the default stability and similarity boost values for the voice",
+        "Samples show which audio files were used to create custom voices",
+        "For pre-made ElevenLabs voices, samples may not be available",
+        "Voice IDs can be obtained from the Get Voices node",
+        "Use this to verify a voice exists before using it in speech generation"
+      ]
+    },
+    "get-voice-settings": {
+      "namespace": "Core.ElevenlabsAi.GetVoiceSettings",
+      "name": "GetVoiceSettings",
+      "summary": "Retrieves the current settings (stability and similarity boost) for a specific voice.",
+      "howItWorks": "The Get Voice Settings node retrieves a voice's generation settings. When executed, the node: 1. Validates that a voice ID is provided 2. Either uses the provided connection or creates a new client with direct API key 3. Calls the ElevenLabs API to retrieve the voice settings 4. Returns the stability and similarity boost values",
+      "usage": [
+        "Valid ElevenLabs API key (via Connect node or direct option)",
+        "Valid voice ID"
+      ],
+      "bestPractices": [
+        "Returns the default generation settings for a voice",
+        "These settings control how the voice sounds when generating speech",
+        "Stability affects voice consistency and variation",
+        "Similarity boost affects how closely output matches the original voice samples",
+        "You can override these settings in Text to Speech and Speech to Speech nodes",
+        "Useful for understanding current voice configuration",
+        "Pre-made voices have optimized default settings"
+      ]
+    },
+    "get-voices": {
+      "namespace": "Core.ElevenlabsAi.GetVoices",
+      "name": "GetVoices",
+      "summary": "Retrieves all available voices from your ElevenLabs AI account, including both pre-made and custom voices.",
+      "howItWorks": "The Get Voices node retrieves your voice library. When executed, the node: 1. Either uses the provided connection or creates a new client with direct API key 2. Calls the ElevenLabs API to retrieve all voices 3. Returns the complete list of voices with their metadata",
+      "usage": [
+        "Valid ElevenLabs API key (via Connect node or direct option)"
+      ],
+      "bestPractices": [
+        "Returns both ElevenLabs pre-made voices and your custom voices",
+        "Use the voice_id from the output in Text to Speech, Speech to Speech, or other voice-related nodes",
+        "The voices list includes professional voices and any voices you've cloned or created",
+        "Voice metadata helps you select the right voice for your use case",
+        "Labels can indicate voice characteristics like age, gender, accent, use case, etc.",
+        "Preview URLs allow you to listen to voice samples before using them",
+        "This is useful for dynamically selecting voices based on requirements"
+      ]
+    },
+    "speech-to-speech": {
+      "namespace": "Core.ElevenlabsAi.SpeechToSpeech",
+      "name": "SpeechToSpeech",
+      "summary": "Converts speech from one voice to another using ElevenLabs AI's voice conversion technology. This node transforms the voice in an audio file while preserving the content and timing.",
+      "howItWorks": "The Speech to Speech node converts audio from one voice to another. When executed, the node: 1. Validates all required inputs (source path, output path, target voice ID) 2. Checks that stability and similarity boost values are valid decimals between 0.0 and 1.0 3. Either uses the provided connection or creates a new client with direct API key 4. Opens the source audio file 5. Calls the ElevenLabs speech-to-speech API with voice settings 6. Streams the converted audio chunks and saves them to the output path",
+      "usage": [
+        "Valid ElevenLabs API key (via Connect node or direct option)",
+        "Source audio file in a supported format",
+        "Valid target voice ID from ElevenLabs",
+        "Writable file path for saving converted audio",
+        "Stability and similarity boost must be decimal numbers between 0.0 and 1.0"
+      ],
+      "bestPractices": [
+        "**Stability** controls voice consistency - higher values (0.7-1.0) create more predictable outputs; lower values (0.0-0.3) add variation",
+        "**Similarity Boost** controls how closely the output matches the target voice - higher values stay closer to the voice samples",
+        "This is different from text-to-speech - it converts existing speech to a different voice while maintaining timing and prosody",
+        "The content, words, and timing from the source audio are preserved",
+        "Only the voice characteristics are changed to match the target voice",
+        "Works with various audio formats (MP3, WAV, etc.)",
+        "Audio quality of the source file affects the quality of the output",
+        "Make sure the output path directory exists before running the node",
+        "The converted audio format depends on the ElevenLabs API default (typically MP3)"
+      ]
+    },
+    "speech-to-text": {
+      "namespace": "Core.ElevenlabsAi.SpeechToText",
+      "name": "SpeechToText",
+      "summary": "Transcribes audio files to text using ElevenLabs AI's speech recognition powered by OpenAI Whisper.",
+      "howItWorks": "The Speech to Text node transcribes audio to text using AI. When executed, the node: 1. Validates that the audio file path is provided 2. Validates temperature if specified (must be between 0.0 and 1.0) 3. Either uses the provided connection or creates a new client with direct API key 4. Opens the audio file and prepares transcription parameters 5. Calls the ElevenLabs speech-to-text API with optional language, prompt, and temperature 6. Returns the transcribed text and metadata",
+      "usage": [
+        "Valid ElevenLabs API key (via Connect node or direct option)",
+        "Audio file in a supported format (MP3, WAV, M4A, FLAC, etc.)",
+        "Temperature value must be between 0.0 and 1.0 if specified"
+      ],
+      "bestPractices": [
+        "**Language** - Specifying the language can improve accuracy, but auto-detection works well for most cases",
+        "**Prompt** - Use prompts to guide transcription for:",
+        "Technical terminology",
+        "Industry-specific vocabulary",
+        "Proper nouns and names",
+        "Specific formatting preferences",
+        "**Temperature** - Usually best left at 0 for most accurate, deterministic results. Increase only if you need creative variations",
+        "The Whisper model supports many languages and can auto-detect them",
+        "Audio quality affects transcription accuracy - clear audio with minimal background noise works best",
+        "Longer audio files may take more time to process",
+        "The model handles various accents and speaking styles",
+        "Supports various audio formats - common formats like MP3, WAV work well"
+      ]
+    },
+    "text-to-speech": {
+      "namespace": "Core.ElevenlabsAi.TextToSpeech",
+      "name": "TextToSpeech",
+      "summary": "Converts text to natural-sounding speech audio using ElevenLabs AI's advanced voice synthesis technology.",
+      "howItWorks": "The Text to Speech node generates audio from text using ElevenLabs AI. When executed, the node: 1. Validates all required inputs (save path, voice ID, text) 2. Checks that stability and similarity boost values are valid decimals between 0.0 and 1.0 3. Either uses the provided connection or creates a new client with direct API key 4. Calls the ElevenLabs text-to-speech API with the specified parameters 5. Streams the generated audio chunks and saves them to the specified file path",
+      "usage": [
+        "Valid ElevenLabs API key (via Connect node or direct option)",
+        "Valid voice ID from ElevenLabs",
+        "Text to convert",
+        "Writable file path for saving audio",
+        "Stability and similarity boost must be decimal numbers between 0.0 and 1.0"
+      ],
+      "bestPractices": [
+        "**Stability** controls voice consistency - higher values (0.7-1.0) create more predictable, steady voices; lower values (0.0-0.3) add more variation and emotion",
+        "**Similarity Boost** controls how closely the output matches the original voice - higher values stay closer to the training samples",
+        "The Monolingual v1 model is faster and more optimized for English content",
+        "The Multilingual v1 model supports various languages but may be slightly slower",
+        "Audio is streamed in chunks and written to disk, making it memory-efficient for long text",
+        "The generated audio format depends on the ElevenLabs API default (typically MP3)",
+        "Make sure the save path directory exists before running the node",
+        "Voice IDs can be obtained from the Get Voices or Get Voice nodes"
+      ]
+    }
+  }
+}

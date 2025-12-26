@@ -1,0 +1,345 @@
+{
+  "package": "Instagram",
+  "summary": "The Instagram package provides comprehensive automation capabilities for Instagram data extraction and interaction. Built on the powerful Instaloader library, this package allows you to automate profile analysis, content discovery, and media collection tasks.",
+  "description": "## Features - **Profile Information** - Extract detailed profile data including followers, following, bio, and verification status",
+  "nodes": {
+    "download-post-media": {
+      "namespace": "Core.Instagram.DownloadPostMedia",
+      "name": "DownloadPostMedia",
+      "summary": "Downloads media files (images and videos) from an Instagram post to a local directory. Supports both single posts and carousel posts with multiple images/videos.",
+      "howItWorks": "The Download Post Media node retrieves and saves media from Instagram posts. When executed, it: 1. Validates the Session ID, Post Shortcode, and Output Directory 2. Extracts the shortcode from the URL if a full URL was provided 3. Creates the output directory if it doesn't exist 4. Retrieves the post data using the Instagram API 5. For carousel posts, iterates through all sidecar nodes 6. Downloads each media file (video or image) based on options 7. Names files using the pattern: `{shortcode}_{index}.{extension}` 8. Returns array of downloaded file paths and count",
+      "usage": [
+        "An active Instagram session (from Login node)",
+        "A valid post shortcode or Instagram post URL",
+        "Write permissions to the output directory",
+        "Sufficient disk space for the media files"
+      ],
+      "bestPractices": [
+        "Files are named `{shortcode}.jpg` for single image posts",
+        "Files are named `{shortcode}.mp4` for single video posts",
+        "Carousel items are named `{shortcode}_1.jpg`, `{shortcode}_2.mp4`, etc.",
+        "The output directory is created automatically if it doesn't exist",
+        "Both options can be enabled to download all media types",
+        "Disable one option to selectively download only images or videos",
+        "Downloaded files are not overwritten; existing files are replaced"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound",
+        "ErrNetwork",
+        "ErrRuntime"
+      ]
+    },
+    "get-followers": {
+      "namespace": "Core.Instagram.GetFollowers",
+      "name": "GetFollowers",
+      "summary": "Retrieves the list of followers for an Instagram profile with optional limits. Returns follower usernames, profile information, verification status, and engagement metrics.",
+      "howItWorks": "The Get Followers node fetches the follower list from a profile. When executed, it: 1. Validates the Session ID and Username 2. Retrieves the profile using the Instagram API 3. Iterates through the profile's followers 4. For each follower, extracts profile information 5. Stops when Max Followers limit is reached or all followers are retrieved 6. Returns the followers array and count",
+      "usage": [
+        "An active Instagram session (from Login node)",
+        "A valid Instagram username",
+        "Login is required to access follower lists (even for public accounts)",
+        "For private profiles, you must follow the account"
+      ],
+      "bestPractices": [
+        "Retrieving followers from large accounts (100K+ followers) can take significant time",
+        "Use Max Followers to limit retrieval time and API calls",
+        "Follower order may vary (Instagram doesn't guarantee specific ordering)",
+        "Each follower object includes their own follower/following counts",
+        "Private account followers require follow relationship",
+        "Rate limiting may occur when retrieving large follower lists",
+        "Instagram may restrict access to very large follower lists"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound",
+        "ErrPermission",
+        "ErrAuth",
+        "ErrRuntime"
+      ]
+    },
+    "get-following": {
+      "namespace": "Core.Instagram.GetFollowing",
+      "name": "GetFollowing",
+      "summary": "Retrieves the list of accounts that an Instagram profile is following with optional limits. Returns usernames, profile information, verification status, and engagement metrics for each followed account.",
+      "howItWorks": "The Get Following node fetches the list of accounts that a profile follows. When executed, it: 1. Validates the Session ID and Username 2. Retrieves the profile using the Instagram API 3. Iterates through the accounts the profile is following 4. For each account, extracts profile information 5. Stops when Max Following limit is reached or all accounts are retrieved 6. Returns the following array and count",
+      "usage": [
+        "An active Instagram session (from Login node)",
+        "A valid Instagram username",
+        "Login is required to access following lists (even for public accounts)",
+        "For private profiles, you must follow the account to see who they follow"
+      ],
+      "bestPractices": [
+        "Following lists are typically smaller than follower lists",
+        "Use Max Following to limit retrieval time for accounts following many users",
+        "Each profile object includes engagement metrics for analysis",
+        "Order may vary and is not guaranteed to be consistent",
+        "Private account following lists require follow relationship",
+        "Rate limiting may occur when retrieving large following lists"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound",
+        "ErrPermission",
+        "ErrAuth",
+        "ErrRuntime"
+      ]
+    },
+    "get-highlights": {
+      "namespace": "Core.Instagram.GetHighlights",
+      "name": "GetHighlights",
+      "summary": "Retrieves story highlights from an Instagram profile. Highlights are curated collections of expired stories that profile owners choose to keep permanently on their profile. Returns highlight albums with cover images, titles, and all stories within each highlight.",
+      "howItWorks": "The Get Highlights node retrieves saved story highlights from a profile. When executed, it: 1. Validates the Session ID and Username 2. Retrieves the profile information 3. Fetches all highlight albums for the profile 4. For each highlight album: - Extracts album metadata (title, cover, item count) - Retrieves all story items within the highlight - Extracts media URLs and metadata for each story 5. Returns all highlights with their contained stories",
+      "usage": [
+        "An active Instagram session (from Login node)",
+        "A valid Instagram username",
+        "Permission to view the profile (public accounts or followed private accounts)",
+        "The profile must have created highlights (not all profiles have highlights)"
+      ],
+      "bestPractices": [
+        "Unlike stories, highlights are permanent until the owner deletes them",
+        "Each highlight is a themed collection of stories (e.g., \"Travel\", \"Products\", \"Events\")",
+        "Highlights can contain stories from different time periods",
+        "The cover image is chosen by the profile owner",
+        "`item_count` tells you how many stories are in each highlight before fetching them",
+        "Story metadata within highlights may be limited compared to active stories",
+        "Highlights are ordered as displayed on the profile"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound",
+        "ErrPermission",
+        "ErrRuntime"
+      ]
+    },
+    "get-post-comments": {
+      "namespace": "Core.Instagram.GetPostComments",
+      "name": "GetPostComments",
+      "summary": "Retrieves comments from a specific Instagram post with optional limits. Returns comment text, author information, timestamps, likes, and reply counts.",
+      "howItWorks": "The Get Post Comments node fetches comments from a specific post. When executed, it: 1. Validates the Session ID and Post Shortcode/URL 2. Extracts the shortcode from the URL if a full URL was provided 3. Retrieves the post using the Instagram API 4. Iterates through the post's comments 5. Extracts comment data including author details and engagement metrics 6. Stops when Max Comments limit is reached or all comments are retrieved 7. Returns the comments array and count",
+      "usage": [
+        "An active Instagram session (from Login node)",
+        "A valid post shortcode or Instagram post URL",
+        "The post must exist and have comments enabled",
+        "Appropriate permissions to view the post"
+      ],
+      "bestPractices": [
+        "Comments are typically returned in chronological order",
+        "The node retrieves top-level comments; replies are indicated by `answers_count`",
+        "Setting Max Comments to 0 retrieves all comments (may be slow for viral posts)",
+        "Verified authors are marked with the `author_verified` flag",
+        "Comment likes provide engagement insights",
+        "Posts with thousands of comments may take time to process",
+        "Some posts have comments disabled; this returns an empty array"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound",
+        "ErrRuntime"
+      ]
+    },
+    "get-post-details": {
+      "namespace": "Core.Instagram.GetPostDetails",
+      "name": "GetPostDetails",
+      "summary": "Retrieves detailed information about a specific Instagram post using its shortcode or URL. Returns comprehensive post data including caption, engagement metrics, media URLs, location, tagged users, and carousel items.",
+      "howItWorks": "The Get Post Details node fetches comprehensive information about a specific post. When executed, it: 1. Validates the Session ID and Post Shortcode/URL 2. Extracts the shortcode from the URL if a full URL was provided 3. Retrieves the post data from Instagram's API 4. For carousel posts (multiple images/videos): - Fetches all sidecar nodes - Extracts media URLs for each item 5. Compiles all post metadata and media information 6. Returns the complete post details object",
+      "usage": [
+        "An active Instagram session (from Login node)",
+        "A valid post shortcode or Instagram post URL",
+        "The post must exist and be accessible"
+      ],
+      "bestPractices": [
+        "Accepts both shortcode and full URL for convenience",
+        "Automatically extracts shortcode from URLs in various formats (/p/, /reel/, /tv/)",
+        "For carousel posts, `media_items` contains all images/videos in order",
+        "Single posts have one item in the `media_items` array",
+        "Location data includes coordinates when available",
+        "`typename` helps identify the post type programmatically",
+        "Video posts include both view count and duration",
+        "Accessibility captions provide AI-generated image descriptions"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound",
+        "ErrRuntime"
+      ]
+    },
+    "get-profile-info": {
+      "namespace": "Core.Instagram.GetProfileInfo",
+      "name": "GetProfileInfo",
+      "summary": "Retrieves detailed information about an Instagram profile including follower count, following count, bio, verification status, profile picture URL, and more.",
+      "howItWorks": "The Get Profile Info node fetches comprehensive profile data from Instagram. When executed, it: 1. Validates that both Session ID and Username are provided 2. Retrieves the active session using the Session ID 3. Queries Instagram's API for the profile information 4. Extracts and structures all available profile data 5. Returns the profile information as a structured object",
+      "usage": [
+        "An active Instagram session (from Login node)",
+        "A valid Instagram username",
+        "Appropriate permissions to view the profile (public profiles or profiles you follow)"
+      ],
+      "bestPractices": [
+        "Public profiles can be accessed by any authenticated account",
+        "Private profiles require you to be a follower",
+        "Biography hashtags and mentions are automatically extracted",
+        "Profile picture URLs are direct links to the image file",
+        "Business category is only available for business/creator accounts",
+        "The data reflects the profile state at the time of the request"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound",
+        "ErrPermission",
+        "ErrRuntime"
+      ]
+    },
+    "get-profile-posts": {
+      "namespace": "Core.Instagram.GetProfilePosts",
+      "name": "GetProfilePosts",
+      "summary": "Retrieves posts from an Instagram profile with optional filtering and limits. Returns detailed post information including captions, likes, comments, hashtags, mentions, and media URLs.",
+      "howItWorks": "The Get Profile Posts node fetches posts from a profile's feed. When executed, it: 1. Validates the Session ID and Username 2. Retrieves the profile using the Instagram API 3. Iterates through the profile's posts 4. Filters out videos if Include Videos is disabled 5. Extracts comprehensive data for each post 6. Stops when Max Posts limit is reached or all posts are retrieved 7. Returns the posts array and count",
+      "usage": [
+        "An active Instagram session (from Login node)",
+        "A valid Instagram username",
+        "Permission to view the profile (public or followed private accounts)"
+      ],
+      "bestPractices": [
+        "Posts are returned in reverse chronological order (newest first)",
+        "Setting Max Posts to 0 retrieves all posts, which may take significant time for large profiles",
+        "Video posts include both video URL and thumbnail URL",
+        "Carousel posts (multiple images) show only the first image; use Get Post Details for all carousel items",
+        "Sponsored posts are clearly marked with the `is_sponsored` flag",
+        "Location data is only available if the user tagged a location",
+        "Rate limiting may occur when retrieving large numbers of posts"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound",
+        "ErrPermission",
+        "ErrRuntime"
+      ]
+    },
+    "get-reels": {
+      "namespace": "Core.Instagram.GetReels",
+      "name": "GetReels",
+      "summary": "Retrieves reels from an Instagram profile with optional limits. Reels are short-form vertical videos. Returns reel details including video URLs, captions, likes, view counts, and engagement metrics.",
+      "howItWorks": "The Get Reels node fetches reels from a profile's content. When executed, it: 1. Validates the Session ID and Username 2. Retrieves the profile using the Instagram API 3. Iterates through the profile's posts 4. Filters for video posts with reel-specific typenames 5. Extracts comprehensive data for each reel 6. Stops when Max Reels limit is reached or all reels are retrieved 7. Returns the reels array and count Note: The node identifies reels by checking if posts are videos with typename 'GraphVideo' or 'XDTGraphVideo'.",
+      "usage": [
+        "An active Instagram session (from Login node)",
+        "A valid Instagram username",
+        "Permission to view the profile (public or followed private accounts)",
+        "The profile must have posted reels"
+      ],
+      "bestPractices": [
+        "Reels are returned in reverse chronological order (newest first)",
+        "Setting Max Reels to 0 retrieves all reels, which may take significant time",
+        "View counts provide engagement metrics specific to video content",
+        "Duration helps identify short vs longer reels",
+        "Reels typically range from 15 to 90 seconds",
+        "The thumbnail URL provides a preview image for the video",
+        "Reels appear in the main feed and the dedicated Reels tab"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound",
+        "ErrPermission",
+        "ErrRuntime"
+      ]
+    },
+    "get-stories": {
+      "namespace": "Core.Instagram.GetStories",
+      "name": "GetStories",
+      "summary": "Retrieves currently active stories from an Instagram profile. Stories are temporary content that expire after 24 hours. Returns story details including media URLs, timestamps, captions, and expiration times.",
+      "howItWorks": "The Get Stories node retrieves currently active stories from a profile. When executed, it: 1. Validates the Session ID and Username 2. Retrieves the profile to get the user ID 3. Fetches active stories for that user 4. Iterates through each story item 5. Extracts media URLs, captions, and metadata 6. Returns all story items with their expiration times",
+      "usage": [
+        "An active Instagram session (from Login node)",
+        "A valid Instagram username",
+        "Permission to view the profile's stories (public accounts or accounts you follow)",
+        "Stories must be currently active (not expired)"
+      ],
+      "bestPractices": [
+        "Stories are only available for 24 hours after posting",
+        "The `expires_at` field shows when each story will be automatically deleted",
+        "You can only retrieve stories from accounts you have permission to view",
+        "Stories from private accounts require you to follow them",
+        "Multiple story items may be returned if the user posted several stories",
+        "Story order matches the posting sequence",
+        "Video stories include duration information",
+        "Some stories may not have captions"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound",
+        "ErrPermission",
+        "ErrRuntime"
+      ]
+    },
+    "login": {
+      "namespace": "Core.Instagram.Login",
+      "name": "Login",
+      "summary": "Authenticates with Instagram using your credentials and establishes a session for subsequent Instagram operations. Supports session persistence to enable faster logins and reduce authentication requests.",
+      "howItWorks": "The Login node is the entry point for all Instagram automation workflows. When executed, it: 1. Retrieves your Instagram credentials from the vault 2. Checks if a session file exists at the specified path (if provided) 3. Attempts to load and validate the existing session 4. If no valid session exists, performs a fresh login with username and password 5. Saves the session to the specified path (if Save Session is enabled) 6. Returns a unique Session ID for use in subsequent operations Session persistence significantly improves performance by reusing authenticated sessions instead of logging in every time.",
+      "usage": [
+        "A valid Instagram account",
+        "Instagram credentials stored in Robomotion's vault",
+        "Write permissions to the session file directory (if using session persistence)"
+      ],
+      "bestPractices": [
+        "The Login node should be the first Instagram node in your flow",
+        "The returned Session ID must be passed to all subsequent Instagram nodes",
+        "Session files are stored locally and contain authentication tokens",
+        "Keep session files secure as they provide access to your Instagram account",
+        "Sessions may expire over time; the node will automatically re-authenticate if needed",
+        "For security, delete session files when they're no longer needed"
+      ],
+      "errorCodes": [
+        "ErrAuth",
+        "ErrNetwork",
+        "ErrRuntime"
+      ]
+    },
+    "logout": {
+      "namespace": "Core.Instagram.Logout",
+      "name": "Logout",
+      "summary": "Ends the Instagram session and cleans up resources. This node should be called when you're finished using Instagram operations to properly release the session.",
+      "howItWorks": "The Logout node properly terminates an Instagram session and releases associated resources. When executed, it: 1. Validates that a Session ID is provided 2. Retrieves the Instaloader instance associated with the session 3. Calls the close method to properly terminate the connection 4. Removes the session from the internal registry 5. Returns a success status Even if the close operation fails, the session is removed from the registry to prevent resource leaks.",
+      "usage": [
+        "A valid Session ID from a previous Login operation",
+        "The session should still be active (not already logged out)"
+      ],
+      "bestPractices": [
+        "Always call Logout at the end of your Instagram workflow to clean up resources",
+        "The Logout operation is safe to call multiple times on the same session",
+        "Even if an error occurred during your workflow, call Logout in a finally block",
+        "Logging out does not delete saved session files; it only cleans up in-memory resources",
+        "After logout, the Session ID becomes invalid and cannot be reused"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg"
+      ]
+    },
+    "search-hashtag": {
+      "namespace": "Core.Instagram.SearchHashtag",
+      "name": "SearchHashtag",
+      "summary": "Searches for Instagram posts by hashtag and retrieves post details including captions, engagement metrics, and media URLs. Useful for discovering trending content, monitoring brand hashtags, and researching popular topics.",
+      "howItWorks": "The Search Hashtag node discovers posts using a specific hashtag. When executed, it: 1. Validates the Session ID and Hashtag 2. Removes the # symbol if provided (accepts both formats) 3. Queries Instagram's hashtag search API 4. Iterates through posts containing the hashtag 5. Filters out videos if Include Videos is disabled 6. Extracts comprehensive data for each post 7. Stops when Max Posts limit is reached 8. Returns the posts array and count",
+      "usage": [
+        "An active Instagram session (from Login node)",
+        "A valid hashtag",
+        "Login is required to search hashtags",
+        "The hashtag must exist on Instagram"
+      ],
+      "bestPractices": [
+        "The # symbol is optional; the node accepts both \"travel\" and \"#travel\"",
+        "Posts are typically returned by relevance or recency",
+        "Very popular hashtags may have millions of posts",
+        "Max Posts defaults to 50 when set to 0 (Instagram's default)",
+        "The search returns posts that include the exact hashtag",
+        "Hashtag searches are case-insensitive (#Travel = #travel)",
+        "Results may include sponsored posts",
+        "Video filtering can speed up processing if you only need images"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrAuth",
+        "ErrRuntime"
+      ]
+    }
+  }
+}

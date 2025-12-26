@@ -1,0 +1,43 @@
+{
+  "package": "Monitoring",
+  "summary": "Monitor websites, servers, and network services for uptime, availability, and health checks.",
+  "description": "## Overview The Monitoring package provides network and service monitoring capabilities. Use it when you need to check website availability, monitor server health, verify SSL certificates, or perform network connectivity tests.",
+  "nodes": {
+    "dns": {
+      "namespace": "Core.Monitoring.Dns",
+      "name": "Dns",
+      "summary": "Checks DNS records for a domain including A, MX, TXT, NS, and CNAME records. This node is essential for monitoring domain configuration, verifying DNS propagation, and ensuring your domain's DNS records are properly configured.",
+      "howItWorks": "The DNS node performs domain name system lookups to retrieve various DNS records. When executed, the node: 1. Cleans the input domain by removing protocol (http://, https://), path, and port 2. Configures a DNS resolver with the specified timeout 3. Queries the specified record type(s) 4. Collects all results and any errors encountered 5. Returns a comprehensive result object with all DNS information"
+    },
+    "keyword": {
+      "namespace": "Core.Monitoring.Keyword",
+      "name": "Keyword",
+      "summary": "Checks if specified keywords exist or do not exist on a webpage. This node is perfect for monitoring website content changes, verifying deployments, detecting errors, or ensuring critical content is present on your pages.",
+      "howItWorks": "The Keyword node fetches a webpage and searches its HTML content for specified keywords. When executed, the node: 1. Validates the URL and keywords input 2. Prepends `https://` if no protocol is specified 3. Fetches the webpage content with the specified timeout 4. Searches the entire HTML for each keyword (case-sensitive) 5. Categorizes keywords as existing or non-existing 6. Returns the appropriate list based on the check condition"
+    },
+    "ping": {
+      "namespace": "Core.Monitoring.Ping",
+      "name": "Ping",
+      "summary": "Pings a host and returns latency and packet loss statistics. This node is essential for network diagnostics, monitoring server reachability, measuring network performance, and detecting connectivity issues.",
+      "howItWorks": "The Ping node sends ICMP echo requests to a host and measures response times. When executed, the node: 1. Cleans the input host by removing protocol (http://, https://), path, and port 2. Creates a pinger with specified count, timeout, and interval 3. Sends ping packets using unprivileged mode (UDP) 4. Collects statistics on response times and packet delivery 5. Returns comprehensive network performance metrics 6. If host is unreachable, returns reachable=false with 100% packet loss"
+    },
+    "port": {
+      "namespace": "Core.Monitoring.Port",
+      "name": "Port",
+      "summary": "Checks if a TCP port is open or closed on a given IP address or hostname. This node is crucial for network security audits, service availability monitoring, firewall configuration validation, and ensuring critical services are accessible.",
+      "howItWorks": "The Port node attempts a TCP connection to verify port accessibility. When executed, the node: 1. Validates the IP address/hostname and port number inputs 2. Creates a TCP connection attempt to the specified host and port 3. Waits for the specified timeout period for connection 4. Determines if the port is open (connection successful) or closed (connection failed) 5. Compares the actual state with the expected state (Check Port option) 6. Returns true if actual state matches expected state, false otherwise"
+    },
+    "ssl": {
+      "namespace": "Core.Monitoring.Ssl",
+      "name": "Ssl",
+      "summary": "Validates SSL/TLS certificates and returns expiry, issuer, and subject information. This node is essential for preventing certificate expiration incidents, ensuring secure connections, monitoring certificate authorities, and maintaining SSL/TLS security compliance.",
+      "howItWorks": "The SSL node establishes a TLS connection to verify certificate validity. When executed, the node: 1. Cleans the URL by removing protocol prefixes (http://, https://) 2. Validates the port number is within valid range (1-65535) 3. Establishes a TLS connection to the specified host and port 4. Retrieves the peer certificate from the connection 5. Verifies the hostname matches the certificate 6. Calculates days until expiration 7. Extracts issuer and subject information 8. Returns comprehensive certificate information"
+    },
+    "website": {
+      "namespace": "Core.Monitoring.Website",
+      "name": "Website",
+      "summary": "Checks if a website is alive and returns status code and response time. This node is the foundation of website uptime monitoring, performance tracking, API health checks, and service availability verification.",
+      "howItWorks": "The Website node sends an HTTP GET request to verify website availability. When executed, the node: 1. Validates the URL input 2. Prepends `https://` if no protocol is specified 3. Creates an HTTP client with the specified timeout 4. Optionally adds Basic Authentication headers if credentials are provided 5. Sends a GET request and measures response time 6. Receives the HTTP response 7. Determines if website is \"alive\" (2xx status code) 8. Returns status code, alive status, and response time"
+    }
+  }
+}

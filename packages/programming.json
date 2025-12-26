@@ -1,0 +1,260 @@
+{
+  "package": "Programming",
+  "summary": "Core programming constructs for flow control - loops, functions, conditional branching, and debugging.",
+  "description": "## Overview The Programming package provides essential flow control constructs for building automation logic. Use it when you need loops, conditional branching, custom functions, delays, or debugging capabilities in your workflows.",
+  "nodes": {
+    "break": {
+      "namespace": "Core.Programming.Break",
+      "name": "Break",
+      "summary": "The \"Break\" node allows you to exit a \"For Each\" loop prematurely. After executing the \"Break\" node, the flow continues from the bottom port of the inner \"For Each\" loop.",
+      "howItWorks": "1. The node checks if it's currently executing within a For Each loop by examining the loop scope context (`__fs` flag) 2. If a valid For Each loop context is found, the node marks the message with a special \"BREAK\" flag 3. The flow exits the current loop iteration and sends control to the bottom port of the For Each node 4. Execution continues after the loop without processing remaining iterations",
+      "usage": [
+        "Must be used inside a \"For Each\" loop node",
+        "The For Each loop must be active and have a valid scope context"
+      ],
+      "bestPractices": [
+        "The Break node only exits the **innermost** For Each loop it's contained within",
+        "For nested loops, use multiple Break nodes to exit multiple levels",
+        "The node respects the \"Continue On Error\" setting - errors can be suppressed if needed",
+        "Delay Before and Delay After settings are applied even when breaking from the loop"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate"
+      ],
+      "relatedNodes": [
+        "For Each",
+        "Switch",
+        "Function"
+      ],
+      "tips": [
+        "Always ensure Break nodes are only used within For Each loops to avoid runtime errors",
+        "Use Break nodes to optimize performance by stopping unnecessary iterations",
+        "Combine with If/Switch nodes to create conditional loop exits",
+        "Consider using Break for search operations - stop iterating once the target is found"
+      ]
+    },
+    "debug": {
+      "namespace": "Core.Programming.Debug",
+      "name": "Debug",
+      "summary": "The current message object or variable data is displayed in the `Output` panel beneath the Flow Designer during execution. Additionally, if the robot is initiated from the Command Prompt/Terminal, the data will also appear there. Alternatively, the data can be directed to DEBUG logs.",
+      "howItWorks": "1. The node checks if the \"Active\" option is enabled; if disabled, it passes through without logging 2. If a specific variable or message field is configured, it extracts that data from the current message or variable scope 3. The node automatically redacts sensitive credentials (passwords, tokens) before displaying data 4. Internal fields (like `__fs` for loop scope) are removed from the output 5. Based on configuration, the debug data is sent to one or more destinations: - Output panel in Flow Designer (always when active) - System console (if OptSysConsole is enabled) - Debug log files (if OptLogDebug is enabled) 6. The message passes through unchanged to the next node",
+      "usage": [
+        "Node must be set to \"Active\" to produce any output",
+        "For variable debugging, the variable must exist in the specified scope (Message, Flow, or Global)",
+        "For log file output, the logs directory must be writable"
+      ],
+      "bestPractices": [
+        "The Debug node automatically redacts password fields for security - sensitive data won't appear in logs",
+        "Internal message properties (like `__fs`) are hidden from debug output",
+        "Debug nodes can be left in production flows - simply set \"Active\" to false to disable",
+        "When debugging message fields, use dot notation for nested objects: `msg.data.field`",
+        "Array elements can be accessed with bracket notation: `msg.items[0].name`",
+        "Setting \"Continue On Error\" to true will suppress all errors, even if using Catch nodes"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOutputMarshal"
+      ],
+      "relatedNodes": [
+        "Function",
+        "For Each",
+        "Switch"
+      ],
+      "tips": [
+        "Use multiple Debug nodes at different points in your flow to trace data transformations",
+        "Turn off \"Active\" in production to avoid performance overhead and log clutter",
+        "Enable \"Log Debug\" for scheduled/unattended robots to review execution later",
+        "Use \"System Console\" during development for real-time debugging",
+        "Add meaningful node names to Debug nodes (e.g., \"Debug - After API Call\") for easier log interpretation",
+        "Debug specific fields instead of entire messages for cleaner, more focused output"
+      ]
+    },
+    "for-each": {
+      "namespace": "Core.Programming.ForEach",
+      "name": "ForEach",
+      "summary": "The \"For Each\" node sequentially processes each element in the input array. This node features two output ports. The flow proceeds from the top port with each iteration, and once all elements in the array have been processed, the flow then advances from the bottom port. For each iteration, the flow must return to the start of the \"For Each\" node. To achieve this, you can either directly connect the wires or utilize a [Go To](/reference/packages/flow/go-to) / [Label](/reference/packages/flow/label) pair.",
+      "howItWorks": "1. The node receives an input array and creates a unique loop scope identifier (`__fs`) 2. For the first iteration, it extracts the first element (index 0) and assigns it to the \"Current Item\" variable 3. The flow exits through the **top port** with the current item data 4. The flow must loop back to the For Each node's input (using direct connection or Go To/Label) 5. On each return, the node increments the index and processes the next array element 6. This continues until all elements are processed 7. After the last iteration, the flow exits through the **bottom port** 8. The loop context is cleaned up and removed from memory 9. If a Break node is encountered, the loop exits immediately via the bottom port",
+      "usage": [
+        "Input must be a valid array (can be from message field or variable)",
+        "The flow must return to the For Each node's input for each iteration",
+        "Current Item and Current Index variable names must be unique within the message scope"
+      ],
+      "bestPractices": [
+        "CRITICAL - EDGES STRUCTURE: ForEach has exactly 2 outputs - edges[0] for loop body, edges[1] for done",
+        "CRITICAL - LOOP BACK: The loop body MUST return to ForEach input via GoTo-Label or direct edge",
+        "Example edges: [[\"process-node-id\"], [\"done-node-id\"]] - first array = loop, second = completion",
+        "The flow **must** loop back to the For Each input - forgetting this will cause the loop to execute only once",
+        "The top port is used for iteration; the bottom port is only triggered when the loop completes",
+        "Each For Each node maintains its own independent loop context via a unique scope ID",
+        "Nested For Each loops are fully supported - each maintains separate iteration state",
+        "The current index is zero-based (starts at 0) and is logged as \"iteration [1/n]\" for readability",
+        "Empty arrays will immediately exit through the bottom port without executing the top port",
+        "Loop contexts are automatically cleaned up when the flow exits or completes"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate"
+      ],
+      "relatedNodes": [
+        "Break",
+        "Go To",
+        "Label",
+        "Debug",
+        "Switch"
+      ],
+      "tips": [
+        "Use meaningful names for \"Current Item\" (e.g., \"customer\", \"order\", \"record\") to make flows readable",
+        "Enable \"Current Index\" to track progress, especially useful for debugging or pagination",
+        "For simple linear flows, use direct wire connections; for complex flows, use Go To/Label pairs",
+        "Place Debug nodes inside loops to inspect data at each iteration",
+        "Use the Break node to exit loops early when a condition is met (e.g., found target item)",
+        "The bottom port is perfect for cleanup operations or \"all done\" notifications",
+        "Consider batch processing: collect results in an array and process in bulk after the loop"
+      ]
+    },
+    "function": {
+      "namespace": "Core.Programming.Function",
+      "name": "Function",
+      "summary": "Executes a custom Javascript function in the flow context. The function should always return a message object or an array of message objects.",
+      "howItWorks": "1. The node creates an isolated V8 JavaScript runtime environment 2. Local variables are initialized with their default values based on type 3. The JavaScript function is wrapped with helper utilities (`local`, `global`, `flow`, `console`) 4. The current message object is passed as the `msg` parameter to your function 5. Your custom JavaScript code executes within the configured timeout period 6. The function must return either: - A single message object (for single output) - An array of message objects or nulls (for multiple outputs) 7. The returned message(s) are packaged and sent to the corresponding output port(s) 8. If the script exceeds the timeout, execution is terminated with an error 9. The V8 runtime is disposed after execution completes",
+      "usage": [
+        "The function must return a valid message object or array of message objects",
+        "For multiple outputs, return an array with length matching the \"Outputs\" configuration",
+        "Use `null` in the output array for ports that should not receive data",
+        "Global/Flow variables must exist before being accessed via `global.get()` or `flow.get()`",
+        "Local variables must be defined in the \"Local Variables\" section before use",
+        "Script must complete within the configured timeout (default: 30 seconds)"
+      ],
+      "bestPractices": [
+        "The Function node uses V8 JavaScript engine (same as Chrome/Node.js)",
+        "All standard JavaScript features are available (ES6+)",
+        "CRITICAL: async/await, setTimeout, setInterval, and Promise are NOT supported - use only synchronous code",
+        "Variables accessed via `local`, `global`, and `flow` APIs are automatically serialized to JSON",
+        "Returning `null` for single output will still generate an error - return the msg object instead",
+        "For multiple outputs, use `null` in array positions where no message should be sent",
+        "The script timeout cannot be disabled - always configure an appropriate timeout value",
+        "Large objects or complex computations may impact performance - consider timeout accordingly",
+        "Use `console.log()` for debugging - output appears in system console during development",
+        "Local variables persist only within the same flow execution, not across different runs"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrV",
+        "ErrTimeout",
+        "ErrJSScriptError",
+        "ErrPackageMsg",
+        "ErrMsg"
+      ],
+      "relatedNodes": [
+        "Debug",
+        "Switch",
+        "For Each"
+      ],
+      "tips": [
+        "Keep functions focused - complex logic is better split across multiple Function nodes",
+        "Use meaningful local variable names to make code maintainable",
+        "Add comments to complex JavaScript logic for future reference",
+        "Test timeout values with representative data volumes to avoid unexpected failures",
+        "Use mutex locks (`local.lock()`/`unlock()`) when modifying shared variables in parallel flows",
+        "Leverage multiple outputs for branching logic instead of multiple Switch nodes",
+        "Initialize variables with sensible defaults: `let value = msg.field || defaultValue`",
+        "Use `try/catch` within your function for graceful error handling",
+        "For intensive calculations, increase the Script Timeout to prevent premature termination"
+      ]
+    },
+    "sleep": {
+      "namespace": "Core.Programming.Sleep",
+      "name": "Sleep",
+      "summary": "Pauses the execution for a specific duration",
+      "howItWorks": "1. The node evaluates the \"Delay Before\" setting and waits if configured 2. If \"Random\" is enabled: - The node validates that Random Max is greater than Random Min - A random duration is calculated using: `min + random() * (max - min)` - This random duration overrides the \"Duration (sec)\" setting 3. If \"Random\" is disabled, the fixed \"Duration (sec)\" value is used 4. The node pauses execution for the calculated duration 5. The node evaluates the \"Delay After\" setting and waits if configured 6. The original message passes through unchanged to the next node",
+      "usage": [
+        "Duration, Random Min, and Random Max can be specified as:",
+        "Fixed numeric values (e.g., 5.5)",
+        "Message fields (e.g., `msg.waitTime`)",
+        "Variables",
+        "When using Random mode, Random Max must be greater than Random Min",
+        "All duration values must be valid numbers (integers or floats)"
+      ],
+      "bestPractices": [
+        "Sleep durations are specified in seconds (supports decimals, e.g., 0.5 for 500ms)",
+        "The Sleep node does not modify the message - it passes through unchanged",
+        "Random mode uses a uniform distribution between min and max values",
+        "Delay Before and Delay After are added on top of the main sleep duration",
+        "When Random is enabled, the Duration field is ignored entirely",
+        "Sleep is blocking - the entire flow pauses during sleep (other flows continue)"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrRandMinMax"
+      ],
+      "relatedNodes": [
+        "For Each",
+        "Function",
+        "Debug"
+      ],
+      "tips": [
+        "Use random delays when automating web scraping to appear more human-like",
+        "Add sleep after browser actions (clicks, navigation) to allow pages to load",
+        "For API automation, use sleep to respect rate limits and avoid throttling",
+        "Keep sleep durations reasonable - long sleeps increase total execution time",
+        "Use dynamic sleep durations from API responses for adaptive rate limiting",
+        "Combine with retry logic: increase sleep duration on each retry attempt",
+        "For parallel flows, use sleep to stagger operations and reduce resource contention",
+        "Use fractional seconds (0.1, 0.5) for fine-grained timing control"
+      ]
+    },
+    "switch": {
+      "namespace": "Core.Programming.Switch",
+      "name": "Switch",
+      "summary": "The Switch node enables the flow to proceed from the output ports for which the provided JavaScript expressions evaluate to true.",
+      "howItWorks": "1. The node receives a message and evaluates each configured output port condition in order 2. For each condition: - If the condition is empty, it evaluates to `false` - If non-empty, the JavaScript expression is evaluated with access to `msg`, `global.get()`, and `flow.get()` - The expression must return a boolean value (`true` or `false`) 3. If **Break** is enabled: - The node stops evaluating conditions after the first `true` result - All remaining conditions are set to `false` - Only one output port will send the message 4. If **Break** is disabled: - All conditions are evaluated regardless of previous results - The message is sent to **all** output ports where the condition evaluates to `true` 5. If no conditions evaluate to `true`, an error is raised 6. The message passes through unchanged to the selected output port(s)",
+      "usage": [
+        "At least one output port condition must be configured",
+        "All conditions must be valid JavaScript expressions",
+        "Expressions must evaluate to boolean values (`true` or `false`)",
+        "At least one condition must evaluate to `true`, or an error will occur",
+        "Global/Flow variables accessed in conditions must exist"
+      ],
+      "bestPractices": [
+        "CRITICAL - EDGES STRUCTURE: Switch edges array length MUST equal optConditions array length!",
+        "CRITICAL - Each condition gets its own output port: edges[0] = condition[0], edges[1] = condition[1], etc.",
+        "WRONG: 13 conditions with 1 edge array - this will NOT work correctly!",
+        "RIGHT: 3 conditions with 3 edges: [[\"node-a\"], [\"node-b\"], [\"node-c\"]]",
+        "If all conditions point to same node, still use separate edges: [[\"same-id\"], [\"same-id\"], [\"same-id\"]]",
+        "Conditions are evaluated in order from top to bottom (Output 1, then Output 2, etc.)",
+        "With Break enabled, only the first matching condition triggers - ideal for if/else-if/else logic",
+        "Without Break, multiple outputs can fire - useful for triggering multiple parallel actions",
+        "Use `true` as the last condition for a default/\"else\" case (works best with Break enabled)",
+        "The message object can be modified within expressions, but changes won't persist",
+        "Empty/undefined fields in `msg` evaluate to falsy values in JavaScript",
+        "Non-boolean expressions (returning strings, numbers, objects) will cause errors"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrExpr",
+        "ErrConditions"
+      ],
+      "relatedNodes": [
+        "Function",
+        "For Each",
+        "Break",
+        "Debug"
+      ],
+      "tips": [
+        "Use Break mode for mutually exclusive routing (status checks, priority levels)",
+        "Disable Break when one input should trigger multiple parallel processes",
+        "Place most specific conditions first, generic conditions last",
+        "Use the last output port with condition `true` as a catch-all/default route",
+        "Test complex expressions in a Function node first before using in Switch",
+        "Access nested object properties safely: `msg.user \u0026\u0026 msg.user.role === \"admin\"`",
+        "Combine conditions with logical operators: `msg.age 1 or greater8 \u0026\u0026 msg.verified === true`",
+        "Use global/flow variables for dynamic routing: `msg.priority === flow.get(\"currentPriority\")`"
+      ]
+    }
+  }
+}

@@ -1,0 +1,247 @@
+{
+  "package": "GoogleDocs",
+  "summary": "Automate Google Docs document creation, editing, and management with Robomotion's comprehensive Google Docs integration.",
+  "description": "## Overview The Google Docs package enables RPA developers to programmatically create, read, modify, and export Google Docs documents. This package is ideal for automating report generation, document workflows, template-based document creation, and batch document processing.",
+  "nodes": {
+    "addfooter": {
+      "namespace": "Core.GoogleDocs.Addfooter",
+      "name": "Addfooter",
+      "summary": "Adds a footer to a Google Docs document.",
+      "howItWorks": "The Add Footer node integrates with Google Docs to add a footer to a document. When executed, the node: 1. Validates the provided inputs (Document Id, Text, Font Size, Font Name) 2. Connects to the specified Google Docs document 3. Optionally deletes any existing footer if Overwrite If Exists is enabled 4. Creates a new footer section in the document 5. Inserts the specified text into the footer 6. Applies the specified formatting options (font, size, alignment, styling)",
+      "usage": [
+        "A valid Google Docs document ID",
+        "Valid Google Docs credentials",
+        "Text content for the footer",
+        "Valid font size value",
+        "Valid Google Docs permissions to modify the document"
+      ],
+      "bestPractices": [
+        "The Document Id can be found in the URL of the Google Docs document",
+        "If Overwrite If Exists is disabled and a footer already exists, the node may fail",
+        "The Font Name should be a valid Google Docs font family",
+        "The Align option controls how the footer text is positioned within the footer",
+        "Styling options (Bold, Italic, Underline) can be combined",
+        "The footer will be added to the bottom of each page in the document"
+      ]
+    },
+    "addheader": {
+      "namespace": "Core.GoogleDocs.Addheader",
+      "name": "Addheader",
+      "summary": "Adds a header to a Google Docs document.",
+      "howItWorks": "The Add Header node integrates with Google Docs to add a header to a document. When executed, the node: 1. Validates the provided inputs (Document Id, Text, Font Size, Font Name) 2. Connects to the specified Google Docs document 3. Optionally deletes any existing header if Overwrite If Exists is enabled 4. Creates a new header section in the document 5. Inserts the specified text into the header 6. Applies the specified formatting options (font, size, alignment, styling)",
+      "usage": [
+        "A valid Google Docs document ID",
+        "Valid Google Docs credentials",
+        "Text content for the header",
+        "Valid font size value",
+        "Valid Google Docs permissions to modify the document"
+      ],
+      "bestPractices": [
+        "The Document Id can be found in the URL of the Google Docs document",
+        "If Overwrite If Exists is disabled and a header already exists, the node may fail",
+        "The Font Name should be a valid Google Docs font family",
+        "The Align option controls how the header text is positioned within the header",
+        "Styling options (Bold, Italic, Underline) can be combined",
+        "The header will be added to the top of each page in the document"
+      ]
+    },
+    "addheading": {
+      "namespace": "Core.GoogleDocs.Addheading",
+      "name": "Addheading",
+      "summary": "Adds a heading to a Google Docs document.",
+      "howItWorks": "The Add Heading node integrates with Google Docs to add a heading to a document. When executed, the node: 1. Validates the provided inputs (Document Id, Text, Font Size, Font Name) 2. Connects to the specified Google Docs document 3. Inserts the specified text at the end of the document 4. Applies the specified heading style to the text 5. Applies additional formatting options (font, size, alignment, styling)",
+      "usage": [
+        "A valid Google Docs document ID",
+        "Valid Google Docs credentials",
+        "Text content for the heading",
+        "Valid font size value",
+        "Valid Google Docs permissions to modify the document"
+      ],
+      "bestPractices": [
+        "The Document Id can be found in the URL of the Google Docs document",
+        "The Heading option determines the hierarchical level and styling of the heading",
+        "The Align option controls how the heading text is positioned within the document",
+        "Styling options (Bold, Italic, Underline) can be combined with the heading style",
+        "The heading will be added at the end of the current document content"
+      ]
+    },
+    "addimage": {
+      "namespace": "Core.GoogleDocs.Addimage",
+      "name": "Addimage",
+      "summary": "Adds an image to a Google Docs document.",
+      "howItWorks": "The Add Image node integrates with Google Docs to insert an image into a document. When executed, the node: 1. Validates the provided inputs (Document Id, Image URL) 2. Connects to the specified Google Docs document 3. Inserts the image from the provided URL at the end of the document 4. Optionally scales the image to the specified height or width",
+      "usage": [
+        "A valid Google Docs document ID",
+        "Valid Google Docs credentials",
+        "A publicly accessible image URL",
+        "Valid Google Docs permissions to modify the document"
+      ],
+      "bestPractices": [
+        "The Document Id can be found in the URL of the Google Docs document",
+        "The Image URL must be publicly accessible (not behind authentication)",
+        "If both Height and Width are specified, only Height will be used for scaling",
+        "If neither Height nor Width is specified, the image will be inserted at its original size",
+        "The image will be added at the end of the current document content",
+        "Supported image formats include JPG, PNG, GIF, and other web-friendly formats"
+      ]
+    },
+    "createdocument": {
+      "namespace": "Core.GoogleDocs.Createdocument",
+      "name": "Createdocument",
+      "summary": "Creates a new Google Docs document.",
+      "howItWorks": "The Create Document node integrates with Google Docs to create a new document. When executed, the node: 1. Validates the provided inputs (Title) 2. Authenticates with Google Docs using the provided credentials 3. Creates a new Google Docs document with the specified title 4. Optionally shares the document with specified users 5. Optionally sends notification emails to shared users 6. Returns the document ID of the newly created document",
+      "usage": [
+        "Valid Google Docs credentials",
+        "A title for the new document",
+        "Valid email addresses for users to share with (if specified)"
+      ],
+      "bestPractices": [
+        "The Title input is required and will be used as the document's title",
+        "The Document Id output can be used in subsequent nodes to modify the document",
+        "The Share With option allows you to specify multiple users or groups to share the document with",
+        "When sharing with users, make sure to specify the correct Role (writer, reader, etc.) and Type (user, group, etc.)",
+        "If Send Notification Mail is enabled, users will receive email notifications about the shared document",
+        "The created document will be owned by the account associated with the provided credentials"
+      ]
+    },
+    "deleterange": {
+      "namespace": "Core.GoogleDocs.Deleterange",
+      "name": "Deleterange",
+      "summary": "Deletes a specified range of content from a Google Docs document.",
+      "howItWorks": "The Delete Range node integrates with Google Docs to remove a specified range of content from a document. When executed, the node: 1. Validates the provided inputs (Document Id, Start Index, End Index) 2. Connects to the specified Google Docs document 3. Deletes the content between the specified start and end indices 4. Updates the document with the deleted content",
+      "usage": [
+        "A valid Google Docs document ID",
+        "Valid Google Docs credentials",
+        "Valid start and end indices (both must be 1 or greater)",
+        "Valid Google Docs permissions to modify the document"
+      ],
+      "bestPractices": [
+        "The Document Id can be found in the URL of the Google Docs document",
+        "Index positions in Google Docs start at 1, not 0",
+        "The Start Index is inclusive, and the End Index is exclusive (content up to but not including the End Index will be deleted)",
+        "Index positions can be determined by analyzing the document structure or using other Google Docs nodes",
+        "Be careful when specifying indices to avoid accidentally deleting unintended content",
+        "The indices refer to character positions in the document, including special characters and formatting"
+      ]
+    },
+    "insertlink": {
+      "namespace": "Core.GoogleDocs.Insertlink",
+      "name": "Insertlink",
+      "summary": "Inserts a hyperlink into a Google Docs document.",
+      "howItWorks": "The Insert Link node integrates with Google Docs to add a hyperlink to a document. When executed, the node: 1. Validates the provided inputs (Document Id, Link, Font Size, Font Name) 2. Connects to the specified Google Docs document 3. Inserts the link text at the end of the document 4. Applies the hyperlink to the inserted text 5. Applies the specified formatting options (font, size, alignment, styling, color)",
+      "usage": [
+        "A valid Google Docs document ID",
+        "Valid Google Docs credentials",
+        "A valid URL for the hyperlink",
+        "Valid font size value",
+        "Valid Google Docs permissions to modify the document"
+      ],
+      "bestPractices": [
+        "The Document Id can be found in the URL of the Google Docs document",
+        "If Link Text is not provided, the Link URL will be used as the display text",
+        "The link will be added at the end of the current document content",
+        "The default link color is a shade of blue (RGB: 0.067, 0.333, 0.800)",
+        "The Underline option is enabled by default for links, which is standard web convention",
+        "The link color values should be between 0.0 and 1.0"
+      ]
+    },
+    "inserttext": {
+      "namespace": "Core.GoogleDocs.Inserttext",
+      "name": "Inserttext",
+      "summary": "Inserts text into a Google Docs document.",
+      "howItWorks": "The Insert Text node integrates with Google Docs to add text to a document. When executed, the node: 1. Validates the provided inputs (Document Id, Text, Font Size, Font Name) 2. Connects to the specified Google Docs document 3. Inserts the specified text at the end of the document 4. Applies the specified formatting options (font, size, alignment, styling)",
+      "usage": [
+        "A valid Google Docs document ID",
+        "Valid Google Docs credentials",
+        "Text content to insert",
+        "Valid font size value",
+        "Valid Google Docs permissions to modify the document"
+      ],
+      "bestPractices": [
+        "The Document Id can be found in the URL of the Google Docs document",
+        "The text will be added at the end of the current document content",
+        "The Font Name should be a valid Google Docs font family",
+        "The Align option controls how the inserted text is positioned within the document",
+        "Styling options (Bold, Italic, Underline) can be combined"
+      ]
+    },
+    "opendocs": {
+      "namespace": "Core.GoogleDocs.Opendocs",
+      "name": "Opendocs",
+      "summary": "Opens an existing Google Docs document.",
+      "howItWorks": "The Open Document node integrates with Google Docs to open an existing document. When executed, the node: 1. Validates the provided inputs (URL) 2. Authenticates with Google Docs using the provided credentials 3. Opens the Google Docs document specified by the URL 4. Returns the document ID of the opened document",
+      "usage": [
+        "Valid Google Docs credentials",
+        "A valid URL of an existing Google Docs document",
+        "Proper permissions to access the document"
+      ],
+      "bestPractices": [
+        "The URL input should be the full URL of the Google Docs document",
+        "The Document Id output can be used in subsequent nodes to modify the document",
+        "The node requires appropriate permissions to access the specified document",
+        "The opened document will be accessible through the document ID in subsequent nodes",
+        "This node is useful for working with existing documents rather than creating new ones"
+      ]
+    },
+    "pdfexport": {
+      "namespace": "Core.GoogleDocs.Pdfexport",
+      "name": "Pdfexport",
+      "summary": "Exports a Google Docs document as a PDF file.",
+      "howItWorks": "The PDF Export node integrates with Google Docs to export a document as a PDF file. When executed, the node: 1. Validates the provided inputs (Document Id, File Path) 2. Authenticates with Google Docs using the provided credentials 3. Exports the specified Google Docs document as a PDF 4. Saves the PDF file to the specified local file path",
+      "usage": [
+        "Valid Google Docs credentials",
+        "A valid Google Docs document ID",
+        "A valid local file path for saving the PDF",
+        "Valid Google Docs permissions to access the document",
+        "Write permissions to the specified local file path"
+      ],
+      "bestPractices": [
+        "The Document Id can be found in the URL of the Google Docs document",
+        "The File Path should be a valid local path where the PDF will be saved",
+        "If a file already exists at the specified path, it will be overwritten",
+        "The node requires appropriate permissions to access the specified document",
+        "The exported PDF will maintain the formatting of the original Google Docs document",
+        "This node is useful for creating PDF versions of Google Docs documents for sharing or archiving"
+      ]
+    },
+    "readdocument": {
+      "namespace": "Core.GoogleDocs.Readdocument",
+      "name": "Readdocument",
+      "summary": "Reads the text content of a Google Docs document.",
+      "howItWorks": "The Read Document node integrates with Google Docs to extract the text content from a document. When executed, the node: 1. Validates the provided input (Document Id) 2. Connects to the specified Google Docs document 3. Reads the entire text content of the document 4. Returns the extracted text as output",
+      "usage": [
+        "A valid Google Docs document ID",
+        "Valid Google Docs credentials",
+        "Valid Google Docs permissions to access the document"
+      ],
+      "bestPractices": [
+        "The Document Id can be found in the URL of the Google Docs document",
+        "The node extracts only the text content, not formatting or images",
+        "The extracted text will be returned as a single string in the Text output",
+        "This node is useful for processing the content of existing Google Docs documents",
+        "Complex formatting, tables, and images will not be included in the extracted text",
+        "The text extraction preserves the order of content as it appears in the document"
+      ]
+    },
+    "replacetext": {
+      "namespace": "Core.GoogleDocs.Replacetext",
+      "name": "Replacetext",
+      "summary": "Replaces text in a Google Docs document.",
+      "howItWorks": "The Replace Text node integrates with Google Docs to find and replace text within a document. When executed, the node: 1. Validates the provided inputs (Document Id, Text to Replace, Replacement) 2. Connects to the specified Google Docs document 3. Searches for all occurrences of the specified text 4. Replaces the found text with the replacement text or link 5. Updates the document with the replaced content",
+      "usage": [
+        "A valid Google Docs document ID",
+        "Valid Google Docs credentials",
+        "Valid text to search for and replace",
+        "Valid Google Docs permissions to modify the document"
+      ],
+      "bestPractices": [
+        "The Document Id can be found in the URL of the Google Docs document",
+        "When using the Link replacement type, the replacement text will be used as the URL for the hyperlink",
+        "The Search case-sensitive option determines whether the search is case-sensitive",
+        "All occurrences of the Text to Replace will be replaced with the Replacement text",
+        "If no matches are found, an error will be returned",
+        "The node supports both plain text replacement and hyperlink replacement"
+      ]
+    }
+  }
+}

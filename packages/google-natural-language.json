@@ -1,0 +1,30 @@
+{
+  "package": "GoogleNaturalLanguage",
+  "summary": "Analyze text using Google's Natural Language AI for sentiment analysis, entity extraction, and content classification.",
+  "description": "## Overview The Google Natural Language package integrates with Google Cloud's Natural Language API. Use it when you need to analyze text for sentiment, extract entities, classify content, or understand the structure of documents.",
+  "nodes": {
+    "TextAnalyze": {
+      "namespace": "Core.GoogleNaturalLanguage.TextAnalyze",
+      "name": "TextAnalyze",
+      "summary": "Analyzes text using Google Cloud Natural Language API to extract insights such as sentiment, entities, and syntax.",
+      "howItWorks": "The Text Analyze node processes text using Google Cloud Natural Language API to extract various types of insights. When executed, the node: 1. Validates the provided text input 2. Retrieves Google Cloud credentials from the credentials option 3. Creates a Natural Language API client with the provided credentials 4. Performs the selected type of analysis on the text: * **Sentiment Analysis:** Determines the emotional tone of the text (positive, negative, neutral) * **Entity Analysis:** Extracts entities (people, places, organizations, etc.) and their metadata * **Entity Sentiment Analysis:** Combines entity extraction with sentiment analysis for each entity * **Syntactic Analysis:** Analyzes the grammatical structure of the text * **Content Classification:** Classifies the content into categories 5. Returns the structured analysis results",
+      "usage": [
+        "Valid Google Cloud service account credentials with Natural Language API access",
+        "Text content to analyze"
+      ],
+      "bestPractices": [
+        "The credentials must be a valid Google Cloud service account JSON key",
+        "Different analysis types provide different insights:",
+        "Sentiment Analysis is useful for understanding opinions and emotions",
+        "Entity Analysis helps identify key people, places, and concepts",
+        "Entity Sentiment Analysis combines both to understand feelings toward specific entities",
+        "Syntactic Analysis is useful for understanding grammatical structure",
+        "Content Classification helps categorize documents",
+        "The node returns structured data that can be parsed for specific insights",
+        "Longer texts may require more processing time and API quota",
+        "The default analysis type is Sentiment Analysis",
+        "Results are returned in the language of the input text when possible"
+      ]
+    }
+  }
+}

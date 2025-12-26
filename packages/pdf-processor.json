@@ -1,0 +1,168 @@
+{
+  "package": "PdfProcessor",
+  "summary": "Advanced PDF processing - fill forms, create from JSON, optimize, and manage PDF documents.",
+  "description": "## Overview The PDF Processor package provides advanced PDF manipulation capabilities. Use it when you need to fill PDF forms programmatically, create PDFs from structured data, optimize file sizes, or work with PDF form fields.",
+  "nodes": {
+    "ChangePassword": {
+      "namespace": "Core.PdfProcessor.ChangePassword",
+      "name": "ChangePassword",
+      "summary": "Changes the owner or user password of an encrypted PDF file without fully decrypting and re-encrypting it.",
+      "howItWorks": "The Change Password node modifies password protection on PDF files. When executed, the node: 1. Validates the input PDF path 2. Retrieves current owner and user passwords from credentials 3. Retrieves the new password from credentials 4. Verifies the current encryption settings (mode and key length) 5. Authenticates using the current passwords 6. Changes either the owner or user password to the new password 7. Saves the modified PDF to the output path or overwrites the original",
+      "bestPractices": [
+        "Original PDF remains unchanged when an output path is specified",
+        "Without an output path, the original file is updated with new password",
+        "You must provide correct current passwords for authentication",
+        "The mode and key length must match the current encryption settings",
+        "After password change, the old password no longer works",
+        "The new password must be provided through credential system",
+        "Encryption settings (mode, key length) remain the same",
+        "Only the specified password (owner or user) is changed"
+      ]
+    },
+    "CreateFromJSON": {
+      "namespace": "Core.PdfProcessor.CreateFromJSON",
+      "name": "CreateFromJSON",
+      "summary": "Creates a new PDF document or updates an existing one using a JSON definition file that describes the PDF structure and content.",
+      "howItWorks": "The Create PDF From JSON node generates or modifies PDF documents based on a JSON definition. When executed, the node: 1. Validates the JSON path and reads the JSON definition 2. Determines the operation mode based on provided paths 3. If updating: Opens the existing PDF file 4. Applies the JSON definition to create or modify the PDF structure 5. Saves the result to the appropriate output path",
+      "bestPractices": [
+        "The JSON definition follows the pdfcpu library schema",
+        "When updating an existing PDF, the original file is modified according to the JSON definition",
+        "For creating new PDFs, ensure the JSON contains all required PDF elements",
+        "The output directory must exist before saving the PDF",
+        "Complex PDF structures may require detailed JSON definitions",
+        "Validate your JSON structure before processing to avoid errors"
+      ]
+    },
+    "Decrypt": {
+      "namespace": "Core.PdfProcessor.Decrypt",
+      "name": "Decrypt",
+      "summary": "Removes password protection from encrypted PDF files, allowing unrestricted access and enabling further processing.",
+      "howItWorks": "The Decrypt node removes password protection from PDF files. When executed, the node: 1. Validates the input PDF path 2. Retrieves the owner and user passwords from credentials 3. Verifies the encryption mode and key length settings 4. Attempts to decrypt the PDF using the provided passwords 5. Removes all encryption from the PDF 6. Saves the decrypted PDF to the output path or overwrites the original",
+      "bestPractices": [
+        "Original PDF remains unchanged when an output path is specified",
+        "Without an output path, the original file is overwritten with decrypted version",
+        "You must provide the correct password used during encryption",
+        "The mode and key length must match the encryption settings",
+        "If you only have the user password, you can still decrypt the PDF",
+        "Owner password provides full access for decryption",
+        "Lost passwords cannot be recovered by this node",
+        "After decryption, the PDF can be opened without any password",
+        "File size remains approximately the same after decryption"
+      ]
+    },
+    "Encrypt": {
+      "namespace": "Core.PdfProcessor.Encrypt",
+      "name": "Encrypt",
+      "summary": "Encrypts a PDF file with password protection using industry-standard encryption algorithms to secure sensitive documents.",
+      "howItWorks": "The Encrypt node applies password protection to PDF files using standard encryption. When executed, the node: 1. Validates the input PDF path 2. Retrieves the owner and user passwords from credentials 3. Configures encryption based on the selected mode and key length 4. Applies encryption to the PDF 5. Saves the encrypted PDF to the output path or overwrites the original",
+      "bestPractices": [
+        "Original PDF remains unchanged when an output path is specified",
+        "Without an output path, the original file is overwritten with encrypted version",
+        "At least one password (owner or user) should be set for effective encryption",
+        "Passwords are retrieved from Robomotion credential system",
+        "Use Vault nodes to manage passwords securely",
+        "The encrypted PDF requires the password to open in any PDF reader",
+        "Lost passwords cannot be recovered - keep backups of passwords",
+        "Encryption adds minimal overhead to file size",
+        "AES with 256-bit key is recommended for new encryptions"
+      ]
+    },
+    "ExportToJSON": {
+      "namespace": "Core.PdfProcessor.ExportToJSON",
+      "name": "ExportToJSON",
+      "summary": "Exports PDF form fields and their current values to a JSON file for data extraction or backup purposes.",
+      "howItWorks": "The Export To JSON node extracts all form field data from a PDF file and saves it in JSON format. When executed, the node: 1. Validates the input PDF file path 2. Opens the PDF file and reads all form fields 3. Extracts field names and their current values 4. Converts the form data to JSON format 5. Saves the JSON data to the specified output path",
+      "bestPractices": [
+        "The exported JSON contains field names as keys and field values as values",
+        "All form field types are supported (text, checkbox, radio, dropdown, etc.)",
+        "Empty fields are included in the export with empty or null values",
+        "The JSON structure mirrors the PDF form field hierarchy",
+        "File paths can be absolute or relative",
+        "The output directory must exist before saving the JSON file",
+        "The node preserves field types and values exactly as they appear in the PDF",
+        "For encrypted PDFs, decrypt the file first using the Decrypt node"
+      ]
+    },
+    "ExtractImages": {
+      "namespace": "Core.PdfProcessor.ExtractImages",
+      "name": "ExtractImages",
+      "summary": "Extracts all images from a PDF file and saves them to a specified directory, useful for extracting visual content from documents.",
+      "howItWorks": "The Extract Images node retrieves all images embedded in a PDF file. When executed, the node: 1. Validates the PDF path and output directory 2. Determines which pages to process based on the options 3. Scans the specified pages for embedded images 4. Extracts each image in its original format 5. Saves the images to the output directory with auto-generated filenames",
+      "bestPractices": [
+        "The output directory must exist before running the node",
+        "Images are extracted in their original format and quality",
+        "Not all PDFs contain extractable images",
+        "Some images may be embedded as vector graphics and won't be extracted",
+        "Scanned PDFs with images as page backgrounds will extract the full page images",
+        "Multiple images on the same page are extracted separately",
+        "Image quality depends on how they were embedded in the PDF",
+        "For encrypted PDFs, decrypt the file first using the Decrypt node"
+      ]
+    },
+    "FillFromJSON": {
+      "namespace": "Core.PdfProcessor.FillFromJSON",
+      "name": "FillFromJSON",
+      "summary": "Fills PDF form fields with values from a JSON file, enabling automated form completion for RPA workflows.",
+      "howItWorks": "The Fill From JSON node populates PDF form fields with data from a JSON file. When executed, the node: 1. Validates all input file paths 2. Reads the JSON file containing field names and values 3. Opens the source PDF file 4. Matches JSON keys with PDF form field names 5. Fills matching form fields with values from the JSON 6. Saves the completed form to the output path",
+      "bestPractices": [
+        "Field names in the JSON must exactly match PDF form field names (case-sensitive)",
+        "JSON keys that don't match any PDF field are ignored",
+        "PDF fields not present in the JSON remain unchanged",
+        "Boolean values in JSON can be used for checkboxes (true/false)",
+        "String values are used for text fields",
+        "The source PDF file remains unchanged; only the output file is created",
+        "The output directory must exist before saving the filled PDF",
+        "For encrypted PDFs, decrypt the file first using the Decrypt node",
+        "You can use Export To JSON first to discover the exact field names in a PDF form"
+      ]
+    },
+    "Merge": {
+      "namespace": "Core.PdfProcessor.Merge",
+      "name": "Merge",
+      "summary": "Combines multiple PDF files into a single PDF document with various merging options including append mode, divider pages, and zip merging.",
+      "howItWorks": "The Merge node combines multiple PDF files into a single document. When executed, the node: 1. Validates all input PDF paths and output path 2. Determines the merge mode based on options 3. Reads all input PDF files 4. Applies the selected merge operation: - Standard merge: Combines all PDFs sequentially - Zip merge: Interleaves pages from two PDFs - Append mode: Adds to existing PDF if present 5. Optionally inserts divider pages between documents 6. Validates the resulting PDF 7. Saves the merged PDF to the output path",
+      "bestPractices": [
+        "All input PDF files must be accessible and readable",
+        "Original PDF files remain unchanged",
+        "The order of PDF files in the array determines the merge order",
+        "When using append mode, the output file is created if it doesn't exist",
+        "Zip merge only works with exactly two PDF files",
+        "For encrypted PDFs, decrypt them first using the Decrypt node",
+        "The merged PDF is validated after creation to ensure integrity",
+        "Divider pages are blank and use standard page size",
+        "Processing time increases with the number and size of PDFs"
+      ]
+    },
+    "Optimize": {
+      "namespace": "Core.PdfProcessor.Optimize",
+      "name": "Optimize",
+      "summary": "Optimizes a PDF file to reduce its file size by removing redundant data, compressing content, and streamlining the document structure.",
+      "howItWorks": "The Optimize node reduces PDF file size through various optimization techniques. When executed, the node: 1. Validates the input PDF path 2. Opens and analyzes the PDF structure 3. Applies optimization techniques: - Removes duplicate objects and resources - Compresses embedded images - Removes unused or redundant data - Streamlines the internal document structure - Optimizes fonts and metadata 4. Saves the optimized PDF to the output path or overwrites the original",
+      "bestPractices": [
+        "Original PDF remains unchanged when an output path is specified",
+        "Without an output path, the original file is overwritten",
+        "Optimization is generally lossless but may reduce image quality slightly",
+        "Processing time increases with PDF size and complexity",
+        "Large PDFs may require significant memory during optimization",
+        "Encrypted PDFs should be decrypted first for better optimization",
+        "Multiple optimization passes typically don't yield further reductions",
+        "The node preserves PDF functionality (forms, links, annotations)"
+      ]
+    },
+    "Split": {
+      "namespace": "Core.PdfProcessor.Split",
+      "name": "Split",
+      "summary": "Splits a PDF file into multiple separate PDF files based on specified page numbers, useful for breaking large documents into smaller parts.",
+      "howItWorks": "The Split node divides a PDF file into multiple separate files. When executed, the node: 1. Validates the PDF path and output directory 2. Determines split points from provided page numbers 3. If only one page number is provided: Splits the PDF into chunks of that size (span mode) 4. If multiple page numbers are provided: Splits at each specified page number 5. Generates separate PDF files for each section 6. Saves all split files to the output directory with auto-generated filenames",
+      "bestPractices": [
+        "The output directory must exist before running the node",
+        "Original PDF file remains unchanged",
+        "Page numbers are 1-indexed (first page is page 1)",
+        "Split files preserve all content, formatting, and metadata from the original",
+        "For encrypted PDFs, decrypt the file first using the Decrypt node",
+        "Large PDFs may take longer to process",
+        "Ensure sufficient disk space for all split files"
+      ]
+    }
+  }
+}

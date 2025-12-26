@@ -1,0 +1,242 @@
+{
+  "package": "Vault",
+  "summary": "Securely store and retrieve credentials, API keys, and sensitive data for automation workflows.",
+  "description": "## Overview The Vault package provides secure credential management for your automations. Use it when you need to store passwords, API keys, connection strings, or any sensitive data that shouldn't be hardcoded in workflows.",
+  "nodes": {
+    "add-item": {
+      "namespace": "Core.Vault.AddItem",
+      "name": "AddItem",
+      "summary": "Adds an item to the selected vault.",
+      "howItWorks": "The Add Item node creates new credential items in Robomotion vaults: 1. **Vault Selection:** - Retrieves the vault ID from the configuration or message - Validates that the vault ID is a valid GUID format - Ensures vault is not empty or placeholder value 2. **Input Validation:** - Validates item name is provided and not empty - Validates category is selected (cannot be empty or placeholder) - Validates item data is provided 3. **Item Creation:** - Marshals the item object to JSON format - Calls the vault API to add the item with name, category, and data - Creates a new vault item entry in the selected vault 4. **Output Generation:** - Returns the newly created item with metadata - Includes item name, category, item ID, and vault ID - Provides the complete item object for reference",
+      "usage": [
+        "**Vault ID:** Must be a valid GUID representing an existing vault",
+        "**Item Name:** Must be non-empty string",
+        "**Category:** Must be selected from available categories",
+        "**Item Data:** Object containing the credential data (structure depends on category)",
+        "**Vault Access:** User must have write permissions to the specified vault"
+      ],
+      "bestPractices": [
+        "**Category Types:** Category determines the structure expected for the item data",
+        "**GUID Format:** Vault ID must be in standard GUID format (xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)",
+        "**Unique Names:** Item names don't have to be unique within a vault",
+        "**Item Structure:** Each category expects specific fields in the item object",
+        "**Permissions:** User must have write access to the vault",
+        "**Item ID:** Generated automatically and returned in the output metadata",
+        "**Immutable Metadata:** Item metadata (name, category) can be updated via Set Item node",
+        "**Dynamic Vault:** Vault can be specified from message instead of dropdown"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrCredentials",
+        "ErrEmpty",
+        "ErrInvalid",
+        "ErrName",
+        "ErrCategory",
+        "ErrItem",
+        "ErrMarshalItem",
+        "ErrAddItem",
+        "ErrOutputMarshal"
+      ],
+      "tips": [
+        "Use descriptive names for vault items to make them easy to identify",
+        "Store all sensitive data in vaults instead of hardcoding in flows",
+        "Use appropriate categories for better organization and filtering",
+        "Document the structure of custom item types for team members",
+        "Validate item data before adding to ensure required fields are present",
+        "Use Try-Catch to handle cases where vault might not be accessible",
+        "Store the returned item ID for future reference and updates",
+        "Avoid storing sensitive data in item names (names may be logged)",
+        "Use Set Item node to update existing items instead of adding duplicates",
+        "Consider vault naming conventions for multi-environment setups"
+      ]
+    },
+    "delete-item": {
+      "namespace": "Core.Vault.DeleteItem",
+      "name": "DeleteItem",
+      "summary": "Deletes an item from the specified vault.",
+      "howItWorks": "The Delete Item node removes credential items from Robomotion vaults: 1. **Credential Retrieval:** - Retrieves vault and item credentials from configuration or message - Decodes the credentials structure to extract vault ID and item ID - Validates that both IDs are provided and not placeholder values 2. **Validation:** - Ensures vault ID is selected and not empty - Ensures item ID is selected and not empty - Validates credential format is correct 3. **Deletion:** - Calls the vault API to delete the specified item - Permanently removes the item from the vault - No confirmation dialog - deletion is immediate 4. **Completion:** - Returns success with no output data - Item is no longer accessible in the vault - Deletion cannot be undone",
+      "usage": [
+        "**Vault ID:** Must be a valid GUID representing an existing vault",
+        "**Item ID:** Must be a valid GUID representing an existing item in the vault",
+        "**Vault Access:** User must have delete permissions on the specified vault",
+        "**Item Existence:** Item must exist in the vault (error if already deleted)"
+      ],
+      "bestPractices": [
+        "**Permanent Deletion:** Deleted items cannot be recovered",
+        "**No Confirmation:** Deletion is immediate with no confirmation prompt",
+        "**Cascade Effects:** Deleting an item doesn't affect flows using it until next execution",
+        "**Error on Missing:** If item doesn't exist, an error is thrown",
+        "**Dynamic Selection:** Credentials can be from dropdown or message variable",
+        "**Permissions Required:** User must have delete permission on the vault",
+        "**No Output:** Node produces no output data, only success/failure status"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrCredentials",
+        "ErrOutputMarshal",
+        "Errors"
+      ],
+      "tips": [
+        "Always confirm you have the correct item before deleting",
+        "Consider adding a confirmation step in your flow before deletion",
+        "Use Get Item first to verify the item exists and contains expected data",
+        "Store item backups before deletion if data might be needed later",
+        "Use Try-Catch to handle cases where item might not exist",
+        "Document why items are being deleted for audit purposes",
+        "Avoid deleting items that might be in use by running flows",
+        "Consider using Set Item to mark items as inactive instead of deleting",
+        "Test deletion logic thoroughly before deploying to production",
+        "Keep logs of deleted items for compliance and troubleshooting"
+      ]
+    },
+    "get-item": {
+      "namespace": "Core.Vault.GetItem",
+      "name": "GetItem",
+      "summary": "Retrieves an item from the vault.",
+      "howItWorks": "The Get Item node retrieves credential items from Robomotion vaults: 1. **Credential Configuration:** - Retrieves vault and item credentials from configuration or message - Supports both dropdown selection and dynamic message-based selection - Validates credential structure and decodes vault/item IDs 2. **Validation:** - Ensures vault ID is selected and not a placeholder - Ensures item ID is selected and not a placeholder - Validates vault secret key has been injected into the robot 3. **Retrieval:** - Calls the vault API to retrieve the encrypted item - Decrypts the item using the vault secret key - Parses the item data based on its category type 4. **Output:** - Returns the decrypted item with all fields - Adds metadata including vault ID and item ID - Provides structured data ready for use in subsequent nodes",
+      "usage": [
+        "**Vault ID:** Must be a valid GUID representing an existing vault",
+        "**Item ID:** Must be a valid GUID representing an existing item in the vault",
+        "**Vault Secret Key:** Must be injected into the robot environment",
+        "**Vault Access:** User must have read permissions on the specified vault"
+      ],
+      "bestPractices": [
+        "**Vault Secret Required:** Vault secret key must be injected before using this node",
+        "**Decryption:** Items are automatically decrypted using the vault secret",
+        "**Metadata Included:** Output includes vaultId and itemId in the meta object",
+        "**Category Types:** Different item categories have different field structures",
+        "**Dynamic Selection:** Can select from dropdown or provide IDs via message",
+        "**Read Permissions:** User must have read access to the vault",
+        "**Version Compatibility:** Handles both legacy and current credential widget formats"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrCredentials",
+        "ErrOutputMarshal"
+      ],
+      "tips": [
+        "Inject vault secrets during robot initialization or before first use",
+        "Store retrieved credentials in variables for reuse across multiple nodes",
+        "Use metadata to track which vault/item was retrieved for logging",
+        "Combine with HTTP Request or database nodes to use retrieved credentials",
+        "Handle missing vault secrets with Try-Catch for better error messages",
+        "Avoid logging decrypted credential values for security",
+        "Use Get Item early in flows to fail fast if credentials are inaccessible",
+        "Consider caching credentials in memory rather than repeated vault calls",
+        "Use different vaults for different environments (dev, staging, production)",
+        "Regularly rotate vault items and update flows accordingly"
+      ]
+    },
+    "list-items": {
+      "namespace": "Core.Vault.ListItems",
+      "name": "ListItems",
+      "summary": "Lists all items in a vault.",
+      "howItWorks": "The List Items node retrieves all items from a specified vault: 1. **Vault Selection:** Retrieves vault ID from configuration or message, validates it's a valid GUID 2. **API Call:** Makes GET request to vault API to retrieve all items in the vault 3. **Data Processing:** Extracts item name, vault ID, and item ID for each item 4. **Output:** Returns array of items with metadata (name, vault_id, item_id)",
+      "usage": [
+        "**Vault ID:** Must be a valid GUID representing an existing vault",
+        "**Vault Access:** User must have read permissions on the vault"
+      ],
+      "bestPractices": [
+        "Returns metadata only (name, IDs) - not actual credential data",
+        "Use Get Item to retrieve actual credential values",
+        "Empty vaults return empty array (not an error)",
+        "Items are returned in no guaranteed order"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrCredentials",
+        "ErrEmpty",
+        "ErrInvalid",
+        "ErrOutputMarshal"
+      ],
+      "tips": [
+        "Combine with loops to process multiple items",
+        "Use to verify item exists before Get/Set/Delete operations",
+        "Filter results to find items by name patterns",
+        "Cache list results to reduce API calls",
+        "Use for vault auditing and inventory management"
+      ]
+    },
+    "list-vaults": {
+      "namespace": "Core.Vault.ListVaults",
+      "name": "ListVaults",
+      "summary": "Lists all available vaults",
+      "howItWorks": "The List Vaults node retrieves all vaults accessible to the user: 1. **API Call:** Makes GET request to `/v1/vaults.list` endpoint 2. **Data Processing:** Extracts vault name and ID from each vault in the response 3. **Output:** Returns array of vaults with name and vault_id properties 4. **Filtering:** Only returns vaults the user has permissions to access",
+      "usage": [
+        "**User Authentication:** User must be authenticated with Robomotion",
+        "**Vault Access:** Returns only vaults the user has access to"
+      ],
+      "bestPractices": [
+        "Returns only vaults the user has permissions to access",
+        "Empty result means no accessible vaults or authentication issue",
+        "Vault IDs are GUIDs that can be used with other vault nodes",
+        "Result includes vault names and IDs only, not vault contents"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrOutputMarshal"
+      ],
+      "tips": [
+        "Use at the start of flows to dynamically select vaults",
+        "Combine with conditional logic for multi-environment flows",
+        "Cache results to reduce API calls",
+        "Validate vault availability before processing",
+        "Use for vault discovery and administration tasks"
+      ]
+    },
+    "set-item": {
+      "namespace": "Core.Vault.SetItem",
+      "name": "SetItem",
+      "summary": "Sets an item in a vault.",
+      "howItWorks": "The Set Item node updates existing credential items in Robomotion vaults: 1. **Credential Retrieval:** - Retrieves vault and item IDs from configuration or message - Decodes the credentials structure - Validates both IDs are provided and valid 2. **Item Data Preparation:** - Retrieves the new item data from the input - Marshals the item object to JSON format - Prepares data for vault API call 3. **Update Operation:** - Calls the vault API to update the item - Replaces existing item data with new data - Encrypts the data using vault secret key 4. **Output:** - Returns the credential metadata (vault ID and item ID) - Confirms the update was successful - Provides reference for subsequent operations",
+      "usage": [
+        "**Vault ID:** Must be a valid GUID representing an existing vault",
+        "**Item ID:** Must be a valid GUID representing an existing item",
+        "**Item Data:** Object containing the updated credential data",
+        "**Vault Access:** User must have write permissions on the vault",
+        "**Item Existence:** Item must already exist in the vault"
+      ],
+      "bestPractices": [
+        "**Complete Replacement:** Set Item replaces all data - include all fields",
+        "**Item Must Exist:** Cannot create new items - use Add Item instead",
+        "**Encryption:** Data is automatically encrypted before storage",
+        "**Metadata Preserved:** Item name and category are not changed",
+        "**No Partial Updates:** Must provide complete item structure",
+        "**Immediate Effect:** Changes take effect immediately for all users",
+        "**Dynamic Selection:** Can specify vault/item via dropdown or message"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrCredentials",
+        "ErrItem",
+        "ErrMarshalItem",
+        "ErrSetItem",
+        "ErrOutputMarshal"
+      ],
+      "tips": [
+        "Get the existing item first to preserve fields you don't want to change",
+        "Merge new data with existing data before calling Set Item",
+        "Validate all required fields are present before updating",
+        "Use Try-Catch to handle cases where item might not exist",
+        "Test updates on a non-production vault first",
+        "Log update operations for audit trails",
+        "Consider using item versioning externally for rollback capability",
+        "Avoid frequent updates to reduce vault API load",
+        "Use Set Item for rotation of credentials and tokens",
+        "Coordinate updates across teams to avoid conflicts"
+      ]
+    }
+  }
+}

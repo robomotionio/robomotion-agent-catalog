@@ -1,0 +1,94 @@
+{
+  "package": "Ssh",
+  "summary": "Connect to remote servers via SSH for command execution and file transfer.",
+  "description": "## Overview The SSH package provides secure shell connectivity for remote server operations. Use it when you need to execute commands on remote servers, transfer files via SFTP, or automate server administration tasks.",
+  "nodes": {
+    "connect": {
+      "namespace": "Core.Ssh.Connect",
+      "name": "Connect",
+      "summary": "Establishes an SSH connection to a remote server.",
+      "howItWorks": "The Connect node establishes an SSH connection to a remote server using either password or private key authentication: 1. Validates the provided credentials (must include a username) 2. If a private key path is provided, uses key-based authentication 3. Otherwise, uses password authentication from the credentials 4. Validates the host and port values 5. Establishes the SSH connection with the specified timeout 6. Stores the connection and returns a client ID for use with other SSH nodes",
+      "usage": [
+        "Valid SSH server hostname or IP address",
+        "Valid credentials with username (and password if not using private key)",
+        "Network access to the SSH server on the specified port",
+        "Private key file (if using key-based authentication)"
+      ],
+      "bestPractices": [
+        "The client ID output must be passed to other SSH nodes to perform operations",
+        "For security, it's recommended to use private key authentication instead of passwords",
+        "The connection should be closed using the Disconnect node when no longer needed",
+        "When using \"Ignore Host Key Check\", be aware of the security implications of man-in-the-middle attacks"
+      ]
+    },
+    "disconnect": {
+      "namespace": "Core.Ssh.Disconnect",
+      "name": "Disconnect",
+      "summary": "Closes an established SSH connection and releases associated resources.",
+      "howItWorks": "The Disconnect node closes an established SSH connection and releases all associated resources: 1. Validates the provided client ID 2. Retrieves the SSH client associated with the ID 3. Closes the SSH connection 4. Removes the client from the internal connection pool",
+      "usage": [
+        "A valid client ID from a previously established SSH connection using the Connect node"
+      ],
+      "bestPractices": [
+        "Always use this node to properly close SSH connections when they are no longer needed",
+        "Failing to disconnect may lead to resource leaks",
+        "Once disconnected, the client ID becomes invalid and cannot be used with other SSH nodes"
+      ]
+    },
+    "downloadfile": {
+      "namespace": "Core.Ssh.Downloadfile",
+      "name": "Downloadfile",
+      "summary": "Downloads a file from a remote SSH server to the local system.",
+      "howItWorks": "The Download File node transfers a file from a remote SSH server to the local system: 1. Validates the provided client ID, remote path, and local path 2. Retrieves the SSH client associated with the client ID 3. Initiates a secure file transfer from the remote path to the local path 4. Completes the transfer and returns success or error",
+      "usage": [
+        "A valid client ID from a previously established SSH connection using the Connect node",
+        "Valid remote file path that exists on the SSH server",
+        "Valid local file path where the user has write permissions",
+        "Sufficient disk space on the local system for the file"
+      ],
+      "bestPractices": [
+        "The remote path must be accessible to the SSH user account",
+        "The local path directory must exist and be writable",
+        "Large file transfers may take significant time depending on network conditions",
+        "The node will overwrite existing files at the local path without warning"
+      ]
+    },
+    "runcommand": {
+      "namespace": "Core.Ssh.Runcommand",
+      "name": "Runcommand",
+      "summary": "Executes a command on a remote SSH server and returns the result.",
+      "howItWorks": "The Run Command node executes a command on a remote SSH server and captures its output: 1. Validates the provided client ID and command 2. Retrieves the SSH client associated with the client ID 3. Executes the specified command on the remote server 4. Captures the command output and returns it as the result",
+      "usage": [
+        "A valid client ID from a previously established SSH connection using the Connect node",
+        "Valid command string that can be executed on the remote system",
+        "Sufficient permissions for the SSH user to execute the command"
+      ],
+      "bestPractices": [
+        "The command is executed in the default shell of the remote user",
+        "Complex commands may need to be properly escaped or quoted",
+        "Long-running commands will block the node until completion",
+        "The output is captured as a string and may include both stdout and stderr",
+        "Be cautious with commands that modify system state as they cannot be easily undone"
+      ]
+    },
+    "uploadfile": {
+      "namespace": "Core.Ssh.Uploadfile",
+      "name": "Uploadfile",
+      "summary": "Uploads a file from the local system to a remote SSH server.",
+      "howItWorks": "The Upload File node transfers a file from the local system to a remote SSH server: 1. Validates the provided client ID, local path, and remote path 2. Retrieves the SSH client associated with the client ID 3. Initiates a secure file transfer from the local path to the remote path 4. Completes the transfer and returns success or error",
+      "usage": [
+        "A valid client ID from a previously established SSH connection using the Connect node",
+        "Valid local file path that exists on the local system",
+        "Valid remote file path where the user has write permissions",
+        "Sufficient disk space on the remote system for the file"
+      ],
+      "bestPractices": [
+        "The local path must be accessible to the application",
+        "The remote path directory must exist and be writable by the SSH user",
+        "Large file transfers may take significant time depending on network conditions",
+        "The node will overwrite existing files at the remote path without warning",
+        "Ensure proper file permissions are set on the remote system after upload if needed"
+      ]
+    }
+  }
+}

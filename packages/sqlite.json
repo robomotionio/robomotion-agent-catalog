@@ -1,0 +1,167 @@
+{
+  "package": "Sqlite",
+  "summary": "Work with SQLite databases for local data storage, querying, and management.",
+  "description": "## Overview The SQLite package provides database connectivity for SQLite, a lightweight file-based database. Use it when you need local data storage, querying, or when you need a simple database without server infrastructure.",
+  "nodes": {
+    "Commit": {
+      "namespace": "Core.Sqlite.Commit",
+      "name": "Commit",
+      "summary": "Commits a SQLite database transaction.",
+      "howItWorks": "The Commit node is used to commit a SQLite database transaction. When executed, the node: 1. Validates the provided Transaction Id input 2. Acquires a mutex lock to ensure thread safety 3. Looks up the transaction in the SQLite transaction store 4. Commits the transaction if found 5. Releases the mutex lock",
+      "usage": [
+        "A valid transaction identifier from a previously started SQLite transaction",
+        "An active SQLite connection"
+      ],
+      "bestPractices": [
+        "The Transaction Id should match the one used when starting the transaction",
+        "Always ensure transactions are properly committed or rolled back to maintain database integrity",
+        "This node should be used in conjunction with Start Transaction and other SQLite nodes"
+      ]
+    },
+    "Connect": {
+      "namespace": "Core.Sqlite.Connect",
+      "name": "Connect",
+      "summary": "Establishes a connection to a SQLite database.",
+      "howItWorks": "The Connect node establishes a connection to a SQLite database using the provided connection string. When executed, the node: 1. Validates the provided Connection String option 2. Creates a new SQLiteConnection object with the connection string 3. Generates a unique connection identifier (GUID) 4. Acquires a mutex lock to ensure thread safety 5. Opens the database connection 6. Stores the connection in the SQLite connection pool with the GUID as key 7. Releases the mutex lock 8. Returns the connection identifier as output",
+      "usage": [
+        "A valid SQLite connection string",
+        "Proper file permissions to access the database file (if using file-based database)"
+      ],
+      "bestPractices": [
+        "The Connection String should follow the SQLite connection string format",
+        "The returned Connection Id should be used with other SQLite nodes that require a connection",
+        "Always ensure connections are properly closed using the Disconnect node when no longer needed",
+        "Connection strings typically follow the format: \"Data Source=path/to/database.db;Version=3;\""
+      ]
+    },
+    "Create": {
+      "namespace": "Core.Sqlite.Create",
+      "name": "Create",
+      "summary": "Creates a new SQLite database file.",
+      "howItWorks": "The Create Database node creates a new SQLite database file at the specified path. When executed, the node: 1. Validates the provided DB File Path input 2. Checks if a file already exists at the specified path 3. If a file exists and Overwrite If Exists is true, deletes the existing file 4. If a file exists and Overwrite If Exists is false, throws an error 5. Creates a new SQLite database file at the specified path",
+      "usage": [
+        "Valid file path with write permissions",
+        "Sufficient disk space for the new database file"
+      ],
+      "bestPractices": [
+        "The DB File Path should include the full path and filename with .db extension",
+        "If Overwrite If Exists is false, the node will fail if a file already exists at the path",
+        "The created database will be an empty SQLite database file ready for tables and data",
+        "Ensure the directory in the file path exists before running the node"
+      ]
+    },
+    "Disconnect": {
+      "namespace": "Core.Sqlite.Disconnect",
+      "name": "Disconnect",
+      "summary": "Closes and disconnects from a SQLite database connection.",
+      "howItWorks": "The Disconnect node closes and removes a SQLite database connection from the connection pool. When executed, the node: 1. Validates the provided Connection Id input 2. Acquires a mutex lock to ensure thread safety 3. Looks up the connection in the SQLite connection pool 4. Throws an error if the connection is not found 5. Closes the database connection 6. Removes the connection from the SQLite connection pool 7. Releases the mutex lock",
+      "usage": [
+        "A valid connection identifier from a previously established SQLite connection",
+        "The connection must still be active"
+      ],
+      "bestPractices": [
+        "The Connection Id should match the one returned by the Connect node",
+        "Always disconnect connections when they are no longer needed to free up resources",
+        "This node should be used at the end of database operations",
+        "Ensure all transactions are committed or rolled back before disconnecting"
+      ]
+    },
+    "Export": {
+      "namespace": "Core.Sqlite.Export",
+      "name": "Export",
+      "summary": "Exports the results of a SQL query to a file.",
+      "howItWorks": "The Export Query node executes a SQL query and exports the results to a file. When executed, the node: 1. Validates the provided Connection Id and Export Path inputs 2. Looks up the database connection in the SQLite connection pool 3. If provided, looks up the transaction in the SQLite transaction store 4. Deserializes message data for use in SQL template variables 5. Renders the SQL query using template variables with Stubble template engine 6. HTML decodes the rendered SQL query 7. Creates and executes a SQLite command with the rendered query 8. Reads the query results using a data reader 9. Writes the column headers and data rows to the specified export file 10. Uses the selected separator character between values",
+      "usage": [
+        "A valid database connection identifier from the Connect node",
+        "Valid file path with write permissions for the export file",
+        "Valid SQL query that returns data",
+        "Sufficient disk space for the exported file"
+      ],
+      "bestPractices": [
+        "The SQL Export field supports template variables using double curly braces (e.g., `{{variableName}}`)",
+        "Template variables are populated from the message data",
+        "The exported file will include column headers as the first row",
+        "If a Transaction Id is provided, the query will be executed within that transaction",
+        "The separator option determines how values are separated in the exported file",
+        "The exported file format is CSV-like but with configurable separators",
+        "Ensure the directory in the export path exists before running the node"
+      ]
+    },
+    "Insert": {
+      "namespace": "Core.Sqlite.Insert",
+      "name": "Insert",
+      "summary": "Inserts data into a SQLite database table.",
+      "howItWorks": "The Insert Table node inserts data into a SQLite database table. When executed, the node: 1. Validates the provided Connection Id and Table Name inputs 2. Validates that Table Data exists 3. Looks up the database connection in the SQLite connection pool 4. If provided, looks up the transaction in the SQLite transaction store 5. For each row in the Table Data: * Clears previous command parameters * For each column in the row: - Constructs an INSERT command using the table name and column names - Adds the column value as a parameter * Executes the INSERT command The node supports different conflict resolution strategies: * Standard INSERT (default) - Fails on unique constraint violations * INSERT OR REPLACE (when Replace is true) - Replaces existing rows with the same primary key * INSERT OR IGNORE (when Ignore Conflicts is true) - Skips rows that would cause unique constraint violations",
+      "usage": [
+        "A valid database connection identifier from the Connect node",
+        "An existing database table with matching column structure",
+        "Valid table data with appropriate column names and values",
+        "Sufficient database permissions for INSERT operations"
+      ],
+      "bestPractices": [
+        "The Table Data input should be a properly formatted table structure",
+        "Column names in the Table Data should match the database table schema",
+        "If a Transaction Id is provided, the insert operation will be part of that transaction",
+        "Use the Replace option carefully as it will overwrite existing rows with the same primary key",
+        "The Ignore Conflicts option is useful when inserting data that may have duplicates",
+        "Only one of Replace or Ignore Conflicts should be selected at a time"
+      ]
+    },
+    "NonQuery": {
+      "namespace": "Core.Sqlite.NonQuery",
+      "name": "NonQuery",
+      "summary": "Executes a SQL non-query command (INSERT, UPDATE, DELETE) on a SQLite database.",
+      "howItWorks": "The Execute Non Query node runs a SQL command that doesn't return data (INSERT, UPDATE, DELETE). When executed, the node: 1. Validates the provided Connection Id input 2. Looks up the database connection in the SQLite connection pool 3. If provided, looks up the transaction in the SQLite transaction store 4. Deserializes message data for use in SQL template variables 5. Renders the SQL query using template variables with Stubble template engine 6. HTML decodes the rendered SQL query 7. Creates and executes a SQLite command with the rendered query using ExecuteNonQuery() 8. Returns the number of affected rows as output",
+      "usage": [
+        "A valid database connection identifier from the Connect node",
+        "Valid SQL non-query command (INSERT, UPDATE, DELETE)",
+        "Sufficient database permissions for the requested operation"
+      ],
+      "bestPractices": [
+        "The SQL Query field supports template variables using double curly braces (e.g., `{{variableName}}`)",
+        "Template variables are populated from the message data",
+        "The Number Of Affected Rows output indicates how many rows were modified by the command",
+        "If a Transaction Id is provided, the command will be executed within that transaction",
+        "This node is specifically for non-query commands and should not be used for SELECT statements",
+        "For SELECT statements, use the Query node instead"
+      ]
+    },
+    "Query": {
+      "namespace": "Core.Sqlite.Query",
+      "name": "Query",
+      "summary": "Executes a SQL query command (SELECT) on a SQLite database and returns the results.",
+      "howItWorks": "The Execute Query node runs a SQL SELECT command and returns the results. When executed, the node: 1. Validates the provided Connection Id input 2. Looks up the database connection in the SQLite connection pool 3. If provided, looks up the transaction in the SQLite transaction store 4. Deserializes message data for use in SQL template variables 5. Renders the SQL query using template variables with Stubble template engine 6. HTML decodes the rendered SQL query 7. Creates and executes a SQLite command with the rendered query 8. Reads the query results using a data reader 9. Loads the results into a DataTable 10. Converts the DataTable to a Table object 11. Returns the Table object as output",
+      "usage": [
+        "A valid database connection identifier from the Connect node",
+        "Valid SQL SELECT query command",
+        "Sufficient database permissions for the requested operation"
+      ],
+      "bestPractices": [
+        "The SQL Query field supports template variables using double curly braces (e.g., `{{variableName}}`)",
+        "Template variables are populated from the message data",
+        "The Result output contains the query results as a table structure",
+        "If a Transaction Id is provided, the query will be executed within that transaction",
+        "This node is specifically for query commands that return data (SELECT)",
+        "For INSERT, UPDATE, DELETE commands, use the Execute Non Query node instead",
+        "Large result sets may impact performance, consider using LIMIT clauses for large tables"
+      ]
+    },
+    "Start": {
+      "namespace": "Core.Sqlite.Start",
+      "name": "Start",
+      "summary": "Starts a new SQLite database transaction.",
+      "howItWorks": "The Start Transaction node begins a new SQLite database transaction. When executed, the node: 1. Validates the provided Connection Id input 2. Acquires a mutex lock to ensure thread safety 3. Looks up the connection in the SQLite connection pool 4. Throws an error if the connection is not found 5. Generates a unique transaction identifier (GUID) 6. Begins a new transaction on the database connection 7. Stores the transaction in the SQLite transaction store with the GUID as key 8. Releases the mutex lock 9. Returns the transaction identifier as output",
+      "usage": [
+        "A valid database connection identifier from the Connect node",
+        "The connection must be active and open"
+      ],
+      "bestPractices": [
+        "The Transaction Id should be used with other transaction-related nodes (Commit, etc.)",
+        "Always ensure transactions are properly committed or rolled back to maintain database integrity",
+        "This node should be used in conjunction with Commit Transaction and other SQLite nodes",
+        "Transactions are useful for grouping multiple database operations that should be executed as a single unit of work",
+        "If a transaction is not committed, changes will be automatically rolled back when the connection is closed"
+      ]
+    }
+  }
+}

@@ -1,0 +1,459 @@
+{
+  "package": "GoogleSheets",
+  "summary": "Integrate with Google Sheets for cloud-based spreadsheet automation and data management.",
+  "description": "## Overview The Google Sheets package provides comprehensive spreadsheet manipulation capabilities for Google Sheets. Use it when you need to read, write, or manage data in Google Sheets from your automation workflows.",
+  "nodes": {
+    "addsheet": {
+      "namespace": "Core.GoogleSheets.Addsheet",
+      "name": "Addsheet",
+      "summary": "Adds a new sheet to a Google Spreadsheet.",
+      "howItWorks": "The Add Sheet node creates a new sheet within an existing Google Spreadsheet. When executed, the node: 1. Validates the provided Spreadsheet Id and Sheet Name inputs 2. Checks if a sheet with the specified name already exists in the spreadsheet 3. Creates a new sheet with the specified name in the target spreadsheet 4. Returns any errors encountered during the process",
+      "usage": [
+        "A valid Google Spreadsheet ID",
+        "A unique sheet name that doesn't already exist in the spreadsheet",
+        "Proper Google Sheets API authentication and permissions"
+      ],
+      "bestPractices": [
+        "The Spreadsheet Id can be obtained from the URL of your Google Spreadsheet",
+        "The sheet name must be unique within the spreadsheet",
+        "If a sheet with the same name already exists, the node will return an error",
+        "Ensure your Google account has proper permissions to modify the target spreadsheet"
+      ]
+    },
+    "append": {
+      "namespace": "Core.GoogleSheets.Append",
+      "name": "Append",
+      "summary": "Appends data from one Google Spreadsheet sheet to another sheet.",
+      "howItWorks": "The Append node copies data from one Google Spreadsheet sheet and appends it to another sheet. When executed, the node: 1. Validates all four input parameters (both spreadsheet IDs and sheet names) 2. Connects to both Google Spreadsheets using their IDs 3. Retrieves data from the specified sheet in the first spreadsheet 4. Retrieves data from the specified sheet in the second spreadsheet 5. Appends the data from the first sheet (excluding the header row) to the second sheet 6. Returns any errors encountered during the process",
+      "usage": [
+        "Valid Google Spreadsheet IDs for both source and destination spreadsheets",
+        "Valid sheet names in both spreadsheets",
+        "Proper Google Sheets API authentication and permissions for both spreadsheets"
+      ],
+      "bestPractices": [
+        "The first row of the source sheet is treated as a header and is not included in the append operation",
+        "Both spreadsheets must be accessible with the current Google account credentials",
+        "Ensure your Google account has proper permissions to read from the source spreadsheet and write to the destination spreadsheet",
+        "The append operation adds data to the end of the existing data in the destination sheet"
+      ]
+    },
+    "appendrange": {
+      "namespace": "Core.GoogleSheets.Appendrange",
+      "name": "Appendrange",
+      "summary": "Appends a range of data to a Google Spreadsheet.",
+      "howItWorks": "The Append Range node adds a structured table of data to the end of a Google Spreadsheet. When executed, the node: 1. Validates all input parameters 2. Connects to the Google Spreadsheet using the provided ID 3. Processes the table data to convert it to the required format 4. Determines the appropriate location to append the data (typically at the end of the sheet) 5. Sends an append request to add the data to the spreadsheet 6. Automatically inserts new rows as needed to accommodate the appended data 7. Returns any errors encountered during the process",
+      "usage": [
+        "A valid Google Spreadsheet ID",
+        "Valid table data in the required format",
+        "Proper Google Sheets API authentication and permissions"
+      ],
+      "bestPractices": [
+        "The Spreadsheet Id can be obtained from the URL of your Google Spreadsheet or from the Open Spreadsheet node",
+        "The Table input should be a structured data object with columns and rows",
+        "Data is appended to the end of the sheet, preserving existing data",
+        "New rows are automatically inserted to accommodate the appended data",
+        "This operation modifies the spreadsheet data by adding new content",
+        "Ensure your Google account has proper permissions to modify the target spreadsheet"
+      ]
+    },
+    "clearrange": {
+      "namespace": "Core.GoogleSheets.Clearrange",
+      "name": "Clearrange",
+      "summary": "Clears a range of data in a Google Spreadsheet.",
+      "howItWorks": "The Clear Range node removes all data from a specified range in a Google Spreadsheet. When executed, the node: 1. Validates all input parameters 2. Connects to the Google Spreadsheet using the provided ID 3. Constructs a range reference based on the Start Cell and End Cell inputs 4. Sends a clear values request to remove all data within the specified range 5. Returns any errors encountered during the process",
+      "usage": [
+        "A valid Google Spreadsheet ID",
+        "Valid cell references for the range (Start Cell and End Cell)",
+        "Proper Google Sheets API authentication and permissions"
+      ],
+      "bestPractices": [
+        "The Spreadsheet Id can be obtained from the URL of your Google Spreadsheet or from the Open Spreadsheet node",
+        "Both Start Cell and End Cell must be specified to define the range",
+        "All data within the specified range will be permanently cleared",
+        "Formatting within the range is preserved, only cell values are cleared",
+        "This operation modifies the spreadsheet data, so use with caution",
+        "Ensure your Google account has proper permissions to modify the target spreadsheet"
+      ]
+    },
+    "createspreadsheet": {
+      "namespace": "Core.GoogleSheets.Createspreadsheet",
+      "name": "Createspreadsheet",
+      "summary": "Creates a new Google Spreadsheet.",
+      "howItWorks": "The Create Spreadsheet node generates a new Google Spreadsheet with the specified title. When executed, the node: 1. Validates all input parameters 2. Authenticates with the Google Sheets API using the provided credentials 3. Creates a new spreadsheet with the specified title 4. Shares the spreadsheet with any specified users if the Share With option is used 5. Sends notification emails if the Send Notification Mail option is enabled 6. Returns the unique ID of the newly created spreadsheet 7. Handles token refresh if necessary 8. Returns any errors encountered during the process",
+      "usage": [
+        "Valid Google Sheets API credentials with appropriate permissions",
+        "Internet connectivity to access Google Sheets API",
+        "Valid title for the new spreadsheet"
+      ],
+      "bestPractices": [
+        "The output Spreadsheet Id can be used in other Google Sheets nodes",
+        "The Share With option allows you to specify users and their roles (e.g., owner, writer, reader)",
+        "When using service account credentials, sharing may have limitations",
+        "The node handles credential token refresh automatically when needed",
+        "The newly created spreadsheet will be owned by the authenticated account",
+        "Ensure your Google account has proper permissions to create spreadsheets in Google Drive"
+      ]
+    },
+    "deletecolumn": {
+      "namespace": "Core.GoogleSheets.Deletecolumn",
+      "name": "Deletecolumn",
+      "summary": "Deletes a specific column from a Google Spreadsheet.",
+      "howItWorks": "The Delete Column node removes a specific column from a Google Spreadsheet. When executed, the node: 1. Validates the provided Spreadsheet Id and Column inputs 2. Connects to the Google Spreadsheet using the provided ID 3. Converts the column letter to a numeric index 4. Constructs a delete dimension request for the specified column 5. Sends the delete request to the Google Sheets API 6. Returns any errors encountered during the process",
+      "usage": [
+        "A valid Google Spreadsheet ID",
+        "A valid column letter reference",
+        "Proper Google Sheets API authentication and permissions"
+      ],
+      "bestPractices": [
+        "The Spreadsheet Id can be obtained from the URL of your Google Spreadsheet",
+        "Column references should be a single letter (e.g., \"A\", \"B\", \"Z\")",
+        "Deleting a column will shift all columns to the right one position to the left",
+        "This operation cannot be undone, so use with caution",
+        "Ensure your Google account has proper permissions to modify the target spreadsheet"
+      ]
+    },
+    "deleterow": {
+      "namespace": "Core.GoogleSheets.Deleterow",
+      "name": "Deleterow",
+      "summary": "Deletes a specific row from a Google Spreadsheet.",
+      "howItWorks": "The Delete Row node removes a specific row from a Google Spreadsheet. When executed, the node: 1. Validates the provided Spreadsheet Id and Row Number inputs 2. Connects to the Google Spreadsheet using the provided ID 3. Constructs a delete dimension request for the specified row 4. Sends the delete request to the Google Sheets API 5. Returns any errors encountered during the process",
+      "usage": [
+        "A valid Google Spreadsheet ID",
+        "A valid row number (1-based index)",
+        "Proper Google Sheets API authentication and permissions"
+      ],
+      "bestPractices": [
+        "The Spreadsheet Id can be obtained from the URL of your Google Spreadsheet",
+        "Row numbers are 1-based, meaning the first row is row 1, not row 0",
+        "Deleting a row will shift all rows below it up by one position",
+        "This operation cannot be undone, so use with caution",
+        "Ensure your Google account has proper permissions to modify the target spreadsheet"
+      ]
+    },
+    "deletesheet": {
+      "namespace": "Core.GoogleSheets.Deletesheet",
+      "name": "Deletesheet",
+      "summary": "Deletes a specific sheet from a Google Spreadsheet.",
+      "howItWorks": "The Delete Sheet node removes a specific sheet from a Google Spreadsheet. When executed, the node: 1. Validates the provided Spreadsheet Id and Sheet Name inputs 2. Connects to the Google Spreadsheet using the provided ID 3. Checks if a sheet with the specified name exists in the spreadsheet 4. Gets the sheet ID for the sheet to be deleted 5. Constructs a delete sheet request 6. Sends the delete request to the Google Sheets API 7. Returns any errors encountered during the process",
+      "usage": [
+        "A valid Google Spreadsheet ID",
+        "A valid sheet name that exists in the spreadsheet",
+        "Proper Google Sheets API authentication and permissions"
+      ],
+      "bestPractices": [
+        "The Spreadsheet Id can be obtained from the URL of your Google Spreadsheet",
+        "The sheet name must exactly match an existing sheet in the spreadsheet",
+        "This operation cannot be undone, so use with caution",
+        "Deleting a sheet will remove all data contained in that sheet",
+        "Ensure your Google account has proper permissions to modify the target spreadsheet"
+      ]
+    },
+    "findreplace": {
+      "namespace": "Core.GoogleSheets.Findreplace",
+      "name": "Findreplace",
+      "summary": "Finds and replaces text in a Google Spreadsheet.",
+      "howItWorks": "The Find and Replace node searches for specific text in a Google Spreadsheet and replaces it with new text. When executed, the node: 1. Validates all input parameters 2. Connects to the Google Spreadsheet using the provided ID 3. Determines the search range based on the Target option 4. Constructs a find and replace request with the specified parameters 5. Sends the request to the Google Sheets API 6. Returns any errors encountered during the process",
+      "usage": [
+        "A valid Google Spreadsheet ID",
+        "Valid cell references for the range (if using specific range)",
+        "Proper Google Sheets API authentication and permissions"
+      ],
+      "bestPractices": [
+        "The Spreadsheet Id can be obtained from the URL of your Google Spreadsheet",
+        "When using specific range, both From Cell and To Cell should be specified",
+        "Regular expressions in the Find field must follow Google Sheets regex syntax",
+        "The operation affects all sheets in the spreadsheet when using \"All Range\" target",
+        "This operation modifies the spreadsheet data, so use with caution",
+        "Ensure your Google account has proper permissions to modify the target spreadsheet"
+      ]
+    },
+    "formatrange": {
+      "namespace": "Core.GoogleSheets.Formatrange",
+      "name": "Formatrange",
+      "summary": "Formats a range of cells in a Google Spreadsheet with a specific number format.",
+      "howItWorks": "The Format Range node applies a specific number format to a range of cells in a Google Spreadsheet. When executed, the node: 1. Validates all input parameters 2. Connects to the Google Spreadsheet using the provided ID 3. Converts the cell references to grid coordinates 4. Constructs a repeat cell request with the specified format 5. Sends the formatting request to the Google Sheets API 6. Returns any errors encountered during the process",
+      "usage": [
+        "A valid Google Spreadsheet ID",
+        "Valid cell references for the range (From Cell and To Cell)",
+        "A format selection from the available options",
+        "Proper Google Sheets API authentication and permissions"
+      ],
+      "bestPractices": [
+        "The Spreadsheet Id can be obtained from the URL of your Google Spreadsheet",
+        "Both From Cell and To Cell must be specified to define the range",
+        "The format is applied to all cells within the specified range",
+        "This operation modifies the formatting of the spreadsheet data, but not the actual data",
+        "Ensure your Google account has proper permissions to modify the target spreadsheet"
+      ]
+    },
+    "getcellvalue": {
+      "namespace": "Core.GoogleSheets.Getcellvalue",
+      "name": "Getcellvalue",
+      "summary": "Retrieves the value of a specific cell from a Google Spreadsheet.",
+      "howItWorks": "The Get Cell Value node retrieves the value of a specific cell from a Google Spreadsheet. When executed, the node: 1. Validates the provided Spreadsheet Id and Cell inputs 2. Connects to the Google Spreadsheet using the provided ID 3. Constructs a range reference for the specified cell 4. Retrieves the value of the specified cell using the Google Sheets API 5. Sets the retrieved value to the output variable 6. Returns any errors encountered during the process",
+      "usage": [
+        "A valid Google Spreadsheet ID",
+        "A valid cell reference in the format of a letter followed by a number (e.g., \"A1\", \"B2\")",
+        "Proper Google Sheets API authentication and permissions"
+      ],
+      "bestPractices": [
+        "The Spreadsheet Id can be obtained from the URL of your Google Spreadsheet",
+        "Cell references should follow the standard Google Sheets format (e.g., \"A1\", \"B2\", \"Z100\")",
+        "The retrieved cell value will be stored in the \"Cell Value\" output variable",
+        "Ensure your Google account has proper permissions to read from the target spreadsheet",
+        "If the cell is empty, the output variable will contain an empty string"
+      ]
+    },
+    "getcolumn": {
+      "namespace": "Core.GoogleSheets.Getcolumn",
+      "name": "Getcolumn",
+      "summary": "Retrieves a column of data from a Google Spreadsheet.",
+      "howItWorks": "The Get Column node retrieves a column of data from a Google Spreadsheet starting from a specified cell. When executed, the node: 1. Validates the provided Spreadsheet Id and Start Cell inputs 2. Connects to the Google Spreadsheet using the provided ID 3. Converts the cell reference to grid coordinates 4. Retrieves all values from the specified sheet 5. Extracts the column data starting from the specified row 6. Sets the retrieved column data to the output variable 7. Returns any errors encountered during the process",
+      "usage": [
+        "A valid Google Spreadsheet ID",
+        "A valid cell reference in the format of a letter followed by a number (e.g., \"A1\", \"B2\")",
+        "Proper Google Sheets API authentication and permissions"
+      ],
+      "bestPractices": [
+        "The Spreadsheet Id can be obtained from the URL of your Google Spreadsheet",
+        "The Start Cell reference determines which column to retrieve and from which row to start",
+        "The output Column variable will contain an array of values from the specified column",
+        "Empty cells in the column will be represented as empty strings in the output array",
+        "Ensure your Google account has proper permissions to read from the target spreadsheet"
+      ]
+    },
+    "getrange": {
+      "namespace": "Core.GoogleSheets.Getrange",
+      "name": "Getrange",
+      "summary": "Retrieves a range of data from a Google Spreadsheet.",
+      "howItWorks": "The Get Range node retrieves a range of data from a Google Spreadsheet and formats it as a structured table. When executed, the node: 1. Validates all input parameters 2. Connects to the Google Spreadsheet using the provided ID 3. Determines the range to retrieve based on the Target option 4. Retrieves the specified data range from the spreadsheet 5. Processes the data to create a structured table with columns and rows 6. Applies header formatting if the Headers option is enabled 7. Converts to JSON format if the Jsonify option is enabled 8. Sets the processed data to the output variable 9. Returns any errors encountered during the process",
+      "usage": [
+        "A valid Google Spreadsheet ID",
+        "Valid cell references for the range (if using specific range)",
+        "Proper Google Sheets API authentication and permissions"
+      ],
+      "bestPractices": [
+        "The Spreadsheet Id can be obtained from the URL of your Google Spreadsheet",
+        "When using specific range, both From Cell and To Cell should be specified",
+        "The Headers option is useful when the first row contains column names",
+        "The Jsonify option converts the output to a standardized JSON format",
+        "The output Table variable contains both column headers and row data",
+        "Ensure your Google account has proper permissions to read from the target spreadsheet"
+      ]
+    },
+    "getrow": {
+      "namespace": "Core.GoogleSheets.Getrow",
+      "name": "Getrow",
+      "summary": "Retrieves a specific row of data from a Google Spreadsheet.",
+      "howItWorks": "The Get Row node retrieves a specific row of data from a Google Spreadsheet. When executed, the node: 1. Validates all input parameters 2. Connects to the Google Spreadsheet using the provided ID 3. Retrieves all data from the specified sheet 4. Extracts the specified row based on the Row Number input 5. Processes the row data based on the Headers option: - If Headers is enabled, uses the first row as column names - If Headers is disabled, uses column letters as keys 6. Converts to JSON format if the Jsonify option is enabled 7. Sets the processed data to the output variable 8. Returns any errors encountered during the process",
+      "usage": [
+        "A valid Google Spreadsheet ID",
+        "A valid row number (1-based index)",
+        "Proper Google Sheets API authentication and permissions"
+      ],
+      "bestPractices": [
+        "The Spreadsheet Id can be obtained from the URL of your Google Spreadsheet",
+        "Row numbers are 1-based, meaning the first row is row 1, not row 0",
+        "When Headers is enabled, the first row of the sheet is used as column names",
+        "When Headers is disabled, column letters (A, B, C, etc.) are used as keys",
+        "The Jsonify option converts the output to a standardized JSON format",
+        "The output Row variable contains the data from the specified row",
+        "Ensure your Google account has proper permissions to read from the target spreadsheet"
+      ]
+    },
+    "getsheets": {
+      "namespace": "Core.GoogleSheets.Getsheets",
+      "name": "Getsheets",
+      "summary": "Retrieves the list of sheets in a Google Spreadsheet.",
+      "howItWorks": "The Get Sheets node retrieves metadata about all sheets in a Google Spreadsheet. When executed, the node: 1. Validates the Spreadsheet Id input 2. Connects to the Google Spreadsheet using the provided ID 3. Retrieves metadata for all sheets in the spreadsheet 4. Processes the metadata to extract sheet names and IDs 5. Formats the data as an array of objects with sheetName and sheetId properties 6. Sets the processed data to the output variable 7. Returns any errors encountered during the process",
+      "usage": [
+        "A valid Google Spreadsheet ID",
+        "Proper Google Sheets API authentication and permissions"
+      ],
+      "bestPractices": [
+        "The Spreadsheet Id can be obtained from the URL of your Google Spreadsheet",
+        "The output Sheets variable contains an array of objects, each with sheetName and sheetId properties",
+        "This node is useful for dynamically working with spreadsheets that have multiple sheets",
+        "The sheetId can be used in other nodes that require a specific sheet ID",
+        "Ensure your Google account has proper permissions to read metadata from the target spreadsheet"
+      ]
+    },
+    "insertcolumn": {
+      "namespace": "Core.GoogleSheets.Insertcolumn",
+      "name": "Insertcolumn",
+      "summary": "Inserts a column of data into a Google Spreadsheet.",
+      "howItWorks": "The Insert Column node adds a column of data to a Google Spreadsheet starting from a specified cell. When executed, the node: 1. Validates all input parameters 2. Connects to the Google Spreadsheet using the provided ID 3. Converts the cell reference to grid coordinates 4. Calculates the range for inserting the column data 5. Prepares the column data in the required format 6. Sends an append request to insert the column data 7. Returns any errors encountered during the process",
+      "usage": [
+        "A valid Google Spreadsheet ID",
+        "A valid cell reference in the format of a letter followed by a number (e.g., \"A1\", \"B2\")",
+        "Valid column data as an array of values",
+        "Proper Google Sheets API authentication and permissions"
+      ],
+      "bestPractices": [
+        "The Spreadsheet Id can be obtained from the URL of your Google Spreadsheet",
+        "The Start Cell reference determines where the column data will be inserted",
+        "The Column Data should be provided as an array of values",
+        "The data will be inserted as a column, with each array element in a separate row",
+        "This operation modifies the spreadsheet data, so use with caution",
+        "Ensure your Google account has proper permissions to modify the target spreadsheet"
+      ]
+    },
+    "insertrow": {
+      "namespace": "Core.GoogleSheets.Insertrow",
+      "name": "Insertrow",
+      "summary": "Inserts a row of data into a Google Spreadsheet.",
+      "howItWorks": "The Insert Row node adds a row of data to a Google Spreadsheet. When executed, the node: 1. Validates all input parameters 2. Connects to the Google Spreadsheet using the provided ID 3. Processes the row data based on the Headers option: - If Headers is enabled, maps the Row Data keys to column headers - If Headers is disabled, sorts the Row Data keys alphabetically 4. Calculates the range for inserting the row data 5. Prepares the row data in the required format 6. Sends an append request to insert the row data 7. Returns any errors encountered during the process",
+      "usage": [
+        "A valid Google Spreadsheet ID",
+        "A valid cell reference in the format of a letter followed by a number (e.g., \"A1\", \"B2\") when not using Append Last Row",
+        "Valid row data as an object with key-value pairs",
+        "Proper Google Sheets API authentication and permissions"
+      ],
+      "bestPractices": [
+        "The Spreadsheet Id can be obtained from the URL of your Google Spreadsheet",
+        "When using the Headers option, the first row of the sheet must contain column headers",
+        "When not using the Headers option, keys in the Row Data object are sorted alphabetically",
+        "The Append Last Row option ignores the Start Cell input and adds data to the end of the sheet",
+        "This operation modifies the spreadsheet data, so use with caution",
+        "Ensure your Google account has proper permissions to modify the target spreadsheet"
+      ]
+    },
+    "merge": {
+      "namespace": "Core.GoogleSheets.Merge",
+      "name": "Merge",
+      "summary": "Merges data from one Google Spreadsheet sheet to another.",
+      "howItWorks": "The Merge node combines data from two Google Spreadsheet sheets by appending data from the source sheet to the destination sheet. When executed, the node: 1. Validates all four input parameters (both spreadsheet IDs and sheet names) 2. Connects to both Google Spreadsheets using their IDs 3. Retrieves data from the specified sheet in the second (source) spreadsheet 4. Retrieves existing data from the specified sheet in the first (destination) spreadsheet 5. Calculates the appropriate range for inserting the source data next to the existing data 6. Updates the first spreadsheet with the merged data 7. Returns any errors encountered during the process",
+      "usage": [
+        "Valid Google Spreadsheet IDs for both source and destination spreadsheets",
+        "Valid sheet names in both spreadsheets",
+        "Proper Google Sheets API authentication and permissions for both spreadsheets"
+      ],
+      "bestPractices": [
+        "The data from the second sheet will be appended to the right of the existing data in the first sheet",
+        "Both spreadsheets must be accessible with the current Google account credentials",
+        "Ensure your Google account has proper permissions to read from the source spreadsheet and write to the destination spreadsheet",
+        "This operation modifies the destination spreadsheet data, so use with caution",
+        "The number of rows in both sheets should ideally match for proper merging"
+      ]
+    },
+    "openspreadsheet": {
+      "namespace": "Core.GoogleSheets.Openspreadsheet",
+      "name": "Openspreadsheet",
+      "summary": "Opens a Google Spreadsheet and retrieves its ID for use in other nodes.",
+      "howItWorks": "The Open Spreadsheet node establishes a connection to a Google Spreadsheet using its URL and retrieves the spreadsheet's unique ID. When executed, the node: 1. Validates the provided Spreadsheet URL and Credentials 2. Authenticates with the Google Sheets API using the provided credentials 3. Opens the spreadsheet specified by the URL 4. Extracts and returns the spreadsheet's unique ID 5. Handles token refresh if necessary 6. Returns any errors encountered during the process",
+      "usage": [
+        "A valid Google Spreadsheet URL",
+        "Valid Google Sheets API credentials with appropriate permissions",
+        "Internet connectivity to access Google Sheets API"
+      ],
+      "bestPractices": [
+        "The Spreadsheet URL should be the full web address of your Google Spreadsheet",
+        "The output Spreadsheet Id can be used as input for other Google Sheets nodes",
+        "Credentials must have appropriate permissions to access the specified spreadsheet",
+        "This node is typically used at the beginning of a workflow to obtain the spreadsheet ID",
+        "The node handles credential token refresh automatically when needed"
+      ]
+    },
+    "renamesheet": {
+      "namespace": "Core.GoogleSheets.Renamesheet",
+      "name": "Renamesheet",
+      "summary": "Renames a sheet within a Google Spreadsheet.",
+      "howItWorks": "The Rename Sheet node changes the name of a specific sheet within a Google Spreadsheet. When executed, the node: 1. Validates all input parameters 2. Connects to the Google Spreadsheet using the provided ID 3. Locates the sheet with the specified current name 4. Gets the sheet ID for the sheet to be renamed 5. Constructs an update sheet properties request with the new name 6. Sends the rename request to the Google Sheets API 7. Returns any errors encountered during the process",
+      "usage": [
+        "A valid Google Spreadsheet ID",
+        "A valid current sheet name that exists in the spreadsheet",
+        "A valid new sheet name",
+        "Proper Google Sheets API authentication and permissions"
+      ],
+      "bestPractices": [
+        "The Spreadsheet Id can be obtained from the URL of your Google Spreadsheet or from the Open Spreadsheet node",
+        "The Sheet Name must exactly match an existing sheet in the spreadsheet",
+        "The New Sheet Name must be unique within the spreadsheet",
+        "This operation modifies the spreadsheet structure, so use with caution",
+        "Ensure your Google account has proper permissions to modify the target spreadsheet"
+      ]
+    },
+    "setcellvalue": {
+      "namespace": "Core.GoogleSheets.Setcellvalue",
+      "name": "Setcellvalue",
+      "summary": "Sets the value of a specific cell in a Google Spreadsheet.",
+      "howItWorks": "The Set Cell Value node updates the content of a specific cell in a Google Spreadsheet. When executed, the node: 1. Validates all input parameters 2. Connects to the Google Spreadsheet using the provided ID 3. Processes the cell value, converting strings to numbers when appropriate 4. Constructs a value range with the specified cell value 5. Determines the appropriate value input option based on the Set as Formula option 6. Sends an update request to set the cell value 7. Returns any errors encountered during the process",
+      "usage": [
+        "A valid Google Spreadsheet ID",
+        "A valid cell reference in the format of a letter followed by a number (e.g., \"A1\", \"B2\")",
+        "A valid cell value",
+        "Proper Google Sheets API authentication and permissions"
+      ],
+      "bestPractices": [
+        "The Spreadsheet Id can be obtained from the URL of your Google Spreadsheet or from the Open Spreadsheet node",
+        "Cell references should follow the standard Google Sheets format (e.g., \"A1\", \"B2\", \"Z100\")",
+        "When Set as Formula is enabled, the value will be treated as a formula (e.g., \"=SUM(A1:A10)\")",
+        "When Set as Formula is disabled, the value will be written as literal text or number",
+        "String values that can be parsed as numbers will be automatically converted",
+        "This operation modifies the spreadsheet data, so use with caution",
+        "Ensure your Google account has proper permissions to modify the target spreadsheet"
+      ]
+    },
+    "setrange": {
+      "namespace": "Core.GoogleSheets.Setrange",
+      "name": "Setrange",
+      "summary": "Sets a range of data in a Google Spreadsheet.",
+      "howItWorks": "The Set Range node writes a structured table of data to a specified range in a Google Spreadsheet. When executed, the node: 1. Validates all input parameters 2. Connects to the Google Spreadsheet using the provided ID 3. Processes the table data based on the Headers option: - If Headers is enabled, includes column headers as the first row - If Headers is disabled, writes only the data rows 4. Constructs a value range with the processed table data 5. Determines the appropriate value input option based on the Set as Formula option 6. Sends an update request to write the data to the specified range 7. Returns any errors encountered during the process",
+      "usage": [
+        "A valid Google Spreadsheet ID",
+        "Valid cell references for the range (Start Cell and End Cell)",
+        "Valid table data in the required format",
+        "Proper Google Sheets API authentication and permissions"
+      ],
+      "bestPractices": [
+        "The Spreadsheet Id can be obtained from the URL of your Google Spreadsheet or from the Open Spreadsheet node",
+        "The Start Cell defaults to \"A1\" if not specified",
+        "The End Cell is optional but recommended for better performance",
+        "When Headers is enabled, the first row of the output will contain column names",
+        "When Set as Formula is enabled, values will be treated as formulas (e.g., \"=SUM(A1:A10)\")",
+        "When Set as Formula is disabled, values will be written as literal text or numbers",
+        "This operation modifies the spreadsheet data, so use with caution",
+        "Ensure your Google account has proper permissions to modify the target spreadsheet"
+      ]
+    },
+    "switchsheet": {
+      "namespace": "Core.GoogleSheets.Switchsheet",
+      "name": "Switchsheet",
+      "summary": "Switches the active sheet in a Google Spreadsheet.",
+      "howItWorks": "The Switch Sheet node changes the active sheet within a Google Spreadsheet context. When executed, the node: 1. Validates all input parameters 2. Connects to the Google Spreadsheet using the provided ID 3. Verifies that the specified sheet exists in the spreadsheet 4. Gets the sheet ID for the target sheet 5. Updates the spreadsheet context to use the specified sheet as active 6. Returns any errors encountered during the process",
+      "usage": [
+        "A valid Google Spreadsheet ID",
+        "A valid sheet name that exists in the spreadsheet",
+        "Proper Google Sheets API authentication and permissions"
+      ],
+      "bestPractices": [
+        "The Spreadsheet Id can be obtained from the URL of your Google Spreadsheet or from the Open Spreadsheet node",
+        "The Sheet Name must exactly match an existing sheet in the spreadsheet",
+        "This node does not modify the spreadsheet structure or data",
+        "Subsequent Google Sheets nodes in the workflow will operate on the switched-to sheet",
+        "Ensure your Google account has proper permissions to access the target spreadsheet"
+      ]
+    },
+    "trigger": {
+      "namespace": "Core.GoogleSheets.Trigger",
+      "name": "Trigger",
+      "summary": "Triggers automation based on changes in a Google Spreadsheet.",
+      "howItWorks": "The Trigger node monitors a Google Spreadsheet for specified changes and initiates automation workflows when those changes occur. When configured, the node: 1. Validates all input parameters and credentials 2. Authenticates with the Google Sheets API using the provided credentials 3. Establishes a monitoring loop that periodically checks for changes 4. For \"New Row Added\" events: - Monitors the specified sheet (or first sheet if none specified) for new rows - Triggers automation when the row count increases 5. For \"Any Changes\" events: - Monitors the entire spreadsheet for any modifications - Triggers automation when the spreadsheet's revision history shows changes 6. Outputs the Spreadsheet Id when triggering conditions are met 7. Returns any errors encountered during the process",
+      "usage": [
+        "A valid Google Spreadsheet URL",
+        "Valid Google Sheets API credentials with appropriate permissions",
+        "Internet connectivity to access Google Sheets API",
+        "Proper permissions to read the specified spreadsheet"
+      ],
+      "bestPractices": [
+        "This is a trigger node that starts workflows rather than processing data within them",
+        "The Polling Interval determines how frequently the node checks for changes",
+        "For \"New Row Added\" events, you can specify which sheet to monitor",
+        "For \"Any Changes\" events, the node monitors the entire spreadsheet",
+        "The output Spreadsheet Id can be used in subsequent nodes in the workflow",
+        "Credentials must have appropriate permissions to access the specified spreadsheet",
+        "The node runs continuously while the flow is active"
+      ]
+    }
+  }
+}

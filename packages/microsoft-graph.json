@@ -1,0 +1,322 @@
+{
+  "package": "MicrosoftGraph",
+  "summary": "Microsoft Graph API integration for Excel automation in OneDrive and SharePoint. This package provides comprehensive Excel file operations through Microsoft's cloud services, enabling you to automate spreadsheet tasks without requiring local Excel installation.",
+  "description": "## Key Features - Cloud-based Excel automation via Microsoft Graph API",
+  "nodes": {
+    "activate-sheet": {
+      "namespace": "Core.MicrosoftGraph.ActivateSheet",
+      "name": "ActivateSheet",
+      "summary": "Selects a worksheet for subsequent operations. Note that Microsoft Graph API doesn't support worksheet activation like desktop Excel, so this node primarily validates the worksheet exists and returns its information for use in subsequent operations.",
+      "tips": [
+        "In Graph API workflows, you typically pass worksheet names directly to operation nodes",
+        "Use this node when you need to validate worksheet existence first",
+        "Store the worksheet_id output for subsequent operations",
+        "Consider using Get Worksheet if you need information about all worksheets"
+      ]
+    },
+    "clear-range": {
+      "namespace": "Core.MicrosoftGraph.ClearRange",
+      "name": "ClearRange",
+      "summary": "Clears the contents, formats, or both from a range of cells in an Excel worksheet.",
+      "tips": [
+        "Clear Range is faster than deleting and recreating rows/columns",
+        "Use \"Contents\" when you want to preserve cell styling",
+        "Use \"All\" for complete cleanup",
+        "For clearing entire sheets, use Clear Sheet node instead",
+        "Clearing does not delete rows or columns, only empties cells"
+      ]
+    },
+    "clear-sheet": {
+      "namespace": "Core.MicrosoftGraph.ClearSheet",
+      "name": "ClearSheet",
+      "summary": "Clears the entire content and/or formatting from a worksheet, resetting it to a blank state.",
+      "tips": [
+        "Always set Confirm Clear to true or the node will fail",
+        "Clearing does not delete the worksheet itself, only its contents",
+        "For clearing specific ranges, use Clear Range instead",
+        "Consider backing up important data before clearing",
+        "The worksheet structure (rows/columns) remains intact"
+      ]
+    },
+    "connect": {
+      "namespace": "Core.MicrosoftGraph.Connect",
+      "name": "Connect",
+      "summary": "Establishes a connection to Microsoft Graph API using OAuth2 credentials. This node authenticates with Microsoft's cloud services and creates a session that can be used with other Microsoft Graph nodes.",
+      "howItWorks": "The Connect node intelligently handles authentication: 1. **Token Reuse**: If a valid access token exists in the credentials and hasn't expired, it's reused immediately 2. **Token Refresh**: If the access token is expired but a refresh token exists, it automatically refreshes the token 3. **OAuth2 Flow**: If no refresh token exists, it opens a browser window for you to authenticate with Microsoft The node automatically updates your vault credentials with fresh tokens, so subsequent connections are faster.",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "1. Create a vault item with your Azure AD credentials:\r\n   {\r\n     \"client_id\": \"your-app-id\",\r\n     \"client_secret\": \"your-app-secret\",\r\n     \"tenant_id\": \"common\"\r\n   }\r\n\r\n2. Use Connect node with the credentials\r\n3. The Client Id output (e.g., \"a1b2c3d4-...\") is passed to other nodes"
+        },
+        {
+          "title": "Example 2",
+          "code": "Connect → Get Workbook → Get Range → Set Cell Value → Disconnect"
+        }
+      ],
+      "tips": [
+        "Store credentials securely in Robomotion vault, never hardcode them",
+        "The same credentials can be used for multiple parallel connections",
+        "Connections remain active until Disconnect is called or the flow ends",
+        "For better performance, reuse a single connection across multiple operations"
+      ]
+    },
+    "create-table": {
+      "namespace": "Core.MicrosoftGraph.CreateTable",
+      "name": "CreateTable",
+      "summary": "Creates an Excel table from a range of cells in a worksheet. Excel tables provide structured data with built-in filtering, sorting, and formula features.",
+      "tips": [
+        "Table names must be unique within the workbook",
+        "The range should include headers when Has Headers is true",
+        "Filter buttons make it easy for users to explore data",
+        "Totals row can show SUM, AVERAGE, COUNT, etc.",
+        "Tables automatically expand when you add data below them in Excel"
+      ]
+    },
+    "create-workbook": {
+      "namespace": "Core.MicrosoftGraph.CreateWorkbook",
+      "name": "CreateWorkbook",
+      "summary": "Creates a new Excel workbook in OneDrive. The workbook is created with a default empty worksheet.",
+      "tips": [
+        "The `.xlsx` extension is automatically added if you don't include it",
+        "The workbook is created with one empty worksheet named \"Sheet1\"",
+        "After creation, use Create Worksheet to add more sheets if needed",
+        "The file is immediately available in OneDrive - no need to save manually",
+        "If a file with the same name exists, it will be overwritten",
+        "Store the Workbook Id output for all subsequent operations on this file"
+      ]
+    },
+    "create-worksheet": {
+      "namespace": "Core.MicrosoftGraph.CreateWorksheet",
+      "name": "CreateWorksheet",
+      "summary": "Creates a new worksheet in an existing Excel workbook. The worksheet is added at the end of the workbook.",
+      "tips": [
+        "Worksheet names must be unique - duplicate names will cause an error",
+        "New worksheets are always created at the end of the workbook",
+        "The worksheet is empty when created - use Set Cell Value or Set Range to add data",
+        "Microsoft Graph API doesn't support setting an \"active\" worksheet like desktop Excel",
+        "Maximum worksheet name length is 31 characters",
+        "Avoid special characters in worksheet names (avoid: \\ / ? * [ ])"
+      ]
+    },
+    "delete-cell": {
+      "namespace": "Core.MicrosoftGraph.DeleteCell",
+      "name": "DeleteCell",
+      "summary": "Deletes a specific cell or range of cells from an Excel worksheet, shifting surrounding cells."
+    },
+    "delete-column": {
+      "namespace": "Core.MicrosoftGraph.DeleteColumn",
+      "name": "DeleteColumn",
+      "summary": "Deletes one or more columns from an Excel worksheet. Columns to the right of the deleted range shift left.",
+      "tips": [
+        "Deletion is permanent",
+        "Columns to the right shift left automatically"
+      ]
+    },
+    "delete-row": {
+      "namespace": "Core.MicrosoftGraph.DeleteRow",
+      "name": "DeleteRow",
+      "summary": "Deletes one or more rows from an Excel worksheet. Rows below the deleted range shift up.",
+      "tips": [
+        "Deletion is permanent",
+        "Rows below shift up automatically",
+        "Formulas referencing deleted rows may need updating"
+      ]
+    },
+    "delete-sheet": {
+      "namespace": "Core.MicrosoftGraph.DeleteSheet",
+      "name": "DeleteSheet",
+      "summary": "Permanently deletes a worksheet from an Excel workbook. This operation cannot be undone.",
+      "tips": [
+        "Always set Confirm Deletion to true or the node will fail with an error",
+        "Cannot delete the last worksheet - a workbook must have at least one sheet",
+        "Deletion is permanent and cannot be undone",
+        "Consider backing up important data before deletion",
+        "The Remaining Worksheets output helps verify what's left after deletion"
+      ]
+    },
+    "disconnect": {
+      "namespace": "Core.MicrosoftGraph.Disconnect",
+      "name": "Disconnect",
+      "summary": "Closes an active Microsoft Graph API connection and releases associated resources. Always use this node when you're finished with Microsoft Graph operations to properly clean up the session.",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "Connect → [Excel Operations] → Disconnect"
+        },
+        {
+          "title": "Example 2",
+          "code": "Connect\r\n  ├─→ Get Workbook → Get Range → Process Data\r\n  ├─→ Set Cell Value\r\n  └─→ Create Worksheet\r\nAll paths converge → Disconnect"
+        }
+      ],
+      "tips": [
+        "Always call Disconnect when finished to free up resources",
+        "Use Disconnect even if errors occur (place it after error handling)",
+        "If a flow ends without calling Disconnect, the connection is automatically cleaned up, but explicit disconnection is best practice",
+        "You cannot reuse a client ID after disconnecting - create a new connection with Connect if needed"
+      ]
+    },
+    "get-cell-value": {
+      "namespace": "Core.MicrosoftGraph.GetCellValue",
+      "name": "GetCellValue",
+      "summary": "Retrieves the value from a specific cell in an Excel worksheet stored in OneDrive or SharePoint.",
+      "tips": [
+        "Cell addresses are not case-sensitive (A1 = a1)",
+        "Returns null for empty cells",
+        "For reading multiple cells, use Get Range for better performance",
+        "Worksheet names are case-insensitive",
+        "If worksheet name is empty, defaults to \"Sheet1\""
+      ]
+    },
+    "get-column": {
+      "namespace": "Core.MicrosoftGraph.GetColumn",
+      "name": "GetColumn",
+      "summary": "Retrieves all data from a specific column in an Excel worksheet. Returns cell values as a dictionary with cell addresses as keys.",
+      "tips": [
+        "Column letters are case-insensitive",
+        "Use Get Range for reading multiple columns efficiently",
+        "Empty cells included based on Include Empty Cells option"
+      ]
+    },
+    "get-file-info": {
+      "namespace": "Core.MicrosoftGraph.GetFileInfo",
+      "name": "GetFileInfo",
+      "summary": "Retrieves detailed information about a file in OneDrive or SharePoint, including metadata, permissions, and version history.",
+      "tips": [
+        "Use File Path for OneDrive files: `/Documents/file.xlsx`",
+        "Use File Path or URL for SharePoint: full URL to the file",
+        "Use File ID when you already have it from List Files or Get Workbook",
+        "Include Permissions to see who has access to the file",
+        "Include Versions to track file history",
+        "The DownloadUrl can be used to download the file directly"
+      ]
+    },
+    "get-formula": {
+      "namespace": "Core.MicrosoftGraph.GetFormula",
+      "name": "GetFormula",
+      "summary": "Retrieves formulas from a cell or range of cells in an Excel worksheet. Returns both the formulas and their evaluated values.",
+      "tips": [
+        "Empty cells or cells without formulas return empty strings",
+        "For single cells, use Single Formula output for convenience",
+        "For ranges, use Formulas output to get all formulas in a 2D array",
+        "Range Info provides context about the queried range"
+      ]
+    },
+    "get-range": {
+      "namespace": "Core.MicrosoftGraph.GetRange",
+      "name": "GetRange",
+      "summary": "Retrieves a range of cells from an Excel worksheet as a structured table object. This is the primary node for reading multiple cells efficiently.",
+      "tips": [
+        "Use \"All Range\" to automatically detect data boundaries",
+        "Headers option makes data easier to work with in subsequent nodes",
+        "Jsonify creates consistent, code-friendly column names",
+        "For large datasets, consider reading specific ranges for better performance",
+        "The table object can be used directly with Loop, Filter, and other data nodes",
+        "Empty cells are returned as empty strings"
+      ]
+    },
+    "get-row": {
+      "namespace": "Core.MicrosoftGraph.GetRow",
+      "name": "GetRow",
+      "summary": "Retrieves all data from a specific row in an Excel worksheet. Returns cell values as a dictionary with cell addresses as keys.",
+      "tips": [
+        "Row numbers are 1-based (first row is 1)",
+        "Cell addresses include $ symbols in Excel format",
+        "Empty cells are included if Include Empty Cells is true",
+        "Use Column Range to limit the columns read for better performance",
+        "For reading multiple rows, consider using Get Range instead"
+      ]
+    },
+    "get-workbook": {
+      "namespace": "Core.MicrosoftGraph.GetWorkbook",
+      "name": "GetWorkbook",
+      "summary": "Opens an Excel workbook from OneDrive or SharePoint and retrieves its metadata. This node is required before performing any operations on an Excel file.",
+      "tips": [
+        "Always store the `Workbook Id` output - you'll need it for all subsequent Excel operations",
+        "For OneDrive files, use simple paths starting with `/`",
+        "For SharePoint files, you can use full URLs or use List Files first to get the file ID",
+        "The workbook remains accessible until you disconnect or the flow ends",
+        "File paths are case-sensitive on some systems",
+        "Use forward slashes (/) for paths, not backslashes (\\)"
+      ]
+    },
+    "get-worksheet": {
+      "namespace": "Core.MicrosoftGraph.GetWorksheet",
+      "name": "GetWorksheet",
+      "summary": "Retrieves information about worksheets in an Excel workbook. Returns details about a specific worksheet or the first worksheet if no name is provided.",
+      "tips": [
+        "Leave Worksheet Name empty to get the first worksheet automatically",
+        "Use the All Worksheets output to discover available sheets",
+        "The UsedRange property shows where data exists - useful for determining read boundaries",
+        "Position is 0-based (first sheet is position 0)",
+        "Worksheet names are case-insensitive when searching"
+      ]
+    },
+    "insert-column": {
+      "namespace": "Core.MicrosoftGraph.InsertColumn",
+      "name": "InsertColumn",
+      "summary": "Inserts one or more blank columns into an Excel worksheet at a specified position. Existing columns to the right are shifted."
+    },
+    "insert-row": {
+      "namespace": "Core.MicrosoftGraph.InsertRow",
+      "name": "InsertRow",
+      "summary": "Inserts one or more blank rows into an Excel worksheet at a specified position. Existing rows below are shifted down.",
+      "tips": [
+        "Row index is 1-based (first row is 1)",
+        "Inserted rows are blank - use Set Range or Set Cell Value to populate them",
+        "Formulas in cells below are automatically adjusted",
+        "For inserting and populating data, consider using Set Range with appropriate positioning"
+      ]
+    },
+    "list-files": {
+      "namespace": "Core.MicrosoftGraph.ListFiles",
+      "name": "ListFiles",
+      "summary": "Lists files and folders from OneDrive or SharePoint. This node helps you discover and locate Excel files before performing operations on them.",
+      "tips": [
+        "Use the `Id` from the output with Get Workbook to open Excel files",
+        "Filter by `.xlsx` extension to find only Excel files",
+        "The `IsExcelFile` property helps identify Excel files even with different extensions",
+        "For SharePoint, ensure your site URL includes the full path: `https://domain.sharepoint.com/sites/sitename`",
+        "Use folder path `/` to list root directory contents",
+        "OneDrive paths use forward slashes (/) like: `/Documents/Reports`"
+      ]
+    },
+    "set-cell-value": {
+      "namespace": "Core.MicrosoftGraph.SetCellValue",
+      "name": "SetCellValue",
+      "summary": "Sets the value of a specific cell in an Excel worksheet stored in OneDrive or SharePoint.",
+      "tips": [
+        "Changes are saved automatically - no separate save operation needed",
+        "For writing multiple cells, use Set Range for better performance",
+        "Cell addresses are not case-sensitive",
+        "The cell is created if it doesn't exist",
+        "Previous cell value is overwritten",
+        "For formulas, use the Set Formula node instead"
+      ]
+    },
+    "set-formula": {
+      "namespace": "Core.MicrosoftGraph.SetFormula",
+      "name": "SetFormula",
+      "summary": "Sets a formula in a specific cell or range of cells in an Excel worksheet. The formula is evaluated automatically by Excel.",
+      "tips": [
+        "Always start formulas with `=`",
+        "Excel automatically evaluates formulas after setting",
+        "Use absolute references ($A$1) when needed",
+        "For multiple formulas, consider using a loop with Set Formula",
+        "Test formulas in Excel first to ensure correct syntax"
+      ]
+    },
+    "set-range": {
+      "namespace": "Core.MicrosoftGraph.SetRange",
+      "name": "SetRange",
+      "summary": "Writes a range of cells to an Excel worksheet from a table object. This is the primary node for writing multiple cells efficiently.",
+      "tips": [
+        "For best performance, write data in batches using Set Range rather than individual cells",
+        "The table object can come from Get Range, database queries, or data transformations",
+        "Use Headers = false when creating new sheets with your own structure",
+        "Use Headers = true when updating existing formatted worksheets",
+        "Start Cell determines where data writing begins",
+        "All data writes are automatically saved - no separate save operation needed"
+      ]
+    }
+  }
+}

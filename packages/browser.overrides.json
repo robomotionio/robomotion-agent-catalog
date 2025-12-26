@@ -1,0 +1,46 @@
+{
+  "_comment": "Custom metadata overrides - merged with browser.json at load time",
+  "nodes": {
+    "run-script": {
+      "summary": "Runs JavaScript code inside the browser context on the current web page.",
+      "howItWorks": "1. The script is injected into the browser page context 2. It executes as if typed in browser DevTools console 3. The script can access DOM, window, document objects 4. Script return value becomes the node output 5. The msg object is NOT available - this runs in browser, not in flow runtime",
+      "usage": [
+        "An active browser session with a loaded page",
+        "Valid JavaScript code that runs in browser context",
+        "Script must return a value if you need output (use return statement)"
+      ],
+      "bestPractices": [
+        "CRITICAL: This runs in BROWSER context, NOT flow context!",
+        "CRITICAL: msg.x changes have NO EFFECT - msg is not available here!",
+        "CRITICAL: Node packages (fs, axios, etc.) are NOT available - browser only!",
+        "Only standard browser JavaScript works (DOM APIs, fetch, etc.)",
+        "Use this when element nodes are insufficient for complex DOM operations",
+        "Script return value is captured as node output",
+        "For DOM queries: document.querySelector(), document.querySelectorAll()",
+        "For element manipulation: element.click(), element.value, element.textContent",
+        "For async operations: use await/async if supported"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrSession",
+        "ErrFailed"
+      ],
+      "relatedNodes": [
+        "Open Browser",
+        "Click Element",
+        "Get Text",
+        "Wait Element"
+      ],
+      "tips": [
+        "Use RunScript when standard element nodes cannot achieve your goal",
+        "Example: Extract all links -> return Array.from(document.querySelectorAll('a')).map(a => a.href)",
+        "Example: Scroll to element -> document.querySelector('.target').scrollIntoView()",
+        "Example: Get computed style -> getComputedStyle(document.querySelector('.el')).color",
+        "Debug in browser DevTools first, then paste working code here",
+        "If you need to modify msg, use Function node AFTER RunScript with the output"
+      ]
+    }
+  }
+}

@@ -1,0 +1,208 @@
+{
+  "package": "Mysql",
+  "summary": "Connect to and interact with MySQL databases for data operations, automation, and integration.",
+  "description": "## Overview The MySQL package provides database connectivity for MySQL and MariaDB databases. Use it when you need to query data, insert records, perform transactions, or integrate automation workflows with MySQL databases.",
+  "nodes": {
+    "backup": {
+      "namespace": "Core.Mysql.Backup",
+      "name": "Backup",
+      "summary": "Creates a backup of the MySQL database to a file. Exports the entire database structure and data to a SQL file.",
+      "howItWorks": "The Backup Database node creates a complete database backup. When executed, the node: 1. Retrieves the database connection (either from connection ID or creates new connection from credentials) 2. Validates the backup file path is not empty 3. Validates the backup directory exists 4. Creates a MySqlBackup object 5. Exports the database to the specified file path 6. Saves all tables, data, and structure to the SQL file",
+      "usage": [
+        "**Either:** A valid connection ID from Connect node **OR** valid database credentials",
+        "Valid backup file path",
+        "The backup directory must exist",
+        "Write permissions on the backup directory",
+        "Sufficient disk space for the backup file",
+        "Database user must have SELECT permission on all tables"
+      ],
+      "errorCodes": [
+        "Error"
+      ]
+    },
+    "commit": {
+      "namespace": "Core.Mysql.Commit",
+      "name": "Commit",
+      "summary": "Commits a database transaction to make all changes permanent. All operations performed within the transaction become durable and visible to other database users.",
+      "howItWorks": "The Commit Transaction node finalizes a database transaction. When executed, the node: 1. Validates the provided transaction ID is not empty 2. Retrieves the transaction from the internal transactions dictionary 3. Calls Commit on the MySqlTransaction object 4. Makes all transaction changes permanent in the database 5. Removes the transaction from the transactions dictionary 6. Releases all locks held by the transaction",
+      "usage": [
+        "A valid transaction ID from a Start Transaction node",
+        "The transaction must be active (not already committed or rolled back)",
+        "All operations in the transaction must have completed successfully"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound"
+      ]
+    },
+    "connect": {
+      "namespace": "Core.Mysql.Connect",
+      "name": "Connect",
+      "summary": "Establishes a connection to a MySQL database server.",
+      "howItWorks": "The Connect node establishes a connection to a MySQL database using the provided credentials. When executed, the node: 1. Validates the provided database credentials 2. Extracts server, port, database, username, and password from the credential 3. Constructs a MySQL connection string 4. Appends any additional connection parameters if provided 5. Creates and opens a new MySqlConnection 6. Generates a unique connection ID (GUID) 7. Stores the connection in an internal connections dictionary 8. Returns the connection ID as output",
+      "usage": [
+        "Valid MySQL database credentials with the following fields:",
+        "**server** - Hostname or IP address of the MySQL server",
+        "**port** - Port number (default: 3306)",
+        "**database** - Database name (optional)",
+        "**username** - MySQL username (required)",
+        "**password** - MySQL password",
+        "MySQL server must be accessible from the robot",
+        "Proper network connectivity and firewall rules"
+      ],
+      "errorCodes": [
+        "ErrCredentials",
+        "ErrConnection"
+      ]
+    },
+    "disconnect": {
+      "namespace": "Core.Mysql.Disconnect",
+      "name": "Disconnect",
+      "summary": "Closes an existing MySQL database connection.",
+      "howItWorks": "The Disconnect node closes an active MySQL database connection. When executed, the node: 1. Validates the provided connection ID is not empty 2. Retrieves the connection from the internal connections dictionary 3. Removes the connection from the dictionary 4. Closes the MySQL connection 5. Releases database resources",
+      "usage": [
+        "A valid connection ID from a Connect node",
+        "The connection must not have been previously closed"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound"
+      ]
+    },
+    "insert": {
+      "namespace": "Core.Mysql.Insert",
+      "name": "Insert",
+      "summary": "Inserts table data into a MySQL database table. This node is optimized for bulk inserts of structured data.",
+      "howItWorks": "The Insert Table node inserts structured table data into a MySQL table. When executed, the node: 1. Retrieves the database connection (either from connection ID or creates new connection from credentials) 2. Optionally retrieves the transaction if a transaction ID is provided 3. Validates the table name and table data 4. For each row in the table data: - Constructs an INSERT statement based on the columns - Adds column values as parameters to prevent SQL injection - Executes the INSERT (or INSERT ON DUPLICATE KEY UPDATE if Replace is enabled) 5. Applies all changes to the database",
+      "usage": [
+        "**Either:** A valid connection ID from Connect node **OR** valid database credentials",
+        "Valid table name that exists in the database",
+        "Table data with at least one row",
+        "Table columns must match database table columns",
+        "Appropriate INSERT permission on the table"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound",
+        "ErrRuntime"
+      ]
+    },
+    "non-query": {
+      "namespace": "Core.Mysql.NonQuery",
+      "name": "NonQuery",
+      "summary": "Executes a MySQL SQL command that does not return data (INSERT, UPDATE, DELETE, etc.).",
+      "howItWorks": "The Execute Non Query node executes SQL commands that modify data or database structure. When executed, the node: 1. Retrieves the database connection (either from connection ID or creates new connection from credentials) 2. Optionally retrieves the transaction if a transaction ID is provided 3. Processes mustache template variables in the SQL command using the message context 4. Decodes any HTML entities in the rendered command 5. Creates a MySqlCommand with the SQL statement 6. Executes the command using ExecuteNonQuery 7. Applies the changes to the database",
+      "usage": [
+        "**Either:** A valid connection ID from Connect node **OR** valid database credentials",
+        "Valid SQL command (INSERT, UPDATE, DELETE, CREATE, ALTER, DROP, etc.)",
+        "If using transactions, a valid transaction ID from Start Transaction node",
+        "Appropriate database permissions for the operation"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound",
+        "ErrRuntime"
+      ]
+    },
+    "query": {
+      "namespace": "Core.Mysql.Query",
+      "name": "Query",
+      "summary": "Executes a MySQL SELECT query and returns the results as a table.",
+      "howItWorks": "The Execute Query node executes a SQL SELECT statement and returns the results. When executed, the node: 1. Retrieves the database connection (either from connection ID or creates new connection from credentials) 2. Optionally retrieves the transaction if a transaction ID is provided 3. Processes mustache template variables in the SQL query using the message context 4. Decodes any HTML entities in the rendered query 5. Creates a MySqlCommand with the SQL query 6. Executes the query using ExecuteReader 7. Loads the results into a DataTable 8. Converts the DataTable to a table structure with columns and rows 9. Returns the table structure as output",
+      "usage": [
+        "**Either:** A valid connection ID from Connect node **OR** valid database credentials",
+        "Valid SQL SELECT statement",
+        "If using transactions, a valid transaction ID from Start Transaction node"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound",
+        "ErrRuntime"
+      ]
+    },
+    "restore": {
+      "namespace": "Core.Mysql.Restore",
+      "name": "Restore",
+      "summary": "Restores a MySQL database from a backup file. Imports database structure and data from a SQL dump file.",
+      "howItWorks": "The Restore Database node imports a database from a backup file. When executed, the node: 1. Retrieves the database connection (either from connection ID or creates new connection from credentials) 2. Validates the backup file path is not empty 3. Verifies the backup file exists 4. Creates a MySqlBackup object 5. Imports the database from the specified file path 6. Executes all SQL statements in the backup file (CREATE TABLE, INSERT, etc.) 7. Restores all tables, data, and structure to the database",
+      "usage": [
+        "**Either:** A valid connection ID from Connect node **OR** valid database credentials",
+        "Valid backup file path",
+        "The backup file must exist and be readable",
+        "Database user must have appropriate permissions (CREATE, INSERT, DROP, etc.)",
+        "Connection to the target database",
+        "Sufficient disk space in the database for restored data"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound",
+        "ErrRuntime"
+      ]
+    },
+    "start-transaction": {
+      "namespace": "Core.Mysql.StartTransaction",
+      "name": "StartTransaction",
+      "summary": "Starts a new database transaction for atomic operations. Transactions ensure that multiple database operations either all succeed or all fail together.",
+      "howItWorks": "The Start Transaction node begins a new database transaction. When executed, the node: 1. Retrieves the database connection (either from connection ID or creates new connection from credentials) 2. Calls BeginTransaction on the MySQL connection 3. Generates a unique transaction ID (GUID) 4. Stores the transaction in an internal transactions dictionary 5. Returns the transaction ID as output",
+      "usage": [
+        "**Either:** A valid connection ID from Connect node **OR** valid database credentials",
+        "The connection must be open and active",
+        "No other active transaction on the same connection (MySQL doesn't support nested transactions)"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound"
+      ]
+    },
+    "wait-column": {
+      "namespace": "Core.Mysql.WaitColumn",
+      "name": "WaitColumn",
+      "summary": "Waits until a new column is added to a specified table. This node blocks execution until a schema change is detected.",
+      "howItWorks": "The Wait Column node monitors a table's schema for new columns. When executed, the node: 1. Retrieves the database connection (either from connection ID or creates new connection from credentials) 2. Validates the table name is not empty 3. Constructs a query to count columns in the table using INFORMATION_SCHEMA 4. On first check, records the current column count (baseline) 5. Polls the table schema at the specified interval 6. Compares the current column count with the baseline 7. Continues execution when the count increases (new column added) 8. Blocks the flow until the condition is met",
+      "usage": [
+        "**Either:** A valid connection ID from Connect node **OR** valid database credentials",
+        "Valid table name that exists in the database",
+        "Database user must have SELECT permission on `INFORMATION_SCHEMA.COLUMNS`",
+        "Active database connection during the wait period"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound"
+      ]
+    },
+    "wait-row": {
+      "namespace": "Core.Mysql.WaitRow",
+      "name": "WaitRow",
+      "summary": "Waits until a new row is inserted into a specified table. This node blocks execution until new data is detected.",
+      "howItWorks": "The Wait Row node monitors a table for new rows. When executed, the node: 1. Retrieves the database connection (either from connection ID or creates new connection from credentials) 2. Validates the table name and sort column are not empty 3. Constructs a query to get the latest value from the sort column: `SELECT {sortBy} FROM {table} ORDER BY {sortBy} DESC LIMIT 1` 4. On first check, records the latest value (baseline) 5. Polls the table at the specified interval 6. Compares the latest value with the baseline 7. Continues execution when a new higher value is detected (new row inserted) 8. Blocks the flow until the condition is met",
+      "usage": [
+        "**Either:** A valid connection ID from Connect node **OR** valid database credentials",
+        "Valid table name that exists in the database",
+        "Valid sort column name that exists in the table",
+        "Sort column should be sequential (auto-increment, timestamp, sequential number)",
+        "Database user must have SELECT permission on the table",
+        "Active database connection during the wait period"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound"
+      ]
+    },
+    "wait-table": {
+      "namespace": "Core.Mysql.WaitTable",
+      "name": "WaitTable",
+      "summary": "Waits until a new table matching the pattern is created in the database. This node blocks execution until the condition is met.",
+      "howItWorks": "The Wait Table node monitors the database for new tables. When executed, the node: 1. Retrieves the database connection (either from connection ID or creates new connection from credentials) 2. Validates the table name pattern is not empty 3. Constructs a SQL query to count tables matching the pattern 4. On first check, records the current count of matching tables (baseline) 5. Polls the database at the specified interval 6. Compares the current count with the baseline 7. Continues execution when the count increases (new table created) 8. Blocks the flow until the condition is met",
+      "usage": [
+        "**Either:** A valid connection ID from Connect node **OR** valid database credentials",
+        "Valid table name or pattern",
+        "Database user must have SELECT permission on `INFORMATION_SCHEMA.TABLES`",
+        "Active database connection during the wait period"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound"
+      ]
+    }
+  }
+}

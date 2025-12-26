@@ -1,0 +1,61 @@
+{
+  "package": "Anticaptcha",
+  "summary": "Solve CAPTCHAs automatically using the Anti-Captcha service to bypass verification challenges in web automation.",
+  "description": "## Overview The AntiCaptcha package integrates with the Anti-Captcha solving service to handle CAPTCHA challenges that block automated access to websites. Use it when your web automation encounters reCAPTCHA, hCaptcha, or image-based CAPTCHAs.",
+  "nodes": {
+    "hcaptcha": {
+      "namespace": "Core.Anticaptcha.Hcaptcha",
+      "name": "Hcaptcha",
+      "summary": "Solves hCaptcha challenges using the AntiCaptcha service.",
+      "howItWorks": "The hCaptcha node integrates with the AntiCaptcha service to automatically solve hCaptcha challenges. When executed, the node: 1. Validates the provided inputs (Website Key and Website URL) 2. Creates a task on the AntiCaptcha service using the HCaptchaTaskProxyless type 3. Continuously checks the task status until it's completed or times out 4. Returns the solved captcha token as the result",
+      "usage": [
+        "A valid AntiCaptcha account with sufficient balance",
+        "The hCaptcha website key from the target website",
+        "The full URL of the page containing the hCaptcha challenge"
+      ],
+      "bestPractices": [
+        "The AntiCaptcha service charges per solved captcha, so ensure your account has sufficient balance",
+        "The default timeout is 180 seconds, but this can be adjusted based on your needs",
+        "The solved token is typically valid for a short period, so use it immediately after receiving it",
+        "For best results, ensure the Website URL exactly matches the domain where the hCaptcha appears"
+      ]
+    },
+    "image": {
+      "namespace": "Core.Anticaptcha.Image",
+      "name": "Image",
+      "summary": "Solves image-based CAPTCHAs using the AntiCaptcha service.",
+      "howItWorks": "The Image Captcha node integrates with the AntiCaptcha service to automatically solve image-based CAPTCHAs. When executed, the node: 1. Validates the provided image path 2. Encodes the image file as base64 3. Creates an ImageToTextTask on the AntiCaptcha service 4. Continuously checks the task status until it's completed or times out 5. Returns the solved text as the result",
+      "usage": [
+        "A valid AntiCaptcha account with sufficient balance",
+        "A local image file containing the CAPTCHA to be solved",
+        "Read permissions for the specified image file path"
+      ],
+      "bestPractices": [
+        "The AntiCaptcha service charges per solved CAPTCHA, so ensure your account has sufficient balance",
+        "Supported image formats include JPG, PNG, GIF, and BMP",
+        "The image should contain only the CAPTCHA text with minimal background noise for best results",
+        "The default timeout is 30 seconds, but this can be adjusted based on the complexity of the CAPTCHA",
+        "The image file must be accessible from the robot's file system",
+        "For optimal results, use high-resolution images with clear, readable text"
+      ]
+    },
+    "recaptcha": {
+      "namespace": "Core.Anticaptcha.Recaptcha",
+      "name": "Recaptcha",
+      "summary": "Solves reCAPTCHA challenges using the AntiCaptcha service.",
+      "howItWorks": "The reCAPTCHA node integrates with the AntiCaptcha service to automatically solve reCAPTCHA challenges. When executed, the node: 1. Validates the provided inputs (Website Key and Website URL) 2. Creates a task on the AntiCaptcha service using the NoCaptchaTaskProxyless type 3. Continuously checks the task status until it's completed or times out 4. Returns the solved captcha token as the result",
+      "usage": [
+        "A valid AntiCaptcha account with sufficient balance",
+        "The reCAPTCHA website key from the target website",
+        "The full URL of the page containing the reCAPTCHA challenge"
+      ],
+      "bestPractices": [
+        "The AntiCaptcha service charges per solved captcha, so ensure your account has sufficient balance",
+        "The default timeout is 180 seconds, but this can be adjusted based on your needs",
+        "The solved token is typically valid for a short period, so use it immediately after receiving it",
+        "For best results, ensure the Website URL exactly matches the domain where the reCAPTCHA appears",
+        "This node works with both reCAPTCHA v2 and v3 challenges"
+      ]
+    }
+  }
+}

@@ -1,0 +1,269 @@
+{
+  "package": "TelegramUser",
+  "summary": "Automate Telegram as a user account - send messages, manage contacts, and interact with channels.",
+  "description": "## Overview The Telegram User package provides Telegram automation using a user account (not a bot). Use it when you need functionality only available to user accounts, such as joining channels, managing contacts, or accessing user-specific features.",
+  "nodes": {
+    "add_contact": {
+      "namespace": "Core.TelegramUser.Add_contact",
+      "name": "Add_contact",
+      "summary": "Adds a new contact to the Telegram client's contact list.",
+      "howItWorks": "The Add Contact node adds a new contact to the Telegram client's contact list. When executed, the node: 1. Validates the provided inputs (Client Id, Phone Number, and First Name) 2. Creates an InputPhoneContact object with the provided details 3. Uses the Telegram client to import the contact into the user's contact list",
+      "usage": [
+        "A valid Telegram client session with appropriate permissions",
+        "Valid phone number, first name, and optionally last name of the contact to add",
+        "Client Id must match an existing Telegram client session"
+      ],
+      "bestPractices": [
+        "The contact will be added to the Telegram client's contact list",
+        "The phone number should be in international format",
+        "First Name is required, but Last Name is optional",
+        "The Client Id must correspond to an active Telegram client session"
+      ]
+    },
+    "create_channel": {
+      "namespace": "Core.TelegramUser.Create_channel",
+      "name": "Create_channel",
+      "summary": "Creates a new Telegram channel with the specified title and optional description and username.",
+      "howItWorks": "The Create Channel node creates a new Telegram channel. When executed, the node: 1. Validates the provided inputs (Client Id and Title) 2. Creates a private channel with the specified title and optional description 3. Optionally assigns a username to make the channel public 4. Returns the channel's ID and access hash as output",
+      "usage": [
+        "A valid Telegram client session with appropriate permissions",
+        "Valid title for the channel",
+        "Client Id must match an existing Telegram client session"
+      ],
+      "bestPractices": [
+        "The channel will initially be created as private",
+        "Adding a username will make the channel public and discoverable",
+        "The output contains the channel's ID and access hash which can be used in other Telegram operations",
+        "The Client Id must correspond to an active Telegram client session"
+      ]
+    },
+    "delete_contact": {
+      "namespace": "Core.TelegramUser.Delete_contact",
+      "name": "Delete_contact",
+      "summary": "Deletes a contact from the Telegram client's contact list.",
+      "howItWorks": "The Delete Contact node removes a contact from the Telegram client's contact list. When executed, the node: 1. Validates the provided inputs (Client Id, User Id, and Access Hash) 2. Creates an InputUser object with the provided User Id and Access Hash 3. Uses the Telegram client to delete the contact from the user's contact list",
+      "usage": [
+        "A valid Telegram client session with appropriate permissions",
+        "Valid User Id and Access Hash of the contact to delete",
+        "Client Id must match an existing Telegram client session"
+      ],
+      "bestPractices": [
+        "The contact will be removed from the Telegram client's contact list",
+        "The User Id and Access Hash are required to identify the contact to delete",
+        "These values can typically be obtained from other Telegram nodes that return user information",
+        "The Client Id must correspond to an active Telegram client session"
+      ]
+    },
+    "download_image": {
+      "namespace": "Core.TelegramUser.Download_image",
+      "name": "Download_image",
+      "summary": "Downloads an image from a Telegram message to a specified directory.",
+      "howItWorks": "The Download Image node downloads an image from a specified Telegram message. When executed, the node: 1. Validates the provided inputs (Client Id, Chat Id, Message Id, and Download Directory) 2. Retrieves the specified message from the Telegram chat 3. Checks if the message contains a photo 4. Downloads the image to the specified directory 5. Returns the full path to the downloaded image file",
+      "usage": [
+        "A valid Telegram client session with appropriate permissions",
+        "Valid Chat Id and Message Id of a message containing an image",
+        "Valid local directory path for downloading the image",
+        "Client Id must match an existing Telegram client session"
+      ],
+      "bestPractices": [
+        "The Chat Id and Message Id can be obtained from other Telegram nodes that retrieve messages",
+        "The Download Directory must be a valid existing directory path",
+        "The output Image Path can be used in other nodes that process files",
+        "The Client Id must correspond to an active Telegram client session"
+      ]
+    },
+    "get_chats": {
+      "namespace": "Core.TelegramUser.Get_chats",
+      "name": "Get_chats",
+      "summary": "Retrieves a list of chats (dialogs) from the Telegram client.",
+      "howItWorks": "The Get Chats node retrieves a list of chats (dialogs) from the Telegram client. When executed, the node: 1. Validates the provided inputs (Client Id, Limit, and Offset) 2. Uses the Telegram client to fetch dialogs with the specified limit and offset 3. Processes each dialog to extract relevant information: - For user chats, extracts the user ID - For channel chats, extracts the channel ID and title 4. Returns the list of chats as output",
+      "usage": [
+        "A valid Telegram client session with appropriate permissions",
+        "Valid Limit and Offset values",
+        "Client Id must match an existing Telegram client session"
+      ],
+      "bestPractices": [
+        "The Limit parameter controls how many chats are retrieved in a single call",
+        "The Offset parameter allows for pagination through the chat list",
+        "The output contains different information for different types of chats (users vs channels)",
+        "The Client Id must correspond to an active Telegram client session"
+      ]
+    },
+    "get_contacts": {
+      "namespace": "Core.TelegramUser.Get_contacts",
+      "name": "Get_contacts",
+      "summary": "Retrieves the list of contacts from the Telegram client.",
+      "howItWorks": "The Get Contacts node retrieves the list of contacts from the Telegram client. When executed, the node: 1. Validates the provided Client Id input 2. Uses the Telegram client to fetch the contacts list 3. Processes each contact to extract relevant information: - ID - Access hash - First name - Last name - Username - Phone number 4. Returns the list of contacts as output",
+      "usage": [
+        "A valid Telegram client session with appropriate permissions",
+        "Client Id must match an existing Telegram client session"
+      ],
+      "bestPractices": [
+        "The output contains detailed information about each contact",
+        "The contact information can be used in other Telegram nodes that require user identification",
+        "The Client Id must correspond to an active Telegram client session"
+      ]
+    },
+    "get_messages": {
+      "namespace": "Core.TelegramUser.Get_messages",
+      "name": "Get_messages",
+      "summary": "Retrieves messages from a specified Telegram chat.",
+      "howItWorks": "The Get Messages node retrieves messages from a specified Telegram chat. When executed, the node: 1. Validates the provided inputs (Client Id, Chat, and Limit) 2. Uses the Telegram client to fetch messages from the specified chat 3. Processes each message to extract relevant information: - ID - Sender ID - Message text - Date and time - Whether the message contains a photo - From ID (if applicable) 4. Returns the list of messages as output",
+      "usage": [
+        "A valid Telegram client session with appropriate permissions",
+        "Valid Chat identifier",
+        "Valid Limit value (greater than 0)",
+        "Client Id must match an existing Telegram client session"
+      ],
+      "bestPractices": [
+        "The Chat parameter can accept various identifiers such as usernames, chat IDs, or other chat references",
+        "The Limit parameter controls how many messages are retrieved in a single call",
+        "The output contains detailed information about each message including metadata",
+        "Message objects include information about whether they contain photos",
+        "The Client Id must correspond to an active Telegram client session"
+      ]
+    },
+    "get_participants": {
+      "namespace": "Core.TelegramUser.Get_participants",
+      "name": "Get_participants",
+      "summary": "Retrieves participants from a specified Telegram channel.",
+      "howItWorks": "The Get Channel Participants node retrieves participants from a specified Telegram channel. When executed, the node: 1. Validates the provided inputs (Client Id, Channel Username, Limit, and Offset) 2. Resolves the channel username to get the channel entity 3. Uses the Telegram client to fetch participants from the specified channel 4. Processes each participant to extract relevant information: - ID - Access hash - First name - Last name - Username - Phone number 5. Returns the list of participants as output",
+      "usage": [
+        "A valid Telegram client session with appropriate permissions",
+        "Valid Channel Username",
+        "Valid Limit and Offset values",
+        "Client Id must match an existing Telegram client session"
+      ],
+      "bestPractices": [
+        "The Channel Username should be the public username of the channel (without the @ symbol)",
+        "The Limit parameter controls how many participants are retrieved in a single call",
+        "The Offset parameter allows for pagination through the participant list",
+        "The output contains detailed information about each participant",
+        "The Client Id must correspond to an active Telegram client session"
+      ]
+    },
+    "get_user": {
+      "namespace": "Core.TelegramUser.Get_user",
+      "name": "Get_user",
+      "summary": "Retrieves detailed information about a specific Telegram user.",
+      "howItWorks": "The Get User node retrieves detailed information about a specific Telegram user. When executed, the node: 1. Validates the provided inputs (Client Id and User Id) 2. Uses the Telegram client to fetch the entity information for the specified user 3. Extracts relevant user information: - ID - Access hash - First name - Last name - Username - Phone number 4. Returns the user information as output",
+      "usage": [
+        "A valid Telegram client session with appropriate permissions",
+        "Valid User Id",
+        "Client Id must match an existing Telegram client session"
+      ],
+      "bestPractices": [
+        "The User Id must be a numeric value representing the Telegram user's unique identifier",
+        "The output contains comprehensive information about the user",
+        "This node is useful for getting detailed information about a specific user when you have their ID",
+        "The Client Id must correspond to an active Telegram client session"
+      ]
+    },
+    "invite_user_to_channel": {
+      "namespace": "Core.TelegramUser.Invite_user_to_channel",
+      "name": "Invite_user_to_channel",
+      "summary": "Invites a user to a Telegram channel.",
+      "howItWorks": "The Invite User To Channel node invites a user to a Telegram channel. When executed, the node: 1. Validates the provided inputs (Client Id, Channel, User Id, and Access Hash) 2. Retrieves the channel entity using the Telegram client 3. Creates an InputUser object with the provided User Id and Access Hash 4. Uses the Telegram client to invite the user to the specified channel",
+      "usage": [
+        "A valid Telegram client session with appropriate permissions",
+        "Valid Channel identifier",
+        "Valid User Id and Access Hash of the user to invite",
+        "Client Id must match an existing Telegram client session"
+      ],
+      "bestPractices": [
+        "The Channel parameter can accept various identifiers such as usernames, chat IDs, or other channel references",
+        "The User Id and Access Hash are required to identify the user to invite",
+        "These values can typically be obtained from other Telegram nodes that return user information",
+        "The Client Id must correspond to an active Telegram client session"
+      ]
+    },
+    "join_chat": {
+      "namespace": "Core.TelegramUser.Join_chat",
+      "name": "Join_chat",
+      "summary": "Joins a Telegram chat or channel.",
+      "howItWorks": "The Join Chat node joins a Telegram chat or channel. When executed, the node: 1. Validates the provided inputs (Client Id and Chat) 2. Retrieves the chat or channel entity using the Telegram client 3. If a Chat Hash is provided, uses it to join a private chat via invitation link 4. If no Chat Hash is provided, joins the channel directly 5. Uses the Telegram client to execute the join operation",
+      "usage": [
+        "A valid Telegram client session with appropriate permissions",
+        "Valid Chat identifier",
+        "Valid Chat Hash (if joining a private chat)",
+        "Client Id must match an existing Telegram client session"
+      ],
+      "bestPractices": [
+        "The Chat parameter can accept various identifiers such as usernames, chat IDs, or other chat references",
+        "For private chats, provide the hash from the invitation link (the part after https://t.me/joinchat/)",
+        "For public channels, the Chat parameter alone is sufficient",
+        "The Client Id must correspond to an active Telegram client session"
+      ]
+    },
+    "login": {
+      "namespace": "Core.TelegramUser.Login",
+      "name": "Login",
+      "summary": "Logs into a Telegram account and creates a client session.",
+      "howItWorks": "The Log In node authenticates with Telegram and creates a client session. When executed, the node: 1. Validates the provided credentials (Api Id, Api Hash, and Phone Number) 2. Validates the Session Name 3. Creates a new TelegramClient with the provided credentials 4. Connects to Telegram 5. Checks if the user is already authorized: - If not authorized, sends a code request to the phone number - Opens a GUI window to enter the received code - Completes the sign-in process with the code 6. Adds the client to the client registry 7. Returns the Client Id for use in other Telegram nodes",
+      "usage": [
+        "Valid Telegram API credentials (API ID and API Hash)",
+        "Valid phone number associated with a Telegram account",
+        "Valid Session Name"
+      ],
+      "bestPractices": [
+        "All sensitive credentials (Api Id, Api Hash, Phone Number) are stored in the vault for security",
+        "The Session Name is used to persist session data between runs",
+        "A GUI window will appear during first-time login to enter the verification code sent to the phone",
+        "The returned Client Id is used in other Telegram nodes to identify which session to use",
+        "Multiple sessions can be created with different Session Names"
+      ]
+    },
+    "logout": {
+      "namespace": "Core.TelegramUser.Logout",
+      "name": "Logout",
+      "summary": "Logs out of a Telegram account and disconnects the client session.",
+      "howItWorks": "The Log Out node disconnects a Telegram client session and removes it from the client registry. When executed, the node: 1. Validates the provided Client Id input 2. Retrieves the client instance associated with the Client Id 3. Disconnects the client from Telegram 4. Removes the client from the client registry",
+      "usage": [
+        "A valid Client Id from a previously created Telegram session",
+        "The client must be currently active"
+      ],
+      "bestPractices": [
+        "This node should be used to properly disconnect Telegram sessions when they are no longer needed",
+        "After logging out, the Client Id becomes invalid and cannot be used in other nodes",
+        "It's good practice to log out of sessions to free up resources",
+        "The Client Id must correspond to an active Telegram client session"
+      ]
+    },
+    "send_media": {
+      "namespace": "Core.TelegramUser.Send_media",
+      "name": "Send_media",
+      "summary": "Sends a media file to a specified recipient on Telegram.",
+      "howItWorks": "The Send Media node sends a media file to a specified recipient on Telegram. When executed, the node: 1. Validates the provided inputs (Client Id, To, and Media Path) 2. Checks that the media file exists and is a valid file 3. Uses the Telegram client to send the media file to the specified recipient",
+      "usage": [
+        "A valid Telegram client session with appropriate permissions",
+        "Valid recipient identifier",
+        "Valid local file path to a media file that exists",
+        "Client Id must match an existing Telegram client session"
+      ],
+      "bestPractices": [
+        "The To parameter can accept various identifiers such as usernames, chat IDs, or other recipient references",
+        "The Media Path should point to a valid media file (image, video, document, etc.)",
+        "Supported media types depend on Telegram's capabilities",
+        "The Client Id must correspond to an active Telegram client session"
+      ]
+    },
+    "send_message": {
+      "namespace": "Core.TelegramUser.Send_message",
+      "name": "Send_message",
+      "summary": "Sends a text message to a specified recipient on Telegram.",
+      "howItWorks": "The Send Message node sends a text message to a specified recipient on Telegram. When executed, the node: 1. Validates the provided inputs (Client Id, To, and Message) 2. Uses the Telegram client to send the text message to the specified recipient",
+      "usage": [
+        "A valid Telegram client session with appropriate permissions",
+        "Valid recipient identifier",
+        "Valid text message content",
+        "Client Id must match an existing Telegram client session"
+      ],
+      "bestPractices": [
+        "The To parameter can accept various identifiers such as usernames, chat IDs, or other recipient references",
+        "The Message parameter should contain the text to be sent",
+        "For sending media files, use the Send Media node instead",
+        "The Client Id must correspond to an active Telegram client session"
+      ]
+    }
+  }
+}

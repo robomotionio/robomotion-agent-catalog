@@ -1,0 +1,69 @@
+{
+  "package": "MemoryQueue",
+  "summary": "The Memory Queue package provides a FIFO (First-In-First-Out) queue system utility for efficient and reliable task management in RPA workflows. Unlike the persistent Queue package, Memory Queue operates entirely in-memory, making it ideal for fast, temporary data processing within a single automation session.",
+  "description": "## Use Cases Memory Queue is perfect for scenarios where you need:",
+  "nodes": {
+    "clear": {
+      "namespace": "Core.MemoryQueue.Clear",
+      "name": "Clear",
+      "summary": "Removes all elements from an in-memory queue without deleting the queue itself. The queue remains available for new elements to be enqueued.",
+      "howItWorks": "The Clear Queue node removes all elements from the specified queue while keeping the queue structure intact. When executed, the node: 1. Validates the Queue ID exists 2. Retrieves the queue from memory 3. Removes all elements from the queue 4. Resets the queue to empty state 5. Queue ID remains valid and can be used for new operations This is useful when you want to reuse a queue without creating a new one.",
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound"
+      ]
+    },
+    "create": {
+      "namespace": "Core.MemoryQueue.Create",
+      "name": "Create",
+      "summary": "Creates a new in-memory FIFO (First-In-First-Out) queue with optional initial elements. The queue operates entirely in memory for fast, temporary data processing within an automation session.",
+      "howItWorks": "The Create Queue node initializes a new in-memory FIFO queue and returns a unique identifier. When executed, the node: 1. Generates a unique UUID for the queue 2. Creates a new thread-safe FIFO queue in memory 3. Adds any initial elements provided (in order) 4. Returns the queue ID for use in subsequent operations",
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrInternal"
+      ]
+    },
+    "delete": {
+      "namespace": "Core.MemoryQueue.Delete",
+      "name": "Delete",
+      "summary": "Permanently deletes an in-memory queue and releases its memory. The queue and all its elements are removed, and the Queue ID becomes invalid.",
+      "howItWorks": "The Delete Queue node permanently removes a queue from memory. When executed, the node: 1. Validates the Queue ID exists 2. Retrieves the queue from memory 3. Removes all elements from the queue 4. Deletes the queue structure 5. Frees all associated memory 6. Invalidates the Queue ID (cannot be used again) After deletion, any attempt to use the Queue ID will result in an error.",
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound"
+      ]
+    },
+    "dequeue": {
+      "namespace": "Core.MemoryQueue.Dequeue",
+      "name": "Dequeue",
+      "summary": "Removes and returns the first element from an in-memory queue. Elements are retrieved in FIFO (First-In-First-Out) order - the first item added is the first item removed.",
+      "howItWorks": "The Dequeue node removes and returns the first element from the specified queue. When executed, the node: 1. Validates the Queue ID exists 2. Retrieves the queue from memory 3. Checks if the queue has elements 4. Removes the first element from the queue 5. Returns the element as output 6. If queue is empty, returns an error immediately This is a destructive operation - the element is removed from the queue and cannot be retrieved again.",
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound"
+      ]
+    },
+    "enqueue": {
+      "namespace": "Core.MemoryQueue.Enqueue",
+      "name": "Enqueue",
+      "summary": "Adds an element to the end of an in-memory queue. Elements are added in FIFO (First-In-First-Out) order and will be retrieved in the same order using Dequeue.",
+      "howItWorks": "The Enqueue node adds an element to the end of the specified queue. When executed, the node: 1. Validates the Queue ID exists 2. Retrieves the queue from memory 3. Adds the element to the end of the queue 4. Returns control immediately (non-blocking operation) Elements are stored in the order they are enqueued and will be dequeued in the same order (FIFO).",
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound",
+        "ErrInternal"
+      ]
+    },
+    "wait": {
+      "namespace": "Core.MemoryQueue.Wait",
+      "name": "Wait",
+      "summary": "Waits for and dequeues an element from an in-memory queue with optional timeout. This is a blocking operation that waits until an element becomes available or the timeout expires.",
+      "howItWorks": "The Wait node blocks execution until an element is available in the queue. When executed, the node: 1. Validates the Queue ID exists 2. Retrieves the queue from memory 3. Checks if the queue has elements 4. If element available: Removes and returns it immediately 5. If queue empty: Waits for an element to be enqueued 6. If timeout specified: Returns error if timeout expires before element available 7. If timeout is 0: Waits indefinitely until element arrives This is the blocking version of Dequeue, ideal for producer-consumer patterns.",
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound",
+        "ErrInternal"
+      ]
+    }
+  }
+}

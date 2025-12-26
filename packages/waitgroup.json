@@ -1,0 +1,156 @@
+{
+  "package": "Waitgroup",
+  "summary": "Synchronize parallel operations - wait for multiple concurrent tasks to complete before proceeding.",
+  "description": "## Overview The Wait Group package provides synchronization primitives for parallel processing. Use it when you need to run multiple operations concurrently and wait for all of them to complete before continuing.",
+  "nodes": {
+    "wg-add": {
+      "namespace": "Core.Waitgroup.WgAdd",
+      "name": "WgAdd",
+      "summary": "Adds a delta counter to the specified wait group.",
+      "howItWorks": "1. The node retrieves the Wait Group ID from the input variable 2. The Delta value is retrieved from the input (default is 1) 3. The node validates that Delta is not negative 4. The wait group is looked up in the global wait groups map using the ID 5. A mutex lock is acquired to ensure thread-safe access 6. The delta value is added to both the internal counter and the sync.WaitGroup 7. The mutex is released 8. The message passes through unchanged",
+      "usage": [
+        "A valid Wait Group ID must be provided (from WG Create node)",
+        "Delta value must be non-negative (0 or positive integers)",
+        "The wait group must exist (not yet deleted by WG Wait)"
+      ],
+      "bestPractices": [
+        "WG Add can be called multiple times on the same wait group - deltas accumulate",
+        "Always call WG Add **before** starting parallel operations to avoid race conditions",
+        "The delta value represents how many WG Done calls are needed to complete the wait group",
+        "A delta of 0 is valid but doesn't add any waiting requirement",
+        "WG Add is thread-safe and can be called from parallel branches",
+        "Each WG Done decrements the counter by 1"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage"
+      ],
+      "relatedNodes": [
+        "WG Create",
+        "WG Done",
+        "WG Wait"
+      ],
+      "tips": [
+        "Call WG Add once with the total count before spawning parallel operations for clarity",
+        "For dynamic parallel work, calculate the total count first, then call WG Add once",
+        "Use message variables for delta values when the count is determined at runtime",
+        "Avoid calling WG Add from within parallel branches unless absolutely necessary (can lead to timing issues)",
+        "If you need to add more work after starting, you can call WG Add again before the new work starts",
+        "Remember: Total WG Done calls must equal the sum of all WG Add deltas"
+      ]
+    },
+    "wg-create": {
+      "namespace": "Core.Waitgroup.WgCreate",
+      "name": "WgCreate",
+      "summary": "Creates a Wait Group identifier to be used in synchronizing parallel execution.",
+      "howItWorks": "1. A new WaitGroup object is created with an internal sync.WaitGroup and delta counter initialized to 0 2. A unique Wait Group ID is generated using a random ID generator 3. The WaitGroup object is stored in a global thread-safe map with the generated ID as the key 4. The Wait Group ID is assigned to the configured output variable 5. The message passes through with the Wait Group ID 6. When the flow closes, all wait groups are automatically cleaned up and deleted",
+      "usage": [
+        "No prerequisites - this node can be called anywhere in the flow",
+        "The Wait Group ID must be passed to WG Add, WG Done, and WG Wait nodes for coordination"
+      ],
+      "bestPractices": [
+        "Each WG Create generates a unique Wait Group ID - don't reuse IDs across different parallel operations",
+        "Wait groups are automatically cleaned up when the flow completes or errors",
+        "The delta counter starts at 0 - use WG Add to set how many parallel operations to wait for",
+        "Store the Wait Group ID in a variable (msg, flow, or global scope) to share across branches",
+        "Wait groups are thread-safe and can be used with truly parallel execution"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage"
+      ],
+      "relatedNodes": [
+        "WG Add",
+        "WG Done",
+        "WG Wait"
+      ],
+      "tips": [
+        "Create one wait group per parallel operation set - don't reuse wait groups",
+        "Store the Wait Group ID in a message variable if using within a single flow",
+        "Store in a flow or global variable if coordinating across multiple sub-flows",
+        "Always call WG Add before starting parallel branches to avoid race conditions",
+        "Use meaningful variable names for Wait Group IDs (e.g., `msg.dataFetchWG`, `msg.processingWG`)",
+        "Wait groups are perfect for fan-out/fan-in patterns in parallel processing",
+        "Clean up is automatic - no need to manually delete wait groups"
+      ]
+    },
+    "wg-done": {
+      "namespace": "Core.Waitgroup.WgDone",
+      "name": "WgDone",
+      "summary": "Signals that a parallel running branch has completed for a specified Wait Group ID. This node decrements the initial count that is set by the [WG Add](/reference/packages/waitgroup/wg-add) node. When this counter reaches zero the [WG Wait](/reference/packages/waitgroup/wg-wait) node continues the flow.",
+      "howItWorks": "1. The node retrieves the Wait Group ID from the input variable 2. The wait group is looked up in the global wait groups map using the ID 3. A mutex lock is acquired to ensure thread-safe access 4. If the internal delta counter is already 0, the node returns without decrementing (prevents negative counts) 5. Otherwise, the delta counter is decremented by 1 6. The sync.WaitGroup's Done() method is called, decrementing the internal wait counter 7. The mutex is released 8. If this was the last Done call (counter reached 0), any waiting WG Wait nodes are unblocked 9. The message passes through unchanged",
+      "usage": [
+        "A valid Wait Group ID must be provided (from WG Create node)",
+        "The wait group must exist (not yet deleted by WG Wait)",
+        "WG Add must have been called before WG Done to set the counter"
+      ],
+      "bestPractices": [
+        "WG Done decrements the counter by exactly 1 each time it's called",
+        "If the counter is already 0, calling WG Done has no effect (safe to call redundantly)",
+        "Always ensure WG Done is called for every parallel operation, including error cases",
+        "The number of WG Done calls must match the sum of all WG Add deltas",
+        "WG Done is thread-safe and can be called simultaneously from multiple parallel branches",
+        "Once the counter reaches 0, any waiting WG Wait nodes immediately continue"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage"
+      ],
+      "relatedNodes": [
+        "WG Create",
+        "WG Add",
+        "WG Wait"
+      ],
+      "tips": [
+        "Place WG Done at the end of each parallel branch to signal completion",
+        "Use Finally blocks or defer patterns to ensure WG Done is called even on errors",
+        "If a branch might error out, set \"Continue On Error\" to true to ensure WG Done is reached",
+        "For loops spawning parallel work, call WG Done at the end of each spawned task",
+        "Never call WG Done more times than you called WG Add - this will cause issues",
+        "Use Debug nodes before WG Done to log completion status for troubleshooting"
+      ]
+    },
+    "wg-wait": {
+      "namespace": "Core.Waitgroup.WgWait",
+      "name": "WgWait",
+      "summary": "Waits for the specified Wait Group to finish, ensuring all the parallel branches associated with it have been completed. The Wait Group is considered complete when the counter, initially set by the [WG Add](/reference/packages/waitgroup/wg-add) node, decrements to zero due to subsequent executions of the [WG Done](/reference/packages/waitgroup/wg-done) node for a given ID.",
+      "howItWorks": "1. The node retrieves the Wait Group ID from the input variable 2. The wait group is looked up in the global wait groups map using the ID 3. The node calls the sync.WaitGroup's Wait() method, which blocks execution 4. The thread is blocked until the internal counter reaches 0 (all WG Done calls complete) 5. Once unblocked, the wait group is deleted from the global map 6. If deletion succeeds, the flow continues to the next node 7. If the wait group was already deleted, the error is silently ignored (allows multiple Wait nodes) 8. The message passes through unchanged",
+      "usage": [
+        "A valid Wait Group ID must be provided (from WG Create node)",
+        "The wait group must exist at the time Wait is called",
+        "WG Add must have been called to set the expected number of completions",
+        "All parallel branches must eventually call WG Done to unblock the wait"
+      ],
+      "bestPractices": [
+        "WG Wait **blocks** the flow execution until all parallel operations complete",
+        "The wait group is automatically deleted after Wait completes successfully",
+        "If no WG Done calls were made, WG Wait will block forever (ensure proper flow design)",
+        "WG Wait can only be called once per wait group - subsequent calls will error",
+        "The blocking is efficient (uses Go's sync primitives, not polling)",
+        "If parallel branches error out and never call WG Done, the Wait will hang indefinitely"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage"
+      ],
+      "relatedNodes": [
+        "WG Create",
+        "WG Add",
+        "WG Done"
+      ],
+      "tips": [
+        "Always ensure every parallel branch calls WG Done, even in error cases",
+        "Use timeouts or monitoring to prevent infinite waiting if branches might fail",
+        "Place WG Wait after all parallel branches have been spawned",
+        "Don't reuse Wait Group IDs - create a new one for each parallel operation set",
+        "Use Flow Designer to visually verify all parallel paths call WG Done",
+        "For debugging, add Debug nodes before WG Wait to log the current state",
+        "Consider using \"Continue On Error\" in parallel branches to ensure WG Done is reached"
+      ]
+    }
+  }
+}

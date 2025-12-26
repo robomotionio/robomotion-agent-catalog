@@ -1,0 +1,211 @@
+{
+  "package": "Net",
+  "summary": "Make HTTP requests, download files, and create HTTP endpoints for API integration and web communication.",
+  "description": "## Overview The Net package provides HTTP communication capabilities for API integration and web operations. Use it when you need to call REST APIs, download files from URLs, or create webhook endpoints to receive HTTP requests.",
+  "nodes": {
+    "download-file": {
+      "namespace": "Core.Net.DownloadFile",
+      "name": "DownloadFile",
+      "summary": "Downloads a file from a given URL and saves it to the specified path on the local machine. Supports basic authentication.",
+      "howItWorks": "The Download File node retrieves files from URLs and saves them locally: 1. **Input Validation:** - Validates and normalizes the URL (adds http:// if protocol is missing) - Parses the URL to ensure it's valid - Validates the download path or creates a temporary file if path is empty 2. **Authentication Setup:** - If credentials are provided, retrieves them from the vault - Sets up basic authentication headers - Adds cookies from cookie store if provided 3. **Download Process:** - Creates an HTTP client with the specified timeout (default: 120 seconds) - Sends a GET request to the URL with authentication and cookies - Checks the HTTP status code (fails if 4 or greater00) - Streams the response body directly to the file 4. **File Saving:** - If download path is provided, creates the file at that location - If no path is provided, creates a temporary file using the temp file pattern - Returns the final path where the file was saved",
+      "usage": [
+        "**URL:** Must be a valid HTTP/HTTPS URL (protocol is optional, defaults to http://)",
+        "**Download Path:** Optional; if empty, a temporary file is created",
+        "**File Permissions:** Write permissions required for the download directory",
+        "**Network Access:** Active internet connection to reach the URL",
+        "**Credentials:** Valid vault credentials if basic authentication is required"
+      ],
+      "bestPractices": [
+        "**Default Timeout:** 120 seconds (2 minutes) if not specified",
+        "**URL Auto-Correction:** URLs without protocol are automatically prefixed with `http://`",
+        "**HTTP Status Codes:** Any response with status code 4 or greater00 is treated as an error",
+        "**Streaming:** Files are streamed directly to disk, not loaded into memory",
+        "**Temporary Files:** When no path is provided, files are created in the system temp directory",
+        "**File Overwrite:** If the target file exists, it will be overwritten without warning",
+        "**Spaces in URLs:** URL encoding is handled automatically by the HTTP client",
+        "**Cookie Support:** Can use cookies from previous HTTP requests via cookie store",
+        "**Large Files:** Suitable for large file downloads due to streaming approach"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrCredentials",
+        "ErrURL",
+        "ErrTempFile",
+        "ErrCreate",
+        "ErrOutputMarshal"
+      ],
+      "tips": [
+        "Use temporary files for intermediate processing, then move to final location",
+        "Set appropriate timeout values based on expected file size and connection speed",
+        "Store credentials in vault instead of hardcoding in the flow",
+        "Check if the file exists before downloading to avoid unnecessary downloads",
+        "Combine with file size checks to verify successful download",
+        "Use try-catch to handle download failures gracefully",
+        "For unreliable connections, consider implementing retry logic",
+        "Validate downloaded file integrity (size, checksum) after download",
+        "Clean up temporary files after processing to avoid disk space issues"
+      ]
+    },
+    "html-template": {
+      "namespace": "Core.Net.HtmlTemplate",
+      "name": "HtmlTemplate",
+      "summary": "Creates a dynamic HTML template",
+      "howItWorks": "The HTML Template node uses Mustache templating to generate dynamic HTML content: 1. **Template Definition:** - The HTML template is defined in the node's function/template field - Template can contain static HTML and dynamic placeholders using Mustache syntax 2. **Data Binding:** - The entire message object is passed to the template engine - Any property in the message can be accessed using `{{propertyName}}` syntax 3. **Rendering:** - Mustache engine processes the template - Replaces all placeholders with corresponding values from the message - Generates the final rendered HTML string 4. **Output:** - The rendered HTML is stored in the output variable - Can be used in HTTP responses, saved to files, or sent via email",
+      "usage": [
+        "**Template:** Valid HTML with Mustache placeholders",
+        "**Message Data:** Properties referenced in template must exist in the message object",
+        "**Mustache Syntax:** Follow Mustache templating syntax for placeholders"
+      ],
+      "bestPractices": [
+        "**Mustache Syntax:** Uses standard Mustache templating (`{{variable}}`, `{{#section}}`, `{{^inverted}}`, etc.)",
+        "**Nested Properties:** Access nested object properties with dot notation: `{{user.address.city}}`",
+        "**HTML Escaping:** By default, HTML characters are escaped; use triple braces `{{{raw}}}` for unescaped HTML",
+        "**Conditionals:** Use `{{#variable}}...{{/variable}}` for conditional sections",
+        "**Loops:** Arrays are automatically iterated using the same conditional syntax",
+        "**Comments:** Use `{{! This is a comment }}` for template comments",
+        "**Missing Variables:** Missing variables render as empty strings (no error thrown)",
+        "**Type Conversion:** All values are converted to strings during rendering"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrRender"
+      ],
+      "tips": [
+        "Test templates with sample data before deploying to production",
+        "Use descriptive variable names in templates for better readability",
+        "Organize complex templates with proper HTML formatting and indentation",
+        "Store large templates in separate files and load them dynamically",
+        "Use conditionals to handle optional content gracefully",
+        "Validate output HTML to ensure it's well-formed",
+        "Combine with HTTP Out node to serve dynamic web pages",
+        "Use with Email nodes to send formatted HTML emails",
+        "Consider security: sanitize user input before including in templates",
+        "Cache rendered templates if the same data is used multiple times"
+      ]
+    },
+    "http-in": {
+      "namespace": "Core.Net.HttpIn",
+      "name": "HttpIn",
+      "summary": "Listen for incoming HTTP requests.",
+      "howItWorks": "The HTTP In node creates a web server to receive incoming HTTP requests: 1. **Server Initialization:** - Creates or reuses an Echo web server instance on the specified IP and port - Automatically adds CORS middleware to allow cross-origin requests - Supports SSL/TLS if configured in settings - Multiple HTTP In nodes can share the same server instance 2. **Route Registration:** - Registers the endpoint with the specified HTTP method (GET, POST, PUT, DELETE, PATCH) - Endpoint automatically gets \"/\" prefix if not provided - Supports path parameters using Echo routing syntax (e.g., /users/:id) 3. **Request Handling:** - When a request arrives, extracts body, headers, cookies, query params, and path params - Attempts to parse body as JSON; falls back to string if parsing fails - Generates a unique request ID for correlation with HTTP Out response - Emits the request data to the flow 4. **Response Correlation:** - Waits for corresponding HTTP Out node to provide response - Uses request ID to match request with response - Returns the response to the HTTP client",
+      "usage": [
+        "**HTTP Method:** Must be selected (GET, POST, PUT, DELETE, or PATCH)",
+        "**Endpoint:** Valid URL path (automatically prefixed with / if missing)",
+        "**IP Address:** Valid IP to bind to (defaults to 127.0.0.1 for localhost)",
+        "**Port:** Available port number (defaults to 9090, configurable via settings)",
+        "**HTTP Out Node:** Must have a corresponding HTTP Out node to send responses"
+      ],
+      "bestPractices": [
+        "**Default Values:** IP defaults to 127.0.0.1 (localhost), Port defaults to 9090",
+        "**Server Reuse:** Multiple HTTP In nodes on the same IP:Port share the same server instance",
+        "**CORS:** Automatically enabled for all origins with common HTTP methods",
+        "**Body Parsing:** JSON bodies are automatically parsed; other formats remain as strings",
+        "**Header Normalization:** Header names are converted to lowercase",
+        "**Cookie Extraction:** Cookie names are converted to lowercase",
+        "**SSL Support:** Enable via configuration settings (core.net.httpin.ssl)",
+        "**Path Parameters:** Use Echo syntax with colons (e.g., /users/:id)",
+        "**Request ID:** Automatically generated unique ID for request/response matching",
+        "**Blocking:** Flow waits at HTTP In until HTTP Out sends response"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrNoMethod",
+        "Errors"
+      ],
+      "tips": [
+        "Use 127.0.0.1 for local testing, 0.0.0.0 to accept external connections",
+        "Always pair HTTP In with HTTP Out to avoid request timeouts",
+        "Use path parameters for RESTful API designs",
+        "Check query parameters for optional filters and pagination",
+        "Validate incoming data before processing",
+        "Set appropriate timeout values in HTTP clients calling your endpoints",
+        "Use SSL in production for secure communications",
+        "Monitor port availability to avoid conflicts",
+        "Consider using reverse proxy (nginx, Apache) for production deployments",
+        "Log request details for debugging and monitoring"
+      ]
+    },
+    "http-out": {
+      "namespace": "Core.Net.HttpOut",
+      "name": "HttpOut",
+      "summary": "Returns the response to an Http Request received from the [Http In](/reference/packages/net/http-in) node.",
+      "howItWorks": "The HTTP Out node sends responses back to HTTP In requests: 1. **Request Correlation:** - Retrieves the unique request ID from the message (set by HTTP In) - Looks up the response channel associated with that request - Validates that the request still exists and is waiting for a response 2. **Response Building:** - Validates status code is provided and non-zero - Collects body data (JSON object or string) - Merges headers from Headers input and Custom Headers - Merges cookies from Cookies input and Custom Cookies - Validates attachment file if provided (must exist and be a file, not directory) 3. **Header and Cookie Processing:** - Iterates through custom headers and adds them to the response - Iterates through custom cookies and adds them to the response - Filters out reserved headers (content-length, user-agent) 4. **Response Delivery:** - If attachment is specified, sends file as response - If body is a string, sends as plain text - If body is an object, sends as JSON - Sets all headers and cookies - Returns response to the waiting HTTP client",
+      "usage": [
+        "**HTTP In Node:** Must be preceded by an HTTP In node in the flow",
+        "**Request ID:** Message must contain the ID from HTTP In (automatically included)",
+        "**Status Code:** Must be a valid, non-zero HTTP status code (e.g., 200, 404, 500)",
+        "**Attachment File:** If provided, must be a valid file path (not a directory)"
+      ],
+      "bestPractices": [
+        "**Status Code Required:** Status code must be provided and cannot be zero",
+        "**Response Types:** Supports JSON objects, plain text strings, and file attachments",
+        "**Header Filtering:** content-length and user-agent headers are automatically filtered",
+        "**Cookie Expiration:** Cookies are set with 24-hour expiration by default",
+        "**One Response Per Request:** Each HTTP In request can only be responded to once",
+        "**Request ID:** The request ID is automatically carried through the message",
+        "**Attachment Priority:** If attachment is specified, body is ignored",
+        "**Custom vs Regular:** Custom headers/cookies are merged with regular headers/cookies",
+        "**Header Case:** Header names preserve their case as specified"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrRequest",
+        "ErrStatus",
+        "ErrAttachment"
+      ],
+      "tips": [
+        "Always set appropriate Content-Type headers for your response",
+        "Use standard HTTP status codes (200 for success, 4xx for client errors, 5xx for server errors)",
+        "Set CORS headers if needed for browser-based clients",
+        "Use file attachments for large binary data instead of encoding in JSON",
+        "Combine with HTML Template node for dynamic HTML responses",
+        "Set descriptive error messages in response body",
+        "Include request tracking IDs in responses for debugging",
+        "Use cookies for session management and authentication tokens",
+        "Clean up request ID after sending response (automatically handled)",
+        "Test different status codes to ensure proper error handling"
+      ]
+    },
+    "http-request": {
+      "namespace": "Core.Net.HttpRequest",
+      "name": "HttpRequest",
+      "summary": "Sends an HTTP Request",
+      "howItWorks": "The HTTP Request node makes HTTP/HTTPS requests to external APIs and services: 1. **Request Preparation:** - Retrieves URL, method, headers, cookies, and body from configuration and message - Merges custom headers/cookies with input headers/cookies - Encodes body as Base64 if option is enabled - Sets up authentication (Basic, Bearer, API Key) if configured 2. **Client Configuration:** - Creates HTTP client with specified timeout (default: 120 seconds) - Configures proxy if enabled - Sets SSL verification based on Insecure Skip Verify option - Adds custom transport settings for connection handling 3. **Request Execution:** - Sends HTTP request to the target URL - Handles streaming responses if enabled - Captures response body, headers, cookies, and status code - Manages redirects and connection pooling 4. **Response Processing:** - Returns response body (automatically parses JSON if content-type is JSON) - Returns response headers as object - Returns cookies from Set-Cookie headers - Returns HTTP status code - Updates cookie store if configured",
+      "usage": [
+        "**URL:** Valid HTTP/HTTPS URL",
+        "**Method:** GET, POST, PUT, DELETE, PATCH, or other HTTP method",
+        "**Timeout:** Optional, defaults to 120 seconds",
+        "**Authentication:** Optional credentials from vault if authentication is required"
+      ],
+      "bestPractices": [
+        "**Default Timeout:** 120 seconds if not specified",
+        "**JSON Parsing:** Response body is automatically parsed as JSON if content-type indicates JSON",
+        "**Streaming:** Enable streaming for large responses or server-sent events",
+        "**Cookie Management:** Use cookie store to maintain session across requests",
+        "**Proxy Support:** Supports HTTP/HTTPS proxies with optional authentication",
+        "**SSL Verification:** Disable only for testing with self-signed certificates",
+        "**Base64 Encoding:** Useful for binary data or specific API requirements"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate"
+      ],
+      "tips": [
+        "Store API credentials in vaults for security",
+        "Set appropriate timeouts based on expected response times",
+        "Use custom headers for API keys and authorization",
+        "Handle different status codes with conditional nodes",
+        "Enable debugging option to log request/response details",
+        "Use cookie store for maintaining sessions",
+        "Combine with loops for batch API operations",
+        "Implement retry logic for transient failures",
+        "Validate response status before processing body",
+        "Use streaming for large file downloads or real-time data"
+      ]
+    }
+  }
+}

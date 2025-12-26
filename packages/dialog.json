@@ -1,0 +1,81 @@
+{
+  "package": "Dialog",
+  "summary": "Display interactive dialog boxes and input prompts during automation for user interaction.",
+  "description": "## Overview The Dialog package enables user interaction during attended automation by displaying message boxes and input dialogs. Use it when you need to notify users, request confirmation, or collect input during workflow execution.",
+  "nodes": {
+    "input-box": {
+      "namespace": "Core.Dialog.InputBox",
+      "name": "InputBox",
+      "summary": "Shows an input dialog box",
+      "howItWorks": "The Input Box node performs the following steps: 1. **Pauses Execution** - Stops the automation flow and waits for user input 2. **Displays Dialog** - Shows a modal dialog box with the specified title 3. **Shows Default Text** - Displays the default value in the input field (if provided) 4. **Waits for Input** - The dialog remains open until the user enters text and clicks OK or Cancel 5. **Captures Response** - Retrieves the text entered by the user 6. **Resumes Flow** - Returns the entered text and continues automation execution",
+      "usage": [
+        "**Desktop Environment** - Must run in an environment where dialog boxes can be displayed",
+        "**User Interaction** - Requires a user to be present to provide input",
+        "**Display Availability** - Needs an active display/screen to show the dialog",
+        "**Attended Automation** - This is an attended automation node, not suitable for unattended scenarios"
+      ],
+      "bestPractices": [
+        "**Blocking Operation** - The automation pauses completely until the user responds to the input box.",
+        "**Cancel Handling** - If the user clicks Cancel or closes the dialog, the output may be empty or null.",
+        "**Default Value Purpose** - Default values help guide users and reduce typing for common inputs.",
+        "**Single Input Only** - This dialog accepts only one text input. For multiple inputs, use multiple Input Box nodes.",
+        "**No Validation** - The node doesn't validate input format. Add validation logic after receiving the response.",
+        "**Modal Dialog** - The dialog appears on top of other windows and requires user action before continuing.",
+        "**Platform Appearance** - Dialog appearance varies by operating system (Windows, macOS, Linux)."
+      ],
+      "errorCodes": [
+        "Error"
+      ],
+      "relatedNodes": [
+        "Message Box"
+      ],
+      "tips": [
+        "**Clear Instructions** - Use the Text property to provide clear instructions about what input is expected.",
+        "**Provide Examples** - Include example formats in the Text or Default Value to guide users.",
+        "**Validate Input** - After receiving input, use conditional logic to validate the format and content.",
+        "**Handle Cancellation** - Check if the output is empty or null to detect when users cancel the dialog.",
+        "**Use Descriptive Titles** - Title should clearly indicate the purpose of the input request.",
+        "**Pre-fill When Possible** - Use Default Value to save users time when you have a good guess for the input.",
+        "**Consider Alternatives** - For unattended automation, consider using configuration files or database lookups instead.",
+        "**Error Recovery** - If input is invalid, use loops to re-prompt the user until valid input is provided."
+      ]
+    },
+    "message-box": {
+      "namespace": "Core.Dialog.MessageBox",
+      "name": "MessageBox",
+      "summary": "Displays a message box with specified text and title.",
+      "howItWorks": "The Message Box node performs the following steps: 1. **Pauses Execution** - Stops the automation flow and waits for user acknowledgment 2. **Displays Dialog** - Shows a modal dialog box with the specified title and message 3. **Applies Type Styling** - Displays appropriate icon and buttons based on the Type setting: - **Yes/No**: Shows question icon with Yes and No buttons - **Info**: Shows information icon with OK button - **Error**: Shows error icon with OK button 4. **Waits for Response** - Dialog remains open until user clicks a button 5. **Captures Response** - For Yes/No type, records which button was clicked 6. **Returns Result** - Outputs true if Yes was clicked, false if No was clicked (for Yes/No type) 7. **Resumes Flow** - Continues automation execution after user responds",
+      "usage": [
+        "**Desktop Environment** - Must run in an environment where dialog boxes can be displayed",
+        "**User Interaction** - Requires a user to be present to acknowledge the message",
+        "**Display Availability** - Needs an active display/screen to show the dialog",
+        "**Attended Automation** - This is an attended automation node, not suitable for unattended scenarios"
+      ],
+      "bestPractices": [
+        "**Blocking Operation** - The automation pauses completely until the user responds to the message box.",
+        "**Yes/No Output** - Only the \"Yes / No\" type produces a boolean output in the Confirmed property.",
+        "**Info and Error Types** - These types only have an OK button and don't produce a meaningful output value.",
+        "**Modal Dialog** - The dialog appears on top of other windows and requires user action before continuing.",
+        "**Platform Appearance** - Dialog appearance and icons vary by operating system (Windows, macOS, Linux).",
+        "**No Timeout by Default** - The dialog will wait indefinitely for user response unless timeout is configured.",
+        "**Multiple Messages** - For multiple sequential messages, consider combining them into one dialog when possible."
+      ],
+      "errorCodes": [
+        "Error"
+      ],
+      "relatedNodes": [
+        "Input Box"
+      ],
+      "tips": [
+        "**Clear Communication** - Write clear, concise messages that tell users exactly what they need to know.",
+        "**Appropriate Type Selection** - Use Info for notifications, Error for problems, and Yes/No for decisions.",
+        "**Avoid Overuse** - Too many message boxes can frustrate users. Use sparingly for important notifications.",
+        "**Action-Oriented Text** - For Yes/No dialogs, phrase questions to make Yes/No responses clear.",
+        "**Handle Both Responses** - For Yes/No type, always implement logic for both true and false outcomes.",
+        "**Error Context** - For error messages, include specific details about what went wrong and how to fix it.",
+        "**Log Important Choices** - When using Yes/No, log the user's choice for audit purposes.",
+        "**Consider Alternatives** - For unattended automation, use logging or notifications instead of message boxes."
+      ]
+    }
+  }
+}

@@ -1,0 +1,210 @@
+{
+  "package": "MicrosoftActiveDirectory",
+  "summary": "The Microsoft Active Directory package provides comprehensive automation capabilities for Azure Active Directory (Azure AD), enabling you to manage users, groups, and organizational resources programmatically.",
+  "description": "## Overview The Microsoft Active Directory package allows you to:",
+  "nodes": {
+    "add-user-to-group": {
+      "namespace": "Core.MicrosoftActiveDirectory.AddUserToGroup",
+      "name": "AddUserToGroup",
+      "summary": "Adds a user as a member to a group in Azure Active Directory.",
+      "howItWorks": "The Add User To Group node: 1. Authenticates using either the access ID or direct credentials 2. Sends a POST request to Microsoft Graph API to add the member 3. Azure AD adds the user to the group 4. Returns a success message :::note You must use the user's object ID (GUID), not the user principal name (email). Use [Get User](/reference/packages/microsoft-active-directory/get-user) to get the object ID from an email address. :::",
+      "relatedNodes": [
+        "Connect",
+        "Get User",
+        "Get Group",
+        "List Group Members",
+        "Delete User From Group",
+        "List All Groups"
+      ]
+    },
+    "connect": {
+      "namespace": "Core.MicrosoftActiveDirectory.Connect",
+      "name": "Connect",
+      "summary": "Connects to Azure Active Directory using client credentials and establishes an access ID for subsequent operations.",
+      "howItWorks": "The Connect node: 1. Validates the provided tenant ID, client ID, and client secret 2. Obtains an access token from Azure AD using OAuth2 client credentials flow 3. Generates a unique access ID and stores the token internally 4. Returns the access ID to be used with other Active Directory nodes The access token is cached for the duration of your automation flow. Other nodes can use either: - The access ID from Connect node (recommended for better performance) - Direct credentials (if you don't want to use Connect)",
+      "relatedNodes": [
+        "Create User",
+        "Create Group",
+        "Get User",
+        "Get Group",
+        "List All Users",
+        "List All Groups",
+        "Update User",
+        "Update Group",
+        "Add User To Group",
+        "Delete User",
+        "Delete Group"
+      ]
+    },
+    "create-group": {
+      "namespace": "Core.MicrosoftActiveDirectory.CreateGroup",
+      "name": "CreateGroup",
+      "summary": "Creates a new group in Azure Active Directory.",
+      "howItWorks": "The Create Group node: 1. Authenticates using either the access ID or direct credentials 2. Sends a POST request to Microsoft Graph API with group properties 3. Azure AD creates the group 4. Returns the complete group object including the generated group ID The group is created immediately and can be used right away for member assignments and access control.",
+      "relatedNodes": [
+        "Connect",
+        "Get Group",
+        "Update Group",
+        "Delete Group",
+        "Add User To Group",
+        "List Group Members",
+        "List All Groups"
+      ]
+    },
+    "create-user": {
+      "namespace": "Core.MicrosoftActiveDirectory.CreateUser",
+      "name": "CreateUser",
+      "summary": "Creates a new user in Azure Active Directory with the specified properties.",
+      "howItWorks": "The Create User node: 1. Authenticates using either the access ID or direct credentials 2. Sends a POST request to Microsoft Graph API with user properties 3. Azure AD creates the user account 4. Returns the complete user object including the generated user ID The user is created immediately and can be used right away for authentication and group assignments.",
+      "relatedNodes": [
+        "Connect",
+        "Get User",
+        "Update User",
+        "Delete User",
+        "Add User To Group",
+        "List All Users"
+      ]
+    },
+    "delete-group": {
+      "namespace": "Core.MicrosoftActiveDirectory.DeleteGroup",
+      "name": "DeleteGroup",
+      "summary": "Deletes a group from Azure Active Directory.",
+      "howItWorks": "The Delete Group node: 1. Authenticates using either the access ID or direct credentials 2. Sends a DELETE request to Microsoft Graph API for the specified group 3. Azure AD permanently deletes the group 4. All group data is removed (including files for M365 groups) :::note Unlike user deletion, group deletion is immediate and permanent. There is no recycle bin for groups. :::",
+      "relatedNodes": [
+        "Connect",
+        "Get Group",
+        "List All Groups",
+        "List Group Members",
+        "Create Group",
+        "Update Group"
+      ]
+    },
+    "delete-user": {
+      "namespace": "Core.MicrosoftActiveDirectory.DeleteUser",
+      "name": "DeleteUser",
+      "summary": "Deletes a user from Azure Active Directory.",
+      "howItWorks": "The Delete User node: 1. Authenticates using either the access ID or direct credentials 2. Sends a DELETE request to Microsoft Graph API for the specified user 3. Azure AD moves the user to the deleted items (recycle bin) 4. The user is soft-deleted and can be restored within 30 days 5. After 30 days, the user is permanently deleted :::note Deleted users can be restored within 30 days using the Microsoft Graph API or Azure Portal. After 30 days, deletion is permanent. :::",
+      "relatedNodes": [
+        "Connect",
+        "Get User",
+        "Update User",
+        "Create User",
+        "List All Users",
+        "Delete User From Group"
+      ]
+    },
+    "delete-user-from-group": {
+      "namespace": "Core.MicrosoftActiveDirectory.DeleteUserFromGroup",
+      "name": "DeleteUserFromGroup",
+      "summary": "Removes a user from a group in Azure Active Directory.",
+      "howItWorks": "The Delete User From Group node: 1. Authenticates using either the access ID or direct credentials 2. Sends a DELETE request to Microsoft Graph API to remove the member 3. Azure AD removes the user from the group 4. Returns a success message :::note You must use the user's object ID (GUID), not the user principal name (email). Use [Get User](/reference/packages/microsoft-active-directory/get-user) to get the object ID from an email address. :::",
+      "relatedNodes": [
+        "Connect",
+        "Get User",
+        "Get Group",
+        "List Group Members",
+        "Add User To Group",
+        "Delete User"
+      ]
+    },
+    "get-group": {
+      "namespace": "Core.MicrosoftActiveDirectory.GetGroup",
+      "name": "GetGroup",
+      "summary": "Retrieves detailed information about a specific group from Azure Active Directory.",
+      "howItWorks": "The Get Group node: 1. Authenticates using either the access ID or direct credentials 2. Sends a GET request to Microsoft Graph API for the specified group 3. Returns the complete group object with all properties 4. Requires the group's object ID (not display name)",
+      "relatedNodes": [
+        "Connect",
+        "Create Group",
+        "Update Group",
+        "Delete Group",
+        "List All Groups",
+        "List Group Members",
+        "Add User To Group"
+      ]
+    },
+    "get-user": {
+      "namespace": "Core.MicrosoftActiveDirectory.GetUser",
+      "name": "GetUser",
+      "summary": "Retrieves detailed information about a specific user from Azure Active Directory.",
+      "howItWorks": "The Get User node: 1. Authenticates using either the access ID or direct credentials 2. Sends a GET request to Microsoft Graph API for the specified user 3. Returns the complete user object with all properties 4. Supports lookup by either user ID or user principal name",
+      "relatedNodes": [
+        "Connect",
+        "Create User",
+        "Update User",
+        "Delete User",
+        "List All Users",
+        "List Group Members"
+      ]
+    },
+    "list-all-groups": {
+      "namespace": "Core.MicrosoftActiveDirectory.ListAllGroups",
+      "name": "ListAllGroups",
+      "summary": "Retrieves a list of all groups from Azure Active Directory.",
+      "howItWorks": "The List All Groups node: 1. Authenticates using either the access ID or direct credentials 2. Sends a GET request to Microsoft Graph API with `$select=id,displayName` parameter 3. Returns a list of groups with only id and displayName properties 4. Result contains `value` array with group objects",
+      "relatedNodes": [
+        "Connect",
+        "Get Group",
+        "Create Group",
+        "Update Group",
+        "Delete Group",
+        "List Group Members",
+        "List All Users"
+      ]
+    },
+    "list-all-users": {
+      "namespace": "Core.MicrosoftActiveDirectory.ListAllUsers",
+      "name": "ListAllUsers",
+      "summary": "Retrieves a list of all users from Azure Active Directory.",
+      "howItWorks": "The List All Users node: 1. Authenticates using either the access ID or direct credentials 2. Sends a GET request to Microsoft Graph API to retrieve all users 3. Returns a paginated list of users (default page size from Graph API) 4. Result contains `value` array with user objects :::note This node retrieves the first page of users. For large directories, you may need to handle pagination using the `@odata.nextLink` property if present in the result. :::",
+      "relatedNodes": [
+        "Connect",
+        "Get User",
+        "Create User",
+        "Update User",
+        "Delete User",
+        "List All Groups"
+      ]
+    },
+    "list-group-members": {
+      "namespace": "Core.MicrosoftActiveDirectory.ListGroupMembers",
+      "name": "ListGroupMembers",
+      "summary": "Retrieves a list of all members of a specific group from Azure Active Directory.",
+      "howItWorks": "The List Group Members node: 1. Authenticates using either the access ID or direct credentials 2. Sends a GET request to Microsoft Graph API to retrieve group members 3. Returns a list of all members (users, groups, service principals, etc.) 4. Result contains `value` array with member objects",
+      "relatedNodes": [
+        "Connect",
+        "Get Group",
+        "Add User To Group",
+        "Delete User From Group",
+        "List All Groups",
+        "Get User"
+      ]
+    },
+    "update-group": {
+      "namespace": "Core.MicrosoftActiveDirectory.UpdateGroup",
+      "name": "UpdateGroup",
+      "summary": "Updates properties of an existing group in Azure Active Directory.",
+      "howItWorks": "The Update Group node: 1. Authenticates using either the access ID or direct credentials 2. Sends a PATCH request to Microsoft Graph API with the update properties 3. Azure AD updates only the specified properties 4. Returns a success message",
+      "relatedNodes": [
+        "Connect",
+        "Get Group",
+        "Create Group",
+        "Delete Group",
+        "List All Groups",
+        "List Group Members"
+      ]
+    },
+    "update-user": {
+      "namespace": "Core.MicrosoftActiveDirectory.UpdateUser",
+      "name": "UpdateUser",
+      "summary": "Updates properties of an existing user in Azure Active Directory.",
+      "howItWorks": "The Update User node: 1. Authenticates using either the access ID or direct credentials 2. Sends a PATCH request to Microsoft Graph API with the update properties 3. Azure AD updates only the specified properties 4. Returns a success message",
+      "relatedNodes": [
+        "Connect",
+        "Get User",
+        "Create User",
+        "Delete User",
+        "List All Users"
+      ]
+    }
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "package": "Compress",
+  "summary": "The Compress package provides comprehensive file compression and archiving capabilities for your RPA workflows. It supports multiple compression formats and archive types, allowing you to efficiently manage, compress, and extract files.",
+  "description": "## Key Features - **Multiple Archive Formats**: Support for Zip, Tar, and TarGz archives",
+  "nodes": {
+    "archive": {
+      "namespace": "Core.Compress.Archive",
+      "name": "Archive",
+      "summary": "Creates an archive file (Zip, Tar, or TarGz) from one or more source files or directories.",
+      "relatedNodes": [
+        "Unarchive",
+        "Extract File",
+        "Inspect Archive File"
+      ]
+    },
+    "compress": {
+      "namespace": "Core.Compress.Compress",
+      "name": "Compress",
+      "summary": "Compresses a single file or folder using the appropriate compression format based on the target file extension.",
+      "howItWorks": "The Compress node automatically selects the compression format based on the target file extension. The node: 1. Validates that the source path exists 2. Detects the compression format from the target file extension 3. For archive formats (Zip), compresses the file or folder directly 4. For pure compression formats (Gzip, Bzip2, etc.), wraps the content in a tar archive to preserve filenames and directory structure 5. Saves the compressed file to the target path",
+      "relatedNodes": [
+        "Decompress",
+        "Archive",
+        "Unarchive",
+        "Inspect Archive File"
+      ]
+    },
+    "decompress": {
+      "namespace": "Core.Compress.Decompress",
+      "name": "Decompress",
+      "summary": "Decompresses a single compressed file to the target path. Automatically detects whether the file is a tar-wrapped archive or pure compression format.",
+      "howItWorks": "The Decompress node intelligently handles different types of compressed files: 1. **Detects the compression format** from the file extension 2. **Analyzes the file content** to determine if it's tar-wrapped (created by Compress node) or pure compression (created by external tools) 3. **For tar-wrapped files**: Extracts the tar archive and decompresses in one step, preserving the original filename and directory structure 4. **For pure compression**: Decompresses the file directly 5. **Saves the decompressed content** to the target path",
+      "relatedNodes": [
+        "Unarchive",
+        "Extract File",
+        "Archive"
+      ]
+    },
+    "extract-file": {
+      "namespace": "Core.Compress.ExtractFile",
+      "name": "ExtractFile",
+      "summary": "Extracts a specific file from an archive to the target path without extracting the entire archive.",
+      "howItWorks": "The Extract File node performs selective extraction: 1. Opens the archive file specified in Source Path 2. Searches for the exact filename specified in the File input 3. Extracts only that specific file 4. Saves it to the Target Path location 5. Leaves the archive file unchanged This is much more efficient than extracting the entire archive when you only need one or a few specific files.",
+      "relatedNodes": [
+        "Inspect Archive File",
+        "Unarchive",
+        "Archive",
+        "Decompress"
+      ]
+    },
+    "inspect-archive-file": {
+      "namespace": "Core.Compress.InspectArchiveFile",
+      "name": "InspectArchiveFile",
+      "summary": "Lists all files contained in an archive without extracting them. This allows you to view the contents of compressed archives and verify file presence before extraction.",
+      "howItWorks": "The Inspect Archive File node performs the following operations: 1. Opens the archive file at the specified path 2. Reads the archive's table of contents 3. Iterates through all entries in the archive 4. Collects the name/path of each file 5. Returns the complete list as an array This operation does not extract any files - it only reads the archive's metadata.",
+      "relatedNodes": [
+        "Extract File",
+        "Unarchive",
+        "Archive",
+        "Decompress"
+      ]
+    },
+    "unarchive": {
+      "namespace": "Core.Compress.Unarchive",
+      "name": "Unarchive",
+      "summary": "Extracts all files from an archive to the target directory. Supports various archive formats including password-protected RAR archives.",
+      "howItWorks": "The Unarchive node performs complete archive extraction: 1. Opens the archive file at the specified path 2. Checks if the archive is password-protected (RAR files) 3. If a RAR password is provided, uses it for extraction 4. Reads all files and directory structure from the archive 5. Extracts all content to the target directory 6. Preserves the original directory structure and file attributes The extraction process maintains the complete directory hierarchy as it exists in the archive.",
+      "relatedNodes": [
+        "Archive",
+        "Extract File",
+        "Inspect Archive File",
+        "Decompress"
+      ]
+    }
+  }
+}

@@ -1,0 +1,204 @@
+{
+  "package": "Datatable",
+  "summary": "The DataTable package provides powerful in-memory data manipulation capabilities for RPA automation. It allows you to create, modify, query, and transform tabular data structures similar to database tables or spreadsheets without requiring external files or databases.",
+  "description": "DataTables are ideal for: - Processing and transforming data extracted from various sources (Excel, CSV, databases, web scraping)",
+  "nodes": {
+    "add-column": {
+      "namespace": "Core.Datatable.AddColumn",
+      "name": "AddColumn",
+      "summary": "Adds a new column with values to an existing DataTable. This node is useful for extending your table structure and populating it with data in a single operation.",
+      "tips": [
+        "Ensure the values array length matches the number of rows if the table is already populated",
+        "Column names must be unique within the table",
+        "Values can be of any type (strings, numbers, booleans, objects)",
+        "This node is efficient for adding columns with pre-computed values",
+        "For adding empty columns, use a values array filled with empty strings or null values"
+      ]
+    },
+    "add-row": {
+      "namespace": "Core.Datatable.AddRow",
+      "name": "AddRow",
+      "summary": "Adds a new row to an existing DataTable. You can provide row data either as a dictionary object via input or define it using the Custom Row option in the node properties.",
+      "tips": [
+        "Use dictionary input for dynamic, programmatic row creation",
+        "Use Custom Row option for static, predefined rows",
+        "Column names in the row dictionary must match existing table columns (unless using Custom Row option)",
+        "Missing columns in the row dictionary will have empty/null values",
+        "You can add rows in loops for bulk data insertion",
+        "Both Row input and Custom Row can be used together - Custom Row is processed after Row input"
+      ]
+    },
+    "append-table": {
+      "namespace": "Core.Datatable.AppendTable",
+      "name": "AppendTable",
+      "summary": "Appends all rows from a second DataTable to a first DataTable. Both tables must have the same column structure. This node is ideal for combining datasets from multiple sources.",
+      "tips": [
+        "Both tables must have identical column structures - same column names",
+        "Column order doesn't need to match, but column names must be the same",
+        "Use this node instead of Merge DataTable when you want to stack rows vertically",
+        "For horizontal combination (adding columns), use Merge DataTable instead",
+        "The operation is non-destructive - original tables are preserved",
+        "Efficient for combining large datasets from multiple sources"
+      ]
+    },
+    "clear-data-table": {
+      "namespace": "Core.Datatable.ClearDataTable",
+      "name": "ClearDataTable",
+      "summary": "Clears all rows from a DataTable while preserving its column structure. This node is useful when you need to reset a table's data without recreating the entire table structure.",
+      "tips": [
+        "Use this node when you want to reuse a table structure without recreating it",
+        "More efficient than creating a new table when the column structure remains the same",
+        "Useful in loops where you process data in batches",
+        "The column structure (names and order) is completely preserved",
+        "All row data is removed - this operation cannot be undone",
+        "Consider backing up important data before clearing"
+      ]
+    },
+    "create-data-table": {
+      "namespace": "Core.Datatable.CreateDataTable",
+      "name": "CreateDataTable",
+      "summary": "Creates a new DataTable with specified columns. This is the starting point for building in-memory data structures for your automation workflows.",
+      "tips": [
+        "Column names should be unique and descriptive",
+        "Avoid special characters in column names for better compatibility",
+        "Plan your table structure before creating it - adding columns later requires additional nodes",
+        "Use meaningful column names that reflect your data domain",
+        "Created tables start empty - use Add Row node to populate data"
+      ]
+    },
+    "filter-data-table": {
+      "namespace": "Core.Datatable.FilterDataTable",
+      "name": "FilterDataTable",
+      "summary": "Filters rows in a DataTable based on a filter expression. Only rows that match the filter criteria are included in the output table. This node is essential for data selection and conditional processing.",
+      "tips": [
+        "Always enclose string values in single quotes (`'value'`)",
+        "Use parentheses to group complex conditions",
+        "Column names with spaces should be enclosed in square brackets: `[Column Name] = 'value'`",
+        "Test your filter expressions with sample data first",
+        "The filter is case-sensitive for string comparisons",
+        "Empty or null values can be checked with special syntax: `ColumnName IS NULL`",
+        "For \"not null\": `ColumnName IS NOT NULL`",
+        "Original table is not modified; a new filtered table is returned"
+      ]
+    },
+    "get-column": {
+      "namespace": "Core.Datatable.GetColumn",
+      "name": "GetColumn",
+      "summary": "Retrieves all values from a specific column in a DataTable as an array. This node is useful for extracting column data for further processing, analysis, or iteration.",
+      "tips": [
+        "The output array preserves the order of rows in the table",
+        "Array length equals the number of rows in the table",
+        "Works with any data type (strings, numbers, booleans, objects)",
+        "Use in combination with loops for row-by-row processing",
+        "Efficient for bulk operations on column data",
+        "For accessing specific rows, use Get Row node instead",
+        "Column values can be null or empty - handle these cases in your code"
+      ]
+    },
+    "get-row": {
+      "namespace": "Core.Datatable.GetRow",
+      "name": "GetRow",
+      "summary": "Retrieves a specific row from a DataTable by its zero-based index. The row is returned as a dictionary object with column names as keys and cell values as values.",
+      "tips": [
+        "Row indices are zero-based: first row is index 0",
+        "The output is a dictionary with column names as keys",
+        "All columns in the row are included in the output object",
+        "To get the row count, access the table's rows array length",
+        "For iterating all rows, use a loop with incrementing row index",
+        "Values preserve their original data types (strings, numbers, objects)",
+        "Missing or null values are included as null or empty"
+      ]
+    },
+    "linq-query": {
+      "namespace": "Core.Datatable.LinqQuery",
+      "name": "LinqQuery",
+      "summary": "Executes a LINQ (Language Integrated Query) expression on a DataTable for advanced data manipulation, transformation, and analysis. This node provides powerful querying capabilities beyond simple filtering.",
+      "tips": [
+        "The LINQ query is written in C#, not JavaScript",
+        "Use `dt.AsEnumerable()` to convert the DataTable to a queryable collection",
+        "The query editor provides syntax highlighting for C#",
+        "Results can be various types: collections, single values, anonymous objects",
+        "Use `.ToList()` at the end if you want to return a list",
+        "LINQ queries are evaluated lazily - add `.ToList()` or `.ToArray()` to force evaluation",
+        "Complex queries may impact performance on large datasets",
+        "Test your queries with sample data first",
+        "The query must be a valid C# expression"
+      ]
+    },
+    "lookup-data-table": {
+      "namespace": "Core.Datatable.LookupDataTable",
+      "name": "LookupDataTable",
+      "summary": "Searches for a value in a specified DataTable column and returns the row index. Optionally, you can retrieve a value from a different column in the same row. This node is similar to Excel's VLOOKUP function.",
+      "tips": [
+        "The search is partial match by default (LIKE '%value%')",
+        "For exact matching, ensure your lookup value is unique enough",
+        "Returns -1 if no match is found - always check this before using row index",
+        "Only the first match is returned if multiple rows match",
+        "Use Target Column Name option for VLOOKUP-style operations",
+        "Column names are case-sensitive",
+        "Target Column Name can be the same as the search column",
+        "Efficient for one-time lookups; for multiple lookups, consider LINQ Query"
+      ]
+    },
+    "merge-data-table": {
+      "namespace": "Core.Datatable.MergeDataTable",
+      "name": "MergeDataTable",
+      "summary": "Merges two DataTables by combining their rows and columns. This operation uses .NET's DataTable.Merge() method, which intelligently combines table structures and data based on matching schemas.",
+      "tips": [
+        "Merge combines both schema (columns) and data (rows)",
+        "Unlike Append, tables don't need identical column structures",
+        "New columns are added automatically",
+        "Rows from both tables are preserved",
+        "Missing values in new columns are filled with empty/null values",
+        "Original tables remain unchanged",
+        "Use Merge when combining tables with different but related schemas",
+        "Use Append when stacking identical tables vertically"
+      ]
+    },
+    "remove-column": {
+      "namespace": "Core.Datatable.RemoveColumn",
+      "name": "RemoveColumn",
+      "summary": "Removes a specified column from a DataTable. All data in that column is deleted, and the table structure is updated to exclude the removed column.",
+      "tips": [
+        "Column removal is permanent - the data cannot be recovered",
+        "All values in the removed column are deleted across all rows",
+        "Consider backing up important data before removing columns",
+        "Column names are case-sensitive",
+        "You can remove multiple columns by calling this node multiple times",
+        "The table structure is automatically updated",
+        "Removing a column doesn't affect row count",
+        "For temporary hiding of columns, consider using Filter or Select operations instead"
+      ]
+    },
+    "remove-row": {
+      "namespace": "Core.Datatable.RemoveRow",
+      "name": "RemoveRow",
+      "summary": "Removes a specific row from a DataTable by its zero-based index. The row is permanently deleted, and subsequent rows shift up to fill the gap.",
+      "tips": [
+        "Row indices are zero-based: first row is index 0",
+        "When removing multiple rows, process from highest index to lowest",
+        "This prevents index shifting issues during iteration",
+        "The removal is permanent - the data cannot be recovered",
+        "Consider backing up important data before removing rows",
+        "For removing rows based on conditions, use Filter DataTable instead",
+        "Row removal doesn't affect column structure",
+        "After removal, subsequent row indices shift down"
+      ]
+    },
+    "sort-table": {
+      "namespace": "Core.Datatable.SortTable",
+      "name": "SortTable",
+      "summary": "Sorts a DataTable by a specified column in ascending or descending order. The entire table is reordered based on the values in the sort column.",
+      "tips": [
+        "Sorting reorders all rows based on the specified column",
+        "The sort is stable - rows with equal values maintain their relative order",
+        "Column names are case-sensitive",
+        "Numbers sort numerically, strings sort alphabetically",
+        "Empty or null values typically sort to the beginning (ASC) or end (DESC)",
+        "For multi-column sorting, apply Sort Table multiple times",
+        "The original table is not modified; a new sorted table is returned",
+        "Sort before filtering for better performance on large datasets"
+      ]
+    }
+  }
+}

@@ -1,0 +1,224 @@
+{
+  "package": "DomParser",
+  "summary": "Parse and extract data from HTML documents using CSS selectors and XPath expressions.",
+  "description": "## Overview The DOM Parser package provides powerful HTML parsing capabilities for extracting structured data from web pages. Use it when you need to scrape data from HTML content, extract tables, find specific elements, or process HTML documents offline.",
+  "nodes": {
+    "count_words": {
+      "namespace": "Core.DomParser.Count_words",
+      "name": "Count_words",
+      "summary": "Calculates the frequency of words in a text and returns statistics including count and ratio for each word.",
+      "howItWorks": "The Count Words node analyzes a text input and calculates the frequency of each word. When executed, the node: 1. Retrieves the Text input variable 2. Validates that the text is not empty 3. Extracts words from the text using a regular expression `[\\p{L}\\p{N}_]+` which matches: * Letters from any language (`\\p{L}`) * Numbers (`\\p{N}`) * Underscore characters (`_`) 4. Checks that at least one word was found in the text 5. Normalizes all words to lowercase to ensure consistent counting 6. Creates a frequency map counting occurrences of each normalized word 7. Calculates the ratio of each word as a percentage of the total word count 8. Converts the frequency map to an array of CountWordsData objects 9. Sorts the array by word count in descending order 10. Sets the sorted array as the output variable",
+      "usage": [
+        "A non-empty text input string",
+        "The text must contain at least one word that matches the word pattern"
+      ],
+      "bestPractices": [
+        "Words are normalized to lowercase for consistent counting",
+        "The regular expression `[\\p{L}\\p{N}_]+` is used to extract words, which supports international characters and numbers",
+        "Punctuation and special characters are ignored during word extraction",
+        "The output is sorted by word count in descending order, with the most frequent words appearing first",
+        "Each word's ratio is calculated as (word count / total words) * 100 and formatted to 2 decimal places",
+        "Useful for text analysis, keyword extraction, and content analysis tasks",
+        "The node can handle texts in various languages that use the supported character sets",
+        "The output array can be processed by subsequent nodes for further analysis or filtering"
+      ]
+    },
+    "escape": {
+      "namespace": "Core.DomParser.Escape",
+      "name": "Escape",
+      "summary": "Escapes special characters in a string to their corresponding HTML entities.",
+      "howItWorks": "The Escape HTML node converts special characters in a string to their corresponding HTML entities to prevent them from being interpreted as HTML markup. When executed, the node: 1. Retrieves the Escape String input variable 2. Validates that the string is not empty 3. Uses the html.EscapeString function to convert special characters: * `\u003c` becomes `\u003c` * `\u003e` becomes `\u003e` * `\u0026` becomes `\u0026` * `\"` becomes `\"` * `'` becomes `'` 4. Sets the escaped string as the output variable",
+      "usage": [
+        "A non-empty string input to escape"
+      ],
+      "bestPractices": [
+        "Useful for sanitizing user input before displaying in HTML contexts",
+        "Prevents cross-site scripting (XSS) vulnerabilities by escaping potentially harmful characters",
+        "The escaped string can be safely embedded in HTML documents without being interpreted as markup",
+        "Commonly used when displaying user-generated content in web applications",
+        "The reverse operation (converting entities back to characters) can be performed with the Unescape HTML node",
+        "Does not modify characters that don't have special meaning in HTML",
+        "The output string will be longer than the input if special characters were present"
+      ]
+    },
+    "extract_image": {
+      "namespace": "Core.DomParser.Extract_image",
+      "name": "Extract_image",
+      "summary": "Extracts image URLs from HTML content by finding all img tags and their src attributes.",
+      "howItWorks": "The Extract Images node parses HTML content and extracts the source URLs of all image tags. When executed, the node: 1. Retrieves the HTML Element input variable 2. Validates that the HTML content is not empty 3. Creates a goquery document from the HTML content 4. Finds all img tags in the HTML document 5. Extracts the src attribute from each img tag 6. Collects all extracted URLs into an array 7. Sets the array of image URLs as the output variable",
+      "usage": [
+        "Valid HTML content containing img tags",
+        "Non-empty HTML Element input"
+      ],
+      "bestPractices": [
+        "Only extracts images that have a src attribute defined",
+        "Ignores img tags without a src attribute",
+        "Returns an empty array if no img tags are found in the HTML",
+        "Works with both absolute and relative image URLs",
+        "Can handle various HTML structures and nested elements",
+        "Useful for web scraping, content analysis, and media extraction tasks",
+        "The extracted URLs can be used with other nodes to download or process the images",
+        "Supports standard HTML img tags with src attributes",
+        "The order of URLs in the output array matches the order of img tags in the HTML"
+      ]
+    },
+    "extract_table": {
+      "namespace": "Core.DomParser.Extract_table",
+      "name": "Extract_table",
+      "summary": "Extracts tabular data from HTML content and converts it to structured JSON format.",
+      "howItWorks": "The Extract Table node parses HTML content and extracts table data into a structured JSON format. When executed, the node: 1. Retrieves the HTML Element input variable 2. Validates that the HTML content is not empty 3. Checks the Vertical option to determine extraction method: * **Horizontal mode (default)** - For traditional tables with headers in thead and data in tbody: * Extracts column headers from thead th elements * Extracts row data from tbody tr elements * Maps cell data to corresponding column headers * **Vertical mode** - For tables organized as key-value pairs: * Extracts key-value pairs from tbody tr elements * Treats the first cell in each row as the key * Treats subsequent cells as values 4. Processes the HTML using goquery to parse DOM elements 5. Constructs a TableData structure with columns and rows 6. Sets the structured table data as the output variable",
+      "usage": [
+        "Valid HTML content containing table elements",
+        "Non-empty HTML Element input"
+      ],
+      "bestPractices": [
+        "Supports both traditional horizontal tables and vertical key-value tables",
+        "For horizontal tables, looks for thead th elements for column headers",
+        "For horizontal tables, looks for tbody tr elements for row data",
+        "For vertical tables, treats the first cell in each row as a key and subsequent cells as values",
+        "Returns empty columns and rows arrays if no table data is found",
+        "Handles tables with missing cells gracefully",
+        "Column headers are used as keys in the row objects",
+        "The output JSON structure makes it easy to process table data in subsequent nodes",
+        "Useful for web scraping, data extraction, and content analysis tasks",
+        "Can handle nested HTML elements within table cells",
+        "The Vertical option should be enabled when working with definition lists or key-value pair tables"
+      ]
+    },
+    "extract_text": {
+      "namespace": "Core.DomParser.Extract_text",
+      "name": "Extract_text",
+      "summary": "Extracts all text content from HTML elements, removing HTML tags and returning plain text.",
+      "howItWorks": "The Extract Text node parses HTML content and extracts all text content while removing HTML tags and markup. When executed, the node: 1. Retrieves the HTML Element input variable 2. Validates that the HTML content is not empty 3. Loads the HTML content into a goquery document 4. Uses the Text() method to extract all text content from the document 5. Removes all HTML tags, scripts, styles, and other markup 6. Preserves the text content and whitespace as much as possible 7. Sets the extracted plain text as the output variable",
+      "usage": [
+        "Valid HTML content",
+        "Non-empty HTML Element input"
+      ],
+      "bestPractices": [
+        "Extracts text from all elements within the provided HTML, including nested elements",
+        "Removes all HTML tags, scripts, and styles",
+        "Preserves text content and basic whitespace",
+        "Does not preserve the original formatting or structure of the HTML",
+        "Useful for cleaning HTML content to get plain text for further processing",
+        "Can handle complex HTML structures with multiple nested elements",
+        "The extracted text maintains the order of content as it appears in the HTML",
+        "Works with partial HTML fragments as well as complete HTML documents",
+        "Useful for web scraping, content analysis, and text processing tasks",
+        "The output text can be further processed by other text manipulation nodes",
+        "Does not decode HTML entities - they will appear as-is in the output"
+      ]
+    },
+    "find": {
+      "namespace": "Core.DomParser.Find",
+      "name": "Find",
+      "summary": "Finds a single HTML element that matches a CSS selector and returns its outer HTML.",
+      "howItWorks": "The Find Element node searches HTML content using a CSS selector and returns the outer HTML of a single matching element. When executed, the node: 1. Retrieves the HTML and CSS Selector input variables 2. Validates that both HTML and CSS Selector are not empty 3. Parses the HTML content into a goquery document 4. Applies optional filtering: * Contains Filter - Only includes elements that contain the specified text * Exclude Filter - Excludes elements that contain the specified text 5. Finds elements that match the CSS selector 6. Validates that exactly one element matches (returns an error if zero or multiple elements match) 7. Extracts the outer HTML of the matched element 8. Sets the outer HTML string as the output variable",
+      "usage": [
+        "Valid HTML content to search within",
+        "Valid CSS selector pattern that matches exactly one element",
+        "Non-empty HTML and CSS Selector inputs"
+      ],
+      "bestPractices": [
+        "Uses standard CSS selector syntax for element matching",
+        "Supports complex selectors like `.class`, `#id`, `tag.class`, `tag[attr=value]`, etc.",
+        "The Contains Filter and Exclude Filter options work on the text content of elements",
+        "Returns the outer HTML of the matched element, preserving its complete structure",
+        "Useful for web scraping, content extraction, and HTML processing tasks",
+        "The outer HTML includes the element's opening tag, content, and closing tag",
+        "Can be chained with other DOM Parser nodes to further process the extracted element",
+        "Designed to find exactly one element - use Find All Elements if you need to match multiple elements",
+        "When no filters are applied, returns the first element matching the CSS selector"
+      ]
+    },
+    "find_all": {
+      "namespace": "Core.DomParser.Find_all",
+      "name": "Find_all",
+      "summary": "Finds all HTML elements that match a CSS selector and returns their outer HTML.",
+      "howItWorks": "The Find All Elements node searches HTML content using a CSS selector and returns the outer HTML of all matching elements. When executed, the node: 1. Retrieves the HTML and CSS Selector input variables 2. Validates that both HTML and CSS Selector are not empty 3. Parses the HTML content into a goquery document 4. Applies optional filtering: * Contains Filter - Only includes elements that contain the specified text * Exclude Filter - Excludes elements that contain the specified text 5. Finds all elements that match the CSS selector 6. Extracts the outer HTML of each matched element 7. Collects all outer HTML strings into an array 8. Sets the array of HTML elements as the output variable",
+      "usage": [
+        "Valid HTML content to search within",
+        "Valid CSS selector pattern",
+        "Non-empty HTML and CSS Selector inputs"
+      ],
+      "bestPractices": [
+        "Uses standard CSS selector syntax for element matching",
+        "Supports complex selectors like `.class`, `#id`, `tag.class`, `tag[attr=value]`, etc.",
+        "The Contains Filter and Exclude Filter options work on the text content of elements",
+        "Returns an array of outer HTML strings, preserving the complete structure of each matched element",
+        "Useful for web scraping, content extraction, and HTML processing tasks",
+        "The outer HTML includes the element's opening tag, content, and closing tag",
+        "Can be chained with other DOM Parser nodes to further process extracted elements",
+        "The order of elements in the output array matches their order in the HTML document",
+        "When no filters are applied, returns all elements matching the CSS selector"
+      ]
+    },
+    "get_value": {
+      "namespace": "Core.DomParser.Get_value",
+      "name": "Get_value",
+      "summary": "Extracts the text content or attribute value from an HTML element using a CSS selector.",
+      "howItWorks": "The Get Value node extracts either the text content or a specific attribute value from an HTML element. When executed, the node: 1. Retrieves the Element, CSS Selector, and Attribute Name input variables 2. Validates that the Element input is not empty 3. Parses the HTML content into a goquery document 4. Applies the CSS selector if provided: * If CSS Selector is empty, uses the entire document * If CSS Selector is provided, finds elements matching the selector 5. Extracts the value based on the Attribute Name: * If Attribute Name is empty, extracts the text content of the selected element(s) * If Attribute Name is provided, extracts the value of that attribute from the selected element(s) 6. Sets the extracted value as the output variable",
+      "usage": [
+        "Valid HTML content to search within",
+        "Non-empty Element input"
+      ],
+      "bestPractices": [
+        "If CSS Selector is empty, operates on the entire HTML document",
+        "If CSS Selector is provided, operates on elements matching that selector",
+        "If Attribute Name is empty, extracts the text content of the element",
+        "If Attribute Name is provided, extracts the value of that specific attribute",
+        "Returns an empty string if the attribute doesn't exist or if no text content is found",
+        "Useful for extracting specific data points from HTML elements",
+        "Can extract common attributes like `href`, `src`, `alt`, `title`, `class`, `id`, etc.",
+        "Works with both simple and complex HTML structures",
+        "The CSS Selector can match multiple elements, but only the first match is used",
+        "When extracting text content, removes HTML tags and returns only the text",
+        "When extracting attribute values, returns the exact value as it appears in the HTML"
+      ]
+    },
+    "get_values": {
+      "namespace": "Core.DomParser.Get_values",
+      "name": "Get_values",
+      "summary": "Extracts text content or attribute values from multiple HTML elements using a CSS selector.",
+      "howItWorks": "The Get Values node extracts either the text content or a specific attribute value from multiple HTML elements. When executed, the node: 1. Retrieves the Elements array, CSS Selector, and Attribute Name input variables 2. Iterates through each HTML element in the Elements array 3. For each element: * Parses the HTML content into a goquery document * Applies the CSS selector if provided: * If CSS Selector is empty, uses the entire document * If CSS Selector is provided, finds elements matching the selector * Extracts the value based on the Attribute Name: * If Attribute Name is empty, extracts the text content of the selected element(s) * If Attribute Name is provided, extracts the value of that attribute from the selected element(s) * Collects the extracted value in an output array 4. Sets the array of extracted values as the output variable",
+      "usage": [
+        "Valid HTML elements in the Elements array",
+        "Non-empty Elements input"
+      ],
+      "bestPractices": [
+        "Processes each HTML element in the input array independently",
+        "If CSS Selector is empty, operates on the entire HTML document for each element",
+        "If CSS Selector is provided, operates on elements matching that selector within each HTML element",
+        "If Attribute Name is empty, extracts the text content of each element",
+        "If Attribute Name is provided, extracts the value of that specific attribute from each element",
+        "Returns an array of values with the same length as the input Elements array",
+        "For elements where the attribute doesn't exist or no text content is found, returns an empty string at that position",
+        "Useful for batch processing of multiple HTML elements to extract similar data points",
+        "Can extract common attributes like `href`, `src`, `alt`, `title`, `class`, `id`, etc.",
+        "Works with both simple and complex HTML structures",
+        "When extracting text content, removes HTML tags and returns only the text",
+        "When extracting attribute values, returns the exact value as it appears in the HTML",
+        "Maintains the order of values corresponding to the input elements"
+      ]
+    },
+    "unescape": {
+      "namespace": "Core.DomParser.Unescape",
+      "name": "Unescape",
+      "summary": "Converts HTML entities in a string back to their corresponding characters.",
+      "howItWorks": "The Unescape HTML node converts HTML entities in a string back to their corresponding characters. When executed, the node: 1. Retrieves the Unescape String input variable 2. Validates that the string is not empty 3. Uses the html.UnescapeString function to convert HTML entities: * `\u003c` becomes `\u003c` * `\u003e` becomes `\u003e` * `\u0026` becomes `\u0026` * `\"` becomes `\"` * `'` becomes `'` * And other standard HTML entities 4. Sets the unescaped string as the output variable",
+      "usage": [
+        "A non-empty string input containing HTML entities to unescape"
+      ],
+      "bestPractices": [
+        "Useful for processing text that has been HTML-escaped and needs to be converted back to its original form",
+        "Commonly used after extracting text from HTML sources that may contain escaped characters",
+        "The reverse operation (converting characters to entities) can be performed with the Escape HTML node",
+        "Does not modify characters that are not HTML entities",
+        "Handles both named entities (like `\u0026`) and numeric entities (like `'`)",
+        "The output string will be the same length or shorter than the input if entities were present",
+        "Works with standard HTML entities as defined in the HTML specification",
+        "Can handle multiple entities in a single string",
+        "Useful for cleaning up text extracted from web pages or HTML documents"
+      ]
+    }
+  }
+}

@@ -1,0 +1,162 @@
+{
+  "package": "Twilio",
+  "summary": "The Twilio package enables you to integrate SMS messaging, WhatsApp messaging, voice calls, and verification services into your automation workflows. This package provides a comprehensive set of tools for communication automation using the Twilio API.",
+  "description": "## Features - **SMS Messaging** - Send SMS messages to any phone number",
+  "nodes": {
+    "check-verification-code": {
+      "namespace": "Core.Twilio.CheckVerificationCode",
+      "name": "CheckVerificationCode",
+      "summary": "Verifies a code entered by the user against a verification code sent via the [Send Verification Code](/reference/packages/twilio/send-verification-code) node. This node completes the verification process for two-factor authentication, phone number verification, and secure authentication flows.",
+      "relatedNodes": [
+        "Send Verification Code",
+        "Connect",
+        "Send SMS",
+        "Send WhatsApp Message"
+      ],
+      "tips": [
+        "**Phone Number Matching** - The To Number must exactly match the number used in Send Verification Code (including country code and format).",
+        "**Check 'valid' Field** - Use `{{response.valid}}` to determine if verification was successful. Don't rely on status alone.",
+        "**Code Format** - Codes are typically numeric (e.g., `123456`). Ensure user input is validated before checking.",
+        "**Timing** - Check codes immediately after user submits. Don't batch verifications or delay unnecessarily.",
+        "**Max Attempts** - Twilio Verify limits verification attempts (default: 5). After max attempts, user must request a new code.",
+        "**Code Expiration** - Codes expire after 10 minutes by default (configurable in Verify Service settings).",
+        "**Error Handling** - Always handle both successful and failed verifications gracefully.",
+        "**User Feedback** - Provide clear feedback: \"Code verified successfully\" or \"Invalid code. Please try again.\"",
+        "**Rate Limiting** - Implement client-side rate limiting to prevent rapid-fire verification attempts.",
+        "**Security Logging** - Log failed verification attempts for security monitoring.",
+        "**Retry Logic** - Allow limited retries (e.g., 3 attempts) before requiring a new code.",
+        "**One-Time Use** - Once a code is successfully verified, it cannot be used again. Each verification requires a new code."
+      ]
+    },
+    "connect": {
+      "namespace": "Core.Twilio.Connect",
+      "name": "Connect",
+      "summary": "Establishes a connection to the Twilio API using your account credentials. This node creates a connection ID that can be reused across multiple Twilio nodes, eliminating the need to enter credentials repeatedly.",
+      "relatedNodes": [
+        "Send SMS",
+        "Voice Call",
+        "Send WhatsApp Message"
+      ],
+      "tips": [
+        "**Connection Reuse** - Create one connection at the start of your flow and reuse the Connection Id across multiple Twilio nodes.",
+        "**Credential Security** - Always use Vault credentials instead of hardcoding your Account SID and Auth Token.",
+        "**Error Handling** - Wrap the Connect node in a Try-Catch block to handle authentication failures gracefully.",
+        "**Testing** - Verify your credentials are correct by testing with a simple Send SMS operation."
+      ]
+    },
+    "receive-message": {
+      "namespace": "Core.Twilio.ReceiveMessage",
+      "name": "ReceiveMessage",
+      "summary": "Receives incoming WhatsApp messages via a webhook server. This node sets up a local HTTP server to listen for incoming messages from Twilio and triggers your automation flow when messages are received.",
+      "relatedNodes": [
+        "Send WhatsApp Message",
+        "Send SMS",
+        "Connect"
+      ],
+      "tips": [
+        "**Server Accessibility** - For production, host on a server with a public IP or domain, not just localhost.",
+        "**HTTPS Required** - Twilio requires HTTPS for webhooks in production. Use a valid SSL certificate.",
+        "**Port Configuration** - If port 9001 is in use, change it via application properties.",
+        "**URL Path** - The webhook endpoint is always the root path `/`. Configure Twilio to post to `https://yourdomain.com/`.",
+        "**Testing with ngrok** - ngrok is perfect for development. Remember to update the Twilio webhook URL when ngrok restarts (URL changes).",
+        "**Message Parsing** - The body contains URL-encoded form data. The node automatically parses it into an object.",
+        "**Number Format** - Incoming numbers include the `whatsapp:` prefix. Remove it when replying: `from.replace('whatsapp:', '')`.",
+        "**Flow Trigger** - This node has 0 inputs (configured in the source code). It acts as a trigger node that starts the flow when messages arrive.",
+        "**Concurrent Messages** - The server handles concurrent incoming messages automatically.",
+        "**Error Handling** - Wrap subsequent nodes in Try-Catch to handle processing errors gracefully."
+      ]
+    },
+    "send-sms": {
+      "namespace": "Core.Twilio.SendSms",
+      "name": "SendSms",
+      "summary": "Sends an SMS text message to a specified phone number using the Twilio API. This node is ideal for notifications, alerts, OTP delivery, and customer communication workflows.",
+      "relatedNodes": [
+        "Connect",
+        "Send WhatsApp Message",
+        "Voice Call",
+        "Send Verification Code"
+      ],
+      "tips": [
+        "**Phone Number Format** - Always use E.164 format: `+[country code][number]`. For example, US numbers: `+1XXXXXXXXXX`.",
+        "**Message Length** - SMS messages are charged per segment (160 characters). Messages longer than 160 characters are split and cost more.",
+        "**Rate Limits** - Twilio has rate limits. For bulk SMS, add delays between messages or use Twilio's Messaging Service.",
+        "**Delivery Status** - Check the `status` field in the Response output to verify delivery: `queued`, `sent`, `delivered`, `failed`.",
+        "**Cost Tracking** - Monitor the `price` field in responses to track SMS costs.",
+        "**Test Mode** - Use Twilio's verified phone numbers for testing before sending to customers.",
+        "**URL Shortening** - Long URLs in messages count toward character limit. Consider using a URL shortener.",
+        "**Personalization** - Use variables from your data source to personalize messages (e.g., customer name, order ID)."
+      ]
+    },
+    "send-verification-code": {
+      "namespace": "Core.Twilio.SendVerificationCode",
+      "name": "SendVerificationCode",
+      "summary": "Sends a verification code (OTP - One-Time Password) to a phone number using Twilio Verify API. This node is essential for implementing two-factor authentication (2FA), phone number verification, and secure user authentication flows.",
+      "relatedNodes": [
+        "Check Verification Code",
+        "Connect",
+        "Send SMS",
+        "Send WhatsApp Message"
+      ],
+      "tips": [
+        "**Phone Number Format** - Always use E.164 format: `+[country code][number]`. Example: `+14155552672`.",
+        "**Service Configuration** - Configure code length, expiration time, and attempts in Twilio Console Verify settings.",
+        "**Channel Selection** - WhatsApp is more secure and has higher open rates, but requires WhatsApp installation. SMS works universally.",
+        "**Code Expiration** - Verify codes expire after 10 minutes by default (configurable in Verify service settings).",
+        "**Rate Limiting** - Twilio Verify automatically rate limits to prevent abuse. Don't implement your own rate limiting.",
+        "**Max Attempts** - By default, users get 5 attempts to verify. Configure this in Verify service settings.",
+        "**Response Handling** - Store the `sid` from Response if you need to track verification status separately.",
+        "**User Experience** - Inform users which channel (SMS/WhatsApp) the code will arrive through.",
+        "**Security** - Never log or store verification codes. Let Twilio Verify handle security.",
+        "**Cost** - Verify API pricing is separate from regular SMS/WhatsApp pricing. Check Twilio pricing for your region.",
+        "**Testing** - Use verified phone numbers during development to avoid costs."
+      ]
+    },
+    "send-wp-message": {
+      "namespace": "Core.Twilio.SendWpMessage",
+      "name": "SendWpMessage",
+      "summary": "Sends a WhatsApp message to a specified phone number using the Twilio API for WhatsApp. This node enables you to integrate WhatsApp messaging into your automation workflows for richer customer communication.",
+      "relatedNodes": [
+        "Connect",
+        "Receive Message",
+        "Send SMS",
+        "Voice Call"
+      ],
+      "tips": [
+        "**Phone Number Format** - Input numbers WITHOUT the `whatsapp:` prefix. The node adds it automatically. Use E.164 format: `+[country code][number]`.",
+        "**Message Length** - WhatsApp supports much longer messages than SMS (up to 4,096 characters) without additional charges for length.",
+        "**Formatting** - WhatsApp preserves line breaks and formatting. Use multiple lines for better readability.",
+        "**Rich Media** - While this node sends text, Twilio's WhatsApp API also supports images, documents, and location sharing (requires additional API calls).",
+        "**Delivery Status** - WhatsApp provides more detailed status: queued, sent, delivered, read, failed.",
+        "**Opt-In Required** - Recipients must have opted in to receive WhatsApp messages from your business. Follow WhatsApp's Business Policy.",
+        "**Template Messages** - For certain use cases (marketing, notifications), you may need to use WhatsApp-approved message templates.",
+        "**Response Handling** - Use the [Receive Message](/reference/packages/twilio/receive-message) node to handle incoming WhatsApp replies.",
+        "**Rate Limiting** - Add delays between messages when sending to multiple recipients to avoid rate limits."
+      ]
+    },
+    "voice-call": {
+      "namespace": "Core.Twilio.VoiceCall",
+      "name": "VoiceCall",
+      "summary": "Makes an automated voice call using the Twilio API. This node can deliver voice messages using text-to-speech or execute custom TwiML scripts for advanced call flows.",
+      "relatedNodes": [
+        "Connect",
+        "Send SMS",
+        "Send WhatsApp Message",
+        "Send Verification Code"
+      ],
+      "tips": [
+        "**Phone Number Format** - Always use E.164 format: `+[country code][number]`. Example: `+14155552671`.",
+        "**Message Length** - Keep messages concise (under 1 minute of speech). Longer messages may cause recipients to hang up.",
+        "**Voice Selection** - `alice` provides the most natural-sounding voice. Test different voices to find what works best.",
+        "**Language Codes** - Use proper language codes for best pronunciation. `en-GB` sounds different from `en-US`.",
+        "**Recording Compliance** - If recording calls, ensure compliance with local laws. Some regions require consent.",
+        "**Call Timing** - Avoid calling outside business hours (9 AM - 8 PM local time) to comply with regulations.",
+        "**TwiML vs Message** - Use Message for simple notifications. Use TwiML for interactive calls, menus, or complex flows.",
+        "**TwiML Testing** - Test your TwiML XML files using Twilio's TwiML Bins before using in production.",
+        "**Cost Management** - Voice calls cost more than SMS. Monitor call durations and costs in Twilio Console.",
+        "**Answering Machines** - Check `answered_by` in Response to detect if a machine answered. Consider using Twilio's AMD (Answering Machine Detection).",
+        "**Retry Logic** - Implement retry logic for failed calls (busy, no-answer). Add delays between retries.",
+        "**Status Tracking** - Check call status in Response: `queued`, `ringing`, `in-progress`, `completed`, `busy`, `no-answer`, `failed`."
+      ]
+    }
+  }
+}

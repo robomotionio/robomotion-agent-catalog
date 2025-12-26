@@ -1,0 +1,836 @@
+{
+  "package": "Browser",
+  "summary": "Modern browser automation using Chrome DevTools Protocol (CDP) for fast, reliable web interactions.",
+  "description": "## Overview The Browser package provides high-performance web automation using the Chrome DevTools Protocol. Unlike traditional Selenium-based automation, CDP offers faster execution, better stability, and direct browser control. Use it for web scraping, form filling, testing, and any task requiring browser interaction.",
+  "nodes": {
+    "alert": {
+      "namespace": "Core.Browser.Alert",
+      "name": "Alert",
+      "summary": "Used to close an Alert popup dialog, confirm and cancel an Alert dialog or just get the text from alert.",
+      "howItWorks": "1. The node receives the Page ID of the browser window containing the alert 2. It retrieves the active page session using the provided Page ID 3. Based on the selected action, it performs one of the following: - **Confirm**: Accepts the alert by clicking the 'OK' button - **Cancel**: Dismisses the alert by clicking 'Cancel' or 'X' - **Get Text**: Retrieves the text message from the alert without closing it 4. If Get Text action is selected, the alert text is stored in the output variable 5. The node applies any configured delay after execution",
+      "usage": [
+        "An active browser session created by the Open Browser node",
+        "A valid Page ID from the Open Browser node",
+        "An alert, confirm, or prompt dialog must be present on the page",
+        "The alert must be actively displayed when the node executes"
+      ],
+      "bestPractices": [
+        "The alert must be present and visible when the node executes, otherwise it will fail",
+        "For \"Get Text\" action, the alert remains open after reading the text",
+        "You need a separate Alert node with \"Confirm\" or \"Cancel\" to close it after reading",
+        "If Continue On Error is enabled, errors are suppressed but the alert may remain open",
+        "The node works with JavaScript alerts, confirms, and prompts",
+        "Delay Before and Delay After can help with timing issues if alerts appear slowly"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrSession",
+        "ErrConfirm",
+        "ErrCancel",
+        "ErrType"
+      ],
+      "relatedNodes": [
+        "Open Browser",
+        "Click Element",
+        "Wait Element",
+        "Run Script"
+      ],
+      "tips": [
+        "Always use \"Get Text\" first if you need to verify alert content before accepting/canceling",
+        "Use appropriate delays if alerts take time to appear after triggering actions",
+        "Consider using Try-Catch blocks to handle cases where alerts may or may not appear",
+        "Test your automation with different browser speeds to ensure alerts are handled correctly",
+        "For debugging, use Get Text to log alert messages to understand application behavior"
+      ]
+    },
+    "click-element": {
+      "namespace": "Core.Browser.ClickElement",
+      "name": "ClickElement",
+      "summary": "Clicks on an element in a web page.",
+      "howItWorks": "1. The node receives the Page ID and waits for any configured delay before execution 2. It validates that the Page ID and Selector are not empty 3. It retrieves the active browser page session using the Page ID 4. The node waits for the element to appear on the page (up to the Wait Timeout duration) 5. For Safari browsers, it uses JavaScript execution to perform the click 6. For other browsers (Chrome, Firefox, Edge), it locates the element using the provided selector 7. Based on the Click Type option, it performs the appropriate click action on the element 8. The node applies any configured delay after execution",
+      "usage": [
+        "An active browser session created by the Open Browser node",
+        "A valid Page ID from the Open Browser node",
+        "A valid CSS or XPath selector that uniquely identifies the target element",
+        "The target element must be clickable and visible on the page",
+        "The element must appear within the specified Wait Timeout period"
+      ],
+      "bestPractices": [
+        "The node automatically waits for the element to appear before attempting to click",
+        "For Safari browsers, clicks are performed using JavaScript, which may behave differently than native clicks",
+        "Hold Click and Release Click must be used in pairs for drag and drop operations",
+        "Right Click and Middle Click first move the mouse to the element, then perform the click",
+        "If the element is not visible or is covered by another element, the click may fail",
+        "The Wait Timeout should be long enough for dynamic content to load",
+        "Single Click is the most commonly used click type for standard interactions"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrPageId",
+        "ErrSession",
+        "ErrSelector",
+        "ErrElements",
+        "ErrClick",
+        "ErrDoubleClick",
+        "ErrRightClick",
+        "ErrMiddleClick",
+        "ErrHoldClick",
+        "ErrReleaseClick",
+        "ErrMoveMouse",
+        "ErrForward"
+      ],
+      "relatedNodes": [
+        "Open Browser",
+        "Wait Element",
+        "Move to Element",
+        "Type Text",
+        "Get Value"
+      ],
+      "tips": [
+        "Use CSS selectors when possible as they are generally faster than XPath",
+        "Increase Wait Timeout for elements that load slowly or require API calls",
+        "Use the browser's developer tools to test and verify your selectors",
+        "For elements that appear after page interactions, add appropriate Wait Timeout values",
+        "If clicks are not registering, try adding a small Delay Before to allow page stabilization",
+        "Consider using Wait Element node before Click Element for better control over element readiness",
+        "For debugging, enable Continue On Error temporarily and check element visibility manually"
+      ]
+    },
+    "close-browser": {
+      "namespace": "Core.Browser.CloseBrowser",
+      "name": "CloseBrowser",
+      "summary": "Closes the specified browser.",
+      "howItWorks": "1. The node receives the Browser ID and waits for any configured delay before execution 2. It validates that the Browser ID is not empty 3. It retrieves the WebDriver instance associated with the Browser ID 4. The node stops the browser process completely 5. It cleans up temporary directories created during the browser session 6. It removes the browser driver instance from the internal registry 7. The node applies any configured delay after execution",
+      "usage": [
+        "A valid Browser ID from the Open Browser node",
+        "The browser session must still be active and not already closed",
+        "Proper permissions to terminate browser processes"
+      ],
+      "bestPractices": [
+        "Close Browser terminates the entire browser process, not just a single tab/window",
+        "After closing, the Browser ID becomes invalid and cannot be reused",
+        "All pages, windows, and tabs associated with the browser are closed",
+        "Temporary files and directories created by the browser session are cleaned up",
+        "If the browser was already closed or crashed, the node will return an error",
+        "Use Close Window instead if you only want to close a specific tab/window",
+        "Closing the browser releases all associated system resources (memory, CPU, etc.)"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrBrowserId"
+      ],
+      "relatedNodes": [
+        "Open Browser",
+        "Close Window",
+        "Switch Window"
+      ],
+      "tips": [
+        "Always close browsers when automation is complete to prevent resource leaks",
+        "Use Try-Catch blocks to ensure browsers are closed even if errors occur",
+        "Store the Browser ID in a variable at the flow level for easy access",
+        "For long-running automations, consider closing and reopening browsers periodically",
+        "Monitor system resources if running multiple browser sessions",
+        "Close browsers before robot termination to avoid orphaned browser processes",
+        "Consider using Continue On Error = false to catch closure failures"
+      ]
+    },
+    "close-window": {
+      "namespace": "Core.Browser.CloseWindow",
+      "name": "CloseWindow",
+      "summary": "Closes the specified browser window.",
+      "howItWorks": "1. The node receives the Page ID and validates it is not empty 2. It waits for any configured delay before execution 3. It retrieves the page session using the provided Page ID 4. The node gets a list of all open windows in the browser session 5. It identifies the currently active window 6. It finds the next available window (if any) to switch focus to 7. The node closes the current window associated with the Page ID 8. If there are remaining windows, it automatically switches focus to the next window 9. The node applies any configured delay after execution",
+      "usage": [
+        "An active browser session created by the Open Browser node",
+        "A valid Page ID from the Open Browser node",
+        "The browser window must still be open and not already closed"
+      ],
+      "bestPractices": [
+        "Close Window only closes the specific window/tab, not the entire browser",
+        "The browser process continues running even if you close the last window",
+        "After closing a window, the browser automatically switches to another open window if available",
+        "The Page ID becomes invalid after the window is closed",
+        "If you try to use a Page ID of a closed window, subsequent operations will fail",
+        "To completely terminate the browser, use the Close Browser node",
+        "Closing a window does not affect other windows or tabs in the same browser session"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrPageId",
+        "ErrSession"
+      ],
+      "relatedNodes": [
+        "Open Browser",
+        "Close Browser",
+        "Switch Window",
+        "Open Link"
+      ],
+      "tips": [
+        "Always track which windows are open to avoid trying to close already-closed windows",
+        "Use Close Window for individual tab/window management in multi-tab workflows",
+        "Store Page IDs in variables or arrays to manage multiple windows efficiently",
+        "Consider using Continue On Error when closing windows that might already be closed",
+        "Switch to a specific window before closing it to ensure you're closing the right one",
+        "For cleanup operations, close windows in a loop starting from the most recently opened",
+        "Use Close Browser instead of Close Window when you want to terminate the entire session"
+      ]
+    },
+    "get-cookies": {
+      "namespace": "Core.Browser.GetCookies",
+      "name": "GetCookies",
+      "summary": "Retrieves all cookies in the current page session.",
+      "howItWorks": "1. The node receives the Page ID and validates it is not empty 2. It waits for any configured delay before execution 3. It retrieves the active page session using the provided Page ID 4. The node calls the browser API to get all cookies for the current page 5. Based on the Robomotion version: - Version 24.1.5+: Returns full cookie objects with all properties - Earlier versions: Returns a simple key-value map of cookie names and values 6. The cookies are stored in the output variable 7. The node applies any configured delay after execution",
+      "usage": [
+        "An active browser session created by the Open Browser node",
+        "A valid Page ID from the Open Browser node",
+        "The browser page must be loaded and cookies must be set by the website"
+      ],
+      "bestPractices": [
+        "Get Cookies retrieves all cookies accessible to the current page",
+        "Cookies are domain-specific and only cookies for the current domain are returned",
+        "HttpOnly cookies (set by the server) are also retrieved",
+        "Secure cookies (HTTPS-only) are included if the page is loaded via HTTPS",
+        "Cookie expiry times are included in version 24.1.5 and later",
+        "The output format differs based on Robomotion version for backward compatibility",
+        "Session cookies (no expiry) are valid only while the browser is open"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrPageId",
+        "ErrSession",
+        "ErrOutputMarshal"
+      ],
+      "relatedNodes": [
+        "Open Browser",
+        "Open Link",
+        "Run Script"
+      ],
+      "tips": [
+        "Always navigate to the target domain before getting cookies",
+        "Use Get Cookies after login operations to capture authentication cookies",
+        "Store cookies securely if they contain sensitive session information",
+        "Check cookie expiry dates before reusing saved cookies",
+        "For API integrations, extract specific cookie values using JavaScript or string operations",
+        "Combine with Set Cookies node for session management across browser instances",
+        "Use vaults to securely store authentication cookies between robot runs",
+        "Be aware of cookie scope (domain and path) when working with multiple sites"
+      ]
+    },
+    "get-value": {
+      "namespace": "Core.Browser.GetValue",
+      "name": "GetValue",
+      "summary": "Gets the value of the selected element from a web page.",
+      "howItWorks": "1. The node receives the Page ID, Selector Type, Selector, and optional Attribute 2. It validates that the Page ID and Selector are not empty 3. It waits for any configured delay before execution 4. It retrieves the active page session using the provided Page ID 5. The node waits for the element to appear on the page (up to the Wait Timeout duration) 6. For Safari browsers, it uses JavaScript execution to get the element value 7. For other browsers, it locates the element using the provided selector 8. Based on the configuration, it extracts the value: - If Attribute is specified: Returns the value of that attribute - If element is input or textarea and no attribute specified: Returns the \"value\" attribute - Otherwise: Returns the inner text of the element 9. The extracted value is stored in the output variable 10. The node applies any configured delay after execution",
+      "usage": [
+        "An active browser session created by the Open Browser node",
+        "A valid Page ID from the Open Browser node",
+        "A valid CSS or XPath selector that uniquely identifies the target element",
+        "The target element must exist and be visible on the page within the Wait Timeout period"
+      ],
+      "bestPractices": [
+        "If Attribute is not specified, behavior depends on element type:",
+        "Input/textarea elements: Returns the \"value\" attribute",
+        "Other elements: Returns the inner text",
+        "The node automatically waits for elements to appear before extraction",
+        "For Safari browsers, value extraction uses JavaScript, which may have different behavior",
+        "Attribute names are case-sensitive (use \"src\" not \"SRC\")",
+        "Common attributes: href, src, alt, title, class, id, data-*, aria-*",
+        "For hidden elements, the value can still be retrieved if the element exists in the DOM",
+        "Empty strings are returned if the element exists but has no value/text"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrPageId",
+        "ErrSelector",
+        "ErrSession",
+        "ErrForward",
+        "ErrElements",
+        "ErrGetName",
+        "ErrAttribute",
+        "ErrText",
+        "ErrOutputMarshal"
+      ],
+      "relatedNodes": [
+        "Open Browser",
+        "Wait Element",
+        "Set Value",
+        "Type Text",
+        "Click Element"
+      ],
+      "tips": [
+        "Use browser developer tools to identify correct attribute names",
+        "Increase Wait Timeout for elements that load slowly or after AJAX calls",
+        "Use CSS selectors when possible for better performance",
+        "For dynamic content, ensure elements are fully loaded before extraction",
+        "To get custom data attributes, use \"data-attributename\" format",
+        "For multiple elements, the node returns value from the first matching element",
+        "Consider using Wait Element before Get Value for better control over timing",
+        "Validate that extracted values are not empty before using them in logic"
+      ]
+    },
+    "go-back": {
+      "namespace": "Core.Browser.GoBack",
+      "name": "GoBack",
+      "summary": "Navigates to the previous page in the browser history.",
+      "howItWorks": "1. The node receives the Page ID and Times parameter 2. It validates that the Page ID is not empty 3. It waits for any configured delay before execution 4. It retrieves the active page session using the provided Page ID 5. It validates that Times is greater than zero 6. The node executes the browser back navigation the specified number of times in a loop 7. Each back navigation moves to the previous page in the browser history 8. The node applies any configured delay after execution",
+      "usage": [
+        "An active browser session created by the Open Browser node",
+        "A valid Page ID from the Open Browser node",
+        "Browser history must have previous pages to navigate back to",
+        "The Times value must be greater than zero"
+      ],
+      "bestPractices": [
+        "Go Back relies on the browser's history stack",
+        "If Times exceeds available history, the node will fail",
+        "Going back does not trigger a full page reload unless required by the page",
+        "Form data may be preserved when going back (depends on the browser and page)",
+        "JavaScript state and dynamic content may be restored to previous state",
+        "Cannot go back if there are no previous pages in history",
+        "The default value for Times is 1 if not specified"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrPageId",
+        "ErrSession",
+        "ErrTimes",
+        "ErrBack"
+      ],
+      "relatedNodes": [
+        "Open Browser",
+        "Go Forward",
+        "Refresh",
+        "Open Link"
+      ],
+      "tips": [
+        "Use Times carefully to avoid going back beyond the available history",
+        "Consider adding a delay after going back to allow page stabilization",
+        "For single-page applications (SPAs), browser back may not work as expected",
+        "Test your automation to ensure back navigation doesn't break page state",
+        "Combine with URL validation to confirm you're on the expected page after going back",
+        "For complex workflows, track navigation history to determine appropriate Times value",
+        "Use Go Back sparingly in production automations as it depends on navigation order"
+      ]
+    },
+    "go-forward": {
+      "namespace": "Core.Browser.GoForward",
+      "name": "GoForward",
+      "summary": "Navigates the browser forward by one page.",
+      "howItWorks": "1. The node receives the Page ID and Times parameter 2. It validates that the Page ID is not empty 3. It waits for any configured delay before execution 4. It retrieves the active page session using the provided Page ID 5. It validates that Times is greater than zero 6. The node executes the browser forward navigation the specified number of times in a loop 7. Each forward navigation moves to the next page in the browser history 8. The node applies any configured delay after execution",
+      "usage": [
+        "An active browser session created by the Open Browser node",
+        "A valid Page ID from the Open Browser node",
+        "Browser history must have forward pages available (user must have gone back previously)",
+        "The Times value must be greater than zero"
+      ],
+      "bestPractices": [
+        "Go Forward only works if the browser has forward history",
+        "Forward history exists only after using Go Back or similar navigation",
+        "If Times exceeds available forward history, the node will fail",
+        "Opening a new page after going back clears the forward history",
+        "Going forward does not trigger a full page reload unless required by the page",
+        "JavaScript state and dynamic content may be restored to previous state",
+        "The default value for Times is 1 if not specified"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrPageId",
+        "ErrSession",
+        "ErrTimes",
+        "ErrForward"
+      ],
+      "relatedNodes": [
+        "Open Browser",
+        "Go Back",
+        "Refresh",
+        "Open Link"
+      ],
+      "tips": [
+        "Go Forward is typically used in combination with Go Back",
+        "Ensure forward history exists before using this node",
+        "Use Times carefully to avoid exceeding available forward history",
+        "Consider adding delays after forward navigation for page stabilization",
+        "For single-page applications (SPAs), forward navigation may not work as expected",
+        "Track your navigation flow to understand when forward history is available",
+        "Test navigation patterns thoroughly as forward history can be cleared unexpectedly",
+        "Use URL validation to confirm you're on the expected page after going forward"
+      ]
+    },
+    "move-to-element": {
+      "namespace": "Core.Browser.MoveToElement",
+      "name": "MoveToElement",
+      "summary": "Moves the mouse pointer (hovers) to the specified element on a web page",
+      "howItWorks": "1. The node receives the Page ID, Selector Type, and Selector 2. It validates that the Page ID and Selector are not empty 3. It waits for any configured delay before execution 4. It retrieves the active page session using the provided Page ID 5. The node waits for the element to appear on the page (up to the Wait Timeout duration) 6. Once the element is located, it retrieves the element from the selection 7. The node moves the mouse pointer to the center of the element 8. The mouse remains at that position until another action moves it 9. The node applies any configured delay after execution",
+      "usage": [
+        "An active browser session created by the Open Browser node",
+        "A valid Page ID from the Open Browser node",
+        "A valid CSS or XPath selector that uniquely identifies the target element",
+        "The target element must be visible and interactable on the page",
+        "The element must appear within the specified Wait Timeout period"
+      ],
+      "bestPractices": [
+        "Move to Element does not click the element, it only hovers over it",
+        "The mouse pointer moves to the center of the element by default",
+        "Hover effects and tooltips triggered by mouse movement will activate",
+        "This node is essential for interacting with hover-based UI elements",
+        "The mouse remains at the element until another node moves it",
+        "For Safari browsers, hover behavior may differ slightly",
+        "Some elements may require the mouse to remain for a duration before showing content"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrPageId",
+        "ErrSession",
+        "ErrSelector",
+        "ErrElements"
+      ],
+      "relatedNodes": [
+        "Open Browser",
+        "Click Element",
+        "Wait Element",
+        "Get Value",
+        "Send Keys"
+      ],
+      "tips": [
+        "Use this node before clicking elements that only appear on hover",
+        "Add a small Delay After to allow hover animations to complete",
+        "Combine with Wait Element to ensure dynamic hover content loads fully",
+        "For dropdown menus, move to the parent item before clicking child items",
+        "Test hover interactions as they may behave differently across browsers",
+        "Increase Wait Timeout for elements that load slowly or require AJAX calls",
+        "Use CSS selectors for better performance when possible",
+        "For elements with hover-triggered JavaScript, ensure adequate delay for execution"
+      ]
+    },
+    "open-browser": {
+      "namespace": "Core.Browser.OpenBrowser",
+      "name": "OpenBrowser",
+      "summary": "Starts a new browser process."
+    },
+    "open-link": {
+      "namespace": "Core.Browser.OpenLink",
+      "name": "OpenLink",
+      "summary": "Navigates to a web page in a browser. This is one of the most commonly used nodes in web automation workflows, allowing you to open URLs in new tabs or navigate existing tabs to different pages.",
+      "howItWorks": "1. The node receives the Browser Id from a previously opened browser session 2. If no Page Id is provided, a new browser tab/window is created 3. If Page Id is provided with \"Open in the Same Tab\" enabled, the existing tab is reused 4. The URL is validated and automatically prefixed with `http://` if no protocol is specified 5. If Stealth Mode is enabled, anti-detection scripts are injected into the page 6. If Block Images or Block CSS is enabled, those resources are intercepted and blocked 7. The browser navigates to the URL and waits for the page to load 8. If the page doesn't load within the timeout, the tab is automatically closed and an error is returned 9. On success, the Page Id is returned for use in subsequent nodes",
+      "usage": [
+        "A browser must be opened first using the [Open Browser](/reference/packages/browser/open-browser) node",
+        "Valid URL (protocol is optional - `http://` will be added automatically)"
+      ],
+      "bestPractices": [
+        "**URL Auto-Correction:** If you enter a URL without a protocol (like `example.com`), the node automatically adds `http://` prefix",
+        "**Timeout Behavior:** When a timeout occurs, the node automatically closes the tab and cleans up resources",
+        "**Page Id Management:** Each new tab gets a unique Page Id that you can use to switch between tabs later",
+        "**Resource Blocking:** Use Block Images and Block CSS to speed up page loads when visual elements aren't needed",
+        "**Stealth Mode:** Useful for websites with anti-bot protection. Injects scripts to make the browser appear more human-like"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrBrowserId",
+        "ErrEmptyURL",
+        "ErrSession",
+        "ErrPageId",
+        "ErrTimeout",
+        "ErrPageNavigate"
+      ],
+      "relatedNodes": [
+        "Open Browser",
+        "Close Browser",
+        "Switch Window",
+        "Refresh",
+        "Go Back"
+      ],
+      "tips": [
+        "**Start with Open Browser:** Always ensure you have a valid Browser Id before using this node",
+        "**Use Shorter Timeouts:** For faster pages, reduce the timeout to fail quickly if there's an issue",
+        "**Block Resources Strategically:** When scraping text-only data, block images and CSS for 2-3x faster load times",
+        "**Save Page Ids:** Store each Page Id in a variable if you need to interact with multiple tabs",
+        "**Handle Timeouts Gracefully:** Use Try-Catch blocks to handle timeout errors and retry if needed",
+        "**Same Tab for Sequences:** When navigating through a website (login → dashboard → reports), use \"Open in the Same Tab\" to keep everything in one tab"
+      ]
+    },
+    "refresh": {
+      "namespace": "Core.Browser.Refresh",
+      "name": "Refresh",
+      "summary": "Refreshes the current page in the browser.",
+      "howItWorks": "1. The node receives the Page ID 2. It validates that the Page ID is not empty 3. It waits for any configured delay before execution 4. It retrieves the active page session using the provided Page ID 5. The node sends a refresh command to the browser 6. The browser reloads the current page from the server 7. All page content, JavaScript, and resources are reloaded 8. The node applies any configured delay after execution",
+      "usage": [
+        "An active browser session created by the Open Browser node",
+        "A valid Page ID from the Open Browser node",
+        "The browser page must be active and not closed"
+      ],
+      "bestPractices": [
+        "Refresh reloads the entire page from the server (not from cache)",
+        "All dynamic content and JavaScript state is reset",
+        "Form data entered by the user may be lost unless saved by the browser",
+        "Session cookies and authentication are typically preserved",
+        "Some pages may show confirmation dialogs before refresh",
+        "Page load times affect how long the refresh takes",
+        "Network conditions impact refresh speed",
+        "Add appropriate delays after refresh to allow page to fully load"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrPageId",
+        "ErrSession",
+        "ErrFailed"
+      ],
+      "relatedNodes": [
+        "Open Browser",
+        "Wait Element",
+        "Go Back",
+        "Open Link"
+      ],
+      "tips": [
+        "Always add a delay after refresh to allow the page to load completely",
+        "Use Wait Element after refresh to confirm critical elements are loaded",
+        "For pages with heavy JavaScript, increase Delay After appropriately",
+        "Consider using Continue On Error for pages that occasionally fail to refresh",
+        "Monitor network conditions if refresh operations are timing out",
+        "For pages with auto-refresh, check if manual refresh is needed",
+        "Test refresh behavior as some SPAs may not respond well to full page refresh",
+        "Combine with Try-Catch to handle refresh failures gracefully"
+      ]
+    },
+    "run-script": {
+      "namespace": "Core.Browser.RunScript",
+      "name": "RunScript",
+      "summary": "Runs JavaScript code inside the browser context on the current web page.",
+      "howItWorks": "1. The script is injected into the browser page context 2. It executes as if typed in browser DevTools console 3. The script can access DOM, window, document objects 4. Script return value becomes the node output 5. The msg object is NOT available - this runs in browser, not in flow runtime",
+      "usage": [
+        "An active browser session with a loaded page",
+        "Valid JavaScript code that runs in browser context",
+        "Script must return a value if you need output (use return statement)"
+      ],
+      "bestPractices": [
+        "CRITICAL: This runs in BROWSER context, NOT flow context!",
+        "CRITICAL: msg.x changes have NO EFFECT - msg is not available here!",
+        "CRITICAL: Node packages (fs, axios, etc.) are NOT available - browser only!",
+        "Only standard browser JavaScript works (DOM APIs, fetch, etc.)",
+        "Use this when element nodes are insufficient for complex DOM operations",
+        "Script return value is captured as node output",
+        "For DOM queries: document.querySelector(), document.querySelectorAll()",
+        "For element manipulation: element.click(), element.value, element.textContent",
+        "For async operations: use await/async if supported"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrSession",
+        "ErrFailed"
+      ],
+      "relatedNodes": [
+        "Open Browser",
+        "Click Element",
+        "Get Text",
+        "Wait Element"
+      ],
+      "tips": [
+        "Use RunScript when standard element nodes cannot achieve your goal",
+        "Example: Extract all links → return Array.from(document.querySelectorAll('a')).map(a => a.href)",
+        "Example: Scroll to element → document.querySelector('.target').scrollIntoView()",
+        "Example: Get computed style → getComputedStyle(document.querySelector('.el')).color",
+        "Debug in browser DevTools first, then paste working code here",
+        "If you need to modify msg, use Function node AFTER RunScript with the output"
+      ]
+    },
+    "save-image": {
+      "namespace": "Core.Browser.SaveImage",
+      "name": "SaveImage",
+      "summary": "Saves the specified image of an element on the current web page to the specified location."
+    },
+    "screenshot": {
+      "namespace": "Core.Browser.Screenshot",
+      "name": "Screenshot",
+      "summary": "Takes a screenshot of the specified web page.",
+      "howItWorks": "1. The node receives the Page ID and Save File Path 2. It validates that the Page ID is not empty 3. It waits for any configured delay before execution 4. It retrieves the active page session using the provided Page ID 5. The node captures a screenshot of the current visible viewport 6. The screenshot is saved to the specified file path as a PNG image 7. The file path where the screenshot was saved is stored in the output variable 8. The node applies any configured delay after execution",
+      "usage": [
+        "An active browser session created by the Open Browser node",
+        "A valid Page ID from the Open Browser node",
+        "A valid file path with write permissions for saving the screenshot",
+        "The directory path must exist (the node doesn't create directories)",
+        "Sufficient disk space to save the screenshot file"
+      ],
+      "bestPractices": [
+        "Screenshots capture the visible viewport, not the entire scrollable page",
+        "The screenshot is saved in PNG format",
+        "File paths should include the .png extension",
+        "If the file already exists, it will be overwritten",
+        "The directory must exist; the node doesn't create parent directories",
+        "Screenshots include all visible browser chrome (depending on browser settings)",
+        "Hidden elements (display:none) are not captured",
+        "Dynamic content should be fully loaded before screenshot",
+        "Screenshot quality depends on browser rendering"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrPageId",
+        "ErrSession",
+        "ErrFailed",
+        "ErrOutputMarshal"
+      ],
+      "relatedNodes": [
+        "Open Browser",
+        "Wait Element",
+        "Save Image",
+        "Run Script"
+      ],
+      "tips": [
+        "Use unique filenames (timestamps, GUIDs) to avoid overwriting previous screenshots",
+        "Create the target directory before running the automation",
+        "Add a small Delay Before to ensure page is fully rendered",
+        "For full-page screenshots, consider scrolling and capturing multiple sections",
+        "Use absolute paths to avoid confusion about file locations",
+        "Include screenshots in error handling for better debugging",
+        "For comparing screenshots, use consistent browser window sizes",
+        "Consider file size when taking many screenshots (can grow quickly)",
+        "Use Delay Before if page has animations that need to complete"
+      ]
+    },
+    "select": {
+      "namespace": "Core.Browser.Select",
+      "name": "Select",
+      "summary": "Selects a value from a select box (dropdown list) in the web page.",
+      "howItWorks": "1. The node receives the Page ID, Selector Type, Selector, and Value 2. It validates that the Page ID, Selector, and Value are not empty 3. It waits for any configured delay before execution 4. It retrieves the active page session using the provided Page ID 5. The node waits for the select element to appear on the page (up to the Wait Timeout duration) 6. Once the select element is located, it selects the option matching the provided value text 7. The selection triggers any associated change events on the select element 8. The node applies any configured delay after execution",
+      "usage": [
+        "An active browser session created by the Open Browser node",
+        "A valid Page ID from the Open Browser node",
+        "A valid CSS or XPath selector that uniquely identifies the select element",
+        "The select element must be a standard HTML select/dropdown element",
+        "The value provided must match an option's visible text exactly",
+        "The select element must appear within the specified Wait Timeout period"
+      ],
+      "bestPractices": [
+        "The Value parameter must exactly match the visible text of the option",
+        "Value matching is case-sensitive in most browsers",
+        "Select only works with standard HTML select elements",
+        "Custom JavaScript-based dropdowns may not work with this node",
+        "The node triggers change events automatically",
+        "Multiple selection (multi-select) is supported by calling Select multiple times",
+        "Some dropdowns may have hidden default options (like \"Please select...\")",
+        "Ensure the option exists in the select element before selection"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrPageId",
+        "ErrSession",
+        "ErrValue",
+        "ErrSelector",
+        "ErrSelect"
+      ],
+      "relatedNodes": [
+        "Open Browser",
+        "Wait Element",
+        "Click Element",
+        "Get Value",
+        "Type Text"
+      ],
+      "tips": [
+        "Use browser developer tools to verify the exact option text",
+        "For dynamically loaded dropdowns, increase Wait Timeout appropriately",
+        "Add a small Delay After if subsequent elements depend on the selection",
+        "Test with different values to ensure all options can be selected",
+        "For custom dropdowns, consider using Click Element instead",
+        "Use Get Value after selection to verify the correct option was chosen",
+        "If selection fails, check for typos in the value text",
+        "Consider using XPath with option text for more flexible selection",
+        "For multi-select elements, call Select node multiple times with different values"
+      ]
+    },
+    "send-keys": {
+      "namespace": "Core.Browser.SendKeys",
+      "name": "SendKeys",
+      "summary": "Sends specified keys to the current targeted web element in the page.",
+      "howItWorks": "1. The node receives the Page ID, Selector Type, Selector, Key, and Key Modifiers 2. It validates that the Page ID and Selector are not empty 3. It waits for any configured delay before execution 4. It retrieves the active page session using the provided Page ID 5. The node waits for the target element to appear on the page 6. Once the element is located, it validates that at least one key or modifier is specified 7. It constructs the key combination from modifiers (Modifier 1, 2, 3) and the main key 8. The node sends the key combination to the element 9. The node applies any configured delay after execution",
+      "usage": [
+        "An active browser session created by the Open Browser node",
+        "A valid Page ID from the Open Browser node",
+        "A valid CSS or XPath selector that uniquely identifies the target element",
+        "At least one key or modifier key must be specified",
+        "The key parameter can only contain a single character",
+        "The element must be focusable and able to receive keyboard input"
+      ],
+      "bestPractices": [
+        "The Key parameter accepts only a single character (a-z, 0-9, etc.)",
+        "Modifier keys include: Control, Alt, Shift, Enter, Escape, Arrow keys, Function keys, etc.",
+        "Up to 3 modifier keys can be combined with the main key",
+        "The order of modifiers doesn't matter",
+        "Special keys (F1-F12, arrows, etc.) should be used as modifiers, not as the main key",
+        "Send Keys works on focused or focusable elements",
+        "Some key combinations may be intercepted by the browser or OS",
+        "For regular text input, use Type Text node instead"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrPageId",
+        "ErrSession",
+        "ErrSelector",
+        "ErrElements"
+      ],
+      "relatedNodes": [
+        "Open Browser",
+        "Type Text",
+        "Click Element",
+        "Wait Element",
+        "Set Value"
+      ],
+      "tips": [
+        "Use Type Text for regular text input; Send Keys is for special key combinations",
+        "Test key combinations as some may be browser-specific",
+        "On macOS, use Command key instead of Control for standard shortcuts",
+        "Add a small Delay After for actions triggered by key combinations",
+        "Use Click Element first to ensure the element is focused",
+        "For keyboard navigation, verify element is focusable",
+        "Some web applications may not respond to all key combinations",
+        "Debug using browser console to verify key events are being received"
+      ]
+    },
+    "set-value": {
+      "namespace": "Core.Browser.SetValue",
+      "name": "SetValue",
+      "summary": "Sets the value of a specified element in a web page."
+    },
+    "switch-frame": {
+      "namespace": "Core.Browser.SwitchFrame",
+      "name": "SwitchFrame",
+      "summary": "This node switches the active context to an iframe within the web page. After executing this node, all subsequent browser nodes will operate within this iframe. To return to the main page, use the \"Switch Frame\" node and select the **Switch to Root** option."
+    },
+    "switch-window": {
+      "namespace": "Core.Browser.SwitchWindow",
+      "name": "SwitchWindow",
+      "summary": "Switches to a specific browser window based on the given Window Name or Page Id."
+    },
+    "type-text": {
+      "namespace": "Core.Browser.TypeText",
+      "name": "TypeText",
+      "summary": "Enters text into the chosen element on the web page. While this node resembles the [Set Value](/reference/packages/browser/set-value) node, it differs in approach. Instead of directly setting the value, this node mimics actual keyboard keystrokes to input the text."
+    },
+    "upload-file": {
+      "namespace": "Core.Browser.UploadFile",
+      "name": "UploadFile",
+      "summary": "Uploads a file to a web page using a specified ``\u003cinput\u003e`` element selector in the web page.",
+      "howItWorks": "1. The node receives the Page ID, Selector Type, Selector, and File Path 2. It validates that Page ID, Selector, and File Path are not empty 3. It waits for any configured delay before execution 4. It verifies that the specified file exists on the file system 5. It retrieves the active page session using the provided Page ID 6. The node waits for the file input element to appear on the page (up to Wait Timeout) 7. Once the input element is located, it verifies the element is available 8. The node uploads the file by setting the file path on the input element 9. The browser handles the file upload process 10. The node applies any configured delay after execution",
+      "usage": [
+        "An active browser session created by the Open Browser node",
+        "A valid Page ID from the Open Browser node",
+        "A valid CSS or XPath selector that identifies the file input element",
+        "The selector must point to an `\u003cinput type=\"file\"\u003e` element",
+        "The file to upload must exist at the specified path",
+        "Appropriate file permissions to read the file",
+        "The web page must have a file upload input element"
+      ],
+      "bestPractices": [
+        "Upload File only works with standard HTML `\u003cinput type=\"file\"\u003e` elements",
+        "The file path must be absolute, not relative",
+        "The file must exist and be readable before upload",
+        "Custom file upload widgets (drag-drop, JavaScript-based) may not work",
+        "Multiple file uploads require multiple Upload File node calls",
+        "Some sites validate file types/sizes - ensure files meet requirements",
+        "Large files may take time to upload, add appropriate delays",
+        "The node sets the file path but doesn't trigger the upload submission",
+        "You typically need to click a submit button after using this node"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrPageId",
+        "ErrSession",
+        "ErrSelector",
+        "ErrFileNotFound",
+        "ErrElements",
+        "ErrUpload"
+      ],
+      "relatedNodes": [
+        "Open Browser",
+        "Wait Element",
+        "Click Element",
+        "Get Value"
+      ],
+      "tips": [
+        "Always verify the file exists before running the automation",
+        "Use absolute file paths to avoid path resolution issues",
+        "Check file size limits on the website before uploading",
+        "Add appropriate Wait Timeout for dynamically loaded file inputs",
+        "Test file type restrictions (jpg, pdf, etc.) before automation",
+        "For large files, add delays after upload before submitting",
+        "Use browser developer tools to identify the correct file input selector",
+        "Consider using Continue On Error for optional file uploads",
+        "Store file paths in variables for dynamic file selection",
+        "Verify upload success by checking for confirmation messages"
+      ]
+    },
+    "wait-element": {
+      "namespace": "Core.Browser.WaitElement",
+      "name": "WaitElement",
+      "summary": "Waits for an element to appear or disappear in a web page",
+      "howItWorks": "1. The node receives the Page ID, Selector Type, Selector, Condition, and Timeout 2. It validates that Page ID, Selector, Timeout, and Condition are not empty 3. It waits for any configured delay before execution 4. It retrieves the active page session using the provided Page ID 5. Based on the Condition selected: - **To Appear**: Waits until the element appears on the page - **To Disappear**: Waits until the element is removed from the page - **Appear and Disappear**: Waits for the element to appear, then waits for it to disappear 6. For Safari browsers, it uses a specialized Safari-specific waiting mechanism 7. For other browsers, it uses the standard element waiting mechanism 8. The node polls the page at intervals checking for the element state 9. If the condition is met within the timeout, the node completes successfully 10. If the timeout is reached before the condition is met, the node fails 11. The node applies any configured delay after execution",
+      "usage": [
+        "An active browser session created by the Open Browser node",
+        "A valid Page ID from the Open Browser node",
+        "A valid CSS or XPath selector that identifies the target element",
+        "A valid Condition selected (To Appear, To Disappear, or Appear and Disappear)",
+        "A Timeout value greater than zero"
+      ],
+      "bestPractices": [
+        "Wait Element is essential for handling dynamic content and asynchronous page updates",
+        "The node polls the page state at regular intervals during the wait period",
+        "For \"To Appear\" condition, the element must be present in the DOM and visible",
+        "For \"To Disappear\" condition, the element must be completely removed from the DOM or hidden",
+        "\"Appear and Disappear\" waits for both conditions sequentially",
+        "Timeout should be set generously for slow-loading content",
+        "The node blocks execution until the condition is met or timeout occurs",
+        "Use this node before interacting with dynamically loaded elements",
+        "For Safari browsers, the implementation differs slightly from other browsers"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrPageId",
+        "ErrSession",
+        "ErrSelector",
+        "ErrNoTimeout",
+        "ErrNoCondition",
+        "ErrFailed"
+      ],
+      "relatedNodes": [
+        "Open Browser",
+        "Click Element",
+        "Get Value",
+        "Type Text",
+        "Refresh"
+      ],
+      "tips": [
+        "Always use Wait Element before interacting with dynamic elements",
+        "Set realistic timeouts based on expected load times (add buffer for slow networks)",
+        "For very slow loading pages, consider increasing timeout significantly",
+        "Use \"To Disappear\" for loading indicators, overlays, and spinners",
+        "Use \"To Appear\" for content that loads after page load or user actions",
+        "Combine multiple Wait Element nodes for complex loading sequences",
+        "Test with slow network conditions to determine appropriate timeouts",
+        "Consider using Continue On Error if the element's presence is optional",
+        "Use Wait Element after navigation, clicking, or form submission when content changes"
+      ]
+    }
+  }
+}

@@ -1,0 +1,148 @@
+{
+  "package": "Slack",
+  "summary": "Integrate with Slack for messaging, file sharing, and team communication automation.",
+  "description": "## Overview The Slack package provides integration with Slack workspaces. Use it when you need to send messages, upload files, receive messages, or interact with Slack channels and users from your automation.",
+  "nodes": {
+    "connect": {
+      "namespace": "Core.Slack.Connect",
+      "name": "Connect",
+      "summary": "Establishes a connection to Slack using a bot token.",
+      "howItWorks": "The Connect node establishes a connection to Slack using a bot token. When executed, the node: 1. Retrieves the bot token from the provided credentials 2. Creates a new Slack client using the slack-go library 3. Stores the client connection with a unique identifier 4. Returns the client identifier as output for use in other Slack nodes",
+      "usage": [
+        "A valid Slack bot token with appropriate permissions",
+        "The bot must be installed in the workspace where you want to perform actions"
+      ],
+      "bestPractices": [
+        "The Client Id output should be passed to other Slack nodes that require a connection",
+        "Each Connect node creates a separate client instance",
+        "The connection is maintained for the duration of the flow execution",
+        "Make sure your bot token has the necessary scopes for the operations you want to perform"
+      ]
+    },
+    "deletefile": {
+      "namespace": "Core.Slack.Deletefile",
+      "name": "Deletefile",
+      "summary": "Deletes a file from Slack using the file ID.",
+      "howItWorks": "The Delete File node removes a file from Slack using its file ID. When executed, the node: 1. Retrieves the Client Id and File ID from the inputs 2. Validates the Client Id by checking if a connection exists 3. Ensures the File ID is not empty 4. Calls the Slack API to delete the specified file",
+      "usage": [
+        "A valid Slack client connection (Client Id from the Connect node)",
+        "The file ID of the file you want to delete",
+        "Appropriate permissions to delete files in the Slack workspace"
+      ],
+      "bestPractices": [
+        "The file will be permanently deleted from Slack",
+        "Make sure you have the correct file ID before executing this node",
+        "Only files that the bot has access to can be deleted",
+        "The bot must have the necessary permissions to delete files"
+      ]
+    },
+    "disconnect": {
+      "namespace": "Core.Slack.Disconnect",
+      "name": "Disconnect",
+      "summary": "Disconnects from Slack and cleans up the client connection.",
+      "howItWorks": "The Disconnect node terminates a Slack connection and cleans up associated resources. When executed, the node: 1. Retrieves the Client Id from the input 2. Validates the Client Id by checking if a connection exists 3. Cancels any ongoing operations for the connection 4. Removes the connection from the internal connection map",
+      "usage": [
+        "A valid Slack client connection (Client Id from the Connect node)"
+      ],
+      "bestPractices": [
+        "Use this node to properly clean up Slack connections at the end of a flow",
+        "All resources associated with the connection will be released",
+        "After disconnecting, the Client Id becomes invalid and cannot be used in other nodes",
+        "It's good practice to disconnect when the Slack connection is no longer needed"
+      ]
+    },
+    "fileupload": {
+      "namespace": "Core.Slack.Fileupload",
+      "name": "Fileupload",
+      "summary": "Uploads a file to a Slack channel.",
+      "howItWorks": "The File Upload node uploads a file from the local file system to a specified Slack channel. When executed, the node: 1. Retrieves the Client Id, Channel Id, and File Path from the inputs 2. Validates the Client Id by checking if a connection exists 3. Ensures the File Path and Channel Id are not empty 4. Gets the file size information from the local file system 5. Uploads the file to Slack using the UploadFileV2 API method 6. Returns the File Id of the uploaded file as output",
+      "usage": [
+        "A valid Slack client connection (Client Id from the Connect node)",
+        "Valid file path to an existing file on the local file system",
+        "Valid Slack channel ID where the bot has permission to upload files",
+        "Sufficient permissions for the bot to upload files to the specified channel"
+      ],
+      "bestPractices": [
+        "The file must exist on the local file system where the automation is running",
+        "The bot must have the necessary scopes (files:write) to upload files",
+        "Large files may take longer to upload",
+        "The returned File Id can be used in other Slack nodes that require a file reference",
+        "The file name in Slack will be the same as the original file name"
+      ]
+    },
+    "listchannels": {
+      "namespace": "Core.Slack.Listchannels",
+      "name": "Listchannels",
+      "summary": "Retrieves a list of channels from Slack.",
+      "howItWorks": "The List Channels node retrieves all channels from the connected Slack workspace. When executed, the node: 1. Retrieves the Client Id from the input 2. Validates the Client Id by checking if a connection exists 3. Calls the Slack API to get a list of conversations (channels) 4. Processes the channel information into a structured format 5. Returns the list of channels as output Each channel in the list contains the following information: * ID - The unique identifier of the channel * Name - The name of the channel * IsArchived - Whether the channel is archived * IsPrivate - Whether the channel is private * MemberCount - The number of members in the channel",
+      "usage": [
+        "A valid Slack client connection (Client Id from the Connect node)",
+        "Appropriate permissions to view channels in the Slack workspace"
+      ],
+      "bestPractices": [
+        "The node returns all channels that the bot has access to",
+        "Private channels will only be included if the bot is a member",
+        "Archived channels are included in the results with the IsArchived flag set to true",
+        "The member count includes all users and bots in the channel",
+        "The output can be used with other nodes that require channel information"
+      ]
+    },
+    "listusers": {
+      "namespace": "Core.Slack.Listusers",
+      "name": "Listusers",
+      "summary": "Retrieves a list of users from Slack.",
+      "howItWorks": "The List Users node retrieves all users from the connected Slack workspace. When executed, the node: 1. Retrieves the Client Id from the input 2. Validates the Client Id by checking if a connection exists 3. Calls the Slack API to get a list of users 4. Processes the user information into a structured format 5. Returns the list of users as output Each user in the list contains the following information: * Id - The unique identifier of the user * Name - The real name of the user * Email - The email address of the user",
+      "usage": [
+        "A valid Slack client connection (Client Id from the Connect node)",
+        "Appropriate permissions to view users in the Slack workspace"
+      ],
+      "bestPractices": [
+        "The node returns all users that the bot has access to",
+        "User information includes real names and email addresses when available",
+        "Some user information may be limited based on workspace privacy settings",
+        "The output can be used with other nodes that require user information",
+        "Bots and apps are included in the user list"
+      ]
+    },
+    "receivemessage": {
+      "namespace": "Core.Slack.Receivemessage",
+      "name": "Receivemessage",
+      "summary": "Listens for incoming messages from Slack in real-time.",
+      "howItWorks": "The Receive Message node establishes a real-time connection to Slack using Socket Mode and listens for incoming messages. When a message is received, the node: 1. Establishes a WebSocket connection to Slack using the provided tokens 2. Optionally filters messages based on Channel Id or User Id if specified 3. Processes incoming message events from Slack 4. Emits a new flow execution for each received message 5. Provides the message data and client connection ID as outputs The node runs continuously while the flow is active and will trigger a new execution for each matching message received.",
+      "usage": [
+        "A valid Slack bot token with appropriate permissions",
+        "A valid Slack app-level token for Socket Mode connections",
+        "The bot must be installed in the workspace where you want to receive messages",
+        "Appropriate scopes for the bot to receive messages (channels:history, groups:history, im:history, mpim:history)"
+      ],
+      "bestPractices": [
+        "This node is designed to be a trigger node that starts new flow executions",
+        "The node does not have input connectors since it initiates flows based on incoming messages",
+        "Filtering by Channel Id or User Id can help reduce unnecessary flow executions",
+        "The message output contains the complete Slack message object with all available fields",
+        "The Client ID can be used with other Slack nodes that require a connection",
+        "Make sure your app is configured for Socket Mode in the Slack API settings",
+        "The bot must be added to channels where you want to receive messages"
+      ]
+    },
+    "sendmessage": {
+      "namespace": "Core.Slack.Sendmessage",
+      "name": "Sendmessage",
+      "summary": "Sends a message to a Slack channel.",
+      "howItWorks": "The Send Message node sends a text message to a specified Slack channel. When executed, the node: 1. Retrieves the Client Id, Channel Name, and Message from the inputs 2. Validates the Client Id by checking if a connection exists 3. Ensures the Channel Name and Message are not empty 4. Calls the Slack API to send the message to the specified channel",
+      "usage": [
+        "A valid Slack client connection (Client Id from the Connect node)",
+        "Valid Slack channel name or ID where the bot has permission to post messages",
+        "Sufficient permissions for the bot to send messages to the specified channel"
+      ],
+      "bestPractices": [
+        "The bot must be a member of the channel to send messages to it",
+        "The bot must have the necessary scopes (chat:write, chat:write.public) to send messages",
+        "Channel Name can be either the channel name (e.g., #general) or channel ID",
+        "For private channels, use the channel ID rather than the name",
+        "Messages are sent as the bot user, not as a human user",
+        "Slack formatting (markdown) is supported in messages"
+      ]
+    }
+  }
+}

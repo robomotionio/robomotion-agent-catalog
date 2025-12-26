@@ -1,0 +1,140 @@
+{
+  "package": "Clickhouse",
+  "summary": "Connect to ClickHouse databases for high-performance analytics queries in your automation workflows.",
+  "description": "## Overview The ClickHouse package enables integration with ClickHouse, the fastest open-source database for real-time analytics. Use it when you need to query large datasets, insert analytics data, or build reporting automations.",
+  "nodes": {
+    "Connect": {
+      "namespace": "Core.Clickhouse.Connect",
+      "name": "Connect",
+      "summary": "Establishes a connection to a ClickHouse database server using credentials.",
+      "howItWorks": "The Connect node establishes a connection to a ClickHouse database using the provided credentials. When executed, the node: 1. Validates that database credentials are provided 2. Extracts connection parameters (server, port, database, username, password) from the credentials 3. Creates a new ClickHouse connection with optimized settings: - LZ4 compression for efficient data transfer - 30-second connection timeout - 60-second query execution timeout - Optimized buffer sizes for batch operations 4. Tests the connection with a ping 5. Generates a unique connection ID and stores the connection 6. Returns the connection ID for use in subsequent operations",
+      "usage": [
+        "Valid ClickHouse server hostname or IP address",
+        "Valid port number (default: 9000)",
+        "Valid database name",
+        "Valid username and password credentials",
+        "Network access to the ClickHouse server"
+      ],
+      "bestPractices": [
+        "The connection ID should be stored and used in subsequent ClickHouse operations",
+        "Connections should be properly closed using the Disconnect node when no longer needed",
+        "The default port for ClickHouse is 9000 (native protocol)",
+        "The connection uses LZ4 compression automatically for better performance",
+        "All queries executed on this connection will have a maximum execution time of 60 seconds"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrConnection"
+      ],
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "Connection Id: \"550e8400-e29b-41d4-a716-446655440000\""
+        }
+      ]
+    },
+    "CreateBatch": {
+      "namespace": "Core.Clickhouse.CreateBatch",
+      "name": "CreateBatch",
+      "summary": "Creates a new batch transaction for executing multiple SQL commands atomically.",
+      "howItWorks": "The Create Batch node starts a new transaction on the ClickHouse database. When executed, the node: 1. Validates inputs and determines connection method (connection ID or credentials) 2. Begins a new database transaction on the connection 3. Generates a unique batch ID 4. Stores the transaction in the internal batch pool 5. Returns the batch ID for use in subsequent Execute Query/Non Query operations 6. Transaction remains open until Send Batch is called",
+      "usage": [
+        "Either a valid connection ID from Connect node OR database credentials",
+        "The connection must be active and not already have an uncommitted transaction"
+      ],
+      "bestPractices": [
+        "The batch ID should be passed to Execute Query and Execute Non Query nodes",
+        "All operations using the same batch ID will be part of the same transaction",
+        "Transactions must be committed using the Send Batch node",
+        "If an error occurs before Send Batch, the transaction is automatically rolled back",
+        "Multiple batches can be active simultaneously on different connections",
+        "Batch transactions ensure atomicity - all operations succeed or all fail"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound"
+      ]
+    },
+    "Disconnect": {
+      "namespace": "Core.Clickhouse.Disconnect",
+      "name": "Disconnect",
+      "summary": "Disconnects from a ClickHouse database server and releases the connection.",
+      "howItWorks": "The Disconnect node closes an active ClickHouse database connection and releases its resources. When executed, the node: 1. Validates that a connection ID is provided 2. Retrieves the connection from the internal connection pool 3. Closes the database connection 4. Removes the connection from the internal pool 5. Releases all associated resources",
+      "usage": [
+        "A valid connection ID from a previous Connect node",
+        "The connection must still be active (not already closed)"
+      ],
+      "bestPractices": [
+        "Always use Disconnect to properly clean up database connections",
+        "Disconnecting a connection that is no longer valid will result in an error",
+        "After disconnecting, the connection ID becomes invalid and cannot be reused",
+        "Any ongoing transactions on the connection will be rolled back automatically",
+        "Ensure all queries and batches are completed before disconnecting"
+      ]
+    },
+    "ExecuteNonQuery": {
+      "namespace": "Core.Clickhouse.ExecuteNonQuery",
+      "name": "ExecuteNonQuery",
+      "summary": "Executes a SQL command (INSERT, UPDATE, DELETE, CREATE, ALTER, etc.) that does not return results.",
+      "howItWorks": "The Execute Non Query node runs SQL commands that modify data or database structure without returning a result set. When executed, the node: 1. Validates inputs and determines connection method (connection ID or credentials) 2. Processes template variables in the SQL query using message context 3. If a Batch Id is provided, adds the command to that transaction 4. Otherwise, executes the command directly on the connection 5. Commits the changes (if not in a batch) 6. Continues to the next node without returning data",
+      "usage": [
+        "Either a valid connection ID from Connect node OR database credentials",
+        "A valid SQL command (INSERT, UPDATE, DELETE, CREATE, ALTER, DROP, etc.)",
+        "If using Batch Id, a valid batch transaction must exist"
+      ],
+      "bestPractices": [
+        "The SQL editor provides syntax highlighting for SQL statements",
+        "This node does not return query results - use Execute Query for SELECT statements",
+        "Commands are executed immediately unless within a batch transaction",
+        "For bulk inserts, consider using batch operations for better performance",
+        "The query timeout is set to 60 seconds (configurable in connection settings)",
+        "ClickHouse is optimized for INSERT operations - bulk inserts are highly efficient"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound"
+      ]
+    },
+    "ExecuteQuery": {
+      "namespace": "Core.Clickhouse.ExecuteQuery",
+      "name": "ExecuteQuery",
+      "summary": "Executes a SQL SELECT query on ClickHouse and returns the results.",
+      "howItWorks": "The Execute Query node runs a SQL SELECT query on ClickHouse and returns the results. When executed, the node: 1. Validates inputs and determines connection method (connection ID or credentials) 2. Processes template variables in the SQL query using message context 3. If a Batch Id is provided, executes the query within that transaction 4. Otherwise, executes the query directly on the connection 5. Retrieves all columns and rows from the result set 6. Formats the results as an array of objects 7. Returns the results for use in subsequent nodes",
+      "usage": [
+        "Either a valid connection ID from Connect node OR database credentials",
+        "A valid SQL SELECT query",
+        "If using Batch Id, a valid batch transaction must exist"
+      ],
+      "bestPractices": [
+        "The SQL editor provides syntax highlighting for SQL statements",
+        "Query results are returned as an array of objects for easy data manipulation",
+        "All column values are converted to strings in the result",
+        "For large datasets, consider using LIMIT clauses to manage memory",
+        "ClickHouse is optimized for analytical queries - leverage its column-oriented storage",
+        "The query timeout is set to 60 seconds (configurable in connection settings)"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound"
+      ]
+    },
+    "SendBatch": {
+      "namespace": "Core.Clickhouse.SendBatch",
+      "name": "SendBatch",
+      "summary": "Commits a batch transaction and executes all queued SQL commands.",
+      "howItWorks": "The Send Batch node commits a transaction and executes all SQL commands that were queued within that batch. When executed, the node: 1. Validates that a batch ID is provided 2. Retrieves the transaction from the internal batch pool 3. Commits the transaction to the database 4. All queued operations are executed atomically 5. Removes the batch from the internal pool 6. Releases the transaction resources",
+      "usage": [
+        "A valid batch ID from a previous Create Batch node",
+        "The batch must still be active (not already committed or rolled back)"
+      ],
+      "bestPractices": [
+        "Send Batch must be called to commit the transaction - otherwise changes are lost",
+        "After calling Send Batch, the batch ID becomes invalid and cannot be reused",
+        "All operations in the batch are executed atomically (all succeed or all fail)",
+        "If any operation in the batch fails, the entire transaction is rolled back",
+        "Once committed, changes become visible to other database connections",
+        "Always call Send Batch after completing all batch operations"
+      ]
+    }
+  }
+}

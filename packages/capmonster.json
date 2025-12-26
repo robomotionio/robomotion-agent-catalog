@@ -1,0 +1,168 @@
+{
+  "package": "Capmonster",
+  "summary": "CapMonster is a cloud-based captcha solving service that provides automatic recognition of various captcha types including reCAPTCHA, hCaptcha, FunCaptcha, and image-based captchas. This package integrates CapMonster Cloud API with Robomotion RPA, enabling automated captcha solving in your automation workflows.",
+  "description": "## Overview The CapMonster package helps you bypass captcha challenges in web automation tasks. It supports multiple captcha types and provides a simple, reliable way to solve captchas without manual intervention.",
+  "nodes": {
+    "create-session": {
+      "namespace": "Core.Capmonster.CreateSession",
+      "name": "CreateSession",
+      "summary": "Establishes a connection to CapMonster Cloud by creating a session with your API key. This session is required for all captcha solving operations.",
+      "howItWorks": "The Create Session node is the entry point for all CapMonster operations. When executed, it: 1. Retrieves your API key from the provided credential 2. Creates a CapMonster Cloud client instance 3. Generates a unique session ID 4. Stores the client instance for use by other nodes 5. Returns the session ID for use in subsequent operations",
+      "usage": [
+        "A valid CapMonster Cloud account",
+        "An API key from your CapMonster dashboard",
+        "The API key must be stored as a credential in Robomotion"
+      ],
+      "bestPractices": [
+        "The Create Session node must be executed before any captcha solving operations",
+        "The session ID should be stored in a message variable for easy access",
+        "Each Create Session creates a new client instance",
+        "Sessions are stored in memory and persist throughout the flow execution",
+        "Multiple sessions can be created if you need to use different API keys"
+      ]
+    },
+    "get-balance": {
+      "namespace": "Core.Capmonster.GetBalance",
+      "name": "GetBalance",
+      "summary": "Retrieves the current account balance from your CapMonster Cloud account in USD.",
+      "howItWorks": "The Get Balance node queries your CapMonster Cloud account to retrieve the current balance. When executed, it: 1. Retrieves the session using the provided session ID 2. Makes an API call to CapMonster Cloud 3. Returns your current balance in USD 4. Stores the balance in the output variable",
+      "usage": [
+        "A valid CapMonster session (from Create Session node)",
+        "Active internet connection",
+        "Valid API key with proper permissions"
+      ],
+      "bestPractices": [
+        "The balance is returned as a decimal number (e.g., 5.25 means $5.25)",
+        "Balance checks do not consume any credits",
+        "Use this node to verify sufficient funds before solving captchas",
+        "The balance updates in real-time and reflects all recent transactions",
+        "You can check your balance as often as needed without additional cost"
+      ]
+    },
+    "solve-captcha": {
+      "namespace": "Core.Capmonster.SolveCaptcha",
+      "name": "SolveCaptcha",
+      "summary": "Solves image-based captchas by extracting text from the image. Supports various captcha formats including Google, Yandex, Steam, Facebook, and other popular captcha providers.",
+      "howItWorks": "The Solve Captcha node processes image-based captchas and returns the recognized text. When executed, it: 1. Retrieves the session using the provided session ID 2. Receives the base64-encoded captcha image 3. Creates a captcha solving task with the specified module 4. Sends the task to CapMonster Cloud for processing 5. Waits for the solution 6. Returns the recognized text",
+      "usage": [
+        "A valid CapMonster session (from Create Session node)",
+        "A base64-encoded captcha image",
+        "Sufficient account balance",
+        "The image must be in a supported format (PNG, JPEG, GIF, BMP)"
+      ],
+      "bestPractices": [
+        "The captcha image must be base64-encoded with a data URL prefix",
+        "The recognition accuracy depends on the captcha complexity and module selection",
+        "Different modules are optimized for different captcha styles",
+        "Use the most specific module for better accuracy",
+        "The Universal module works for most captchas but may be less accurate",
+        "Solving time typically ranges from 5-15 seconds"
+      ]
+    },
+    "solve-funcaptcha": {
+      "namespace": "Core.Capmonster.SolveFuncaptcha",
+      "name": "SolveFuncaptcha",
+      "summary": "Solves FunCaptcha (Arkose Labs) challenges and returns a response token. FunCaptcha uses interactive puzzles to verify users and is commonly found on gaming platforms, financial services, and e-commerce sites.",
+      "howItWorks": "The Solve FunCaptcha node solves Arkose Labs FunCaptcha challenges. When executed, it: 1. Retrieves the session using the provided session ID 2. Creates a FunCaptcha solving task with the website URL and public key 3. Optionally adds the data parameter if provided 4. Sends the task to CapMonster Cloud for processing 5. Waits for the challenge to be solved 6. Returns the response token",
+      "usage": [
+        "A valid CapMonster session (from Create Session node)",
+        "The full URL where the FunCaptcha is displayed",
+        "The FunCaptcha public key from the page source",
+        "Sufficient account balance",
+        "Active internet connection"
+      ],
+      "bestPractices": [
+        "FunCaptcha solving typically takes 20-40 seconds",
+        "The token is valid for a limited time (usually 2-5 minutes)",
+        "Use the token immediately after receiving it",
+        "The No Cache option forces a fresh solve, useful for testing",
+        "Some FunCaptcha implementations are site-specific and may require the data parameter"
+      ]
+    },
+    "solve-hcaptcha": {
+      "namespace": "Core.Capmonster.SolveHcaptcha",
+      "name": "SolveHcaptcha",
+      "summary": "Solves hCaptcha challenges and returns a response token. hCaptcha is a privacy-focused alternative to reCAPTCHA, commonly used on websites that prioritize user privacy.",
+      "howItWorks": "The Solve HCaptcha node solves hCaptcha challenges. When executed, it: 1. Retrieves the session using the provided session ID 2. Creates an hCaptcha solving task with the website URL and site key 3. Sends the task to CapMonster Cloud for processing 4. Waits for the challenge to be solved 5. Returns the response token (h-captcha-response)",
+      "usage": [
+        "A valid CapMonster session (from Create Session node)",
+        "The full URL where the hCaptcha is displayed",
+        "The hCaptcha site key from the page source",
+        "Sufficient account balance",
+        "Active internet connection"
+      ],
+      "bestPractices": [
+        "hCaptcha solving typically takes 15-30 seconds",
+        "The response token is valid for approximately 2 minutes",
+        "Use the token immediately after receiving it",
+        "The No Cache option forces a fresh solve, useful for testing",
+        "hCaptcha tokens are single-use only",
+        "Token format is different from reCAPTCHA"
+      ]
+    },
+    "solve-recaptcha-v2": {
+      "namespace": "Core.Capmonster.SolveRecaptchaV2",
+      "name": "SolveRecaptchaV2",
+      "summary": "Solves Google reCAPTCHA v2 challenges and returns a response token. reCAPTCHA v2 is the familiar \"I'm not a robot\" checkbox captcha used on millions of websites worldwide.",
+      "howItWorks": "The Solve Recaptcha v2 node solves Google's reCAPTCHA v2 challenges. When executed, it: 1. Retrieves the session using the provided session ID 2. Creates a reCAPTCHA v2 solving task with the website URL and site key 3. Optionally adds the data-s value if provided 4. Sends the task to CapMonster Cloud for processing 5. Waits for the challenge to be solved (including image selection if required) 6. Returns the g-recaptcha-response token",
+      "usage": [
+        "A valid CapMonster session (from Create Session node)",
+        "The full URL where the reCAPTCHA is displayed",
+        "The reCAPTCHA site key from the page source",
+        "Sufficient account balance",
+        "Active internet connection"
+      ],
+      "bestPractices": [
+        "reCAPTCHA v2 solving typically takes 15-40 seconds",
+        "The response token is valid for approximately 2 minutes",
+        "Use the token immediately after receiving it",
+        "The No Cache option forces a fresh solve, useful for testing",
+        "Tokens are single-use only",
+        "Some reCAPTCHA v2 challenges are easier (checkbox only), others require image selection"
+      ]
+    },
+    "solve-recaptcha-v2-enterprise": {
+      "namespace": "Core.Capmonster.SolveRecaptchaV2Enterprise",
+      "name": "SolveRecaptchaV2Enterprise",
+      "summary": "Solves Google reCAPTCHA v2 Enterprise challenges with custom payload support. reCAPTCHA v2 Enterprise is the business/enterprise version of reCAPTCHA v2 with enhanced security features and additional configuration options.",
+      "howItWorks": "The Solve Recaptcha v2 Enterprise node solves Google's enterprise-grade reCAPTCHA v2. When executed, it: 1. Retrieves the session using the provided session ID 2. Creates a reCAPTCHA v2 Enterprise solving task with the website URL and site key 3. Optionally adds the enterprise payload if provided 4. Sends the task to CapMonster Cloud for processing 5. Waits for the challenge to be solved (including image selection if required) 6. Returns the g-recaptcha-response token",
+      "usage": [
+        "A valid CapMonster session (from Create Session node)",
+        "The full URL where the reCAPTCHA Enterprise is displayed",
+        "The reCAPTCHA Enterprise site key from the page source",
+        "Sufficient account balance",
+        "Active internet connection"
+      ],
+      "bestPractices": [
+        "Enterprise solving typically takes 20-45 seconds",
+        "The response token is valid for approximately 2 minutes",
+        "Use the token immediately after receiving it",
+        "Enterprise implementations may have stricter validation",
+        "The enterprise payload is required by some implementations",
+        "Token format is the same as standard reCAPTCHA v2",
+        "Some enterprise sites have additional security checks"
+      ]
+    },
+    "solve-recaptcha-v3": {
+      "namespace": "Core.Capmonster.SolveRecaptchaV3",
+      "name": "SolveRecaptchaV3",
+      "summary": "Solves Google reCAPTCHA v3 challenges with score control and returns a response token. reCAPTCHA v3 is Google's invisible captcha that uses behavioral analysis to assess user interactions without requiring user interaction.",
+      "howItWorks": "The Solve Recaptcha v3 node solves Google's invisible reCAPTCHA v3. When executed, it: 1. Retrieves the session using the provided session ID 2. Creates a reCAPTCHA v3 solving task with the website URL and site key 3. Optionally adds the page action parameter 4. Optionally sets the minimum score requirement 5. Sends the task to CapMonster Cloud for processing 6. Returns a token with the requested score level",
+      "usage": [
+        "A valid CapMonster session (from Create Session node)",
+        "The full URL where the reCAPTCHA v3 is active",
+        "The reCAPTCHA v3 site key from the page source",
+        "Sufficient account balance",
+        "Active internet connection"
+      ],
+      "bestPractices": [
+        "reCAPTCHA v3 solving typically takes 10-20 seconds",
+        "The response token is valid for approximately 2 minutes",
+        "Higher min scores take longer to achieve and may cost more",
+        "The token includes the score information",
+        "v3 is completely invisible to users",
+        "The page action should match what the website expects"
+      ]
+    }
+  }
+}

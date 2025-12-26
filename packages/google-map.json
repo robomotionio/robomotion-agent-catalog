@@ -1,0 +1,94 @@
+{
+  "package": "GoogleMap",
+  "summary": "The Google Maps package provides powerful geocoding and distance calculation capabilities for RPA workflows. Use these nodes to convert addresses to coordinates, perform reverse geocoding, and calculate distances between locations.",
+  "description": "## Key Features - **Geocoding**: Convert street addresses to geographic coordinates (latitude/longitude)",
+  "nodes": {
+    "AddressToCoordinates": {
+      "namespace": "Core.GoogleMap.AddressToCoordinates",
+      "name": "AddressToCoordinates",
+      "summary": "Converts a textual address to geographic coordinates (latitude and longitude) using Google Maps API.",
+      "howItWorks": "The Address to Coordinates node converts a textual address into geographic coordinates using Google Maps Geocoding API. When executed, the node: 1. Validates the provided address input 2. Retrieves the Google Maps API key from credentials 3. Creates a Geocoding request with the provided address 4. Sends the request to Google Maps Geocoding API 5. Returns the geocoding result which includes: * Latitude and longitude coordinates * Formatted address * Address components (street, city, state, etc.) * Place ID * Geometry information",
+      "usage": [
+        "A valid Google Maps API key with Geocoding API enabled",
+        "Valid address input"
+      ],
+      "bestPractices": [
+        "The address should be as specific as possible for accurate results",
+        "The API key must have Geocoding API permissions enabled",
+        "The result contains multiple address components that can be parsed as needed",
+        "Multiple results may be returned for ambiguous addresses",
+        "The node returns structured data that can be used with other map-related nodes",
+        "Results include a `place_id` which uniquely identifies the location",
+        "Coordinates are provided in WGS84 datum (standard for GPS)"
+      ]
+    },
+    "CalculateDistance": {
+      "namespace": "Core.GoogleMap.CalculateDistance",
+      "name": "CalculateDistance",
+      "summary": "Calculates the straight-line (as the crow flies) distance between two geographic coordinates using the Haversine formula.",
+      "howItWorks": "The Calculate Distance node computes the straight-line distance between two geographic coordinates using the Haversine formula. When executed, the node: 1. Validates both coordinate inputs 2. Parses the latitude and longitude values from each coordinate string 3. Applies the Haversine formula to calculate the great-circle distance 4. Returns the distance in kilometers The Haversine formula accounts for the Earth's curvature, providing accurate distance calculations between any two points on the globe.",
+      "usage": [
+        "Two valid geographic coordinates in \"latitude,longitude\" format",
+        "Coordinates must be expressed as decimal degrees"
+      ],
+      "bestPractices": [
+        "Coordinates should be provided in decimal degrees format",
+        "The distance is calculated as a straight line (not road distance)",
+        "The result is returned in kilometers",
+        "For coordinate formatting, use a comma separator: \"latitude,longitude\"",
+        "This calculation is useful for proximity checks and rough distance estimations",
+        "For driving distances, use the Get Route Distance node instead",
+        "No Google API key required - calculation is performed locally",
+        "Uses Haversine formula which accounts for Earth's curvature",
+        "Extremely fast and suitable for batch processing thousands of coordinates",
+        "Distance accuracy is typically within 0.3% for most practical purposes"
+      ]
+    },
+    "CoordinatesToAddress": {
+      "namespace": "Core.GoogleMap.CoordinatesToAddress",
+      "name": "CoordinatesToAddress",
+      "summary": "Converts geographic coordinates (latitude and longitude) to a human-readable address using Google Maps API.",
+      "howItWorks": "The Coordinates to Address node converts geographic coordinates into a human-readable address using Google Maps Reverse Geocoding API. When executed, the node: 1. Validates the provided latitude and longitude inputs 2. Retrieves the Google Maps API key from credentials 3. Creates a Reverse Geocoding request with the provided coordinates 4. Sends the request to Google Maps Reverse Geocoding API 5. Returns the reverse geocoding result which includes: * Formatted address * Address components (street, city, state, etc.) * Place ID * Address types and categories",
+      "usage": [
+        "A valid Google Maps API key with Geocoding API enabled",
+        "Valid latitude and longitude coordinates"
+      ],
+      "bestPractices": [
+        "Latitude and longitude should be provided as decimal numbers",
+        "The API key must have Geocoding API permissions enabled",
+        "The result contains multiple address components that can be parsed as needed",
+        "Multiple results may be returned for a single coordinate pair (from most to least specific)",
+        "The node returns structured data that can be used with other map-related nodes",
+        "Coordinates should be in decimal degrees format (e.g., 41.0082, 28.9784)",
+        "Results are provided in WGS84 datum (standard for GPS)",
+        "Reverse geocoding accuracy depends on Google's map data coverage for the region",
+        "Some coordinates (oceans, remote areas) may only return general location names"
+      ]
+    },
+    "GetRouteDistance": {
+      "namespace": "Core.GoogleMap.GetRouteDistance",
+      "name": "GetRouteDistance",
+      "summary": "Calculates the driving distance between two geographic coordinates using Google Maps Directions API.",
+      "howItWorks": "The Get Route Distance node calculates the actual driving distance between two geographic coordinates using Google Maps Directions API. When executed, the node: 1. Validates both coordinate inputs 2. Parses the latitude and longitude values from each coordinate string 3. Retrieves the Google Maps API key from credentials 4. Creates a Directions request with the provided coordinates 5. Sends the request to Google Maps Directions API 6. Calculates the total route distance by summing the distance of all route legs 7. Returns the distance in kilometers",
+      "usage": [
+        "A valid Google Maps API key with Directions API enabled",
+        "Two valid geographic coordinates in \"latitude,longitude\" format"
+      ],
+      "bestPractices": [
+        "Coordinates should be provided in decimal degrees format",
+        "The distance represents actual driving distance (not straight-line)",
+        "The result is returned in kilometers",
+        "For coordinate formatting, use comma separator: \"latitude,longitude\"",
+        "This calculation requires an internet connection to access Google Maps API",
+        "The API key must have Directions API permissions enabled",
+        "If no route is found between coordinates, an error will be returned",
+        "The node accounts for one-way streets, road closures, and traffic restrictions",
+        "Uses default driving mode (car) - does not support walking, cycling, or transit",
+        "Returns distance for the primary recommended route",
+        "Does NOT account for real-time traffic (uses base road network)",
+        "Ferry routes and toll preferences are not customizable",
+        "Distance is the sum of all route legs in the journey"
+      ]
+    }
+  }
+}

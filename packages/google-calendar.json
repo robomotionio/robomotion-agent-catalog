@@ -1,0 +1,147 @@
+{
+  "package": "GoogleCalendar",
+  "summary": "Integrate with Google Calendar to manage events, check availability, and automate scheduling workflows.",
+  "description": "## Overview The Google Calendar package provides comprehensive calendar management capabilities. Use it when you need to create, update, or delete calendar events, check availability, or automate scheduling workflows.",
+  "nodes": {
+    "CreateEvent": {
+      "namespace": "Core.GoogleCalendar.CreateEvent",
+      "name": "CreateEvent",
+      "summary": "Creates a new event in Google Calendar.",
+      "howItWorks": "The Create Event node integrates with Google Calendar to create new events. When executed, the node: 1. Validates the provided inputs (Calendar ID, Summary, Description, Start Time, End Time, Attendees) 2. Authenticates with Google Calendar using the provided credentials 3. Creates a new event with the specified details 4. Returns the created event object as the result",
+      "usage": [
+        "A valid Google Calendar account",
+        "Valid Google Calendar credentials",
+        "Properly formatted RFC3339 timestamps for start and end times",
+        "Valid email addresses for attendees (if provided)"
+      ],
+      "bestPractices": [
+        "The Calendar ID can be an email address or calendar ID. If not provided, the primary calendar is used.",
+        "Start Time and End Time must be in RFC3339 format (e.g. 2024-03-20T15:30:00Z)",
+        "Attendee emails are validated for proper email format",
+        "The created event object is returned as the result, which can be used in subsequent nodes"
+      ]
+    },
+    "DeleteEvent": {
+      "namespace": "Core.GoogleCalendar.DeleteEvent",
+      "name": "DeleteEvent",
+      "summary": "Deletes an event from Google Calendar.",
+      "howItWorks": "The Delete Event node integrates with Google Calendar to delete existing events. When executed, the node: 1. Validates the provided inputs (Calendar ID and Event ID) 2. Authenticates with Google Calendar using the provided credentials 3. Deletes the specified event from the calendar 4. Optionally sends notifications about the deletion if enabled 5. Returns a success message with details about the deleted event",
+      "usage": [
+        "A valid Google Calendar account",
+        "Valid Google Calendar credentials",
+        "Valid Calendar ID (email address or calendar ID)",
+        "Valid Event ID of the event to delete"
+      ],
+      "bestPractices": [
+        "The Calendar ID can be an email address or calendar ID. If not provided, the primary calendar is used.",
+        "The Event ID is required and must be a valid event identifier from Google Calendar",
+        "Send Notifications option can be enabled to notify attendees about the event deletion",
+        "The result contains details about the deletion including success status, event ID, and calendar ID"
+      ]
+    },
+    "GetAllEvents": {
+      "namespace": "Core.GoogleCalendar.GetAllEvents",
+      "name": "GetAllEvents",
+      "summary": "Retrieves all events from a Google Calendar within specified parameters.",
+      "howItWorks": "The Get All Events node integrates with Google Calendar to retrieve events based on specified parameters. When executed, the node: 1. Authenticates with Google Calendar using the provided credentials 2. Applies filters based on Calendar ID, time range, and search query 3. Configures options for maximum results, deleted events, recurring events, and sorting 4. Retrieves events from Google Calendar 5. Returns an array of event objects as the result",
+      "usage": [
+        "A valid Google Calendar account",
+        "Valid Google Calendar credentials",
+        "Properly formatted RFC3339 timestamps for time filters (if provided)",
+        "Valid Calendar ID (email address or calendar ID)"
+      ],
+      "bestPractices": [
+        "The Calendar ID can be an email address or calendar ID. If not provided, the primary calendar is used.",
+        "Start Time and End Time must be in RFC3339 format (e.g. 2024-03-20T15:30:00Z)",
+        "The Query parameter allows free text search across event fields",
+        "Max Results is capped at 2500 events",
+        "When Show Deleted is false (default), deleted events are not included",
+        "When Single Events is true (default), recurring events are expanded into individual events",
+        "Order By determines how results are sorted (by start time or last updated)",
+        "The result contains an array of event objects with fields like id, summary, description, start, end, attendees, etc."
+      ]
+    },
+    "GetAvailability": {
+      "namespace": "Core.GoogleCalendar.GetAvailability",
+      "name": "GetAvailability",
+      "summary": "Checks the availability of multiple Google Calendars within a specified time range.",
+      "howItWorks": "The Get Availability node integrates with Google Calendar to check the availability of multiple calendars within a specified time range. When executed, the node: 1. Validates the provided inputs (Calendar IDs, Time Min, Time Max) 2. Authenticates with Google Calendar using the provided credentials 3. Creates a freebusy query request for all specified calendars 4. Executes the freebusy query to check calendar availability 5. Processes and formats the response for better usability 6. Returns detailed availability information as the result",
+      "usage": [
+        "A valid Google Calendar account",
+        "Valid Google Calendar credentials",
+        "At least one valid Calendar ID",
+        "Properly formatted RFC3339 timestamps for Time Min and Time Max",
+        "Time Max must be after Time Min"
+      ],
+      "bestPractices": [
+        "Calendar IDs should be provided as an array of strings",
+        "Time Min and Time Max must be in RFC3339 format (e.g. 2024-03-20T15:30:00Z)",
+        "The result includes detailed availability information for each calendar:",
+        "Busy times (start and end timestamps)",
+        "Any errors encountered for each calendar",
+        "The result also includes the raw Google Calendar API response with timeMin, timeMax, calendars, groups, and kind fields",
+        "This node is particularly useful for scheduling applications to find available time slots across multiple calendars"
+      ]
+    },
+    "GetEvent": {
+      "namespace": "Core.GoogleCalendar.GetEvent",
+      "name": "GetEvent",
+      "summary": "Retrieves a specific event from Google Calendar by its ID.",
+      "howItWorks": "The Get Event node integrates with Google Calendar to retrieve a specific event by its ID. When executed, the node: 1. Validates the provided inputs (Calendar ID and Event ID) 2. Authenticates with Google Calendar using the provided credentials 3. Retrieves the specified event from the calendar 4. Returns the complete event object as the result",
+      "usage": [
+        "A valid Google Calendar account",
+        "Valid Google Calendar credentials",
+        "Valid Calendar ID (email address or calendar ID)",
+        "Valid Event ID of the event to retrieve"
+      ],
+      "bestPractices": [
+        "The Calendar ID can be an email address or calendar ID. If not provided, the primary calendar is used.",
+        "The Event ID is required and must be a valid event identifier from Google Calendar",
+        "The result contains the complete event object with all its properties like summary, description, start time, end time, attendees, etc.",
+        "This node is useful when you need to retrieve detailed information about a specific event"
+      ]
+    },
+    "ListEvents": {
+      "namespace": "Core.GoogleCalendar.ListEvents",
+      "name": "ListEvents",
+      "summary": "Lists upcoming events from a Google Calendar.",
+      "howItWorks": "The List Events node integrates with Google Calendar to list upcoming events. When executed, the node: 1. Authenticates with Google Calendar using the provided credentials 2. Lists upcoming events from the specified calendar 3. Returns an array of event objects as the result",
+      "usage": [
+        "A valid Google Calendar account",
+        "Valid Google Calendar credentials",
+        "Valid Calendar ID (email address or calendar ID)"
+      ],
+      "bestPractices": [
+        "The Calendar ID can be an email address or calendar ID. If not provided, the primary calendar is used.",
+        "By default, the node lists events starting from the current time",
+        "Deleted events are not included in the results",
+        "Recurring events are expanded into individual events",
+        "Events are ordered by start time",
+        "The result contains an array of event objects with fields like id, summary, description, start, end, attendees, etc.",
+        "The default maximum number of results is 25, but this can be adjusted using the Max Results option"
+      ]
+    },
+    "UpdateEvent": {
+      "namespace": "Core.GoogleCalendar.UpdateEvent",
+      "name": "UpdateEvent",
+      "summary": "Updates an existing event in Google Calendar.",
+      "howItWorks": "The Update Event node integrates with Google Calendar to update existing events. When executed, the node: 1. Validates the provided inputs (Calendar ID, Event ID, and any fields to update) 2. Authenticates with Google Calendar using the provided credentials 3. Retrieves the existing event from Google Calendar 4. Updates only the fields that are provided in the inputs 5. Optionally sends notifications about the update if enabled 6. Returns the updated event object as the result",
+      "usage": [
+        "A valid Google Calendar account",
+        "Valid Google Calendar credentials",
+        "Valid Calendar ID (email address or calendar ID)",
+        "Valid Event ID of the event to update",
+        "Properly formatted RFC3339 timestamps for start and end times (if provided)",
+        "Valid email addresses for attendees (if provided)"
+      ],
+      "bestPractices": [
+        "The Calendar ID can be an email address or calendar ID. If not provided, the primary calendar is used.",
+        "Only the fields that are provided in the inputs will be updated; other fields will retain their existing values",
+        "Start Time and End Time must be in RFC3339 format (e.g. 2024-03-20T15:30:00Z)",
+        "Attendee emails are validated for proper email format",
+        "The Send Notifications option can be enabled to notify attendees about the event update",
+        "The updated event object is returned as the result, which can be used in subsequent nodes"
+      ]
+    }
+  }
+}

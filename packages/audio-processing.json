@@ -1,0 +1,173 @@
+{
+  "package": "AudioProcessing",
+  "summary": "Process, transform, and manipulate audio files in your automation workflows.",
+  "description": "## Overview The Audio Processing package provides tools for working with audio files programmatically. Use it when you need to convert audio formats, extract segments, combine files, or modify audio properties like speed.",
+  "nodes": {
+    "Concatenate": {
+      "namespace": "Core.AudioProcessing.Concatenate",
+      "name": "Concatenate",
+      "summary": "Concatenates two audio segments together sequentially, creating a single combined audio segment.",
+      "howItWorks": "The Concatenate node combines two audio segments sequentially, playing the first segment followed by the second segment. When executed, the node: 1. Retrieves both audio segments using their IDs 2. Validates that both segment IDs exist 3. Combines the segments sequentially (first + second) 4. Creates a new audio segment with a unique ID 5. Establishes dependencies in the audio processing graph 6. Returns the ID of the concatenated segment",
+      "usage": [
+        "Valid first audio segment ID (created by Create, Slice, or other processing nodes)",
+        "Valid second audio segment ID (created by Create, Slice, or other processing nodes)",
+        "Both segments must exist in memory"
+      ],
+      "bestPractices": [
+        "The order of concatenation matters: first segment plays before second segment",
+        "The resulting segment inherits properties from the first segment (sample rate, channels)",
+        "If segments have different properties, they are automatically converted to match",
+        "Concatenation is non-destructive - original segments remain in memory",
+        "Use the Delete node to free memory when segments are no longer needed",
+        "Multiple concatenations can be chained to combine more than two segments",
+        "The node creates a dependency graph for tracking audio transformations"
+      ]
+    },
+    "Convert": {
+      "namespace": "Core.AudioProcessing.Convert",
+      "name": "Convert",
+      "summary": "Converts an audio file from one format to another with optional frame rate and channel configuration.",
+      "howItWorks": "The Convert node uses the PyDub library (powered by FFmpeg) to convert audio files between formats. When executed, the node: 1. Validates the source file path and checks if the file exists 2. Validates the destination file path 3. Loads the source audio file 4. Applies frame rate conversion if specified 5. Applies channel conversion if specified 6. Detects the output format from the destination file extension 7. Exports the converted audio to the destination path",
+      "usage": [
+        "Valid source audio file at the specified path",
+        "Destination path must be writable",
+        "FFmpeg must be installed (included with the package)",
+        "Supported audio format for both input and output"
+      ],
+      "bestPractices": [
+        "The output format is automatically detected from the file extension in the Destination Path",
+        "If frame rate is not specified, the original sample rate is preserved",
+        "If channels are not specified, the original channel configuration is preserved",
+        "Converting from lossy to lossless formats (e.g., MP3 to WAV) won't improve quality",
+        "Converting to mono (1 channel) reduces file size but loses stereo information",
+        "Higher frame rates increase file size but may improve quality",
+        "Common frame rates: 8000 (telephone), 44100 (CD), 48000 (professional), 96000 (high-res)",
+        "Converting between formats may take time depending on file size and complexity"
+      ]
+    },
+    "Create": {
+      "namespace": "Core.AudioProcessing.Create",
+      "name": "Create",
+      "summary": "Creates an audio segment from a file or generates silent/empty audio segments for processing.",
+      "howItWorks": "The Create node is the starting point for audio processing workflows. When executed, the node: 1. Checks the selected format type 2. For file-based formats (MP3, WAV, etc.): - Validates the file path - Loads the audio file into memory - Creates a segment with a unique ID 3. For Silent format: - Creates a silent audio segment with the specified duration - Generates a segment ID 4. For Empty format: - Creates an empty audio segment (0 duration) - Generates a segment ID 5. Stores the segment in memory for use by other nodes 6. Returns the segment ID for reference",
+      "usage": [
+        "For file-based formats: Valid file path to an existing audio file",
+        "For Silent format: Duration value in milliseconds",
+        "For Empty format: No additional requirements"
+      ],
+      "bestPractices": [
+        "The Create node is typically the first node in an audio processing workflow",
+        "Each created segment is assigned a unique ID (GUID)",
+        "Segments are stored in memory until explicitly deleted",
+        "The same audio file can be loaded multiple times, creating separate segments",
+        "Empty segments are useful as placeholders in complex audio building scenarios",
+        "Silent segments are commonly used for:",
+        "Adding pauses between audio clips",
+        "Creating intro/outro silence",
+        "Timing control in automated announcements",
+        "Padding audio to specific durations"
+      ]
+    },
+    "Delete": {
+      "namespace": "Core.AudioProcessing.Delete",
+      "name": "Delete",
+      "summary": "Deletes an audio segment and all of its predecessor segments from memory, freeing up system resources.",
+      "howItWorks": "The Delete node performs recursive deletion of audio segments to free memory. When executed, the node: 1. Validates that the segment ID is not empty 2. Retrieves the segment from the internal audio graph 3. Identifies all predecessor segments in the processing chain 4. Recursively deletes the specified segment and all its predecessors 5. Removes all related nodes from the audio processing graph 6. Frees the memory occupied by these segments",
+      "usage": [
+        "Valid audio segment ID (from Create, Slice, Concatenate, Speedup, etc.)",
+        "Segment must exist in memory"
+      ],
+      "bestPractices": [
+        "Delete is a destructive operation - segments cannot be recovered once deleted",
+        "The node deletes the entire dependency chain leading to the specified segment",
+        "Only delete segments after you've exported or finished using them",
+        "Deleting a segment makes its ID invalid for future operations",
+        "Memory is immediately freed when segments are deleted",
+        "Use Delete at the end of your audio processing workflows",
+        "In loops, delete segments to prevent memory buildup"
+      ]
+    },
+    "Export": {
+      "namespace": "Core.AudioProcessing.Export",
+      "name": "Export",
+      "summary": "Exports an audio segment to a file in the specified format, or exports a PNG visualization of the audio processing graph.",
+      "howItWorks": "The Export node saves audio segments to files or creates visualizations. When executed, the node: 1. Validates the segment ID and file path 2. Retrieves the audio segment from memory 3. For audio formats (MP3, WAV, etc.): - Converts the segment to the specified format - Exports the audio data to the file path - Closes the export stream 4. For PNG format: - Generates a backward dependency graph from the segment - Creates a visual representation showing how the segment was created - Saves the graph as a PNG image",
+      "usage": [
+        "Valid audio segment ID (from Create, Slice, Concatenate, etc.)",
+        "Output file path must be writable",
+        "Sufficient disk space for the output file"
+      ],
+      "bestPractices": [
+        "The output format is determined by the Format option, not the file extension",
+        "However, it's best practice to match file extension with format (e.g., .mp3 for MP3)",
+        "Export does not delete the segment - use Delete node for cleanup",
+        "The same segment can be exported multiple times to different files/formats",
+        "PNG export is useful for understanding complex audio processing workflows",
+        "PNG graphs show all predecessor segments that contributed to the final result"
+      ]
+    },
+    "GetMetadata": {
+      "namespace": "Core.AudioProcessing.GetMetadata",
+      "name": "GetMetadata",
+      "summary": "Retrieves detailed metadata information from an audio segment including duration, quality settings, and amplitude metrics.",
+      "howItWorks": "The Get Metadata node analyzes an audio segment and extracts technical information. When executed, the node: 1. Validates the segment ID is not empty 2. Retrieves the audio segment from memory 3. Analyzes the segment's properties 4. Calculates amplitude and loudness metrics 5. Handles special cases (like infinite values for silent audio) 6. Returns a metadata object with all information",
+      "usage": [
+        "Valid audio segment ID (from Create, Slice, Concatenate, etc.)",
+        "Segment must exist in memory"
+      ],
+      "bestPractices": [
+        "Metadata extraction is very fast (milliseconds)",
+        "The operation is non-destructive - doesn't modify the segment",
+        "Metadata reflects the current state of the segment",
+        "For transformed segments (sliced, sped up), metadata shows the result",
+        "Infinite values (for silent audio) are automatically converted to 0",
+        "Use metadata for validation, decision-making, and quality control",
+        "Metadata can be logged for auditing and debugging"
+      ]
+    },
+    "Slice": {
+      "namespace": "Core.AudioProcessing.Slice",
+      "name": "Slice",
+      "summary": "Extracts a portion of an audio segment between specified start and end times, creating a new audio segment.",
+      "howItWorks": "The Slice node extracts a portion of audio between two time points. When executed, the node: 1. Validates the segment ID is not empty 2. Retrieves the original audio segment 3. Determines the slice range based on provided parameters: - Both start and end: Extract segment[start:end] - Only start: Extract from start to end segment[start:] - Only end: Extract from beginning to end segment[:end] - Neither: Return the full segment unchanged 4. Creates a new segment with the sliced audio 5. Establishes a dependency link in the processing graph 6. Returns the ID of the new segment",
+      "usage": [
+        "Valid audio segment ID (from Create, Concatenate, or other nodes)",
+        "Segment must exist in memory",
+        "Start time must be less than end time (if both provided)",
+        "Times must be within the segment duration"
+      ],
+      "bestPractices": [
+        "All times are in milliseconds (1000 ms = 1 second)",
+        "Slicing is non-destructive - original segment remains in memory",
+        "The new segment is independent and can be processed further",
+        "Multiple slices can be taken from the same source segment",
+        "Leaving both times empty creates a copy of the segment",
+        "Slicing preserves audio quality (no re-encoding)",
+        "Use Get Metadata first to know the segment duration",
+        "Sliced segments can be further sliced"
+      ]
+    },
+    "Speedup": {
+      "namespace": "Core.AudioProcessing.Speedup",
+      "name": "Speedup",
+      "summary": "Speeds up or slows down an audio segment by a given multiplier factor, changing playback speed without altering pitch quality.",
+      "howItWorks": "The Speed Up node uses advanced audio processing algorithms to change playback speed. When executed, the node: 1. Validates the segment ID is not empty 2. Retrieves the multiplier and chunk size values 3. If multiplier equals 1.0, returns the original segment unchanged (optimization) 4. Retrieves the audio segment from memory 5. Processes the audio in chunks to adjust speed while maintaining quality 6. Creates a new segment with the adjusted speed 7. Establishes a dependency link in the processing graph 8. Returns the ID of the speed-adjusted segment",
+      "usage": [
+        "Valid audio segment ID (from Create, Slice, Concatenate, etc.)",
+        "Segment must exist in memory",
+        "Multiplier must be a positive number (\u003e 0)",
+        "Chunk size must be a positive number"
+      ],
+      "bestPractices": [
+        "Speed adjustment preserves audio quality using time-stretching algorithms",
+        "Pitch is maintained (doesn't create \"chipmunk\" effect)",
+        "Processing time increases with audio length",
+        "Very high multipliers (\u003e 3.0) may cause quality degradation",
+        "Very low multipliers (\u003c 0.25) may sound unnatural",
+        "Multiplier of 1.0 is optimized to skip processing entirely",
+        "The original segment remains unchanged in memory",
+        "Duration changes proportionally to multiplier"
+      ]
+    }
+  }
+}

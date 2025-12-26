@@ -1,0 +1,312 @@
+{
+  "package": "RobomotionAssistant",
+  "summary": "Build interactive conversational interfaces for automations - display forms, collect user input, and show results.",
+  "description": "## Overview The Robomotion Assistant package enables building interactive UI components for conversational automation. Use it when you need to collect user input, display forms, show results, or create step-by-step guided workflows that interact with users.",
+  "nodes": {
+    "button_group": {
+      "namespace": "Core.RobomotionAssistant.Button_group",
+      "name": "Button_group",
+      "summary": "Creates a group of buttons for user interaction in chat interfaces.",
+      "howItWorks": "The Button Group node creates interactive buttons in chat interfaces. When executed, the node: 1. Creates a group of buttons with the specified labels 2. Displays the buttons in the chat interface 3. Waits for user interaction with the buttons 4. Returns a payload with information about the user's selection",
+      "usage": [
+        "A valid chat interface or messaging platform",
+        "Properly configured button labels or custom labels"
+      ],
+      "bestPractices": [
+        "Button labels are automatically converted to snake_case for internal use",
+        "Custom actions can be used to modify button behavior",
+        "The payload output contains information about which button was selected",
+        "Button groups are useful for creating interactive chat experiences"
+      ]
+    },
+    "change_mode": {
+      "namespace": "Core.RobomotionAssistant.Change_mode",
+      "name": "Change_mode",
+      "summary": "Changes the runtime mode of the Assistant, enabling or disabling specific features like prompts and streaming.",
+      "howItWorks": "The Change Mode node modifies the runtime behavior of the Assistant. When executed, the node: 1. Sends a command to change the Assistant's mode based on the selected options 2. If streaming is enabled, creates a streaming endpoint for real-time communication 3. Returns stream connection details when streaming is enabled",
+      "usage": [
+        "A properly configured Assistant environment",
+        "Valid permissions to change Assistant modes"
+      ],
+      "bestPractices": [
+        "When Enable Streaming is set to True, the node creates an HTTP endpoint for streaming data",
+        "The Stream output contains the address, method, and path for the streaming endpoint",
+        "The Enable Prompt option controls whether the Assistant can receive prompts",
+        "Streaming is useful for real-time interactions with the Assistant",
+        "Changes to mode take effect immediately after the node executes"
+      ]
+    },
+    "change_theme": {
+      "namespace": "Core.RobomotionAssistant.Change_theme",
+      "name": "Change_theme",
+      "summary": "Changes the color theme of the Assistant interface, allowing customization of colors and icons.",
+      "howItWorks": "The Change Theme node modifies the visual appearance of the Assistant interface. When executed, the node: 1. Collects all the color values from the inputs 2. Constructs a theme object with the specified colors 3. Sends the theme configuration to the Assistant 4. Updates the interface with the new theme",
+      "usage": [
+        "Valid color values in supported formats (hex codes, RGB, etc.)",
+        "For Chat Icon, a valid URL to an SVG file"
+      ],
+      "bestPractices": [
+        "All color inputs accept standard color formats (hex codes, RGB, etc.)",
+        "The Chat Icon input accepts a URL to an SVG file for customizing the chat icon",
+        "Theme changes take effect immediately after the node executes",
+        "Colors can be customized to match brand guidelines or user preferences",
+        "The node affects the visual appearance but not the functionality of the Assistant"
+      ]
+    },
+    "checkbox": {
+      "namespace": "Core.RobomotionAssistant.Checkbox",
+      "name": "Checkbox",
+      "summary": "Creates a group of checkboxes for user selection in chat interfaces.",
+      "howItWorks": "The Checkboxes node creates interactive checkboxes in chat interfaces. When executed, the node: 1. Creates a group of checkboxes with the specified options 2. Displays the checkboxes in the chat interface 3. Waits for user interaction with the checkboxes 4. Returns a payload with information about the user's selections",
+      "usage": [
+        "A valid chat interface or messaging platform",
+        "Properly configured checkbox options or custom options"
+      ],
+      "bestPractices": [
+        "Checkbox options are displayed as a group for user selection",
+        "Users can select multiple checkboxes from the group",
+        "The payload output contains information about which checkboxes were selected",
+        "Checkbox groups are useful for collecting multiple user preferences",
+        "Both Options and Custom Options can be used together to define the checkbox items"
+      ]
+    },
+    "datepicker": {
+      "namespace": "Core.RobomotionAssistant.Datepicker",
+      "name": "Datepicker",
+      "summary": "Creates a date picker interface for users to select dates in chat interfaces.",
+      "howItWorks": "The Date Picker node creates an interactive date selection interface in chat interfaces. When executed, the node: 1. Creates a date picker with the specified title and date constraints 2. Displays the date picker in the chat interface 3. Waits for user interaction with the date picker 4. Returns a payload with information about the user's date selection",
+      "usage": [
+        "A valid chat interface or messaging platform",
+        "Properly formatted date values (YYYY-MM-DD) for Initial Date, First Date, and Last Date"
+      ],
+      "bestPractices": [
+        "Date values should be provided in YYYY-MM-DD format",
+        "If Initial Date is not provided, the current date is used",
+        "If First Date is not provided, it defaults to January 1, 1900",
+        "If Last Date is not provided, it defaults to January 1, 2100",
+        "The payload output contains the selected date in RFC3339 format",
+        "Date pickers are useful for collecting date information from users"
+      ]
+    },
+    "divider": {
+      "namespace": "Core.RobomotionAssistant.Divider",
+      "name": "Divider",
+      "summary": "Adds a horizontal divider to separate content in chat interfaces.",
+      "howItWorks": "The Divider node adds a horizontal visual separator in chat interfaces. When executed, the node: 1. Creates a horizontal divider with the specified width 2. Displays the divider in the chat interface 3. Helps organize and separate different sections of content",
+      "usage": [
+        "A valid chat interface or messaging platform"
+      ],
+      "bestPractices": [
+        "The divider helps visually organize content in chat interfaces",
+        "The width option controls the thickness of the divider line",
+        "Dividers are useful for separating different sections or topics in a conversation",
+        "The node doesn't require any inputs or produce any outputs",
+        "Multiple dividers can be used to create clear sections in complex conversations"
+      ]
+    },
+    "download_file": {
+      "namespace": "Core.RobomotionAssistant.Download_file",
+      "name": "Download_file",
+      "summary": "Creates a file download link in chat interfaces, allowing users to download files.",
+      "howItWorks": "The Download File node creates a download link for a file in chat interfaces. When executed, the node: 1. Validates the file path and checks if the file exists 2. Creates a temporary download link for the file 3. Displays a download button or link in the chat interface 4. Allows users to download the file through the chat interface",
+      "usage": [
+        "A valid file path to an existing file",
+        "Proper file system permissions to access the file",
+        "A chat interface or messaging platform that supports file downloads"
+      ],
+      "bestPractices": [
+        "The file must exist at the specified path when the node executes",
+        "The file name displayed in the chat interface is extracted from the file path",
+        "File size is automatically detected and displayed",
+        "Users can download the file directly through the chat interface",
+        "The node is useful for sharing files with users during conversations",
+        "Large files may take longer to process and make available for download"
+      ]
+    },
+    "dropdown": {
+      "namespace": "Core.RobomotionAssistant.Dropdown",
+      "name": "Dropdown",
+      "summary": "Creates a dropdown list for user selection in chat interfaces.",
+      "howItWorks": "The Dropdown node creates an interactive dropdown list in chat interfaces. When executed, the node: 1. Creates a dropdown list with the specified options 2. Displays the dropdown list in the chat interface 3. Waits for user interaction with the dropdown 4. Returns a payload with information about the user's selection",
+      "usage": [
+        "A valid chat interface or messaging platform",
+        "Properly configured dropdown options or custom options"
+      ],
+      "bestPractices": [
+        "Dropdown lists allow users to select one option from a list",
+        "The payload output contains information about which option was selected",
+        "Dropdown lists are useful for collecting user preferences or choices",
+        "Both Options and Custom Options can be used together to define the dropdown items",
+        "Custom Options allow for more complex option configurations"
+      ]
+    },
+    "end_conversation": {
+      "namespace": "Core.RobomotionAssistant.End_conversation",
+      "name": "End_conversation",
+      "summary": "Ends the Assistant conversation and closes the chat session.",
+      "howItWorks": "The End Conversation node terminates the current Assistant conversation. When executed, the node: 1. Sends a command to end the conversation to the Assistant 2. Closes the chat session 3. Cleans up any resources associated with the conversation",
+      "usage": [
+        "An active Assistant conversation",
+        "Proper permissions to end conversations"
+      ],
+      "bestPractices": [
+        "The node immediately ends the conversation when executed",
+        "Any subsequent nodes in the flow may not execute after this node",
+        "The payload output may contain information about the conversation state at the time of ending",
+        "This node is typically used at the end of a conversation flow",
+        "Users will no longer be able to interact with the Assistant after this node executes",
+        "The node is useful for gracefully ending conversations when all tasks are completed"
+      ]
+    },
+    "header": {
+      "namespace": "Core.RobomotionAssistant.Header",
+      "name": "Header",
+      "summary": "Prints a plain or Markdown formatted header in chat interfaces.",
+      "howItWorks": "The Header node displays formatted header text in chat interfaces. When executed, the node: 1. Takes the provided text input 2. Applies the specified alignment 3. Displays the header in the chat interface with Markdown formatting",
+      "usage": [
+        "A valid chat interface or messaging platform",
+        "Text content to display as a header"
+      ],
+      "bestPractices": [
+        "Headers help organize and structure content in chat interfaces",
+        "The text is formatted using Markdown for consistent appearance",
+        "Alignment options help control the visual presentation of headers",
+        "Headers are useful for separating sections or emphasizing important information",
+        "The node supports both plain text and Markdown formatted text",
+        "Multiple headers can be used to create a clear document structure in conversations"
+      ]
+    },
+    "image": {
+      "namespace": "Core.RobomotionAssistant.Image",
+      "name": "Image",
+      "summary": "Displays an image from a URL in chat interfaces.",
+      "howItWorks": "The Image node displays an image from a URL in chat interfaces. When executed, the node: 1. Retrieves the image from the provided URL 2. Applies the specified alignment and size settings 3. Displays the image with the provided title in the chat interface",
+      "usage": [
+        "A valid image URL that is accessible",
+        "A chat interface or messaging platform that supports image display",
+        "Proper network connectivity to retrieve the image"
+      ],
+      "bestPractices": [
+        "The image must be accessible from the URL when the node executes",
+        "The title serves as a caption for the image",
+        "Different size options help optimize the display for various contexts",
+        "Alignment options control the positioning of the image in the chat interface",
+        "Images are useful for providing visual context or information to users",
+        "Supported image formats typically include JPEG, PNG, and GIF"
+      ]
+    },
+    "prompt": {
+      "namespace": "Core.RobomotionAssistant.Prompt",
+      "name": "Prompt",
+      "summary": "Creates a prompt for user input in chat interfaces.",
+      "howItWorks": "The Prompt node creates an interactive prompt in chat interfaces to collect user input. When executed, the node: 1. Sends a prompt request to the Assistant 2. Displays a prompt interface in the chat for user input 3. Waits for the user to provide input or respond 4. Returns a payload with the user's response",
+      "usage": [
+        "A valid chat interface or messaging platform",
+        "An active conversation with a user"
+      ],
+      "bestPractices": [
+        "The prompt node is used to collect user input during conversations",
+        "The payload output contains the user's response to the prompt",
+        "Prompts are useful for gathering information or making decisions in workflows",
+        "The node waits for user input before proceeding to the next step",
+        "Multiple prompt nodes can be used in sequence to collect multiple pieces of information",
+        "The prompt interface may vary depending on the messaging platform being used"
+      ]
+    },
+    "radio_button": {
+      "namespace": "Core.RobomotionAssistant.Radio_button",
+      "name": "Radio_button",
+      "summary": "Creates a group of radio buttons for single-choice user selection in chat interfaces.",
+      "howItWorks": "The Radio Buttons node creates a group of radio buttons in chat interfaces where users can select only one option. When executed, the node: 1. Creates a radio button group with the specified options 2. Displays the radio buttons in the chat interface 3. Waits for user interaction with the radio buttons 4. Returns a payload with information about the user's single selection",
+      "usage": [
+        "A valid chat interface or messaging platform",
+        "Properly configured radio button options or custom options"
+      ],
+      "bestPractices": [
+        "Radio buttons allow users to select only one option from a group",
+        "The payload output contains information about which option was selected",
+        "Radio buttons are useful for collecting single-choice user preferences or answers",
+        "Both Options and Custom Options can be used together to define the radio button items",
+        "Custom Options allow for more complex option configurations",
+        "Radio buttons are typically used for mutually exclusive choices"
+      ]
+    },
+    "streaming_text": {
+      "namespace": "Core.RobomotionAssistant.Streaming_text",
+      "name": "Streaming_text",
+      "summary": "Streams text content in real-time to chat interfaces, enabling progressive text display.",
+      "howItWorks": "The Streaming Text node enables real-time text streaming in chat interfaces. When executed, the node: 1. Receives text content and streaming parameters 2. Establishes a connection to the streaming endpoint 3. Sends text data in real-time chunks 4. Maintains the streaming session until completion 5. Returns stream status information",
+      "usage": [
+        "A valid streaming session with a Stream ID",
+        "Text content to stream",
+        "A chat interface or messaging platform that supports streaming text"
+      ],
+      "bestPractices": [
+        "The node is used to progressively display text in chat interfaces",
+        "Text is streamed in real-time rather than displayed all at once",
+        "The Stream ID is required to maintain the streaming session",
+        "The Stream Index helps track the position of text in the stream",
+        "Streaming text is useful for displaying large amounts of text or real-time updates",
+        "The node can handle both partial text updates and end-of-stream signals",
+        "Multiple streaming text nodes can be used in sequence for continuous text streaming"
+      ]
+    },
+    "text": {
+      "namespace": "Core.RobomotionAssistant.Text",
+      "name": "Text",
+      "summary": "Prints plain or Markdown formatted text in chat interfaces.",
+      "howItWorks": "The Text node displays formatted text content in chat interfaces. When executed, the node: 1. Takes the provided text input 2. Applies Markdown formatting if present 3. Displays the formatted text in the chat interface",
+      "usage": [
+        "A valid chat interface or messaging platform",
+        "Text content to display"
+      ],
+      "bestPractices": [
+        "The node supports both plain text and Markdown formatted text",
+        "Markdown formatting allows for rich text presentation including bold, italic, lists, and more",
+        "Text is displayed immediately when the node executes",
+        "The node is useful for providing information, instructions, or responses to users",
+        "Multiple text nodes can be used in sequence to create longer formatted content",
+        "Text formatting helps improve readability and user experience in chat interfaces"
+      ]
+    },
+    "textbox": {
+      "namespace": "Core.RobomotionAssistant.Textbox",
+      "name": "Textbox",
+      "summary": "Adds a plain textbox input for user text entry in chat interfaces.",
+      "howItWorks": "The Textbox node creates a text input field in chat interfaces. When executed, the node: 1. Creates a textbox input with the specified ID and label 2. Displays the textbox in the chat interface 3. Waits for user to enter text and submit 4. Returns a payload with the user's text input",
+      "usage": [
+        "A valid chat interface or messaging platform",
+        "Properly configured textbox ID and label"
+      ],
+      "bestPractices": [
+        "The textbox allows users to enter free-form text input",
+        "The label provides context or instructions for the expected input",
+        "The payload output contains the text entered by the user",
+        "Textboxes are useful for collecting user information or responses",
+        "The ID helps identify the specific textbox input in workflows",
+        "Multiple textboxes can be used to collect multiple pieces of information",
+        "Text input is typically single-line, for multi-line input consider using other input types"
+      ]
+    },
+    "upload_file": {
+      "namespace": "Core.RobomotionAssistant.Upload_file",
+      "name": "Upload_file",
+      "summary": "Creates a file upload dialog in chat interfaces, allowing users to upload files.",
+      "howItWorks": "The Upload File node creates a file upload interface in chat interfaces. When executed, the node: 1. Creates a file upload dialog with the specified ID and options 2. Displays the upload dialog in the chat interface 3. Waits for user to select and upload files 4. Saves the uploaded files to the specified directory 5. Returns payload information and file paths",
+      "usage": [
+        "A valid chat interface or messaging platform that supports file uploads",
+        "Proper directory permissions for saving uploaded files",
+        "Valid file format specifications if using format filtering"
+      ],
+      "bestPractices": [
+        "The file upload dialog allows users to select files from their device",
+        "The Format option can restrict uploads to specific file types",
+        "The Files Limit option controls how many files can be uploaded at once",
+        "Uploaded files are automatically saved to the specified directory",
+        "The payload output contains metadata about the uploaded files",
+        "The files output provides the actual file paths of the saved files",
+        "This node is useful for collecting documents, images, or other files from users"
+      ]
+    }
+  }
+}

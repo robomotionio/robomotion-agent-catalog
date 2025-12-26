@@ -1,0 +1,333 @@
+{
+  "package": "Gateio",
+  "summary": "The Gate.io package provides comprehensive integration with the Gate.io cryptocurrency exchange, enabling automated trading, portfolio management, and market data retrieval for RPA workflows.",
+  "description": "## Overview The Gate.io package allows you to:",
+  "nodes": {
+    "buy-order": {
+      "namespace": "Core.Gateio.BuyOrder",
+      "name": "BuyOrder",
+      "summary": "Places a limit buy order on Gate.io exchange to purchase cryptocurrency at a specified price. The node automatically checks balance and validates the order before submission.",
+      "howItWorks": "The Buy Order node executes the following steps: 1. Authenticates using either Client Id or direct credentials 2. Validates and parses the Currency Pair (e.g., `BTC_USDT` splits into base=BTC, quote=USDT) 3. Fetches current ticker data to get the last price 4. Retrieves your account balance for the quote currency (e.g., USDT) 5. Uses the provided Order Price, or defaults to last market price if empty 6. Verifies you have sufficient balance to complete the purchase 7. Creates a limit buy order on Gate.io spot market 8. Returns the order details including order ID and fees",
+      "usage": [
+        "Either a valid Client Id from Connect node OR API credentials",
+        "Sufficient balance in the quote currency (e.g., USDT for BTC_USDT)",
+        "Valid trading pair that exists on Gate.io",
+        "Order amount must meet minimum trading requirements for the pair",
+        "Trading pair must be active and not suspended"
+      ],
+      "bestPractices": [
+        "This node places a **limit order** that will only execute at the specified price or better",
+        "The order is placed on the **spot market** (not margin or futures)",
+        "Time in force is set to `gtc` (Good Till Cancelled) - order stays active until filled or cancelled",
+        "Order amount must be specified in the base currency (first part of the pair)",
+        "The node automatically fetches and validates the current market price",
+        "Balance check includes the exact amount needed (amount × price)",
+        "Fees are deducted separately and returned in the result"
+      ],
+      "errorCodes": [
+        "ErrInternal",
+        "ErrInvalidArg",
+        "ErrGetCurrencyPair",
+        "ErrListTickers",
+        "ErrListSpotAccounts",
+        "ErrCheckBalance",
+        "ErrCreateOrder"
+      ]
+    },
+    "cancel-order": {
+      "namespace": "Core.Gateio.CancelOrder",
+      "name": "CancelOrder",
+      "summary": "Cancels an existing open order on Gate.io exchange. This node is useful for managing your active orders and implementing dynamic trading strategies.",
+      "howItWorks": "The Cancel Order node executes the following steps: 1. Authenticates using either Client Id or direct credentials 2. Validates that Order ID is not empty 3. Validates that Currency Pair is not empty 4. Sends a cancellation request to Gate.io API for the specified order 5. Returns the complete order details after cancellation",
+      "usage": [
+        "Either a valid Client Id from Connect node OR API credentials",
+        "Valid Order ID from a previously created order",
+        "Correct Currency Pair matching the original order",
+        "The order must be in an open/active state (not already filled or cancelled)"
+      ],
+      "bestPractices": [
+        "You can only cancel orders that are still open (not filled or already cancelled)",
+        "The Order ID must match an order you created with your API credentials",
+        "The Currency Pair must exactly match the original order",
+        "Partially filled orders can be cancelled (unfilled portion will be cancelled)",
+        "The returned result includes information about any partial fills",
+        "Cancelled orders cannot be reactivated; you must create a new order"
+      ],
+      "errorCodes": [
+        "ErrInternal",
+        "ErrInvalidArg",
+        "ErrCancelOrder"
+      ]
+    },
+    "connect": {
+      "namespace": "Core.Gateio.Connect",
+      "name": "Connect",
+      "summary": "Establishes a connection to the Gate.io cryptocurrency exchange using API credentials, creating a reusable client session for subsequent trading and data operations.",
+      "howItWorks": "The Connect node is the first step in any Gate.io automation workflow. It establishes a secure connection to Gate.io and creates a client session. When executed, the node: 1. Retrieves the API Key and Secret Key from the provided credentials 2. Validates that both credentials are not empty 3. Creates a new Gate.io client instance with the provided credentials 4. Configures the base URL (defaults to https://api.gateio.ws/api/v4) 5. Generates a unique client ID for the session 6. Stores the client in memory for use by other nodes 7. Returns the client ID for subsequent operations",
+      "usage": [
+        "A valid Gate.io account",
+        "Gate.io API Key and Secret Key (created from Gate.io Account Settings \u003e API Management)",
+        "Both credentials stored in Robomotion Vault",
+        "Appropriate API permissions enabled (e.g., spot trading, reading)"
+      ],
+      "bestPractices": [
+        "The Connect node should be executed before any other Gate.io operations",
+        "The returned Client Id must be passed to all subsequent Gate.io nodes",
+        "Each Connect node creates a new client session",
+        "Always pair Connect with Disconnect to properly clean up resources",
+        "The client session is stored in memory and automatically removed when the flow stops",
+        "The node automatically detects testnet URLs (fx-api-testnet.gateio.ws)"
+      ],
+      "errorCodes": [
+        "ErrCredentials",
+        "ErrInvalidArg"
+      ]
+    },
+    "disconnect": {
+      "namespace": "Core.Gateio.Disconnect",
+      "name": "Disconnect",
+      "summary": "Closes the connection to Gate.io exchange and releases associated resources. This node should be used at the end of your Gate.io automation workflow to properly clean up the client session.",
+      "howItWorks": "The Disconnect node cleans up the Gate.io client session when your automation workflow is complete. When executed, the node: 1. Retrieves the Client Id from the input 2. Validates that the Client Id is not empty 3. Looks up the corresponding client session in memory 4. Removes the client session from memory 5. Releases all associated resources",
+      "usage": [
+        "A valid Client Id from a Connect node",
+        "The client session must still exist (not already disconnected)"
+      ],
+      "bestPractices": [
+        "Always use Disconnect at the end of your Gate.io automation flow",
+        "Each Connect node should have a corresponding Disconnect node",
+        "The Disconnect node should be executed even if errors occur during the workflow",
+        "Use a Finally node or error handling to ensure Disconnect always runs",
+        "Once disconnected, the Client Id becomes invalid and cannot be reused",
+        "The client is automatically removed when the flow stops, but explicit disconnection is best practice"
+      ],
+      "errorCodes": [
+        "ErrInternal",
+        "ErrInvalidArg"
+      ]
+    },
+    "get-balance": {
+      "namespace": "Core.Gateio.GetBalance",
+      "name": "GetBalance",
+      "summary": "Retrieves the available balance for a specific cryptocurrency in your Gate.io spot trading account. Essential for checking funds before placing orders or monitoring your portfolio.",
+      "howItWorks": "The Get Balance node executes the following steps: 1. Authenticates using either Client Id or direct credentials 2. Validates that the Currency is not empty 3. Queries Gate.io spot account API for the specified currency 4. Extracts the available balance (not locked in orders) 5. Returns the balance as a string",
+      "usage": [
+        "Either a valid Client Id from Connect node OR API credentials",
+        "Valid currency code that exists on Gate.io",
+        "Read permissions on your API key"
+      ],
+      "bestPractices": [
+        "The returned balance is the **available** amount (not locked in open orders)",
+        "Balance is returned as a string to preserve decimal precision",
+        "If the currency doesn't exist in your account, an error is returned",
+        "The currency code must be exact (e.g., `BTC` not `btc` or `Bitcoin`)",
+        "This retrieves spot wallet balance only (not margin, futures, or other wallets)",
+        "Balance shown is net of any locked funds in open orders"
+      ],
+      "errorCodes": [
+        "ErrInternal",
+        "ErrInvalidArg",
+        "ErrListSpotAccounts"
+      ]
+    },
+    "get-deposit-address": {
+      "namespace": "Core.Gateio.GetDepositAddress",
+      "name": "GetDepositAddress",
+      "summary": "Retrieves the deposit address for a specific cryptocurrency on Gate.io. Essential for automating cryptocurrency deposits and building wallet management systems.",
+      "howItWorks": "The Get Deposit Address node executes the following steps: 1. Authenticates using either Client Id or direct credentials 2. Validates that Currency is not empty 3. Queries Gate.io Wallet API for deposit address 4. Returns deposit address information including multi-chain addresses if available",
+      "usage": [
+        "Either a valid Client Id from Connect node OR API credentials",
+        "Valid currency code that is supported on Gate.io",
+        "Wallet permissions on your API key",
+        "The currency must support deposits"
+      ],
+      "bestPractices": [
+        "Many cryptocurrencies support multiple networks (e.g., USDT on TRC20, ERC20, BEP20)",
+        "Always verify the network before depositing (wrong network can result in lost funds)",
+        "Some currencies require a payment ID/memo in addition to the address",
+        "Deposit addresses are typically permanent but can change",
+        "Some new currencies may not have addresses generated automatically",
+        "This is read-only wallet information retrieval"
+      ],
+      "errorCodes": [
+        "ErrInternal",
+        "ErrInvalidArg",
+        "ErrGetDepositAddress"
+      ]
+    },
+    "get-fee": {
+      "namespace": "Core.Gateio.GetFee",
+      "name": "GetFee",
+      "summary": "Retrieves trading fee information for a specific currency pair on Gate.io. Essential for calculating total trading costs and optimizing trading strategies.",
+      "howItWorks": "The Get Fee node executes the following steps: 1. Authenticates using either Client Id or direct credentials 2. Validates that Currency Pair is not empty 3. Queries Gate.io API for fee information for the specified pair 4. Returns the complete fee structure including discounts",
+      "usage": [
+        "Either a valid Client Id from Connect node OR API credentials",
+        "Valid trading pair that exists on Gate.io",
+        "Read permissions on your API key"
+      ],
+      "bestPractices": [
+        "Fee rates are returned as percentages (e.g., \"0.2\" means 0.2%)",
+        "Taker fees apply when you take liquidity (market orders or limit orders that execute immediately)",
+        "Maker fees apply when you add liquidity (limit orders that don't execute immediately)",
+        "GT discount requires holding GateToken and enabling the discount feature",
+        "Fee rates may vary based on your trading volume and VIP level",
+        "Fees are charged in the currency you receive (buy: charged in base, sell: charged in quote)"
+      ],
+      "errorCodes": [
+        "ErrInternal",
+        "ErrInvalidArg",
+        "ErrGetFee"
+      ]
+    },
+    "get-order": {
+      "namespace": "Core.Gateio.GetOrder",
+      "name": "GetOrder",
+      "summary": "Retrieves detailed information about a specific order on Gate.io using its order ID. Essential for monitoring order status, tracking fills, and managing individual orders.",
+      "howItWorks": "The Get Order node executes the following steps: 1. Authenticates using either Client Id or direct credentials 2. Validates that Currency Pair is not empty and in correct format 3. Validates that Order ID is not empty 4. Queries Gate.io API for the specific order 5. Returns complete order details including current status and fills",
+      "usage": [
+        "Either a valid Client Id from Connect node OR API credentials",
+        "Valid Order ID from a previously created order",
+        "Correct Currency Pair matching the original order",
+        "The order must have been created with your API credentials"
+      ],
+      "bestPractices": [
+        "You can only retrieve orders created with your API credentials",
+        "The Currency Pair must exactly match the original order",
+        "Order status indicates if order is open, filled, or cancelled",
+        "`left` field shows how much of the order remains unfilled",
+        "Filled orders show average execution price in `fill_price`",
+        "Timestamps are in Unix format (seconds since epoch)",
+        "Fees are charged in the currency you receive"
+      ],
+      "errorCodes": [
+        "ErrInternal",
+        "ErrInvalidArg",
+        "ErrGetOrder"
+      ]
+    },
+    "get-price": {
+      "namespace": "Core.Gateio.GetPrice",
+      "name": "GetPrice",
+      "summary": "Retrieves current price and ticker information for a specific cryptocurrency trading pair on Gate.io. Essential for price monitoring, trading decisions, and market analysis.",
+      "howItWorks": "The Get Price node executes the following steps: 1. Authenticates using either Client Id or direct credentials 2. Validates and parses the Currency Pair (e.g., `BTC_USDT` splits into base=BTC, quote=USDT) 3. Fetches the currency pair details from Gate.io 4. Retrieves the current ticker data for the trading pair 5. Returns the complete ticker object with all market information",
+      "usage": [
+        "Either a valid Client Id from Connect node OR API credentials",
+        "Valid trading pair that exists on Gate.io",
+        "Trading pair must use underscore format (e.g., `BTC_USDT`)"
+      ],
+      "bestPractices": [
+        "Returns real-time market data",
+        "The `last` field is the most recent traded price",
+        "Spread can be calculated as: `lowest_ask - highest_bid`",
+        "All prices are in the quote currency (e.g., USDT for BTC_USDT)",
+        "Volume data is for the last 24 hours",
+        "This is read-only and doesn't require trading permissions"
+      ],
+      "errorCodes": [
+        "ErrInternal",
+        "ErrInvalidArg",
+        "ErrGetCurrencyPair",
+        "ErrListTickers"
+      ]
+    },
+    "list-my-orders": {
+      "namespace": "Core.Gateio.ListMyOrders",
+      "name": "ListMyOrders",
+      "summary": "Retrieves all open orders across all trading pairs for your Gate.io account. Essential for monitoring active orders and implementing order management strategies.",
+      "howItWorks": "The List My Orders node executes the following steps: 1. Authenticates using either Client Id or direct credentials 2. Queries Gate.io API for all open orders across all trading pairs 3. Groups orders by currency pair 4. Returns an array with orders organized by trading pair",
+      "usage": [
+        "Either a valid Client Id from Connect node OR API credentials",
+        "Read permissions on your API key",
+        "You must have created orders with this API key to see results"
+      ],
+      "bestPractices": [
+        "Only returns **open** orders (not filled or cancelled orders)",
+        "Returns orders across **all** trading pairs",
+        "Orders are grouped by currency pair in the result",
+        "Empty array is returned if you have no open orders",
+        "This is read-only and doesn't require trading permissions",
+        "Historical or filled orders are not included"
+      ],
+      "errorCodes": [
+        "ErrListMyOrders"
+      ]
+    },
+    "list-orders": {
+      "namespace": "Core.Gateio.ListOrders",
+      "name": "ListOrders",
+      "summary": "Retrieves the order book (list of buy and sell orders) for a specific trading pair on Gate.io. Essential for analyzing market depth, liquidity, and finding the best execution prices.",
+      "howItWorks": "The List Orders node executes the following steps: 1. Validates that Currency Pair is not empty 2. Sets default limit to 10 if not specified or invalid 3. Creates a new Gate.io client (no authentication required for public data) 4. Fetches the order book for the specified trading pair 5. Filters for either buy (bids) or sell (asks) orders based on Order Type option 6. Returns the specified number of price levels",
+      "usage": [
+        "Valid trading pair that exists on Gate.io",
+        "No authentication required (this is public market data)",
+        "Limit should be a positive number (1-100 recommended)"
+      ],
+      "bestPractices": [
+        "This retrieves **public** order book data (doesn't require authentication)",
+        "Buy orders (bids) are sorted from highest to lowest price",
+        "Sell orders (asks) are sorted from lowest to highest price",
+        "Data is real-time snapshot of the order book",
+        "Each price level shows total amount available at that price",
+        "Order book data changes rapidly in active markets",
+        "No Client Id required - this is public market data"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrListOrderBook",
+        "ErrInvalidOrderType"
+      ]
+    },
+    "list-pairs": {
+      "namespace": "Core.Gateio.ListPairs",
+      "name": "ListPairs",
+      "summary": "Retrieves all available cryptocurrency trading pairs on Gate.io exchange. Essential for discovering tradeable pairs, validating pair names, and building multi-pair trading strategies.",
+      "howItWorks": "The List Pairs node executes the following steps: 1. Creates a new Gate.io client (no authentication required) 2. Queries the Gate.io API for all currency pairs 3. Returns the complete list of trading pair configurations",
+      "usage": [
+        "No authentication required (this is public market data)",
+        "No inputs needed"
+      ],
+      "bestPractices": [
+        "This retrieves **public** data (no authentication needed)",
+        "Returns all pairs regardless of trading status",
+        "Check `trade_status` field to verify if pair is actively tradable",
+        "Data includes minimum order sizes and precision requirements",
+        "Result can contain hundreds of trading pairs",
+        "Use filtering to find specific pairs of interest",
+        "Trading rules (min amounts, precision) are crucial for order placement"
+      ],
+      "errorCodes": [
+        "ErrListCurrency"
+      ]
+    },
+    "sell-order": {
+      "namespace": "Core.Gateio.SellOrder",
+      "name": "SellOrder",
+      "summary": "Places a limit sell order on Gate.io exchange to sell cryptocurrency at a specified price. The node automatically checks balance and validates the order before submission.",
+      "howItWorks": "The Sell Order node executes the following steps: 1. Authenticates using either Client Id or direct credentials 2. Validates and parses the Currency Pair (e.g., `BTC_USDT` splits into base=BTC, quote=USDT) 3. Fetches current ticker data to get the last price 4. Retrieves your account balance for the base currency (e.g., BTC) 5. Uses the provided Order Price, or defaults to last market price if empty 6. Verifies you have sufficient balance of the cryptocurrency to sell 7. Creates a limit sell order on Gate.io spot market 8. Returns the order details including order ID and fees",
+      "usage": [
+        "Either a valid Client Id from Connect node OR API credentials",
+        "Sufficient balance in the base currency (e.g., BTC for BTC_USDT)",
+        "Valid trading pair that exists on Gate.io",
+        "Order amount must meet minimum trading requirements for the pair",
+        "Trading pair must be active and not suspended"
+      ],
+      "bestPractices": [
+        "This node places a **limit order** that will only execute at the specified price or better",
+        "The order is placed on the **spot market** (not margin or futures)",
+        "Time in force is set to `gtc` (Good Till Cancelled) - order stays active until filled or cancelled",
+        "Order amount must be specified in the base currency (first part of the pair)",
+        "The node automatically fetches and validates the current market price",
+        "Balance check verifies you have enough of the cryptocurrency to sell",
+        "Fees are deducted separately and returned in the result"
+      ],
+      "errorCodes": [
+        "ErrInternal",
+        "ErrInvalidArg",
+        "ErrGetCurrencyPair",
+        "ErrListTickers",
+        "ErrListSpotAccounts",
+        "ErrCheckBalance",
+        "ErrCreateOrder"
+      ]
+    }
+  }
+}

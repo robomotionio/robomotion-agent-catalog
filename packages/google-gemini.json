@@ -1,0 +1,361 @@
+{
+  "package": "GoogleGemini",
+  "summary": "Google Gemini is Google's most capable and advanced family of large language models (LLMs), offering multimodal capabilities for text generation, image understanding, video generation, audio processing, and advanced reasoning tasks.",
+  "description": "```mdx-code-block import DocCardList from '@theme/DocCardList';",
+  "nodes": {
+    "BatchEmbeddings": {
+      "namespace": "Core.GoogleGemini.BatchEmbeddings",
+      "name": "BatchEmbeddings",
+      "summary": "Generates embeddings for multiple text inputs using Google's Gemini API.",
+      "howItWorks": "The Batch Embeddings node generates embeddings for multiple text inputs using Google's Gemini API. When executed, the node: 1. Validates the provided connection ID and content inputs 2. Ensures the content array is not empty and doesn't exceed 100 texts 3. Retrieves the configured embedding model (defaults to \"text-embedding-004\" if not specified) 4. Builds the embedding configuration with optional parameters like task type, title, and output dimensionality 5. Generates embeddings for each text in the content array 6. Returns a structured response containing the embeddings, model information, and metadata",
+      "usage": [
+        "A valid Google Gemini API key",
+        "Connection ID from a successful Connect node execution",
+        "An array of text strings to generate embeddings for"
+      ],
+      "bestPractices": [
+        "The maximum number of texts allowed per batch is 100",
+        "The Title option is only supported for RETRIEVAL_DOCUMENT task type",
+        "Output dimensionality must be a positive integer if specified",
+        "Each text in the contents array must be non-empty",
+        "The embeddings output includes statistics like token count and truncation information when available"
+      ]
+    },
+    "CompareEmbeddings": {
+      "namespace": "Core.GoogleGemini.CompareEmbeddings",
+      "name": "CompareEmbeddings",
+      "summary": "Compares embeddings of texts to find similarities using various similarity metrics.",
+      "howItWorks": "The Compare Embeddings node calculates similarity scores between a source text and multiple comparison texts using Google's Gemini API. When executed, the node: 1. Validates the provided connection ID and input texts or files 2. Configures the embedding model based on the selected options 3. Loads or generates embeddings for the source text and comparison texts 4. Calculates similarity scores using the specified metric (cosine, dot product, or euclidean) 5. Filters results based on the similarity threshold if provided 6. Sorts results according to the specified sort order 7. Limits the number of results if a maximum is specified 8. Saves detailed results to a JSON file and returns a summary",
+      "usage": [
+        "A valid Google Gemini API key",
+        "Connection ID from a successful Connect node execution",
+        "Either source text or a source embedding file",
+        "Either comparison texts or a target embeddings file"
+      ],
+      "bestPractices": [
+        "You can provide texts directly or load pre-computed embeddings from JSON files",
+        "Comparison texts can also be loaded from a text file (one text per line)",
+        "Cosine similarity is the default and most commonly used metric",
+        "Results are automatically saved to a JSON file in a temporary directory",
+        "The node supports timeout configuration for long-running operations",
+        "For large datasets, consider using pre-computed embedding files to improve performance"
+      ]
+    },
+    "DeleteFile": {
+      "namespace": "Core.GoogleGemini.DeleteFile",
+      "name": "DeleteFile",
+      "summary": "Deletes a file from Google's Gemini API using the file URI.",
+      "howItWorks": "The Delete File node removes a previously uploaded file from Google's Gemini API. When executed, the node: 1. Validates the provided connection ID and file URI 2. Retrieves the Gemini client using the connection ID 3. Sends a delete request to the Gemini API for the specified file URI 4. Measures the operation time for performance tracking 5. Returns a structured response with success status and metadata",
+      "usage": [
+        "A valid Google Gemini API key",
+        "Connection ID from a successful Connect node execution",
+        "Valid file URI from a previous file upload operation"
+      ],
+      "bestPractices": [
+        "The file URI must be the full URI returned from a file upload operation",
+        "Deleted files cannot be recovered",
+        "The operation time is included in the result metadata for performance monitoring",
+        "If a file has already been deleted or expired, a specific \"File not found\" error will be returned"
+      ]
+    },
+    "EditImage": {
+      "namespace": "Core.GoogleGemini.EditImage",
+      "name": "EditImage",
+      "summary": "Edits images using Google's Gemini API based on a text prompt and mask image.",
+      "howItWorks": "The Edit Image node modifies images using Google's Gemini API based on a text prompt and mask. When executed, the node: 1. Validates the provided connection ID, edit prompt, and image file paths 2. Ensures the base and mask image files exist 3. Configures the image editing parameters including model, number of images, and output format 4. Reads the base and mask images from the file system 5. Sends an image editing request to the Gemini API 6. Saves the edited images to a temporary directory 7. Returns structured information about the edited images including file paths and metadata",
+      "usage": [
+        "A valid Google Gemini API key",
+        "Connection ID from a successful Connect node execution",
+        "Valid base image file path",
+        "Valid mask image file path",
+        "Edit prompt describing the desired changes"
+      ],
+      "bestPractices": [
+        "The edit prompt should clearly describe the changes you want to make",
+        "The mask image should have white areas where you want edits to occur",
+        "Edited images are saved to a temporary directory with unique names",
+        "The maximum length for edit prompts and negative prompts is 1000 characters",
+        "For JPEG output, quality can be adjusted between 1-100",
+        "The default timeout is 120 seconds, which can be adjusted for complex edits",
+        "The node returns file paths to the edited images, which can be used by other nodes"
+      ]
+    },
+    "Embeddings": {
+      "namespace": "Core.GoogleGemini.Embeddings",
+      "name": "Embeddings",
+      "summary": "Generates embeddings for text content using Google's Gemini API with various task types.",
+      "howItWorks": "The Embeddings node generates embeddings for text content using Google's Gemini API. When executed, the node: 1. Validates the provided connection ID and content 2. Configures the embedding model (defaults to \"text-embedding-004\" if not specified) 3. Sets optional parameters like task type, title, and output dimensionality 4. For Semantic Similarity task: * Generates embeddings for both Content and Compare Text * Calculates cosine similarity between the two embeddings * Returns the similarity score and optionally the embeddings themselves 5. For other task types: * Generates a single embedding for the Content * Returns the embedding values with metadata 6. Includes statistics if requested and available from the API",
+      "usage": [
+        "A valid Google Gemini API key",
+        "Connection ID from a successful Connect node execution",
+        "Text content to generate embeddings for"
+      ],
+      "bestPractices": [
+        "The Title option is only supported for RETRIEVAL_DOCUMENT task type",
+        "Output dimensionality should be one of the common values: 256, 512, or 768",
+        "For Semantic Similarity task, both Content and Compare Text are required",
+        "Statistics include token count and truncation information when available",
+        "The default embedding model is \"text-embedding-004\"",
+        "Cosine similarity is used for Semantic Similarity calculations"
+      ]
+    },
+    "FileUpload": {
+      "namespace": "Core.GoogleGemini.FileUpload",
+      "name": "FileUpload",
+      "summary": "Uploads a local file to Google's Gemini API for use in multimodal operations.",
+      "howItWorks": "The Upload File node uploads a local file to Google's Gemini API for use in multimodal operations. When executed, the node: 1. Validates the provided connection ID and file path 2. Checks that the file exists and is not a directory 3. Validates the file size (maximum 2GB) if validation is enabled 4. Detects the MIME type of the file 5. Uploads the file to the Gemini API with progress tracking 6. Returns detailed information about the uploaded file including URI and metadata",
+      "usage": [
+        "A valid Google Gemini API key",
+        "Connection ID from a successful Connect node execution",
+        "Valid local file path to an existing file",
+        "File size must not exceed 2GB"
+      ],
+      "bestPractices": [
+        "The file display name defaults to the file's base name if not explicitly provided",
+        "Upload progress is logged every 5 seconds for large files",
+        "Uploaded files have expiration times set by the Gemini API",
+        "The returned file URI is used by other nodes that require file inputs",
+        "File upload speed is calculated and included in the metadata",
+        "MIME type is automatically detected based on the file extension",
+        "Files are uploaded directly to Google's servers and are not stored locally"
+      ]
+    },
+    "GenerateContent": {
+      "namespace": "Core.GoogleGemini.GenerateContent",
+      "name": "GenerateContent",
+      "summary": "Generates text content using Google's Gemini API with support for multimodal inputs including text, images, and files.",
+      "howItWorks": "The Generate Content node creates text content using Google's Gemini API with support for multimodal inputs. When executed, the node: 1. Validates the provided connection ID and user prompt 2. Configures the selected model with all specified parameters 3. Processes any local files or uploaded files to include as input 4. Sets up safety settings and generation parameters 5. Sends a content generation request to the Gemini API 6. Handles the response either as a complete result or as a stream 7. Returns the generated content in the specified format",
+      "usage": [
+        "A valid Google Gemini API key",
+        "Connection ID from a successful Connect node execution",
+        "Valid text prompt for the model to respond to"
+      ],
+      "bestPractices": [
+        "Local files are limited to 20MB for inline data; larger files should be uploaded first",
+        "File input is supported only with Gemini Flash and Pro models",
+        "JSON mode can be used to enforce structured output",
+        "Safety settings can be adjusted to control content filtering",
+        "Streaming responses are useful for long-generation tasks",
+        "System prompts can guide the model's overall behavior",
+        "Response schemas enable structured output validation",
+        "Code execution and Google Search tools must be explicitly enabled",
+        "The default timeout is 60 seconds, which can be adjusted for complex requests"
+      ]
+    },
+    "GenerateImages": {
+      "namespace": "Core.GoogleGemini.GenerateImages",
+      "name": "GenerateImages",
+      "summary": "Generates images from text prompts using Google's Imagen models.",
+      "howItWorks": "The Generate Images node creates images from text prompts using Google's Imagen models. When executed, the node: 1. Validates the provided connection ID and prompt 2. Configures the selected model with all specified parameters 3. Sets up generation parameters including number of images, aspect ratio, and safety settings 4. Sends an image generation request to the Imagen API 5. Saves the generated images to a temporary directory 6. Returns structured information about the generated images including file paths and metadata",
+      "usage": [
+        "A valid Google Gemini API key",
+        "Connection ID from a successful Connect node execution",
+        "Valid text prompt describing the desired image"
+      ],
+      "bestPractices": [
+        "The maximum length for prompts and negative prompts is 1000 characters",
+        "Images are saved to a temporary directory with unique names",
+        "For JPEG output, quality can be adjusted between 1-100",
+        "The default aspect ratio is 1:1",
+        "Person generation settings control adult content filtering",
+        "The node returns file paths to the generated images, which can be used by other nodes",
+        "Different models offer different capabilities and performance characteristics",
+        "The default model is \"imagen-3.0-generate-002\" (latest version)"
+      ]
+    },
+    "GenerateText": {
+      "namespace": "Core.GoogleGemini.GenerateText",
+      "name": "GenerateText",
+      "summary": "Generates text using Google Gemini models with optional file inputs, advanced reasoning, and tool capabilities.",
+      "howItWorks": "The Generate Text node creates text content using Google Gemini models with multimodal inputs. When executed: 1. Validates connection ID/API key and user prompt 2. Configures the selected model with all parameters 3. Processes local files (max 20MB each) and uploaded files 4. Sets up thinking configuration based on model and mode 5. Configures safety settings and generation parameters 6. Sends generation request to Gemini API (or via Robomotion gateway) 7. Handles response as complete result or stream 8. Returns generated text in specified format",
+      "usage": [
+        "Valid Google Gemini API key or Robomotion credits",
+        "Connection ID from Connect node (or inline API key)",
+        "Non-empty user prompt"
+      ],
+      "bestPractices": [
+        "Local files limited to 20MB; use FileUpload for larger files",
+        "Streaming not available when using Robomotion Credits",
+        "JSON Mode forces `application/json` MIME type",
+        "Thinking mode not available on 2.0 Flash Lite",
+        "Multiple generations not guaranteed to be diverse without temperature \u003e 0",
+        "Google Search grounding requires supported model",
+        "Code execution runs in sandboxed environment"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrFileNotFound",
+        "ErrFileSize",
+        "ErrInvalidParam",
+        "ErrInvalidModel",
+        "ErrContentBlocked",
+        "ErrUnsupportedFeature"
+      ],
+      "tips": [
+        "Use **Gemini 3 Pro** for tasks requiring deep reasoning and analysis",
+        "Use **Gemini 2.5 Flash** for most production workloads (best balance)",
+        "Use **Gemini 2.5 Flash-Lite** for simple, high-volume tasks",
+        "Enable **Thinking Mode** for math, coding, and complex reasoning",
+        "Use **System Prompt** to define role, constraints, and output format",
+        "Set **Temperature to 0** for deterministic outputs",
+        "Set **Temperature to 0.7-1.0** for creative tasks",
+        "Use **JSON Mode + Schema** for reliable structured data extraction",
+        "Enable **Google Search** for current events and factual grounding",
+        "Use **Code Execution** for calculations and data processing",
+        "Adjust **Safety Settings** based on your use case requirements",
+        "For large files, use FileUpload node first, then reference in Uploaded Files"
+      ]
+    },
+    "GenerateVideos": {
+      "namespace": "Core.GoogleGemini.GenerateVideos",
+      "name": "GenerateVideos",
+      "summary": "Generates videos from text prompts using Google's Veo models.",
+      "howItWorks": "The Generate Videos node creates videos from text prompts using Google's Veo models. When executed, the node: 1. Validates the provided connection ID and video prompt 2. Configures the selected model with all specified parameters 3. Sets up generation parameters including aspect ratio and person generation settings 4. Handles reference image input for image-to-video generation (Veo 2 only) 5. Sends a video generation request to the Veo API 6. Polls for completion status until the operation finishes 7. Saves the generated videos to a temporary directory 8. Returns structured information about the generated videos including file paths and metadata",
+      "usage": [
+        "A valid Google Gemini API key",
+        "Connection ID from a successful Connect node execution",
+        "Valid text prompt describing the desired video",
+        "Reference image file (for image-to-video generation with Veo 2)"
+      ],
+      "bestPractices": [
+        "The maximum length for video prompts and negative prompts is 2000 characters",
+        "Videos are 8 seconds long at 720p resolution and 24fps",
+        "Veo 3 has native audio support and SynthID watermarking",
+        "Veo 2 supports image-to-video generation with reference images",
+        "Videos are saved to a temporary directory with unique names",
+        "The default timeout is 360 seconds (6 minutes) which can be adjusted",
+        "The default aspect ratio is 16:9 (landscape)",
+        "Person generation settings control content filtering for human subjects",
+        "The node returns file paths to the generated videos, which can be used by other nodes"
+      ]
+    },
+    "GetFile": {
+      "namespace": "Core.GoogleGemini.GetFile",
+      "name": "GetFile",
+      "summary": "Retrieves information about a previously uploaded file from Google's Gemini API.",
+      "howItWorks": "The Get File node retrieves information about a previously uploaded file from Google's Gemini API. When executed, the node: 1. Validates the provided connection ID and file URI 2. Sends a request to the Gemini API to retrieve file information 3. Returns detailed information about the file including: * URI and name * Display name * MIME type * Size in bytes * Creation and update times * Expiration time (if applicable) * Processing state * Error information (if any) * Video metadata (for video files) * Additional metadata",
+      "usage": [
+        "A valid Google Gemini API key",
+        "Connection ID from a successful Connect node execution",
+        "Valid file URI from a previous file upload operation"
+      ],
+      "bestPractices": [
+        "The file URI must be the full URI returned from a file upload operation",
+        "Files have expiration times set by the Gemini API",
+        "The node provides time until expiration in the metadata",
+        "File processing state is included in the response:",
+        "Processing: File is being processed",
+        "Active: File is ready for use",
+        "Failed: File processing failed",
+        "Video files include duration metadata",
+        "Error information is provided if file processing failed",
+        "The SHA256 hash of the file is included in the metadata"
+      ]
+    },
+    "ListFiles": {
+      "namespace": "Core.GoogleGemini.ListFiles",
+      "name": "ListFiles",
+      "summary": "Lists files that have been uploaded to Google's Gemini API with pagination support.",
+      "howItWorks": "The List Files node retrieves a list of files that have been uploaded to Google's Gemini API with support for pagination. When executed, the node: 1. Validates the provided connection ID 2. Configures pagination parameters including page size and page token 3. Sends a request to the Gemini API to list files 4. Processes the results, filtering expired files if requested 5. Returns detailed information about each file including: * URI and name * Display name * MIME type * Size in bytes * Creation and update times * Expiration time (if applicable) * Processing state * Expiration status 6. Provides pagination support with next page token 7. Includes statistics about the files such as total size and counts by state",
+      "usage": [
+        "A valid Google Gemini API key",
+        "Connection ID from a successful Connect node execution"
+      ],
+      "bestPractices": [
+        "The default page size is 10 files per page",
+        "Files are filtered to exclude expired ones by default",
+        "The node provides statistics including total file size and counts by processing state",
+        "Pagination is supported through the Next Page Token output",
+        "File processing states include:",
+        "Active: File is ready for use",
+        "Processing: File is being processed",
+        "Failed: File processing failed",
+        "Expired files can be included by enabling the Include Expired option",
+        "The maximum page size is 100 files",
+        "Time until expiration is included in file metadata when available",
+        "The SHA256 hash of each file is included in the metadata"
+      ]
+    },
+    "ListModels": {
+      "namespace": "Core.GoogleGemini.ListModels",
+      "name": "ListModels",
+      "summary": "Lists available models from Google's Gemini API with detailed information and filtering capabilities.",
+      "howItWorks": "The List Models node retrieves information about available models from Google's Gemini API with support for filtering and pagination. When executed, the node: 1. Validates the provided connection ID 2. Configures pagination parameters including page size and page token 3. Applies any specified filters to narrow down the model list 4. Sends a request to the Gemini API to list models 5. Processes the results and categorizes models by type 6. Returns detailed information about each model including: * Name and display name * Version information * Description * Token limits (input and output) * Supported generation methods * Additional metadata and capabilities 7. Provides pagination support with next page token 8. Includes statistics about the models such as counts by category and supported methods",
+      "usage": [
+        "A valid Google Gemini API key",
+        "Connection ID from a successful Connect node execution"
+      ],
+      "bestPractices": [
+        "The default page size is 50 models per page",
+        "Models are categorized as Gemini Pro, Gemini Flash, Embedding, Imagen, or other",
+        "Filtering can be used to find models with specific capabilities",
+        "Detailed information includes token limits and supported generation methods",
+        "Common generation methods include:",
+        "generateContent: Text generation",
+        "streamGenerateContent: Streaming responses",
+        "embedContent: Embedding generation",
+        "batchEmbedContents: Batch embedding generation",
+        "countTokens: Token counting",
+        "generateAnswer: Answer generation",
+        "Model capabilities are automatically detected and included in metadata",
+        "The maximum page size is 100 models",
+        "Statistics include counts by model category and supported methods",
+        "The node provides both basic and detailed model information"
+      ]
+    },
+    "SendChatMessage": {
+      "namespace": "Core.GoogleGemini.SendChatMessage",
+      "name": "SendChatMessage",
+      "summary": "Sends a message in a chat conversation with Google's Gemini API, maintaining conversation history.",
+      "howItWorks": "The Send Chat Message node sends a message in a chat conversation with Google's Gemini API while maintaining conversation history. When executed, the node: 1. Validates the provided connection ID and user prompt 2. Processes any chat history to maintain context 3. Configures the selected model with all specified parameters 4. Processes any local files or uploaded files to include as input 5. Sets up safety settings and generation parameters 6. Creates a chat session with the Gemini API 7. Sends the message and receives a response 8. Handles the response either as a complete result or as a stream 9. Returns the model's response and updated chat history",
+      "usage": [
+        "A valid Google Gemini API key",
+        "Connection ID from a successful Connect node execution",
+        "Valid text prompt for the model to respond to"
+      ],
+      "bestPractices": [
+        "Chat history should be provided in the format expected by the node",
+        "Local files are processed as inline data",
+        "Uploaded files are referenced by URI",
+        "The node maintains conversation context through the chat history output",
+        "Streaming responses are useful for long-generation tasks",
+        "Safety settings can be adjusted to control content filtering",
+        "The default timeout is 60 seconds, which can be adjusted for complex requests",
+        "Response MIME type can be set to enforce JSON format",
+        "Presence and frequency penalties help control repetition in responses",
+        "Code execution and Google Search tools must be explicitly enabled",
+        "The default model is \"gemini-2.5-flash\""
+      ]
+    },
+    "connect": {
+      "namespace": "Core.GoogleGemini.Connect",
+      "name": "Connect",
+      "summary": "Establishes a connection to Google's Gemini API using an API key.",
+      "howItWorks": "The Connect node establishes a connection to Google's Gemini API using the provided API key. When executed, the node: 1. Retrieves the API key from the credentials 2. Creates a client configuration with the API key 3. Initializes a new Gemini client with the configuration 4. Generates a unique connection ID 5. Stores the client for use by other nodes 6. Returns the connection ID as output",
+      "usage": [
+        "A valid Google Gemini API key with appropriate permissions"
+      ],
+      "bestPractices": [
+        "The connection ID output is required by all other Google Gemini nodes",
+        "The API key should be stored as a credential for security",
+        "Each connection creates a unique client instance",
+        "The connection remains active until the workflow ends or an explicit disconnect"
+      ]
+    },
+    "disconnect": {
+      "namespace": "Core.GoogleGemini.Disconnect",
+      "name": "Disconnect",
+      "summary": "Disconnects from Google's Gemini API and releases the connection resources.",
+      "howItWorks": "The Disconnect node releases the connection resources for a Google Gemini API connection. When executed, the node: 1. Validates the provided connection ID 2. Removes the client associated with the connection ID from the internal store 3. Frees up any resources associated with the connection",
+      "usage": [
+        "A valid connection ID from a successful Connect node execution"
+      ],
+      "bestPractices": [
+        "This node is used to explicitly release connection resources",
+        "Connections are automatically cleaned up when a workflow ends, but explicit disconnection is recommended",
+        "Once disconnected, the connection ID cannot be used for other Gemini operations",
+        "This node doesn't have any output variables"
+      ]
+    }
+  }
+}

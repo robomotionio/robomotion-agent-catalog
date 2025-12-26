@@ -1,0 +1,45 @@
+{
+  "package": "MimeTools",
+  "summary": "Detect file types and extract attachments from MIME-encoded email messages and files.",
+  "description": "## Overview The MIME Tools package provides utilities for working with MIME (Multipurpose Internet Mail Extensions) content. Use it when you need to detect file types, extract attachments from email messages, or work with MIME-encoded content.",
+  "nodes": {
+    "detect_file": {
+      "namespace": "Core.MimeTools.Detect_file",
+      "name": "Detect_file",
+      "summary": "Detects the MIME type of a file using the mimetype library.",
+      "howItWorks": "The Detect File node uses the mimetype library to analyze a file and determine its MIME type. When executed, the node: 1. Validates the provided file path input 2. Uses the mimetype.DetectFile function to analyze the file 3. Returns the detected MIME type as a string",
+      "usage": [
+        "A valid file path to analyze",
+        "The file must be accessible by the application"
+      ],
+      "bestPractices": [
+        "The MIME type detection is based on the file content, not just the file extension",
+        "The node supports a wide range of file formats including documents, images, audio, video, and more",
+        "The detected MIME type follows the standard MIME type format (e.g., \"text/plain\", \"image/jpeg\", \"application/pdf\")"
+      ],
+      "errorCodes": [
+        "Error"
+      ]
+    },
+    "extract_attachments": {
+      "namespace": "Core.MimeTools.Extract_attachments",
+      "name": "Extract_attachments",
+      "summary": "Extracts attachments from EML files and saves them to a specified directory.",
+      "howItWorks": "The Extract Attachments node parses EML files (email message files) and extracts any attachments they contain. When executed, the node: 1. Validates the provided EML file path input 2. Uses the enmime library to parse the EML file 3. Extracts all attachments from the email 4. Saves each attachment to the specified directory 5. Returns a list of the extracted attachment filenames",
+      "usage": [
+        "A valid EML file path",
+        "The EML file must be accessible by the application",
+        "Write permissions to the extract directory (or temporary directory if not specified)"
+      ],
+      "bestPractices": [
+        "The node supports various email attachment types including documents, images, and other files",
+        "If no extract path is provided, attachments are saved to the system's temporary directory",
+        "The output provides only the filenames of extracted attachments, not their full paths",
+        "Existing files with the same name in the extract directory will be overwritten"
+      ],
+      "errorCodes": [
+        "Error"
+      ]
+    }
+  }
+}

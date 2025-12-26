@@ -1,0 +1,35 @@
+{
+  "package": "GoogleDialogflow",
+  "summary": "The Google Dialogflow package provides natural language understanding (NLU) capabilities for building conversational AI applications. This package enables your RPA flows to detect user intents, extract parameters, and build intelligent chatbot automation workflows.",
+  "description": "## Key Features - **Intent Detection** - Automatically identify user intentions from natural language text",
+  "nodes": {
+    "DetectIntent": {
+      "namespace": "Core.GoogleDialogflow.DetectIntent",
+      "name": "DetectIntent",
+      "summary": "Detects user intent from natural language text using Google Dialogflow's advanced NLU engine. This node analyzes user input, matches it to trained intents, extracts parameters, and returns structured results for building intelligent conversational automation.",
+      "howItWorks": "The Detect Intent node processes natural language text through Google Dialogflow's NLU engine: 1. **Validation** - Validates all required inputs (Text, Credentials, Language, Project ID) 2. **Authentication** - Creates authenticated Dialogflow API client using service account credentials 3. **Session Setup** - Establishes or continues a conversation session using the session ID 4. **Intent Detection** - Sends text to Dialogflow for analysis against trained intents 5. **Parameter Extraction** - Extracts structured data using entity recognition 6. **Response Processing** - Receives complete query result with intent, confidence, and parameters 7. **Output** - Returns structured result object for further automation processing",
+      "usage": [
+        "**Google Cloud Account** - Active account with billing enabled",
+        "**Dialogflow API** - Enabled in Google Cloud Console",
+        "**Dialogflow Agent** - Configured agent with intents and training phrases",
+        "**Service Account** - JSON credentials with \"Dialogflow API Client\" role",
+        "**Project ID** - Valid Google Cloud project ID",
+        "**Network Access** - Connectivity to dialogflow.googleapis.com"
+      ]
+    },
+    "detect-intent": {
+      "namespace": "Core.GoogleDialogflow.DetectIntent",
+      "name": "DetectIntent",
+      "summary": "Detects user intent from natural language text using Google Dialogflow's advanced NLU engine. This node analyzes user input, matches it to trained intents, extracts parameters, and returns structured results for building intelligent conversational automation.",
+      "howItWorks": "The Detect Intent node processes natural language text through Google Dialogflow's NLU engine: 1. **Validation** - Validates all required inputs (Text, Credentials, Language, Project ID) 2. **Authentication** - Creates authenticated Dialogflow API client using service account credentials 3. **Session Setup** - Establishes or continues a conversation session using the session ID 4. **Intent Detection** - Sends text to Dialogflow for analysis against trained intents 5. **Parameter Extraction** - Extracts structured data using entity recognition 6. **Response Processing** - Receives complete query result with intent, confidence, and parameters 7. **Output** - Returns structured result object for further automation processing",
+      "usage": [
+        "**Google Cloud Account** - Active account with billing enabled",
+        "**Dialogflow API** - Enabled in Google Cloud Console",
+        "**Dialogflow Agent** - Configured agent with intents and training phrases",
+        "**Service Account** - JSON credentials with \"Dialogflow API Client\" role",
+        "**Project ID** - Valid Google Cloud project ID",
+        "**Network Access** - Connectivity to dialogflow.googleapis.com"
+      ]
+    }
+  }
+}

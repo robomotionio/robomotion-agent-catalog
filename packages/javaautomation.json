@@ -1,0 +1,247 @@
+{
+  "package": "Javaautomation",
+  "summary": "Automate Java Swing and AWT desktop applications by accessing their internal UI elements and controls directly.",
+  "description": "## Overview The Java Automation package enables automation of Java-based desktop applications using the Java Access Bridge. Use it when you need to interact with Java Swing/AWT applications, read values from Java UI components, or automate legacy Java desktop software.",
+  "nodes": {
+    "ClickElement": {
+      "namespace": "Core.Javaautomation.ClickElement",
+      "name": "ClickElement",
+      "summary": "Clicks on a Java UI element using the Java Access Bridge.",
+      "howItWorks": "The Click Element node interacts with Java applications through the Java Access Bridge to perform click actions on UI elements. When executed, the node: 1. Waits for the specified Java context to become available based on the Window Title, Window Handle, and Full Path 2. If the element is found, it performs the specified click action using AccessibleActionsToDo 3. If the element is not found or the click fails, appropriate errors are thrown",
+      "usage": [
+        "Java Access Bridge must be enabled in the target Java application",
+        "The target Java application must be running and accessible",
+        "Valid Window Title, Window Handle, and Full Path to the target element"
+      ],
+      "bestPractices": [
+        "Ensure the Java Access Bridge is properly configured in your Java application",
+        "The Full Path should be obtained using Java accessibility tools or by inspecting the application's accessibility tree",
+        "The default timeout of 5 seconds can be adjusted based on application responsiveness",
+        "Only interactive elements can be clicked; verify the target element supports click actions"
+      ]
+    },
+    "DoAction": {
+      "namespace": "Core.Javaautomation.DoAction",
+      "name": "DoAction",
+      "summary": "Performs a specified action on a Java UI element using the Java Access Bridge.",
+      "howItWorks": "The Do Action node interacts with Java applications through the Java Access Bridge to perform custom actions on UI elements. When executed, the node: 1. Gets the action to perform, either from the Custom Action input or the Action option 2. Waits for the specified Java context to become available based on the Window Title, Window Handle, and Full Path 3. If the element is found, it performs the specified action using AccessibleActionsToDo 4. If the element is not found or the action fails, appropriate errors are thrown",
+      "usage": [
+        "Java Access Bridge must be enabled in the target Java application",
+        "The target Java application must be running and accessible",
+        "Valid Window Title, Window Handle, and Full Path to the target element",
+        "The specified action must be supported by the target element"
+      ],
+      "bestPractices": [
+        "Ensure the Java Access Bridge is properly configured in your Java application",
+        "The Full Path should be obtained using Java accessibility tools or by inspecting the application's accessibility tree",
+        "The default timeout of 5 seconds can be adjusted based on application responsiveness",
+        "Not all elements support all actions; verify the target element supports the specified action",
+        "If using a Custom Action, ensure it matches the exact name expected by the Java Access Bridge"
+      ]
+    },
+    "GetActions": {
+      "namespace": "Core.Javaautomation.GetActions",
+      "name": "GetActions",
+      "summary": "Retrieves the list of available actions for a Java UI element using the Java Access Bridge.",
+      "howItWorks": "The Get Actions node interacts with Java applications through the Java Access Bridge to retrieve the list of actions available for a UI element. When executed, the node: 1. Waits for the specified Java context to become available based on the Window Title, Window Handle, and Full Path 2. If the element is found, it retrieves the list of available actions using GetAccessibleActions 3. The action names are extracted and returned as an array 4. If the element is not found or actions cannot be retrieved, appropriate errors are thrown",
+      "usage": [
+        "Java Access Bridge must be enabled in the target Java application",
+        "The target Java application must be running and accessible",
+        "Valid Window Title, Window Handle, and Full Path to the target element"
+      ],
+      "bestPractices": [
+        "Ensure the Java Access Bridge is properly configured in your Java application",
+        "The Full Path should be obtained using Java accessibility tools or by inspecting the application's accessibility tree",
+        "The default timeout of 5 seconds can be adjusted based on application responsiveness",
+        "The retrieved actions can be used with the Do Action node to perform specific operations on the element",
+        "Not all elements have actions; some may return an empty array"
+      ]
+    },
+    "GetCombobox": {
+      "namespace": "Core.Javaautomation.GetCombobox",
+      "name": "GetCombobox",
+      "summary": "Retrieves the available values from a Java combobox element using the Java Access Bridge.",
+      "howItWorks": "The Get Combobox node interacts with Java applications through the Java Access Bridge to retrieve the list of values available in a combobox element. When executed, the node: 1. Waits for the specified Java context to become available based on the Window Title, Window Handle, and Full Path 2. If the element is found, it retrieves the count of accessible selections using GetAccessibleSelectionCountFromContext 3. Iterates through each selection to get the accessible selection using GetAccessibleSelectionFromContext 4. Extracts the name of each selection and adds it to the values list 5. Returns the values as an array 6. If the element is not found, appropriate errors are thrown",
+      "usage": [
+        "Java Access Bridge must be enabled in the target Java application",
+        "The target Java application must be running and accessible",
+        "Valid Window Title, Window Handle, and Full Path to the target combobox element"
+      ],
+      "bestPractices": [
+        "Ensure the Java Access Bridge is properly configured in your Java application",
+        "The Full Path should be obtained using Java accessibility tools or by inspecting the application's accessibility tree",
+        "The default timeout of 5 seconds can be adjusted based on application responsiveness",
+        "This node is specifically designed for combobox elements; other element types may not return meaningful values",
+        "The retrieved values can be used with the Set Combobox node to select a specific value"
+      ]
+    },
+    "GetInfo": {
+      "namespace": "Core.Javaautomation.GetInfo",
+      "name": "GetInfo",
+      "summary": "Retrieves information about a Java UI element including its position and dimensions using the Java Access Bridge.",
+      "howItWorks": "The Get Info node interacts with Java applications through the Java Access Bridge to retrieve positional and dimensional information about a UI element. When executed, the node: 1. Waits for the specified Java context to become available based on the Window Title, Window Handle, and Full Path 2. If the element is found, it retrieves the element's context information using GetInfo() 3. Extracts the position (x, y) and dimensions (height, width) from the context information 4. Creates an Info object with these values and outputs it 5. If the element is not found, appropriate errors are thrown",
+      "usage": [
+        "Java Access Bridge must be enabled in the target Java application",
+        "The target Java application must be running and accessible",
+        "Valid Window Title, Window Handle, and Full Path to the target element"
+      ],
+      "bestPractices": [
+        "Ensure the Java Access Bridge is properly configured in your Java application",
+        "The Full Path should be obtained using Java accessibility tools or by inspecting the application's accessibility tree",
+        "The default timeout of 5 seconds can be adjusted based on application responsiveness",
+        "The positional information can be used for various purposes such as screen scraping or element interaction"
+      ]
+    },
+    "GetText": {
+      "namespace": "Core.Javaautomation.GetText",
+      "name": "GetText",
+      "summary": "Retrieves the text content from a Java UI element using the Java Access Bridge.",
+      "howItWorks": "The Get Text node interacts with Java applications through the Java Access Bridge to retrieve text content from a UI element. When executed, the node: 1. Waits for the specified Java context to become available based on the Window Title, Window Handle, and Full Path 2. If the element is found, it checks if the element has accessible text 3. If the element has accessible text, it retrieves the text using GetAccessibleTextInfo and AccessibleTextReader 4. If the element doesn't have accessible text, it retrieves the element's name from its context information 5. Returns the retrieved text 6. If the element is not found or text retrieval fails, appropriate errors are thrown",
+      "usage": [
+        "Java Access Bridge must be enabled in the target Java application",
+        "The target Java application must be running and accessible",
+        "Valid Window Title, Window Handle, and Full Path to the target element"
+      ],
+      "bestPractices": [
+        "Ensure the Java Access Bridge is properly configured in your Java application",
+        "The Full Path should be obtained using Java accessibility tools or by inspecting the application's accessibility tree",
+        "The default timeout of 5 seconds can be adjusted based on application responsiveness",
+        "This node works with various text elements including labels, text fields, and buttons with text",
+        "For elements without accessible text, the node will return the element's name instead"
+      ]
+    },
+    "GetTitle": {
+      "namespace": "Core.Javaautomation.GetTitle",
+      "name": "GetTitle",
+      "summary": "Retrieves the title (name) of a Java UI element using the Java Access Bridge.",
+      "howItWorks": "The Get Title node interacts with Java applications through the Java Access Bridge to retrieve the title (name) of a UI element. When executed, the node: 1. Waits for the specified Java context to become available based on the Window Title, Window Handle, and Full Path 2. If the element is found, it retrieves the element's name from its context information using GetInfo().name 3. Returns the retrieved title 4. If the element is not found, appropriate errors are thrown",
+      "usage": [
+        "Java Access Bridge must be enabled in the target Java application",
+        "The target Java application must be running and accessible",
+        "Valid Window Title, Window Handle, and Full Path to the target element"
+      ],
+      "bestPractices": [
+        "Ensure the Java Access Bridge is properly configured in your Java application",
+        "The Full Path should be obtained using Java accessibility tools or by inspecting the application's accessibility tree",
+        "The default timeout of 5 seconds can be adjusted based on application responsiveness",
+        "The title corresponds to the \"name\" property of the element in the Java accessibility tree",
+        "This node is useful for identifying elements or verifying the correct element has been selected"
+      ]
+    },
+    "GetValue": {
+      "namespace": "Core.Javaautomation.GetValue",
+      "name": "GetValue",
+      "summary": "Retrieves the current value of a Java UI element using the Java Access Bridge.",
+      "howItWorks": "The Get Value node interacts with Java applications through the Java Access Bridge to retrieve the current value of a UI element. When executed, the node: 1. Waits for the specified Java context to become available based on the Window Title, Window Handle, and Full Path 2. If the element is found, it retrieves the current value using GetCurrentAccessibleValueFromContext 3. Returns the retrieved value as a string 4. If the element is not found or value retrieval fails, appropriate errors are thrown",
+      "usage": [
+        "Java Access Bridge must be enabled in the target Java application",
+        "The target Java application must be running and accessible",
+        "Valid Window Title, Window Handle, and Full Path to the target element"
+      ],
+      "bestPractices": [
+        "Ensure the Java Access Bridge is properly configured in your Java application",
+        "The Full Path should be obtained using Java accessibility tools or by inspecting the application's accessibility tree",
+        "The default timeout of 5 seconds can be adjusted based on application responsiveness",
+        "This node is particularly useful for retrieving values from input fields, sliders, and other elements that have a current value",
+        "The retrieved value can be used in subsequent nodes for processing or validation"
+      ]
+    },
+    "IsEnabled": {
+      "namespace": "Core.Javaautomation.IsEnabled",
+      "name": "IsEnabled",
+      "summary": "Checks if a Java UI element is enabled using the Java Access Bridge.",
+      "howItWorks": "The Is Enabled node interacts with Java applications through the Java Access Bridge to check if a UI element is enabled. When executed, the node: 1. Waits for the specified Java context to become available based on the Window Title, Window Handle, and Full Path 2. If the element is found, it retrieves the element's state information using GetInfo().states 3. Checks if the \"enabled\" state is present in the comma-separated list of states 4. Returns true if the element is enabled, false otherwise 5. If the element is not found, appropriate errors are thrown",
+      "usage": [
+        "Java Access Bridge must be enabled in the target Java application",
+        "The target Java application must be running and accessible",
+        "Valid Window Title, Window Handle, and Full Path to the target element"
+      ],
+      "bestPractices": [
+        "Ensure the Java Access Bridge is properly configured in your Java application",
+        "The Full Path should be obtained using Java accessibility tools or by inspecting the application's accessibility tree",
+        "The default timeout of 5 seconds can be adjusted based on application responsiveness",
+        "This node is useful for conditional logic in automation flows, allowing you to check if an element is interactable before attempting to interact with it",
+        "The enabled state corresponds to whether the element can accept user interaction such as clicks or text input"
+      ]
+    },
+    "SendKey": {
+      "namespace": "Core.Javaautomation.SendKey",
+      "name": "SendKey",
+      "summary": "Sends keyboard input to a Java application window using the Java Access Bridge.",
+      "howItWorks": "The Send Key node interacts with Java applications through the Java Access Bridge to send keyboard input to a window. When executed, the node: 1. Gets the target window context based on the Window Title and Window Handle 2. If the window is found and valid, it processes the key modifiers and key input 3. Converts the key modifiers and key to KeyCode values 4. Sends the key combination to the window using SendKeys.SendKey 5. If the window is not found or key sending fails, appropriate errors are thrown",
+      "usage": [
+        "Java Access Bridge must be enabled in the target Java application",
+        "The target Java application window must be running and accessible",
+        "Valid Window Title and Window Handle for the target window"
+      ],
+      "bestPractices": [
+        "Ensure the Java Access Bridge is properly configured in your Java application",
+        "The window must be in focus or able to receive keyboard input for the keys to be processed",
+        "Key modifiers can be combined with a key or text input for complex keyboard shortcuts",
+        "This node sends keys directly to the window, not to a specific element within the window",
+        "The key input can be a single key or a sequence of characters",
+        "Common use cases include sending keyboard shortcuts, entering text, or triggering menu commands"
+      ]
+    },
+    "SetCombobox": {
+      "namespace": "Core.Javaautomation.SetCombobox",
+      "name": "SetCombobox",
+      "summary": "Sets the value of a Java combobox element using the Java Access Bridge.",
+      "howItWorks": "The Set Combobox node interacts with Java applications through the Java Access Bridge to set the value of a combobox element. When executed, the node: 1. Waits for the specified Java context to become available based on the Window Title, Window Handle, and Full Path 2. If the element is found, it retrieves the current value of the combobox 3. Attempts to find and select the specified value in the combobox using AddAccessibleSelectionFromContext 4. Iterates through the available selections until it finds the matching value 5. If the value is found and selected, the operation completes successfully 6. If the value is not found, it attempts to restore the previous value and throws an error 7. If the element is not found, appropriate errors are thrown",
+      "usage": [
+        "Java Access Bridge must be enabled in the target Java application",
+        "The target Java application must be running and accessible",
+        "Valid Window Title, Window Handle, and Full Path to the target combobox element",
+        "The specified value must exist in the combobox"
+      ],
+      "bestPractices": [
+        "Ensure the Java Access Bridge is properly configured in your Java application",
+        "The Full Path should be obtained using Java accessibility tools or by inspecting the application's accessibility tree",
+        "The default timeout of 5 seconds can be adjusted based on application responsiveness",
+        "The node will automatically restore the previous value if the specified value is not found",
+        "This node is specifically designed for combobox elements; other element types may not work correctly",
+        "The value must exactly match one of the available options in the combobox"
+      ]
+    },
+    "SetText": {
+      "namespace": "Core.Javaautomation.SetText",
+      "name": "SetText",
+      "summary": "Sets the text content of a Java UI element using the Java Access Bridge.",
+      "howItWorks": "The Set Text node interacts with Java applications through the Java Access Bridge to set the text content of a UI element. When executed, the node: 1. Waits for the specified Java context to become available based on the Window Title, Window Handle, and Full Path 2. If the element is found, it retrieves the text content from the Text input 3. Sets the text content of the element using SetTextContents 4. If the element is not found or text setting fails, appropriate errors are thrown",
+      "usage": [
+        "Java Access Bridge must be enabled in the target Java application",
+        "The target Java application must be running and accessible",
+        "Valid Window Title, Window Handle, and Full Path to the target element",
+        "The target element must support text content modification"
+      ],
+      "bestPractices": [
+        "Ensure the Java Access Bridge is properly configured in your Java application",
+        "The Full Path should be obtained using Java accessibility tools or by inspecting the application's accessibility tree",
+        "The default timeout of 5 seconds can be adjusted based on application responsiveness",
+        "This node works with text input elements such as text fields and text areas",
+        "Not all elements support text modification; the node will fail if the element doesn't support this operation",
+        "The text content will completely replace any existing content in the element"
+      ]
+    },
+    "WaitContext": {
+      "namespace": "Core.Javaautomation.WaitContext",
+      "name": "WaitContext",
+      "summary": "Waits for a Java UI element or window to become available using the Java Access Bridge.",
+      "howItWorks": "The Wait Context node interacts with Java applications through the Java Access Bridge to wait for a UI element or window to become available. When executed, the node: 1. Gets the Window Title, Window Handle, and Full Path from the inputs 2. Uses Helper.WaitForContext to wait for the specified Java context to become available 3. If a Full Path is provided, it waits for the specific element to be available 4. If no Full Path is provided, it waits for the window to be available 5. If the element or window is found within the timeout period, the node completes successfully 6. If the element or window is not found within the timeout period, an appropriate error is thrown",
+      "usage": [
+        "Java Access Bridge must be enabled in the target Java application",
+        "The target Java application must be running and accessible",
+        "Valid Window Title and Window Handle for the target window",
+        "Valid Full Path to the target element (if waiting for a specific element)"
+      ],
+      "bestPractices": [
+        "Ensure the Java Access Bridge is properly configured in your Java application",
+        "The Full Path should be obtained using Java accessibility tools or by inspecting the application's accessibility tree",
+        "The default timeout of 30 seconds can be adjusted based on application responsiveness",
+        "This node is useful for synchronization in automation flows, ensuring elements are available before interacting with them",
+        "If only waiting for a window, leave the Full Path input empty",
+        "If waiting for a specific element, provide the Full Path to that element"
+      ]
+    }
+  }
+}

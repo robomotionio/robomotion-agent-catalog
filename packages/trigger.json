@@ -1,0 +1,162 @@
+{
+  "package": "Trigger",
+  "summary": "Start workflows on schedules, timers, or manual injection for automation orchestration.",
+  "description": "## Overview The Trigger package provides workflow triggering capabilities. Use it when you need to start workflows on a schedule, at intervals, handle errors, or manually inject data into running flows.",
+  "nodes": {
+    "catch": {
+      "namespace": "Core.Trigger.Catch",
+      "name": "Catch",
+      "summary": "Catches the exceptions thrown by the node(s) in the current scope and handles them accordingly.",
+      "howItWorks": "The Catch node implements error handling by subscribing to error events from specified nodes: 1. During flow initialization: - Subscribes to error events from selected nodes (or all nodes in scope if \"All\" is selected) - Registers itself as a catching node for those nodes - Marks those nodes as \"caught\" in the robot service 2. When a node throws an error: - The error event is published to the messaging system - The Catch node receives the error payload - Extracts the payload from the error message - Outputs the error details for handling 3. The flow continues from the Catch node with error information 4. On close, unsubscribes from all error events",
+      "usage": [
+        "At least one node must be selected to catch errors from (or select \"All\" for scope-wide catching)",
+        "Nodes to catch must be in the same scope as the Catch node",
+        "Caught nodes must not have Continue On Error enabled (otherwise errors are suppressed)"
+      ],
+      "bestPractices": [
+        "When a node has Continue On Error enabled, errors are **not** caught even with a Catch node",
+        "Catch works at the scope level - it catches errors from nodes in the same scope",
+        "Selecting \"All\" catches errors from all nodes in the current scope",
+        "The error payload contains: error type, message, source node ID, source node name, and original payload",
+        "Multiple Catch nodes can catch errors from the same node",
+        "Catch doesn't prevent the error - it provides a way to handle it",
+        "Sub Flows have their own error catching scope",
+        "Caught errors don't propagate to parent scopes unless re-thrown"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrSubscribe",
+        "ErrOnMessage"
+      ],
+      "relatedNodes": [
+        "Stop",
+        "Log",
+        "Sub Flow",
+        "Should Stop"
+      ],
+      "tips": [
+        "Use Catch to implement graceful error handling instead of letting errors stop the flow",
+        "Log error details before handling for debugging and audit trails",
+        "Use Catch with decision nodes to implement different recovery strategies per error type",
+        "In Sub Flows, use Catch to handle errors locally before they propagate",
+        "Select specific nodes for targeted error handling instead of catching all",
+        "Access error details via the output payload for context-aware error handling",
+        "Combine Catch with Log and Stop nodes for proper error reporting",
+        "Don't rely on Catch if Continue On Error is enabled on source nodes",
+        "Use Catch in loops to handle individual item failures without stopping the entire process",
+        "Consider using multiple Catch nodes for different error categories",
+        "Test error paths thoroughly - Catch is only useful if error handling logic is correct"
+      ]
+    },
+    "inject": {
+      "namespace": "Core.Trigger.Inject",
+      "name": "Inject",
+      "summary": "The Inject activity is used to inject a payload into a flow to start it.",
+      "howItWorks": "The Inject node triggers flow execution by injecting payloads at specified intervals: 1. During flow initialization: - Creates a background repeater goroutine (unless in run-from-node-only mode) - Waits for the robot to be in running state 2. Repeater behavior depends on configuration: - **Once mode**: Waits for Once Delay seconds, injects payload once, then stops - **Repeat mode**: Injects payload every Repeat Interval seconds continuously 3. Each injection: - Creates a new message with unique ID - Emits the payload as input to trigger flow execution 4. When flow is deployed, Inject nodes do not auto-start (manual trigger only) 5. On close, the repeater goroutine is terminated",
+      "usage": [
+        "**Payload** must be provided (cannot be empty)",
+        "Either Once or Repeat mode must be configured",
+        "Minimum delay/interval is 0.001 seconds (adjusted automatically if set to 0 or negative)"
+      ],
+      "bestPractices": [
+        "Inject nodes automatically start when the flow starts (except in deployment or run-from-node-only modes)",
+        "Minimum interval/delay is 0.001 seconds (values 0 or less are adjusted)",
+        "**Once mode**: Injects payload after Once Delay seconds, then stops",
+        "**Repeat mode**: Continuously injects payload every Repeat Interval seconds",
+        "Each injection creates a new flow execution instance",
+        "Payload can be static values or dynamic expressions",
+        "The repeater waits for the robot to reach running state before first injection",
+        "In deployment mode, Inject nodes don't auto-start (manual trigger only)",
+        "Closing the flow terminates all active Inject repeaters"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrInPayload"
+      ],
+      "relatedNodes": [
+        "Timer",
+        "Catch",
+        "Should Stop",
+        "Stop"
+      ],
+      "tips": [
+        "Use Once mode for startup initialization tasks",
+        "Use Repeat mode for periodic tasks (monitoring, data sync, scheduled operations)",
+        "Set appropriate intervals based on task frequency and system load",
+        "Avoid very short intervals (\u003c 1 second) unless necessary - they can overload the system",
+        "Use dynamic payload expressions to inject current timestamps or changing data",
+        "Combine with decision nodes to implement conditional processing",
+        "For complex scheduling, consider using Timer node instead",
+        "Test Once Delay carefully - too short may not allow proper initialization",
+        "Use Inject for simple periodic triggers; use Timer for cron-like scheduling",
+        "Monitor system resources when using short repeat intervals",
+        "Consider using Queue-based workflows instead of high-frequency Inject for production workloads"
+      ]
+    },
+    "timer": {
+      "namespace": "Core.Trigger.Timer",
+      "name": "Timer",
+      "summary": "Triggers the flow at certain intervals based on the set options.",
+      "howItWorks": "The Timer node uses cron-based scheduling to trigger flows at precise times: 1. During flow initialization: - Converts time configuration to cron specification format (second, minute, hour, day, month, day-of-week) - Validates all time components are within valid ranges - Creates a cron scheduler with the generated specification - Starts the scheduler 2. When scheduled time arrives: - Waits for robot to be in running state (if not already) - Creates a new message - Emits the input payload to trigger flow execution 3. Continues triggering at each matching cron schedule 4. On close, stops the cron scheduler",
+      "usage": [
+        "**Minute** cannot be empty (0 means \"every minute\", specific value means that minute)",
+        "All time components must be within valid ranges:",
+        "Second: 0-59 or -1 for every second",
+        "Minute: 0-59 or -1 for every minute",
+        "Hour: 0-23 or -1 for every hour",
+        "Day: 1-31, 0 for every day, or -1 for wildcard",
+        "Month: 1-12 or 0 for every month",
+        "Day of week: 0-6 (Sunday=0), -1 for every day, or -2 for wildcard",
+        "**Payload** input should be provided (empty payload triggers error)"
+      ],
+      "bestPractices": [
+        "When `Continue On Error` is enabled, errors are **not** caught even if Catch node is present",
+        "Timer uses cron format internally: `second minute hour day month day-of-week`",
+        "Use -1 or \"Every\" options for wildcard matching",
+        "Day of month and day of week interaction:",
+        "Use day of month wildcard (-1) when specifying day of week",
+        "Use day of week wildcard (-1 or -2) when specifying day of month",
+        "Timer triggers immediately when all conditions match",
+        "Multiple timers can coexist in the same flow",
+        "Timer waits for robot to be running before first trigger",
+        "Empty payload triggers error during execution (not at creation)",
+        "Timer continues running until flow is closed"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrSecond",
+        "ErrMinute",
+        "ErrHour",
+        "ErrDay",
+        "ErrMonth",
+        "ErrDayOfWeek",
+        "ErrOnMessage",
+        "ErrInPayload"
+      ],
+      "relatedNodes": [
+        "Inject",
+        "Catch",
+        "Should Stop",
+        "Stop"
+      ],
+      "tips": [
+        "For daily tasks, set specific hour and minute with \"every day\"",
+        "For hourly tasks, use \"every hour\" with specific minute",
+        "Use day of week for weekly schedules (0=Sunday, 1=Monday, ..., 6=Saturday)",
+        "Combine month and day for annual events (birthdays, anniversaries)",
+        "Test timer schedules in development before deploying to production",
+        "Use meaningful payloads to distinguish different timer triggers",
+        "Consider timezone settings when scheduling tasks",
+        "For simple repetitive tasks, consider Inject node instead",
+        "Document timer schedules in comments for future reference",
+        "Monitor first trigger to ensure schedule is correct",
+        "Use Timer for complex schedules; use Inject for simple intervals",
+        "Avoid very frequent triggers (every second) - use Inject with short intervals instead"
+      ]
+    }
+  }
+}

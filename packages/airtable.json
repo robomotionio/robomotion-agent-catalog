@@ -1,0 +1,147 @@
+{
+  "package": "Airtable",
+  "summary": "Integrate with Airtable databases to read, create, update, and delete records in your automation workflows.",
+  "description": "## Overview The Airtable package provides full CRUD (Create, Read, Update, Delete) operations for Airtable bases. Use it when you need to automate data management tasks involving Airtable, such as syncing data between systems, processing form submissions, or managing inventory and CRM data.",
+  "nodes": {
+    "connect": {
+      "namespace": "Core.Airtable.Connect",
+      "name": "Connect",
+      "summary": "Establishes a connection to Airtable by storing the API key token for use in subsequent Airtable operations.",
+      "howItWorks": "The Connect node is the first step in any Airtable automation flow. It securely stores your Airtable API key and returns a key ID that is used by all other Airtable nodes in the flow. When executed, the node: 1. Retrieves the API key from the provided credentials 2. Stores the API key in a thread-safe token manager 3. Returns a unique key ID that references the stored API key 4. This key ID is then used by other Airtable nodes to access the API",
+      "usage": [
+        "A valid Airtable account",
+        "An Airtable API key (can be generated in your Airtable account settings)",
+        "The API key must be stored as a credential in Robomotion"
+      ],
+      "bestPractices": [
+        "The Connect node should be executed before any other Airtable operations",
+        "The returned Key Id must be passed to subsequent Airtable nodes",
+        "Each Connect node creates a new token entry that should be cleaned up with a Disconnect node",
+        "For security, always use the Disconnect node to remove the stored API key when it's no longer needed",
+        "The API key is stored in memory only and is automatically removed when the flow stops"
+      ]
+    },
+    "createrecord": {
+      "namespace": "Core.Airtable.Createrecord",
+      "name": "Createrecord",
+      "summary": "Creates a new record in a specified Airtable table.",
+      "howItWorks": "The Create Record node adds a new record to a specified Airtable table. When executed, the node: 1. Validates the required inputs (Base Id, Table Name, and Record) 2. Constructs the Airtable API endpoint URL 3. Retrieves the API key using the provided Key Id 4. Sends a POST request to the Airtable API with the record data 5. Returns the created record details as the result",
+      "usage": [
+        "A valid Airtable account",
+        "An Airtable base with appropriate permissions",
+        "A connected Airtable session (using the Connect node)",
+        "Valid Base Id and Table Name",
+        "Properly formatted record data"
+      ],
+      "bestPractices": [
+        "The Record input should be an object with field names as keys and their values",
+        "Field names must exactly match those in your Airtable table",
+        "The result includes the created record's ID and other metadata from Airtable",
+        "All field types supported by Airtable can be included in the record data",
+        "The node will fail if the table doesn't exist or if you don't have permission to create records"
+      ]
+    },
+    "deleterecord": {
+      "namespace": "Core.Airtable.Deleterecord",
+      "name": "Deleterecord",
+      "summary": "Deletes a specific record from an Airtable table.",
+      "howItWorks": "The Delete Record node removes a specific record from an Airtable table. When executed, the node: 1. Validates the required inputs (Base Id, Table Name, and Record Id) 2. Constructs the Airtable API endpoint URL for the specific record 3. Retrieves the API key using the provided Key Id 4. Sends a DELETE request to the Airtable API 5. Returns the deletion confirmation as the result",
+      "usage": [
+        "A valid Airtable account",
+        "An Airtable base with appropriate permissions",
+        "A connected Airtable session (using the Connect node)",
+        "Valid Base Id, Table Name, and Record Id",
+        "Sufficient permissions to delete records from the table"
+      ],
+      "bestPractices": [
+        "The Record Id must be the unique identifier assigned by Airtable when the record was created",
+        "Record Ids can be obtained from the result of Create Record, List Records, or Read Record operations",
+        "Once a record is deleted, it cannot be recovered through the API (unless using Airtable's backup features)",
+        "The node will fail if the record doesn't exist or if you don't have permission to delete it",
+        "Deleted records are returned in the \"deleted\" field of the result object"
+      ]
+    },
+    "disconnect": {
+      "namespace": "Core.Airtable.Disconnect",
+      "name": "Disconnect",
+      "summary": "Removes a stored Airtable API key token from memory.",
+      "howItWorks": "The Disconnect node removes a stored API key token from memory. When executed, the node: 1. Retrieves the Key Id from the input 2. Calls the removeToken function to delete the token from the global tokens map 3. The token is permanently removed from memory and can no longer be used",
+      "usage": [
+        "A valid Key Id from a previous Connect node",
+        "The Key Id must exist in the tokens map"
+      ],
+      "bestPractices": [
+        "The Disconnect node should be used at the end of flows to clean up stored credentials",
+        "Once a Key Id is removed, it cannot be used by other Airtable nodes",
+        "The node doesn't communicate with Airtable's servers; it only removes the local token reference",
+        "It's good practice to use Disconnect nodes to prevent credential leaks",
+        "If your flow has multiple exit points, consider using a Disconnect node at each exit"
+      ]
+    },
+    "listrecords": {
+      "namespace": "Core.Airtable.Listrecords",
+      "name": "Listrecords",
+      "summary": "Retrieves records from a specified Airtable table with optional filtering and view selection.",
+      "howItWorks": "The List Records node retrieves multiple records from an Airtable table. When executed, the node: 1. Validates the required inputs (Base Id and Table Name) 2. Constructs the Airtable API endpoint URL with optional view and query parameters 3. Retrieves the API key using the provided Key Id 4. Sends a GET request to the Airtable API 5. Returns the retrieved records and metadata as the result",
+      "usage": [
+        "A valid Airtable account",
+        "An Airtable base with appropriate permissions",
+        "A connected Airtable session (using the Connect node)",
+        "Valid Base Id and Table Name"
+      ],
+      "bestPractices": [
+        "The result includes an array of records and pagination information",
+        "Records are returned in the order defined by the table or view",
+        "When using a view, only records visible in that view are returned",
+        "Query parameters can be used for filtering, sorting, and limiting results",
+        "The node returns a maximum of 100 records per request (Airtable API limit)",
+        "For large datasets, use pagination with the offset parameter in the Query option"
+      ]
+    },
+    "readrecord": {
+      "namespace": "Core.Airtable.Readrecord",
+      "name": "Readrecord",
+      "summary": "Retrieves a specific record from an Airtable table by its record ID.",
+      "howItWorks": "The Read Record node retrieves a specific record from an Airtable table using its unique ID. When executed, the node: 1. Validates the required inputs (Base Id, Table Name, and Record Id) 2. Constructs the Airtable API endpoint URL for the specific record 3. Retrieves the API key using the provided Key Id 4. Sends a GET request to the Airtable API 5. Returns the retrieved record data as the result",
+      "usage": [
+        "A valid Airtable account",
+        "An Airtable base with appropriate permissions",
+        "A connected Airtable session (using the Connect node)",
+        "Valid Base Id, Table Name, and Record Id"
+      ],
+      "bestPractices": [
+        "The Record Id must be the unique identifier assigned by Airtable when the record was created",
+        "Record Ids can be obtained from the result of Create Record, List Records operations, or from Airtable's web interface",
+        "The result includes the record's fields, ID, and creation time",
+        "All field types supported by Airtable will be included in the returned record data",
+        "The node will fail if the record doesn't exist or if you don't have permission to read it"
+      ]
+    },
+    "updaterecord": {
+      "namespace": "Core.Airtable.Updaterecord",
+      "name": "Updaterecord",
+      "summary": "Updates existing records in an Airtable table.",
+      "howItWorks": "The Update Record node modifies existing records in an Airtable table. When executed, the node: 1. Validates the required inputs (Base Id, Table Name, and Record) 2. Constructs the Airtable API endpoint URL 3. Retrieves the API key using the provided Key Id 4. Sends a PATCH request to the Airtable API with the record update data 5. Returns the updated records as the result",
+      "usage": [
+        "A valid Airtable account",
+        "An Airtable base with appropriate permissions",
+        "A connected Airtable session (using the Connect node)",
+        "Valid Base Id and Table Name",
+        "Properly formatted record update data with record IDs"
+      ],
+      "bestPractices": [
+        "The Record input should be an object that includes the record ID and the fields to update",
+        "Only the fields specified in the Record object will be updated; other fields remain unchanged",
+        "Multiple records can be updated in a single request by including multiple record objects in an array",
+        "Field names must exactly match those in your Airtable table",
+        "The result includes the updated records' IDs and updated field values"
+      ],
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "**Output:**\r\nThe result will contain the updated record details:"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "package": "Keyboard",
+  "summary": "Simulate keyboard input for desktop automation - type text and send key combinations to any application.",
+  "description": "## Overview The Keyboard package enables keyboard simulation for desktop automation. Use it when you need to type text into applications, send keyboard shortcuts, or input data into any active window or control.",
+  "nodes": {
+    "send-keys": {
+      "namespace": "Core.Keyboard.SendKeys",
+      "name": "SendKeys",
+      "summary": "Sends keystroke commands to the active window",
+      "howItWorks": "The Send Keys node simulates keyboard input by sending keystrokes to the currently active window on your desktop. The execution follows these steps: 1. **Delay Before** - Waits for the specified delay before execution (if configured) 2. **Modifier Validation** - Validates each key modifier (1, 2, and 3) against the list of supported keys 3. **Key Normalization** - Converts certain modifiers to their standard forms (e.g., \"control\" to \"ctrl\", \"win\" to \"cmd\") 4. **Key Press Simulation** - Uses the robotgo library to simulate the key press: - If a key is provided with modifiers, presses the modifiers + key combination - If only a key is provided, presses that single key - If only modifiers are provided, presses the modifier keys in order 5. **Delay After** - Waits for the specified delay after execution (if configured) The order of key presses is important: Modifier 1, then Modifier 2, then Modifier 3, followed by the Key input.",
+      "usage": [
+        "**Robomotion Deskbot** - This node only works with Robomotion Deskbot (desktop automation)",
+        "**Active Window** - The target window must be active and in focus to receive the keystrokes",
+        "**Operating System Support** - Compatible with Windows, macOS, and Linux",
+        "**Permissions** - May require accessibility permissions on macOS and some Linux distributions"
+      ],
+      "bestPractices": [
+        "**Key Timing** - All modifiers are held down simultaneously when the key is pressed, simulating a real keyboard combination",
+        "**Case Sensitivity** - The Key input is case-sensitive. Use lowercase for regular keys",
+        "**Empty Key** - You can leave the Key field empty to press only modifier keys (e.g., just pressing Enter or Escape)",
+        "**Platform Differences** - \"Win\" modifier maps to \"Command\" on macOS and Windows key on Windows/Linux",
+        "**Focus Required** - The keystrokes are sent to whichever window is currently active, so ensure proper window activation before this node"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrKeyModifier"
+      ],
+      "relatedNodes": [
+        "Type Text",
+        "Mouse Click",
+        "Application In"
+      ]
+    },
+    "type-text": {
+      "namespace": "Core.Keyboard.TypeText",
+      "name": "TypeText",
+      "summary": "Types text into the active window.",
+      "howItWorks": "The Type Text node simulates human-like typing by entering text character by character into the currently active window. The execution follows these steps: 1. **Delay Before** - Waits for the specified delay before execution (if configured) 2. **Text Retrieval** - Retrieves the text value from the input (can be a variable or direct value) 3. **CPM Validation** - Validates that the Characters Per Minute value is between 0 and 1000 4. **Delay Calculation** - Calculates the delay between characters based on CPM (60 seconds / CPM) 5. **Character-by-Character Typing** - Types each character with the calculated delay using the robotgo library 6. **Enter Key Press** - If \"Press Enter\" is enabled, presses the Enter key after typing 7. **Delay After** - Waits for the specified delay after execution (if configured) The typing speed can be controlled dynamically using variables, allowing for adaptive typing speeds based on automation context.",
+      "usage": [
+        "**Robomotion Deskbot** - This node only works with Robomotion Deskbot (desktop automation)",
+        "**Active Window** - The target window/application must be active and in focus to receive the typed text",
+        "**Text Input Field** - The cursor must be positioned in a text input field or text-accepting area",
+        "**Operating System Support** - Compatible with Windows, macOS, and Linux",
+        "**Permissions** - May require accessibility permissions on macOS and some Linux distributions"
+      ],
+      "bestPractices": [
+        "**CPM Range** - Valid range is 0-1000 characters per minute. Values outside this range will cause an error",
+        "**Default Speed** - The default of 945 CPM is very fast and suitable for most automation scenarios",
+        "**Human-like Speed** - For realistic human simulation, use 200-400 CPM",
+        "**Variable Support** - Since version 24.1.5, CPM can be set dynamically using variables",
+        "**Special Characters** - All characters including newlines, tabs, and special symbols are supported",
+        "**Empty Text** - If the text input is empty, the node will complete without typing anything",
+        "**Clipboard Alternative** - For very long text, consider using clipboard paste (Ctrl+V) instead for better performance"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrTypeText"
+      ],
+      "relatedNodes": [
+        "Send Keys",
+        "Mouse Click",
+        "Application In"
+      ]
+    }
+  }
+}

@@ -1,0 +1,272 @@
+{
+  "package": "Dropbox",
+  "summary": "Integrate with Dropbox cloud storage for file management in your automation workflows.",
+  "description": "## Overview The Dropbox package provides comprehensive file operations for Dropbox cloud storage. Use it when you need to upload, download, organize, or manage files stored in Dropbox.",
+  "nodes": {
+    "connect": {
+      "namespace": "Core.Dropbox.Connect",
+      "name": "Connect",
+      "summary": "Establishes a connection to Dropbox using an access token for use in subsequent Dropbox operations.",
+      "howItWorks": "The Connect node is the first step in any Dropbox automation flow. It securely stores your Dropbox access token and returns a client ID that is used by all other Dropbox nodes in the flow. When executed, the node: 1. Retrieves the access token from the provided credentials 2. Stores the token in a thread-safe token manager 3. Returns a unique client ID that references the stored token 4. This client ID is then used by other Dropbox nodes to authenticate API requests",
+      "usage": [
+        "A valid Dropbox account",
+        "A Dropbox access token (can be generated in your Dropbox App Console)",
+        "The access token must be stored as a credential in Robomotion"
+      ],
+      "bestPractices": [
+        "The Connect node should be executed before any other Dropbox operations",
+        "The returned Client ID must be passed to subsequent Dropbox nodes",
+        "Each Connect node creates a new token entry that should be cleaned up with a Disconnect node",
+        "For security, always use the Disconnect node to remove the stored token when it's no longer needed",
+        "The token is stored in memory only and is automatically removed when the flow stops"
+      ]
+    },
+    "copyfile": {
+      "namespace": "Core.Dropbox.Copyfile",
+      "name": "Copyfile",
+      "summary": "Copies a file or folder from one location to another within Dropbox.",
+      "howItWorks": "The Copy File node duplicates a file or folder from one location to another in your Dropbox account. When executed, the node: 1. Validates the required inputs (Client ID, Source Path, and Destination Path) 2. Retrieves the access token using the provided Client ID 3. Prepends \"/\" to the paths as required by the Dropbox API 4. Sends a copy request to the Dropbox API 5. Creates a duplicate of the file or folder at the destination",
+      "usage": [
+        "A valid Dropbox connection (using the Connect node)",
+        "The source file or folder must exist in Dropbox",
+        "Write permissions for the destination path",
+        "The destination path's parent folder must exist"
+      ],
+      "bestPractices": [
+        "The copy operation works for both files and folders",
+        "If copying a folder, all contents are copied recursively",
+        "The original file or folder remains unchanged",
+        "If a file already exists at the destination, it will be overwritten",
+        "The destination path should include the file or folder name",
+        "Large files or folders may take longer to copy"
+      ],
+      "tips": [
+        "To rename a file, use the Move File node instead",
+        "For creating backups, include timestamps in destination paths",
+        "Test with small files first when automating large copy operations",
+        "Use ListFiles to verify the copy was successful"
+      ]
+    },
+    "createfolder": {
+      "namespace": "Core.Dropbox.Createfolder",
+      "name": "Createfolder",
+      "summary": "Creates a new folder at the specified path in Dropbox.",
+      "howItWorks": "The Create Folder node creates a new directory in your Dropbox account at the specified location. When executed, the node: 1. Validates the required inputs (Client ID and Dropbox Path) 2. Retrieves the access token using the provided Client ID 3. Prepends \"/\" to the path as required by the Dropbox API 4. Sends a create folder request to the Dropbox API 5. Creates the new folder at the specified location",
+      "usage": [
+        "A valid Dropbox connection (using the Connect node)",
+        "Write permissions for the parent folder",
+        "The parent folder must exist (e.g., to create `documents/2024`, the `documents` folder must exist)",
+        "The folder name must not already exist at that location"
+      ],
+      "bestPractices": [
+        "The folder is created immediately upon execution",
+        "You cannot create nested folders in a single call (parent folders must exist first)",
+        "Folder names are case-sensitive on some systems",
+        "Special characters in folder names may cause issues",
+        "The operation is idempotent - if the folder already exists, an error is returned"
+      ],
+      "tips": [
+        "Use the Continue On Error property when creating folders that might already exist",
+        "Combine with ListFiles to check if a folder exists before creating it",
+        "Include timestamps in folder names for time-based organization (e.g., `reports_2024-03-15`)",
+        "Use the FileStat node to verify folder creation was successful",
+        "Consider using variables for dynamic folder names based on dates or user input"
+      ]
+    },
+    "deletefile": {
+      "namespace": "Core.Dropbox.Deletefile",
+      "name": "Deletefile",
+      "summary": "Deletes a file or folder at the specified path in Dropbox.",
+      "howItWorks": "The Delete File node permanently removes a file or folder from your Dropbox account. When executed, the node: 1. Validates the required inputs (Client ID and Dropbox Path) 2. Retrieves the access token using the provided Client ID 3. Prepends \"/\" to the path as required by the Dropbox API 4. Sends a delete request to the Dropbox API 5. Permanently removes the file or folder from Dropbox :::warning This operation is **permanent** and cannot be undone through the API. Deleted files may be recoverable through the Dropbox web interface for a limited time, but this should not be relied upon in automation workflows. :::",
+      "usage": [
+        "A valid Dropbox connection (using the Connect node)",
+        "The file or folder must exist in Dropbox",
+        "Delete permissions for the specified path",
+        "For folders, permission to delete all contents"
+      ],
+      "bestPractices": [
+        "When deleting a folder, all contents are deleted recursively",
+        "The operation is permanent and immediate",
+        "Deleted files are moved to Dropbox's trash and may be recoverable through the web interface",
+        "Use with caution in production environments",
+        "Consider creating backups before deletion in critical workflows"
+      ],
+      "tips": [
+        "Use descriptive logging when deleting files in automation",
+        "Implement a \"soft delete\" pattern by moving files to a trash folder instead",
+        "For production systems, consider requiring manual approval for deletions",
+        "Use variables to make deletion paths dynamic based on dates or conditions",
+        "Test deletion workflows thoroughly in a development environment first"
+      ]
+    },
+    "disconnect": {
+      "namespace": "Core.Dropbox.Disconnect",
+      "name": "Disconnect",
+      "summary": "Disconnects from Dropbox and releases the client connection by removing the stored access token.",
+      "howItWorks": "The Disconnect node safely cleans up the Dropbox connection by removing the stored access token from memory. When executed, the node: 1. Validates the Client ID input 2. Removes the stored access token from the token manager 3. Frees up memory resources associated with the connection 4. Invalidates the Client ID for future operations",
+      "usage": [
+        "A valid Client ID from a previous Connect node",
+        "The Client ID should not be used in subsequent Dropbox operations after disconnection"
+      ],
+      "bestPractices": [
+        "Always use Disconnect at the end of your Dropbox automation flow",
+        "After disconnection, the Client ID becomes invalid and cannot be reused",
+        "Multiple Disconnect calls with the same Client ID may cause errors",
+        "The node is lightweight and executes quickly",
+        "Disconnection is automatic when the flow stops, but explicit disconnection is a best practice"
+      ],
+      "tips": [
+        "Use a Finally block to guarantee disconnection",
+        "Log disconnection for audit trails",
+        "Handle disconnection errors gracefully with Continue On Error",
+        "Consider disconnection as part of your workflow's cleanup phase",
+        "Test that your workflow properly disconnects in all scenarios (success and error cases)"
+      ]
+    },
+    "downloadfile": {
+      "namespace": "Core.Dropbox.Downloadfile",
+      "name": "Downloadfile",
+      "summary": "Downloads a file from Dropbox to the local filesystem.",
+      "howItWorks": "The Download File node retrieves a file from Dropbox and saves it to your local filesystem. When executed, the node: 1. Validates the required inputs (Client ID, Dropbox Path, and Local Path) 2. Retrieves the access token using the provided Client ID 3. Prepends \"/\" to the Dropbox path as required by the Dropbox API 4. Opens a download stream from Dropbox 5. Reads the file data in chunks (1024 bytes at a time) 6. Writes the file data to the local filesystem 7. Sets file permissions to 0644 (read/write for owner, read for others)",
+      "usage": [
+        "A valid Dropbox connection (using the Connect node)",
+        "The file must exist in Dropbox",
+        "Read permissions for the Dropbox file",
+        "Write permissions for the local directory",
+        "Sufficient local disk space for the file",
+        "The local directory must exist (create it first if needed)"
+      ],
+      "bestPractices": [
+        "Files are downloaded in chunks to handle large files efficiently",
+        "The local file will be overwritten if it already exists",
+        "File permissions are set to 0644 by default",
+        "Large files may take time to download depending on network speed",
+        "The download is buffered in memory before writing to disk",
+        "Binary files (images, videos, etc.) are handled correctly"
+      ],
+      "tips": [
+        "Use variables for dynamic paths based on dates or user input",
+        "Implement progress logging for large file downloads",
+        "Test with small files first before automating large downloads",
+        "Consider using temporary directories for intermediate files",
+        "Verify file integrity after download if critical",
+        "Use appropriate error handling for network issues",
+        "Clean up temporary files to prevent disk space issues"
+      ]
+    },
+    "filestat": {
+      "namespace": "Core.Dropbox.Filestat",
+      "name": "Filestat",
+      "summary": "Retrieves metadata and statistics for a file or folder in Dropbox.",
+      "howItWorks": "The File Stat node retrieves detailed information about a file or folder in Dropbox. When executed, the node: 1. Validates the required inputs (Client ID and Dropbox Path) 2. Retrieves the access token using the provided Client ID 3. Prepends \"/\" to the path as required by the Dropbox API 4. Queries the Dropbox API for file/folder metadata 5. Returns a stats object containing the file or folder information",
+      "usage": [
+        "A valid Dropbox connection (using the Connect node)",
+        "The file or folder must exist in Dropbox",
+        "Read permissions for the specified path"
+      ],
+      "bestPractices": [
+        "The stats object is returned as a JSON object in the message context",
+        "For folders, the size is always 0",
+        "The modification time is in ISO 8601 format",
+        "Use this node to verify file existence before operations",
+        "Useful for conditional logic based on file properties"
+      ],
+      "tips": [
+        "Use the `is_dir` property to avoid attempting file operations on folders",
+        "Check file size before downloading to prevent memory issues",
+        "Combine FileStat with conditional nodes for smart workflows",
+        "Use Continue On Error to handle missing files gracefully",
+        "Access stats properties using dot notation: `stats.name`, `stats.size`, etc.",
+        "Store stats in variables for reuse throughout the workflow"
+      ]
+    },
+    "listfiles": {
+      "namespace": "Core.Dropbox.Listfiles",
+      "name": "Listfiles",
+      "summary": "Lists all files and folders in a specified Dropbox directory.",
+      "howItWorks": "The List Files node retrieves a listing of all files and folders in a specified Dropbox directory. When executed, the node: 1. Validates the required inputs (Client ID and Dropbox Path) 2. Retrieves the access token using the provided Client ID 3. If the path is empty, uses \"/\" for the root directory 4. Otherwise, prepends \"/\" to the provided path 5. Queries the Dropbox API for the directory listing 6. Returns an array of file and folder information objects",
+      "usage": [
+        "A valid Dropbox connection (using the Connect node)",
+        "The directory must exist in Dropbox",
+        "Read permissions for the specified directory"
+      ],
+      "bestPractices": [
+        "Returns an array of objects, even if the directory is empty",
+        "Both files and folders are included in the results",
+        "Use the `is_dir` property to distinguish between files and folders",
+        "The listing is not recursive - only direct children are returned",
+        "Results are returned in the order provided by Dropbox API",
+        "Large directories are fully loaded (no pagination in current implementation)"
+      ],
+      "tips": [
+        "Use ListFiles as the starting point for batch operations",
+        "Combine with FileStat for detailed information on specific files",
+        "Implement sorting and filtering to process files in the right order",
+        "Consider rate limits when processing large numbers of files",
+        "Use descriptive variable names when looping through results",
+        "Log progress when processing many files",
+        "Implement error handling for individual file operations in loops"
+      ]
+    },
+    "movefile": {
+      "namespace": "Core.Dropbox.Movefile",
+      "name": "Movefile",
+      "summary": "Moves a file or folder from one location to another within Dropbox.",
+      "howItWorks": "The Move File node relocates a file or folder from one location to another in your Dropbox account. When executed, the node: 1. Validates the required inputs (Client ID, Source Path, and Destination Path) 2. Retrieves the access token using the provided Client ID 3. Prepends \"/\" to the paths as required by the Dropbox API 4. Sends a move request to the Dropbox API 5. Moves the file or folder to the destination (effectively removes it from source)",
+      "usage": [
+        "A valid Dropbox connection (using the Connect node)",
+        "The source file or folder must exist in Dropbox",
+        "Write permissions for both source and destination paths",
+        "The destination path's parent folder must exist"
+      ],
+      "bestPractices": [
+        "The move operation works for both files and folders",
+        "If moving a folder, all contents are moved recursively",
+        "The source file or folder is removed after the move",
+        "If a file already exists at the destination, the operation will fail",
+        "The destination path should include the file or folder name",
+        "Moving is atomic - it either succeeds completely or fails"
+      ],
+      "tips": [
+        "Use MoveFile instead of CopyFile + DeleteFile for efficiency",
+        "For renaming, keep the same directory path and only change the filename",
+        "Verify destination parent folders exist before moving",
+        "Use variables for dynamic destination paths based on dates or metadata",
+        "Consider creating destination folders with CreateFolder before moving",
+        "Test move operations with non-critical files first",
+        "Implement rollback logic for critical move operations"
+      ]
+    },
+    "uploadfile": {
+      "namespace": "Core.Dropbox.Uploadfile",
+      "name": "Uploadfile",
+      "summary": "Uploads a file from the local filesystem to Dropbox.",
+      "howItWorks": "The Upload File node transfers a file from your local filesystem to Dropbox. When executed, the node: 1. Validates the required inputs (Client ID, Dropbox Path, and File Path) 2. Retrieves the access token using the provided Client ID 3. Opens the local file for reading 4. Prepends \"/\" to the Dropbox path as required by the Dropbox API 5. Uploads the file to Dropbox at the specified path 6. Closes the local file handle",
+      "usage": [
+        "A valid Dropbox connection (using the Connect node)",
+        "The local file must exist and be readable",
+        "Write permissions for the destination Dropbox path",
+        "The destination parent folder must exist in Dropbox",
+        "Sufficient Dropbox storage space"
+      ],
+      "bestPractices": [
+        "If a file already exists at the destination, it will be overwritten",
+        "File metadata (creation date, permissions) is not preserved",
+        "Large files may take time to upload depending on network speed",
+        "Binary files (images, videos, PDFs) are handled correctly",
+        "File streams are used for efficient memory usage",
+        "Upload progress is not reported (operation blocks until complete)"
+      ],
+      "tips": [
+        "Use variables for dynamic Dropbox paths based on dates or metadata",
+        "Implement retry logic for network failures",
+        "Log successful uploads for audit trails",
+        "Verify file size before uploading large files",
+        "Consider compression for large text files before uploading",
+        "Use descriptive folder structures for organization",
+        "Test uploads with small files first when automating",
+        "Monitor Dropbox storage quota in long-running automations"
+      ]
+    }
+  }
+}

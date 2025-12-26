@@ -1,0 +1,354 @@
+{
+  "package": "RobomotionChatAssistant",
+  "summary": "Build chat-based interactive interfaces with authentication, progress tracking, and custom widgets.",
+  "description": "## Overview The Robomotion Chat Assistant package enables building chat-based conversational interfaces for automations. Use it when you need to create chat bots, interactive forms within chat, or authenticated chat experiences.",
+  "nodes": {
+    "auth": {
+      "namespace": "Core.RobomotionChatAssistant.Auth",
+      "name": "Auth",
+      "summary": "Provides authorization credentials for chat assistant clients.",
+      "howItWorks": "The Auth node creates an authorization widget that is displayed to the client and waits for the client to provide their credentials. When executed, the node: 1. Validates the provided Session ID 2. Creates an authorization widget with the specified label and description 3. Sends the widget to the client with the specified session ID 4. Waits for the client's response 5. Parses the response as JSON or string 6. Returns the parsed credentials as the result",
+      "usage": [
+        "A valid session ID for an active client connection",
+        "Properly configured client interface that can handle authorization widgets"
+      ],
+      "bestPractices": [
+        "The Session ID must match an active client connection",
+        "The Label and Description fields are optional but can help users understand what credentials are being requested",
+        "The Authorization Mode determines how the client interface presents the authorization request",
+        "The returned credentials will be in the format provided by the client (JSON or string)"
+      ]
+    },
+    "button_group": {
+      "namespace": "Core.RobomotionChatAssistant.Button_group",
+      "name": "Button_group",
+      "summary": "Displays a group of buttons for user selection in chat interfaces.",
+      "howItWorks": "The Button Group node creates an interactive widget with multiple buttons that users can select from. When executed, the node: 1. Validates the provided Session ID 2. Checks that the session is not in conversational mode 3. Builds the button options from the provided array or custom labels 4. Creates a button group widget with the specified label and description 5. Sends the widget to the client with the specified session ID 6. Waits for the user's selection 7. Parses the response as JSON or string 8. Returns the parsed selection as the result",
+      "usage": [
+        "A valid session ID for an active client connection",
+        "Properly configured client interface that can handle button group widgets",
+        "Session must not be in conversational mode"
+      ],
+      "bestPractices": [
+        "The Session ID must match an active client connection",
+        "The Label and Description fields are optional but can help users understand what they're selecting",
+        "In Single Select mode, users can only choose one button",
+        "In Multi Select mode, users can choose multiple buttons",
+        "The returned selection will be in the format provided by the client (JSON or string)",
+        "Button groups cannot be used in conversational mode"
+      ]
+    },
+    "chatin": {
+      "namespace": "Core.RobomotionChatAssistant.Chatin",
+      "name": "Chatin",
+      "summary": "Receives incoming messages from chat clients and extracts session information.",
+      "howItWorks": "The Chat In node acts as a trigger that starts a flow when a message is received from a chat client. When a message is received, the node: 1. Extracts the session ID from the incoming message 2. Validates that the session ID is not empty 3. Retrieves session information including additional data and profile information 4. In conversational mode, extracts the message payload 5. Outputs the session information and payload (if applicable)",
+      "usage": [
+        "An active connection to the chat proxy",
+        "Valid session IDs from connected clients"
+      ],
+      "bestPractices": [
+        "This node should be the starting point of flows that respond to chat messages",
+        "In Guided mode, the flow follows a predetermined path with specific widgets",
+        "In Conversational mode, the flow processes natural language messages",
+        "The Payload output is only available in Conversational mode",
+        "The Profile output contains client information if a Robomotion session exists",
+        "The Additionals output contains information about the flow and instance"
+      ]
+    },
+    "chatout": {
+      "namespace": "Core.RobomotionChatAssistant.Chatout",
+      "name": "Chatout",
+      "summary": "Signals the end of a chat interaction and sends a completion message to the client.",
+      "howItWorks": "The Chat Out node signals the end of a chat interaction by sending a completion message to the client. When executed, the node: 1. Validates the provided Session ID 2. Retrieves the session information for the provided ID 3. Constructs a chat out message with the session ID 4. Sends the message to the client through the websocket connection",
+      "usage": [
+        "A valid session ID for an active client connection",
+        "Active websocket connection to the client"
+      ],
+      "bestPractices": [
+        "This node should be placed at the end of flows that interact with chat clients",
+        "It signals to the client that the interaction is complete",
+        "The Session ID must match an active client connection",
+        "No further processing occurs after this node in the flow"
+      ]
+    },
+    "checkbox": {
+      "namespace": "Core.RobomotionChatAssistant.Checkbox",
+      "name": "Checkbox",
+      "summary": "Displays a group of checkboxes for user selection in chat interfaces.",
+      "howItWorks": "The Checkbox node creates an interactive widget with multiple checkboxes that users can select from. When executed, the node: 1. Validates the provided Session ID 2. Checks that the session is not in conversational mode 3. Builds the checkbox options from the provided array or custom options 4. Creates a checkbox widget with the specified label and description 5. Sends the widget to the client with the specified session ID 6. Waits for the user's selection 7. Parses the response as JSON or string 8. Returns the parsed selection as the result",
+      "usage": [
+        "A valid session ID for an active client connection",
+        "Properly configured client interface that can handle checkbox widgets",
+        "Session must not be in conversational mode"
+      ],
+      "bestPractices": [
+        "The Session ID must match an active client connection",
+        "The Label and Description fields are optional but can help users understand what they're selecting",
+        "Users can select multiple checkboxes",
+        "The returned selection will be in the format provided by the client (JSON or string)",
+        "Checkboxes cannot be used in conversational mode"
+      ]
+    },
+    "custom_widget": {
+      "namespace": "Core.RobomotionChatAssistant.Custom_widget",
+      "name": "Custom_widget",
+      "summary": "Displays a custom React component widget in chat interfaces.",
+      "howItWorks": "The Custom Widget node creates a custom React component widget for display in chat interfaces. When executed, the node: 1. Validates the provided Session ID 2. Retrieves the widget data 3. Creates a custom widget with the provided React component code and data 4. Sends the widget to the client with the specified session ID 5. In Interactive mode, waits for user interaction 6. Parses the response as JSON or string 7. Returns the parsed result as the output",
+      "usage": [
+        "A valid session ID for an active client connection",
+        "Properly configured client interface that can handle custom widgets",
+        "Valid React component code for the widget content"
+      ],
+      "bestPractices": [
+        "The Session ID must match an active client connection",
+        "The Widget Data input provides default values for input fields in the custom widget",
+        "In Interactive mode, the widget can receive user input and return results",
+        "In Static mode, the widget only displays information without user interaction",
+        "The returned result will be in the format provided by the client (JSON or string)",
+        "Custom widgets must be written as valid React components"
+      ]
+    },
+    "datepicker": {
+      "namespace": "Core.RobomotionChatAssistant.Datepicker",
+      "name": "Datepicker",
+      "summary": "Displays a date picker widget for user date selection in chat interfaces.",
+      "howItWorks": "The Datepicker node creates an interactive widget that allows users to select a date. When executed, the node: 1. Validates the provided Session ID 2. Checks that the session is not in conversational mode 3. Creates a date picker widget with the specified label and description 4. Sends the widget to the client with the specified session ID 5. Waits for the user's date selection 6. Parses the response as JSON or string 7. Returns the parsed date as the result",
+      "usage": [
+        "A valid session ID for an active client connection",
+        "Properly configured client interface that can handle date picker widgets",
+        "Session must not be in conversational mode"
+      ],
+      "bestPractices": [
+        "The Session ID must match an active client connection",
+        "The Label and Description fields are optional but can help users understand what date they're selecting",
+        "The returned date will be in the format provided by the client (JSON or string)",
+        "Date pickers cannot be used in conversational mode"
+      ]
+    },
+    "divider": {
+      "namespace": "Core.RobomotionChatAssistant.Divider",
+      "name": "Divider",
+      "summary": "Displays a visual divider in chat interfaces to separate content sections.",
+      "howItWorks": "The Divider node creates a visual divider widget that separates content sections in chat interfaces. When executed, the node: 1. Validates the provided Session ID 2. Retrieves the thickness value (defaults to 1 if not provided) 3. Creates a divider widget with the specified border style and thickness 4. Sends the widget to the client with the specified session ID",
+      "usage": [
+        "A valid session ID for an active client connection",
+        "Properly configured client interface that can display divider widgets"
+      ],
+      "bestPractices": [
+        "The Session ID must match an active client connection",
+        "The divider is a visual element only and does not collect user input",
+        "Different border styles can be used to create visual variety in chat interfaces",
+        "Thickness values range from 1 (thinnest) to 5 (thickest)"
+      ]
+    },
+    "download_file": {
+      "namespace": "Core.RobomotionChatAssistant.Download_file",
+      "name": "Download_file",
+      "summary": "Provides a file download widget for users in chat interfaces.",
+      "howItWorks": "The Download File node creates a widget that allows users to download a file. When executed, the node: 1. Validates the provided Session ID and File Path 2. Checks that the session is not in conversational mode 3. Retrieves app, instance, and run IDs from the session 4. Gets an upload link for the file 5. Reads and uploads the file data 6. Creates a download file widget with the specified label, description, and button text 7. Sends the widget to the client with the specified session ID",
+      "usage": [
+        "A valid session ID for an active client connection",
+        "Valid file path to an existing file",
+        "Properly configured client interface that can handle download file widgets",
+        "Session must not be in conversational mode",
+        "Valid app, instance, and run IDs in the session"
+      ],
+      "bestPractices": [
+        "The Session ID must match an active client connection",
+        "The File Path must point to an existing file accessible by the system",
+        "The Label and Description fields are optional but can help users understand what file they're downloading",
+        "The File Name option allows you to specify a different name for the downloaded file",
+        "The Button Text option allows you to customize the text on the download button",
+        "Download file widgets cannot be used in conversational mode"
+      ]
+    },
+    "dropdown": {
+      "namespace": "Core.RobomotionChatAssistant.Dropdown",
+      "name": "Dropdown",
+      "summary": "Displays a dropdown selection widget for users in chat interfaces.",
+      "howItWorks": "The Dropdown node creates an interactive widget that allows users to select an option from a dropdown list. When executed, the node: 1. Validates the provided Session ID 2. Checks that the session is not in conversational mode 3. Builds the dropdown options from the provided array or custom options 4. Creates a dropdown widget with the specified label, description, and placeholder 5. Sends the widget to the client with the specified session ID 6. Waits for the user's selection 7. Parses the response as JSON or string 8. Returns the parsed selection as the result",
+      "usage": [
+        "A valid session ID for an active client connection",
+        "Properly configured client interface that can handle dropdown widgets",
+        "Session must not be in conversational mode"
+      ],
+      "bestPractices": [
+        "The Session ID must match an active client connection",
+        "The Label, Description, and Placeholder fields are optional but can help users understand what they're selecting",
+        "Users can only select one option from the dropdown",
+        "The returned selection will be in the format provided by the client (JSON or string)",
+        "Dropdowns cannot be used in conversational mode"
+      ]
+    },
+    "error": {
+      "namespace": "Core.RobomotionChatAssistant.Error",
+      "name": "Error",
+      "summary": "Displays an error message widget in chat interfaces.",
+      "howItWorks": "The Error node creates a widget that displays an error message to the user. When executed, the node: 1. Validates the provided Session ID, Error Label, and Error Message 2. Retrieves the session information for the provided ID 3. Creates an error widget with the specified label and message content 4. Sends the widget to the client with the specified session ID",
+      "usage": [
+        "A valid session ID for an active client connection",
+        "Valid error label and message content",
+        "Properly configured client interface that can display error widgets"
+      ],
+      "bestPractices": [
+        "The Session ID must match an active client connection",
+        "The error widget is a visual element only and does not collect user input",
+        "Error messages can be used to inform users about issues or problems in the flow",
+        "The error widget has a distinct visual style to make it easily recognizable"
+      ],
+      "errorCodes": [
+        "Error"
+      ]
+    },
+    "header": {
+      "namespace": "Core.RobomotionChatAssistant.Header",
+      "name": "Header",
+      "summary": "Displays a header text widget in chat interfaces.",
+      "howItWorks": "The Header node creates a header text widget with specified level and content. When executed, the node: 1. Validates the provided Session ID, Text, and Level 2. Retrieves the session information for the provided ID 3. Creates a header widget with the specified level and text content 4. Sends the widget to the client with the specified session ID",
+      "usage": [
+        "A valid session ID for an active client connection",
+        "Valid header text content",
+        "Header level between 1 and 6",
+        "Properly configured client interface that can display header widgets"
+      ],
+      "bestPractices": [
+        "The Session ID must match an active client connection",
+        "The header widget is a visual element only and does not collect user input",
+        "Header levels follow standard HTML heading conventions (1 = largest, 6 = smallest)",
+        "Headers can be used to organize and structure content in chat interfaces"
+      ]
+    },
+    "image": {
+      "namespace": "Core.RobomotionChatAssistant.Image",
+      "name": "Image",
+      "summary": "Displays an image widget in chat interfaces.",
+      "howItWorks": "The Image node creates an image widget that displays an image from a URL. When executed, the node: 1. Validates the provided Session ID and Image URL 2. Retrieves the session information for the provided ID 3. Creates an image widget with the specified URL, label, description, and alt text 4. Sends the widget to the client with the specified session ID",
+      "usage": [
+        "A valid session ID for an active client connection",
+        "Valid image URL",
+        "Properly configured client interface that can display image widgets"
+      ],
+      "bestPractices": [
+        "The Session ID must match an active client connection",
+        "The image widget is a visual element only and does not collect user input",
+        "The Label and Description fields are optional but can help users understand what the image represents",
+        "The Alt Text field is optional but provides accessibility benefits for users with screen readers",
+        "Images should be hosted at publicly accessible URLs"
+      ]
+    },
+    "progress": {
+      "namespace": "Core.RobomotionChatAssistant.Progress",
+      "name": "Progress",
+      "summary": "Displays a progress indicator widget in chat interfaces.",
+      "howItWorks": "The Progress node creates a progress indicator widget that shows the status of a process. When executed, the node: 1. Validates the provided Session ID, Title, and Description 2. Retrieves the session information for the provided ID 3. Creates a progress widget with the specified title, description, and progress ID 4. Sends the widget to the client with the specified session ID 5. Waits for a response from the client 6. Parses the response as JSON 7. Returns the widget ID as the output",
+      "usage": [
+        "A valid session ID for an active client connection",
+        "Valid title and description for the progress indicator",
+        "Properly configured client interface that can display progress widgets"
+      ],
+      "bestPractices": [
+        "The Session ID must match an active client connection",
+        "The Progress Id input allows you to reference an existing progress widget",
+        "The Title and Description fields help users understand what process is being tracked",
+        "The output Progress Id can be used to reference this specific progress widget in other nodes",
+        "Progress widgets are typically used to indicate that a background process is running"
+      ]
+    },
+    "radio_button": {
+      "namespace": "Core.RobomotionChatAssistant.Radio_button",
+      "name": "Radio_button",
+      "summary": "Displays a group of radio buttons for user selection in chat interfaces.",
+      "howItWorks": "The Radio Button node creates an interactive widget with multiple radio buttons where users can select only one option. When executed, the node: 1. Validates the provided Session ID 2. Checks that the session is not in conversational mode 3. Builds the radio button options from the provided array or custom options 4. Creates a radio button widget with the specified label and description 5. Sends the widget to the client with the specified session ID 6. Waits for the user's selection 7. Parses the response as JSON or string 8. Returns the parsed selection as the result",
+      "usage": [
+        "A valid session ID for an active client connection",
+        "Properly configured client interface that can handle radio button widgets",
+        "Session must not be in conversational mode"
+      ],
+      "bestPractices": [
+        "The Session ID must match an active client connection",
+        "The Label and Description fields are optional but can help users understand what they're selecting",
+        "Users can only select one option from the radio button group",
+        "The returned selection will be in the format provided by the client (JSON or string)",
+        "Radio buttons cannot be used in conversational mode"
+      ]
+    },
+    "streaming_text": {
+      "namespace": "Core.RobomotionChatAssistant.Streaming_text",
+      "name": "Streaming_text",
+      "summary": "Displays streaming text content in chat interfaces.",
+      "howItWorks": "The Streaming Text node creates a widget that displays text content with a streaming effect. When executed, the node: 1. Validates the provided Session ID and Text 2. Retrieves the session information for the provided ID 3. Creates a streaming text widget with the specified text content, label, and description 4. Sends the widget to the client with the specified session ID",
+      "usage": [
+        "A valid session ID for an active client connection",
+        "Valid text content to display",
+        "Properly configured client interface that can display streaming text widgets"
+      ],
+      "bestPractices": [
+        "The Session ID must match an active client connection",
+        "The streaming text widget is a visual element only and does not collect user input",
+        "The Label and Description fields are optional but can help users understand what the text content represents",
+        "The streaming effect simulates typing text character by character for a more engaging user experience"
+      ]
+    },
+    "text": {
+      "namespace": "Core.RobomotionChatAssistant.Text",
+      "name": "Text",
+      "summary": "Displays text content in chat interfaces.",
+      "howItWorks": "The Text node creates a widget that displays text content in chat interfaces. When executed, the node: 1. Validates the provided Session ID and Text 2. Retrieves the session information for the provided ID 3. Creates a text widget with the specified content and content type 4. Sends the widget to the client with the specified session ID",
+      "usage": [
+        "A valid session ID for an active client connection",
+        "Valid text content to display",
+        "Properly configured client interface that can display text widgets"
+      ],
+      "bestPractices": [
+        "The Session ID must match an active client connection",
+        "The text widget is a visual element only and does not collect user input",
+        "When Content Type is set to \"Markdown\", the text will be rendered with Markdown formatting",
+        "When Content Type is set to \"Text\", the text will be displayed as plain text"
+      ]
+    },
+    "textbox": {
+      "namespace": "Core.RobomotionChatAssistant.Textbox",
+      "name": "Textbox",
+      "summary": "Displays a textbox input widget for user text input in chat interfaces.",
+      "howItWorks": "The Textbox node creates an interactive widget that allows users to input text. When executed, the node: 1. Validates the provided Session ID 2. Retrieves the session information for the provided ID 3. Creates a textbox widget with the specified label, description, placeholder, input type, max length, and rows 4. Sends the widget to the client with the specified session ID 5. Waits for the user's input 6. Parses the response as JSON or string 7. Returns the parsed input as the result",
+      "usage": [
+        "A valid session ID for an active client connection",
+        "Properly configured client interface that can handle textbox widgets"
+      ],
+      "bestPractices": [
+        "The Session ID must match an active client connection",
+        "The Label, Description, and Placeholder fields are optional but can help users understand what they're inputting",
+        "When Input Type is set to \"Number\", only numeric input is accepted",
+        "When Rows is set to 1 (default), a single-line textbox is displayed",
+        "When Rows is set to a value greater than 1, a multi-line textarea is displayed",
+        "The Max Length option limits the number of characters a user can input",
+        "The returned input will be in the format provided by the client (JSON or string)"
+      ]
+    },
+    "upload_file": {
+      "namespace": "Core.RobomotionChatAssistant.Upload_file",
+      "name": "Upload_file",
+      "summary": "Provides a file upload widget for users in chat interfaces.",
+      "howItWorks": "The Upload File node creates a widget that allows users to upload files. When executed, the node: 1. Validates the provided Session ID and Local Directory 2. Checks that the session is not in conversational mode 3. Creates an upload file widget with the specified label, description, acceptable extensions, max file size, and mode 4. Sends the widget to the client with the specified session ID 5. Waits for the user to upload file(s) 6. Parses the response as JSON containing file information 7. Downloads the uploaded files to the specified local directory 8. Returns file information as the result",
+      "usage": [
+        "A valid session ID for an active client connection",
+        "Valid local directory path for saving uploaded files",
+        "Properly configured client interface that can handle file upload widgets",
+        "Session must not be in conversational mode",
+        "Valid app, instance, and run IDs in the session"
+      ],
+      "bestPractices": [
+        "The Session ID must match an active client connection",
+        "The Local Directory must be a valid path where the system can save files",
+        "The Label and Description fields are optional but can help users understand what files they should upload",
+        "The Acceptable Extensions option limits the types of files that can be uploaded",
+        "The Max File Size option limits the size of files that can be uploaded",
+        "In Single mode, users can only upload one file",
+        "In Multiple mode, users can upload multiple files",
+        "The returned file information includes details about each uploaded file",
+        "Upload file widgets cannot be used in conversational mode"
+      ]
+    }
+  }
+}

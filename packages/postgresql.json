@@ -1,0 +1,127 @@
+{
+  "package": "Postgresql",
+  "summary": "Connect to and interact with PostgreSQL databases for data operations and automation.",
+  "description": "## Overview The PostgreSQL package provides database connectivity for PostgreSQL. Use it when you need to query data, insert records, execute statements, or perform transactions against PostgreSQL databases.",
+  "nodes": {
+    "Commit": {
+      "namespace": "Core.Postgresql.Commit",
+      "name": "Commit",
+      "summary": "Commits a PostgreSQL transaction using the provided transaction ID.",
+      "howItWorks": "The Commit Transaction node commits a PostgreSQL transaction using the provided transaction ID. When executed, the node: 1. Validates the provided transaction ID 2. Retrieves the transaction object from the internal transactions dictionary 3. Commits the transaction to the database 4. Removes the transaction from the internal transactions dictionary",
+      "usage": [
+        "A valid PostgreSQL connection must be established",
+        "A transaction must have been started using the Start Transaction node",
+        "The transaction ID must be valid and correspond to an active transaction"
+      ],
+      "bestPractices": [
+        "Transactions should be committed after all related database operations are completed",
+        "After committing a transaction, the transaction ID becomes invalid and cannot be used again",
+        "If a transaction is not committed, changes may not be persisted to the database"
+      ]
+    },
+    "Connect": {
+      "namespace": "Core.Postgresql.Connect",
+      "name": "Connect",
+      "summary": "Establishes a connection to a PostgreSQL database.",
+      "howItWorks": "The Connect node establishes a connection to a PostgreSQL database using the provided connection parameters. When executed, the node: 1. Validates the provided connection parameters 2. Constructs a connection string from the provided parameters 3. Creates and opens a new NpgsqlConnection 4. Generates a unique connection ID 5. Stores the connection in an internal connections dictionary 6. Returns the connection ID as output",
+      "usage": [
+        "Valid PostgreSQL server hostname/IP address",
+        "Valid port number (typically 5432)",
+        "Valid database name",
+        "Valid username and password credentials"
+      ],
+      "bestPractices": [
+        "The connection ID should be stored and used in subsequent database operations",
+        "Connections should be properly closed using the Disconnect node when no longer needed",
+        "The connection parameters should match the PostgreSQL server configuration",
+        "The Credentials option should be configured with valid database authentication credentials"
+      ]
+    },
+    "Disconnect": {
+      "namespace": "Core.Postgresql.Disconnect",
+      "name": "Disconnect",
+      "summary": "Closes and removes a PostgreSQL database connection.",
+      "howItWorks": "The Disconnect node closes and removes a PostgreSQL database connection using the provided connection ID. When executed, the node: 1. Validates the provided connection ID 2. Retrieves the connection object from the internal connections dictionary 3. Closes the database connection 4. Removes the connection from the internal connections dictionary",
+      "usage": [
+        "A valid PostgreSQL connection must be established",
+        "The connection ID must be valid and correspond to an active connection"
+      ],
+      "bestPractices": [
+        "Connections should be properly closed when no longer needed to free up resources",
+        "After disconnecting, the connection ID becomes invalid and cannot be used again",
+        "All transactions associated with the connection should be committed or rolled back before disconnecting"
+      ]
+    },
+    "Insert": {
+      "namespace": "Core.Postgresql.Insert",
+      "name": "Insert",
+      "summary": "Inserts data into a PostgreSQL table.",
+      "howItWorks": "The Insert Table node inserts data into a PostgreSQL table using the provided parameters. When executed, the node: 1. Validates the provided connection ID and retrieves the connection 2. Optionally retrieves the transaction if a transaction ID is provided 3. Creates an insert command based on the table data and options 4. Executes the insert command for each row in the table data",
+      "usage": [
+        "A valid PostgreSQL connection must be established",
+        "The table name must be valid and exist in the database",
+        "The table data must be properly formatted",
+        "If using transactions, a valid transaction ID must be provided"
+      ],
+      "bestPractices": [
+        "The Table Data input should be provided as a properly formatted table structure",
+        "When using the Replace option, either Conflict Column Name or Conflict Constraint Name must be specified, but not both",
+        "The Ignore Conflicts and Replace options cannot be used simultaneously",
+        "When using transactions, the transaction must be committed using the Commit Transaction node",
+        "The Column Names with Special Characters option should be used when column names contain special characters"
+      ]
+    },
+    "NonQuery": {
+      "namespace": "Core.Postgresql.NonQuery",
+      "name": "NonQuery",
+      "summary": "Executes a PostgreSQL non-query SQL statement (INSERT, UPDATE, DELETE, etc.).",
+      "howItWorks": "The Execute Non Query node executes a PostgreSQL non-query SQL statement using the provided parameters. When executed, the node: 1. Validates the provided connection ID and retrieves the connection 2. Optionally retrieves the transaction if a transaction ID is provided 3. Processes template variables in the SQL query using the message context 4. Creates and executes the SQL command",
+      "usage": [
+        "A valid PostgreSQL connection must be established",
+        "The SQL query must be valid",
+        "If using transactions, a valid transaction ID must be provided"
+      ],
+      "bestPractices": [
+        "The SQL Query input supports template variables using double curly braces (e.g., `{{variableName}}`)",
+        "Template variables are populated from the message context",
+        "Non-query statements include INSERT, UPDATE, DELETE, CREATE, ALTER, DROP, etc.",
+        "When using transactions, the transaction must be committed using the Commit Transaction node",
+        "The SQL editor provides syntax highlighting for SQL statements"
+      ]
+    },
+    "Query": {
+      "namespace": "Core.Postgresql.Query",
+      "name": "Query",
+      "summary": "Executes a PostgreSQL query SQL statement (SELECT) and returns the results.",
+      "howItWorks": "The Execute Query node executes a PostgreSQL SELECT SQL statement and returns the results. When executed, the node: 1. Validates the provided connection ID and retrieves the connection 2. Optionally retrieves the transaction if a transaction ID is provided 3. Processes template variables in the SQL query using the message context 4. Creates and executes the SQL command 5. Reads the results into a DataTable 6. Converts the DataTable to a table structure 7. Returns the table structure as output",
+      "usage": [
+        "A valid PostgreSQL connection must be established",
+        "The SQL query must be a valid SELECT statement",
+        "If using transactions, a valid transaction ID must be provided"
+      ],
+      "bestPractices": [
+        "The SQL Query input supports template variables using double curly braces (e.g., `{{variableName}}`)",
+        "Template variables are populated from the message context",
+        "Query results are returned as a table structure that can be used in subsequent nodes",
+        "When using transactions, the transaction must be committed using the Commit Transaction node",
+        "The SQL editor provides syntax highlighting for SQL statements"
+      ]
+    },
+    "Start": {
+      "namespace": "Core.Postgresql.Start",
+      "name": "Start",
+      "summary": "Starts a new PostgreSQL transaction.",
+      "howItWorks": "The Start Transaction node begins a new PostgreSQL transaction using the provided connection ID. When executed, the node: 1. Validates the provided connection ID and retrieves the connection 2. Begins a new transaction on the connection 3. Generates a unique transaction ID 4. Stores the transaction in an internal transactions dictionary 5. Returns the transaction ID as output",
+      "usage": [
+        "A valid PostgreSQL connection must be established",
+        "The connection ID must be valid and correspond to an active connection"
+      ],
+      "bestPractices": [
+        "The transaction ID should be stored and used in subsequent database operations that should be part of the transaction",
+        "Transactions should be committed using the Commit Transaction node or rolled back using a rollback mechanism",
+        "All operations between Start Transaction and Commit Transaction/Rollback will be part of the same transaction",
+        "Transactions help ensure data consistency and can be rolled back in case of errors"
+      ]
+    }
+  }
+}

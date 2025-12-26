@@ -1,0 +1,43 @@
+{
+  "package": "KeywordAnalysis",
+  "summary": "The Keyword Analysis package is a comprehensive toolkit designed for SEO professionals, content creators, and digital marketers who aim to enhance their online presence through strategic keyword optimization. This package provides powerful text analysis and keyword research capabilities for automated content optimization workflows.",
+  "description": "## Overview The Keyword Analysis package enables you to automate SEO and content analysis tasks by providing advanced text processing capabilities including:",
+  "nodes": {
+    "cluster_keywords": {
+      "namespace": "Core.KeywordAnalysis.Cluster_keywords",
+      "name": "Cluster_keywords",
+      "summary": "Groups similar keywords together using various distance metrics and clustering algorithms. This node helps organize large keyword lists into meaningful groups, identify keyword themes, and reduce redundancy in keyword research.",
+      "howItWorks": "The Cluster Keywords node uses advanced similarity metrics and clustering algorithms: 1. **Distance Calculation** - Computes similarity/distance between all keyword pairs - Creates a distance matrix based on the selected method 2. **Clustering** - Applies the selected clustering algorithm - Groups keywords based on their distances 3. **Cluster Formation** - Identifies root keywords (earliest occurrence in each cluster) - Groups remaining keywords under their respective roots 4. **Result Formatting** - Returns either full clusters or just root keywords - Maintains original keyword order for consistency"
+    },
+    "count_keywords": {
+      "namespace": "Core.KeywordAnalysis.Count_keywords",
+      "name": "Count_keywords",
+      "summary": "Counts the occurrences of specified keywords in a given text. This node is useful for verifying keyword density, checking if target keywords appear in content, and measuring keyword usage across documents.",
+      "howItWorks": "The Count Occurrences node performs simple but effective keyword counting: 1. **Preprocesses** the input text by converting to lowercase and removing punctuation 2. **Normalizes** each keyword by converting to lowercase 3. **Counts** exact occurrences of each keyword in the processed text 4. **Returns** a dictionary mapping each keyword to its count The node uses case-insensitive matching and removes punctuation to ensure accurate counting even when keywords appear with different capitalization or adjacent to punctuation marks."
+    },
+    "frequency_analysis": {
+      "namespace": "Core.KeywordAnalysis.Frequency_analysis",
+      "name": "Frequency_analysis",
+      "summary": "Performs frequency analysis on documents to extract and rank keywords based on occurrence counts. This node provides a simpler alternative to TF-IDF analysis, focusing on raw frequency counts to identify commonly used terms across documents.",
+      "howItWorks": "Frequency Analysis extracts keywords based on how often they appear across documents: 1. **Tokenizes** documents into n-grams (single words, two-word phrases, three-word phrases based on your settings) 2. **Filters** stop words based on the selected language 3. **Counts** occurrences of each term in each document 4. **Applies document frequency filtering** to remove very common and very rare terms 5. **Validates n-grams** by ensuring they exist exactly in at least one document 6. **Computes a Total Score** by multiplying N-Gram length, Document Count, and Total Count 7. **Ranks** keywords by Total Score to identify the most frequently used terms 8. **Returns Top N** keywords with their counts across all documents"
+    },
+    "gap_analysis": {
+      "namespace": "Core.KeywordAnalysis.Gap_analysis",
+      "name": "Gap_analysis",
+      "summary": "Compares keyword frequencies between a target text and multiple comparison texts to identify keyword usage gaps. This node is essential for competitive content analysis, helping you understand how your content's keyword usage compares to top-ranking competitors or industry standards.",
+      "howItWorks": "The Gap Analysis node helps identify keyword opportunities and deficiencies: 1. **Receives** your keyword counts and an array of competitor keyword counts 2. **Calculates** the average count for each keyword across all comparison texts 3. **Compares** your counts against the calculated averages 4. **Returns** both values for each keyword, enabling easy gap identification This allows you to see where your content underuses or overuses keywords compared to the average of competitor content."
+    },
+    "normalize_text": {
+      "namespace": "Core.KeywordAnalysis.Normalize_text",
+      "name": "Normalize_text",
+      "summary": "Normalizes text using lemmatization, stemming, or POS (Part-of-Speech) tagging operations. This preprocessing node helps standardize text before analysis by reducing words to their base forms or adding grammatical context.",
+      "howItWorks": "The Normalize Text node uses NLP libraries to standardize text:"
+    },
+    "tfidf_analysis": {
+      "namespace": "Core.KeywordAnalysis.Tfidf_analysis",
+      "name": "Tfidf_analysis",
+      "summary": "Performs TF-IDF (Term Frequency-Inverse Document Frequency) analysis on documents to identify important keywords. This advanced algorithm identifies keywords that are important to specific documents while filtering out common terms that appear across all documents.",
+      "howItWorks": "TF-IDF Analysis identifies keywords that are important to specific documents while filtering out common terms. The algorithm: 1. **Tokenizes** documents into n-grams (single words, two-word phrases, three-word phrases based on your settings) 2. **Filters** stop words based on the selected language 3. **Calculates TF-IDF scores** for each term in each document 4. **Applies document frequency filtering** to remove very common and very rare terms 5. **Validates n-grams** by ensuring they exist exactly in at least one document 6. **Computes a Total Score** by multiplying N-Gram length, Document Count, and TF-IDF Score 7. **Ranks** keywords by Total Score to identify the most significant terms 8. **Returns Top N** keywords with their scores across all documents"
+    }
+  }
+}

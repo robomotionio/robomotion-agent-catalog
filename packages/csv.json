@@ -1,0 +1,162 @@
+{
+  "package": "Csv",
+  "summary": "Read, write, and manipulate CSV (Comma-Separated Values) files in your automation workflows.",
+  "description": "## Overview The CSV package provides comprehensive tools for working with CSV files, a common format for data exchange. Use it when you need to process data exports, create reports, or transfer data between systems using CSV format.",
+  "nodes": {
+    "append-csv": {
+      "namespace": "Core.Csv.AppendCsv",
+      "name": "AppendCsv",
+      "summary": "Appends a [data table](/concepts/core/data-table/) to the end of a CSV file.",
+      "howItWorks": "The Append CSV node performs the following steps: 1. **Validates File Existence** - Checks if the specified CSV file exists at the given file path 2. **Reads File Encoding** - Opens the file using the specified encoding format to ensure proper character handling 3. **Parses Data Table** - Converts the input data table into CSV-formatted rows 4. **Appends Data** - Adds the new rows to the end of the existing CSV file using the specified separator 5. **Preserves Format** - Maintains the original file structure and encoding while adding new data 6. **Closes File** - Safely closes the file stream after the append operation",
+      "usage": [
+        "**File System Access** - Write permissions to the target CSV file location",
+        "**Valid CSV File** - The target file must exist and be a valid CSV file",
+        "**Data Table Format** - Input data must be in Robomotion data table format",
+        "**Encoding Match** - The append encoding should match the original file encoding to prevent data corruption",
+        "**Disk Space** - Sufficient disk space to accommodate the additional data"
+      ],
+      "bestPractices": [
+        "**File Must Exist** - Unlike Write CSV, Append CSV requires the target file to already exist. Use Write CSV to create new files.",
+        "**Header Handling** - Headers from the data table are not appended. Only data rows are added to maintain consistency with existing structure.",
+        "**Concurrent Access** - Avoid appending to files that are open in other applications (Excel, text editors) to prevent file locking issues.",
+        "**Large Files** - When appending to very large CSV files (over 100MB), consider performance implications and available memory.",
+        "**Encoding Consistency** - Always use the same encoding as the original file to prevent character corruption.",
+        "**Separator Match** - Ensure the separator matches the original file's separator for proper data structure."
+      ],
+      "errorCodes": [
+        "Error"
+      ],
+      "relatedNodes": [
+        "Write CSV",
+        "Read CSV",
+        "Split CSV"
+      ],
+      "tips": [
+        "**Verify Before Append** - Use a Read CSV node first to verify the file exists and has the expected structure.",
+        "**Error Handling** - Always use Try-Catch blocks when appending to handle file access errors gracefully.",
+        "**Backup Strategy** - Consider creating backups of important CSV files before appending large amounts of data.",
+        "**Batch Operations** - When appending multiple small tables, consider combining them first to reduce file I/O operations.",
+        "**File Validation** - After appending, read a few rows to verify the data was appended correctly.",
+        "**Use Absolute Paths** - Always use absolute file paths rather than relative paths to avoid ambiguity."
+      ]
+    },
+    "read-csv": {
+      "namespace": "Core.Csv.ReadCsv",
+      "name": "ReadCsv",
+      "summary": "Reads data from a CSV file and outputs a [data table](/concepts/core/data-table/)",
+      "howItWorks": "The Read CSV node performs the following steps: 1. **Locates File** - Validates that the CSV file exists at the specified path 2. **Opens File** - Opens the file using the specified encoding to ensure proper character interpretation 3. **Skips Rows** - If configured, skips the specified number of initial rows (useful for files with metadata) 4. **Parses Headers** - If Headers option is enabled, reads the first row as column names 5. **Reads Data** - Parses each row using the specified separator character 6. **Builds Data Table** - Constructs a data table structure with rows and columns 7. **Applies Jsonify** - If enabled, transforms header names to JSON-friendly format (lowercase, underscore-separated) 8. **Returns Table** - Outputs the complete data table for use in subsequent nodes",
+      "usage": [
+        "**File System Access** - Read permissions to the CSV file location",
+        "**Valid CSV File** - The file must exist and contain valid CSV-formatted data",
+        "**Correct Encoding** - The encoding setting must match the file's actual encoding",
+        "**Memory Availability** - Sufficient memory to load the entire CSV file (for very large files, consider Split CSV first)",
+        "**Proper Separator** - The separator setting must match the actual delimiter used in the file"
+      ],
+      "bestPractices": [
+        "**Encoding Detection** - If unsure about encoding, UTF-8 is the most common. For legacy systems, try Windows-1252.",
+        "**Separator Auto-Detection** - While the node doesn't auto-detect, comma and semicolon are most common. Tab-separated values are common in data exports.",
+        "**Memory Considerations** - Reading very large files (over 100MB) can consume significant memory. Monitor performance and consider splitting large files.",
+        "**Header Row** - When Headers is true, the first row (after skipped rows) becomes column names, not data.",
+        "**Jsonify Usage** - Enable Jsonify when preparing data for JSON APIs or when you want consistent, code-friendly column names.",
+        "**Empty Cells** - Empty cells in the CSV are preserved as empty strings in the data table.",
+        "**Data Type Handling** - All data is initially read as strings. Use type conversion nodes if numeric or date operations are needed."
+      ],
+      "errorCodes": [
+        "Error"
+      ],
+      "relatedNodes": [
+        "Write CSV",
+        "Append CSV",
+        "Split CSV"
+      ],
+      "tips": [
+        "**Test with Sample First** - When working with large files, test your configuration on a small sample first.",
+        "**Use Skip Rows Wisely** - Skip Rows is perfect for CSV files with comments or metadata at the top.",
+        "**Encoding Troubleshooting** - If you see strange characters, try different encoding options. UTF-8, Windows-1252, and ISO 8859-1 cover most cases.",
+        "**Inspect Your Data** - Use a Log node immediately after Read CSV to inspect the data table structure before further processing.",
+        "**Handle Missing Files** - Use Try-Catch blocks to handle file not found errors gracefully.",
+        "**Separator Issues** - If data appears in a single column, you likely have the wrong separator selected.",
+        "**Performance Optimization** - For repeated reads of the same file, consider reading once and storing in a variable."
+      ]
+    },
+    "split-csv": {
+      "namespace": "Core.Csv.SplitCsv",
+      "name": "SplitCsv",
+      "summary": "Splits a CSV file into smaller files based on the maximum number of rows specified.",
+      "howItWorks": "The Split CSV node performs the following steps: 1. **Validates Input File** - Checks if the source CSV file exists at the specified path 2. **Creates Output Directory** - Creates the output directory if it doesn't already exist 3. **Parses File Structure** - Reads the CSV file to understand its structure and total row count 4. **Preserves Headers** - If Headers option is enabled, captures the header row to include in each split file 5. **Calculates Splits** - Determines how many output files will be created based on Max Rows setting 6. **Splits Data** - Divides the data into chunks, each containing up to Max Rows 7. **Writes Split Files** - Creates numbered CSV files (e.g., filename-000.csv, filename-001.csv) in the output directory 8. **Returns Directory Path** - Outputs the path to the directory containing all split files",
+      "usage": [
+        "**File System Access** - Read permissions for source file and write permissions for output directory",
+        "**Valid CSV File** - The source file must be a properly formatted CSV file",
+        "**Disk Space** - Sufficient disk space to store all split files (approximately the same size as original file)",
+        "**Max Rows Setting** - Max Rows must be a positive integer greater than 0",
+        "**Separator Match** - The separator setting must match the actual delimiter in the source file"
+      ],
+      "bestPractices": [
+        "**Header Inclusion** - When Headers is true, each split file includes the header row in addition to the Max Rows of data.",
+        "**Automatic Numbering** - Split files are automatically numbered with zero-padded indices (000, 001, 002, etc.).",
+        "**Original File Preserved** - The original CSV file remains unchanged after splitting.",
+        "**Output Directory Creation** - If the output directory doesn't exist, it will be created automatically.",
+        "**Last File Size** - The last split file may contain fewer rows than Max Rows if the total rows aren't evenly divisible.",
+        "**Performance** - Splitting very large files (over 1GB) may take considerable time. Monitor progress and plan accordingly.",
+        "**File Naming** - Split files use the original filename with a numeric suffix (e.g., data.csv becomes data-000.csv)."
+      ],
+      "errorCodes": [
+        "Error"
+      ],
+      "relatedNodes": [
+        "Read CSV",
+        "Write CSV",
+        "Append CSV"
+      ],
+      "tips": [
+        "**Optimal Chunk Size** - Choose Max Rows based on your processing needs. For parallel processing, consider your available CPU cores.",
+        "**Memory Management** - Splitting is more memory-efficient than loading entire large files for processing.",
+        "**Batch Processing Pattern** - After splitting, use a Loop node to process each split file individually.",
+        "**Cleanup Strategy** - Plan to clean up split files after processing to avoid cluttering storage.",
+        "**Test First** - Test splitting with a smaller Max Rows value first to ensure correct configuration.",
+        "**Progress Tracking** - When processing split files, log which file is being processed for debugging and monitoring.",
+        "**Parallel Execution** - Split CSV is ideal when you need to distribute workload across multiple automation instances or servers."
+      ]
+    },
+    "write-csv": {
+      "namespace": "Core.Csv.WriteCsv",
+      "name": "WriteCsv",
+      "summary": "Writes a [data table](/concepts/core/data-table/) to a CSV file",
+      "howItWorks": "The Write CSV node performs the following steps: 1. **Validates Input** - Ensures the input table is in valid data table format 2. **Checks File Path** - Verifies the target file path is valid and writable 3. **Creates Directory** - If the directory doesn't exist, creates the necessary folders 4. **Prepares Headers** - If Headers option is enabled, extracts column names from the data table 5. **Formats Data** - Converts data table rows into CSV format using the specified separator 6. **Applies Encoding** - Encodes the data using the specified character encoding 7. **Writes File** - Creates or overwrites the CSV file with the formatted data 8. **Closes Stream** - Ensures the file is properly closed after writing",
+      "usage": [
+        "**File System Access** - Write permissions to the target directory",
+        "**Valid Data Table** - Input must be a properly formatted Robomotion data table",
+        "**Disk Space** - Sufficient disk space to store the CSV file",
+        "**Directory Path** - Parent directory must exist or be creatable",
+        "**File Permissions** - If overwriting, the existing file must not be locked by another process"
+      ],
+      "bestPractices": [
+        "**Overwrite Behavior** - Write CSV always overwrites the target file if it exists. Use Append CSV to add to existing files.",
+        "**Header Source** - Headers are automatically derived from data table column names when Headers option is enabled.",
+        "**Encoding Selection** - UTF-8 is recommended for modern systems. Use Windows-1252 for legacy Windows applications.",
+        "**Separator Choice** - Comma is standard for CSV. Use semicolon for European systems where comma is a decimal separator.",
+        "**File Creation** - The node creates the file and necessary parent directories if they don't exist.",
+        "**Empty Tables** - Writing an empty data table creates a CSV file with headers only (if enabled) or an empty file.",
+        "**Data Type Conversion** - All data is converted to strings during CSV writing. Numeric formatting is not preserved."
+      ],
+      "errorCodes": [
+        "Error"
+      ],
+      "relatedNodes": [
+        "Read CSV",
+        "Append CSV",
+        "Split CSV"
+      ],
+      "tips": [
+        "**Always Use Absolute Paths** - Specify complete file paths to avoid ambiguity about file location.",
+        "**Test Encoding First** - If unsure about encoding, test with a small sample first to ensure compatibility.",
+        "**Backup Important Files** - Since Write CSV overwrites files, backup important data before running.",
+        "**Handle Errors Gracefully** - Use Try-Catch blocks to handle file writing errors without stopping automation.",
+        "**Verify After Writing** - Use Read CSV immediately after to verify the file was written correctly.",
+        "**Choose Appropriate Separators** - If your data contains commas, consider using a different separator like semicolon or tab.",
+        "**Memory Considerations** - For very large data tables, monitor memory usage during write operations.",
+        "**File Naming** - Use timestamps in filenames for reports generated regularly (e.g., report_2025_01_15.csv)."
+      ]
+    }
+  }
+}

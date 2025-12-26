@@ -1,0 +1,460 @@
+{
+  "package": "Telegram",
+  "summary": "The Telegram Bot package enables you to build powerful automation workflows that interact with Telegram. Create bots that can send messages, receive messages, share files, photos, and audio, and manage Telegram chats programmatically.",
+  "description": "## Features - Connect to Telegram using bot tokens",
+  "nodes": {
+    "connect": {
+      "namespace": "Core.Telegram.Connect",
+      "name": "Connect",
+      "summary": "Establishes a connection to Telegram using a bot token, creating a client session that can be used by other Telegram nodes.",
+      "howItWorks": "The Connect node establishes a connection to Telegram's Bot API using the provided bot token. When executed, the node: 1. Retrieves the bot token from the credential vault 2. Validates the token format and credentials 3. Creates a new bot client instance 4. Generates a unique Client Id for this connection 5. Stores the connection for use by other Telegram nodes 6. Returns the Client Id for downstream nodes",
+      "usage": [
+        "A valid Telegram bot token from [@BotFather](https://t.me/botfather)",
+        "The token must be stored in the Robomotion credential vault"
+      ],
+      "tips": [
+        "Keep the Client Id in the message scope to share it across multiple Telegram nodes",
+        "The same bot token can be used in multiple flows, but each flow should have its own Connect node",
+        "If you change your bot token, you'll need to update the credential in the vault",
+        "Use the Get Bot Info node to verify your connection is working correctly"
+      ]
+    },
+    "disconnect": {
+      "namespace": "Core.Telegram.Disconnect",
+      "name": "Disconnect",
+      "summary": "Closes the Telegram bot connection and cleans up resources. This node should be used at the end of your flow to properly terminate the bot session.",
+      "howItWorks": "The Disconnect node terminates the Telegram bot connection and releases associated resources. When executed, the node: 1. Retrieves the Client Id from the input 2. Validates that the Client Id exists and corresponds to an active connection 3. Stops any running pollers (for bots listening to messages) 4. Closes the bot client instance 5. Removes the connection from the connection pool 6. Frees up system resources",
+      "usage": [
+        "A valid Client Id from an active Connect node",
+        "The connection must not have already been closed"
+      ],
+      "tips": [
+        "Always pair each Connect with a Disconnect",
+        "Use error handling to ensure Disconnect runs even if the flow fails",
+        "The Disconnect node is idempotent - calling it multiple times on an already closed connection won't cause issues (though it will log a warning)",
+        "For flows using Receive Message (which runs continuously), Disconnect will be called automatically when the flow stops"
+      ]
+    },
+    "download-file": {
+      "namespace": "Core.Telegram.DownloadFile",
+      "name": "DownloadFile",
+      "summary": "Downloads a file from Telegram to your local storage using the file ID. Useful for processing files received from users or retrieving media from messages.",
+      "howItWorks": "The Download File node retrieves a file from Telegram's servers and saves it locally. When executed, the node: 1. Either uses the provided Client Id or creates a temporary connection using Bot Token 2. Validates the File Id 3. If Save Path is empty, creates a temporary file in the system temp directory 4. If Save Path is provided, creates the necessary parent directories 5. Calls Telegram's API to get file information using the File Id 6. Downloads the file from Telegram's servers 7. Saves the file to the specified location 8. Returns the full path of the downloaded file in the File Path output",
+      "usage": [
+        "Either a valid Client Id from a Connect node OR a valid Bot Token credential",
+        "A valid File Id from a Telegram message",
+        "Sufficient disk space for the file",
+        "Write permissions for the save location",
+        "The file must still be available on Telegram's servers (files may expire after some time)"
+      ],
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "Receive Message\r\n  → If (message.document exists)\r\n    → Download File (\r\n        File Id: message.document.file_id,\r\n        Save Path: \"C:\\Downloads\\received_file.pdf\"\r\n      )\r\n    → Process File"
+        },
+        {
+          "title": "Example 2",
+          "code": "Receive Message\r\n  → Download File (\r\n      File Id: message.photo.file_id,\r\n      Save Path: \"\"  // Auto temp path\r\n    )\r\n  → Process Image (file_path)\r\n  → Delete File (file_path)"
+        },
+        {
+          "title": "Example 3",
+          "code": "Receive Message (from user)\r\n  → Download File (File Id: message.document.file_id)\r\n  → Send Document (\r\n      Chat Id: admin_chat,\r\n      Document Path: file_path\r\n    )"
+        },
+        {
+          "title": "Example 4",
+          "code": "For Each (file in message.files)\r\n  → Download File (\r\n      File Id: file.file_id,\r\n      Save Path: `/downloads/${file.file_name}`\r\n    )"
+        }
+      ],
+      "tips": [
+        "File IDs are unique and can only be used once per download operation",
+        "Downloaded files remain until you delete them - implement cleanup",
+        "The node creates parent directories automatically if they don't exist",
+        "Empty Save Path is useful for one-time processing",
+        "File IDs expire after some time - download files promptly",
+        "For photos, multiple file IDs exist for different sizes",
+        "Use the largest photo size for best quality",
+        "The output File Path is always absolute, even if you provide a relative Save Path",
+        "Consider implementing rate limiting for bulk downloads",
+        "Telegram's file storage is temporary - don't rely on it for long-term storage"
+      ]
+    },
+    "forward-message": {
+      "namespace": "Core.Telegram.ForwardMessage",
+      "name": "ForwardMessage",
+      "summary": "Forwards a message from one Telegram chat to another. The forwarded message will show as \"Forwarded from\" in Telegram.",
+      "howItWorks": "The Forward Message node copies a message from one chat to another while preserving the original sender information. When executed, the node: 1. Either uses the provided Client Id or creates a temporary connection using Bot Token 2. Validates the From Chat Id, To Chat Id, and Message Id 3. Retrieves the message from the source chat 4. Forwards it to the destination chat 5. Applies the Disable Notification and Protect Content options 6. Returns success or error based on the API response In the destination chat, the message will appear with a \"Forwarded from\" header showing the original source.",
+      "usage": [
+        "Either a valid Client Id from a Connect node OR a valid Bot Token credential",
+        "The bot must have access to read messages in the source chat",
+        "The bot must have permission to send messages in the destination chat",
+        "The message ID must exist in the source chat",
+        "For channels: The bot must be an administrator with appropriate permissions"
+      ],
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "Receive Message\r\n  → Forward Message (\r\n      From Chat Id: message.chat.id,\r\n      To Chat Id: -1001234567890,\r\n      Message Id: message.message_id\r\n    )"
+        },
+        {
+          "title": "Example 2",
+          "code": "Receive Message\r\n  → If (message.text contains \"urgent\")\r\n    → Forward Message (to admin chat)"
+        },
+        {
+          "title": "Example 3",
+          "code": "Receive Message (from content channel)\r\n  → For Each (channel in distributionList)\r\n    → Forward Message (to channel)"
+        },
+        {
+          "title": "Example 4",
+          "code": "Forward Message:\r\n  From Chat Id: source_chat\r\n  To Chat Id: destination_chat\r\n  Message Id: 123\r\n  Disable Notification: true"
+        }
+      ],
+      "tips": [
+        "You can forward messages from private chats, groups, and channels",
+        "The Message Id is unique per chat, not globally",
+        "Forwarding preserves all media and formatting",
+        "Use Disable Notification for batch forwarding to avoid disturbing users",
+        "Some channels disable forwarding - you'll get an error if this is the case",
+        "For anonymous admin messages in channels, the forward will show the channel name",
+        "You can forward your own messages or messages from other users (if allowed)",
+        "The forwarded message gets a new Message Id in the destination chat"
+      ]
+    },
+    "get-bot-info": {
+      "namespace": "Core.Telegram.GetBotInfo",
+      "name": "GetBotInfo",
+      "summary": "Retrieves information about the connected Telegram bot, including its username, ID, name, and other details.",
+      "howItWorks": "The Get Bot Info node queries the Telegram Bot API to retrieve information about the bot. When executed, the node: 1. Either uses the provided Client Id or creates a temporary connection using Bot Token 2. Calls the Telegram API `getMe` method 3. Retrieves the bot's profile information 4. Returns the information as an object in the Bot Info output 5. If using Bot Token (without Client Id), the temporary connection is closed after retrieval",
+      "usage": [
+        "Either a valid Client Id from a Connect node OR a valid Bot Token credential",
+        "Network connectivity to Telegram's API"
+      ],
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "Connect → Get Bot Info → Log (Bot Info)"
+        },
+        {
+          "title": "Example 2",
+          "code": "Get Bot Info (with Bot Token) → Log (Bot Info)"
+        },
+        {
+          "title": "Example 3",
+          "code": "Connect → Get Bot Info → Check Bot Username → Send Message → Disconnect"
+        }
+      ],
+      "tips": [
+        "You can use this node without a Connect node by providing a Bot Token directly - useful for quick checks",
+        "The bot username is useful for creating @mentions in messages",
+        "Store the bot ID to identify messages sent by your bot vs. received messages",
+        "Check `can_read_all_group_messages` to understand if your bot has privacy mode enabled",
+        "Use this node to verify token validity before performing expensive operations"
+      ]
+    },
+    "get-file-path": {
+      "namespace": "Core.Telegram.GetFilePath",
+      "name": "GetFilePath",
+      "summary": "Retrieves the file path for a Telegram file using its file ID. This path can be used to construct a download URL or get file information without downloading the entire file.",
+      "howItWorks": "The Get File Path node queries Telegram's Bot API to retrieve metadata about a file. When executed, the node: 1. Either uses the provided Client Id or creates a temporary connection using Bot Token 2. Validates the File Id 3. Calls Telegram's `getFile` API method with the File Id 4. Retrieves file information including the file path 5. Returns the file path as a string in the Result output The file path returned is a relative path on Telegram's servers, not a full URL or local path.",
+      "usage": [
+        "Either a valid Client Id from a Connect node OR a valid Bot Token credential",
+        "A valid File Id from a Telegram message",
+        "The file must still be available on Telegram's servers"
+      ],
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "Receive Message\r\n  → If (message.document exists)\r\n    → Get File Path (File Id: message.document.file_id)\r\n    → Log (result)"
+        },
+        {
+          "title": "Example 2",
+          "code": "Receive Message\r\n  → Get File Path (File Id: message.photo.file_id)\r\n  → If (result exists)\r\n    → Download File\r\n  → Else\r\n    → Send Message (\"File not available\")"
+        },
+        {
+          "title": "Example 3",
+          "code": "Get File Path (File Id: file_id)\r\n  → Build URL: https://api.telegram.org/file/bot\u003ctoken\u003e/\u003cresult\u003e\r\n  → Download via HTTP"
+        },
+        {
+          "title": "Example 4",
+          "code": "For Each (attachment in message.attachments)\r\n  → Get File Path (File Id: attachment.file_id)\r\n  → Log (result)"
+        }
+      ],
+      "tips": [
+        "Get File Path is lightweight - it doesn't download the file",
+        "Use it to validate File Ids before downloading",
+        "The file path can change - don't store it long-term",
+        "Always use the File Id as the permanent reference",
+        "File paths are relative to Telegram's storage, not absolute URLs",
+        "You can't use the file path alone - you need the bot token for downloads",
+        "The result is just a string - parse it if you need specific information",
+        "Different file types use different directory structures in the path",
+        "This node is useful for debugging and logging file information",
+        "Combine with Download File for complete file handling"
+      ]
+    },
+    "get-invite-link": {
+      "namespace": "Core.Telegram.GetInviteLink",
+      "name": "GetInviteLink",
+      "summary": "Creates an invite link for a Telegram group or channel. This link can be shared with users to allow them to join the chat.",
+      "howItWorks": "The Create Invite Link node generates a new invitation link for a Telegram group or channel. When executed, the node: 1. Either uses the provided Client Id or creates a temporary connection using Bot Token 2. Validates the Chat Id 3. Verifies that the Chat Id corresponds to a group or channel (not a private chat) 4. Calls Telegram's `createChatInviteLink` API method 5. Generates a new invite link for the specified chat 6. Returns the invite link URL in the Result output",
+      "usage": [
+        "Either a valid Client Id from a Connect node OR a valid Bot Token credential",
+        "A valid group or channel Chat Id (negative number)",
+        "The bot must be an administrator in the group/channel",
+        "The bot must have the \"Invite Users\" permission",
+        "Cannot be used for private chats (one-on-one conversations)"
+      ],
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "Connect\r\n  → Create Invite Link (Chat Id: -1001234567890)\r\n  → Send Message (Chat Id: admin_id, Message: result)\r\n  → Disconnect"
+        },
+        {
+          "title": "Example 2",
+          "code": "Create Group\r\n  → Add Bot as Admin\r\n  → Create Invite Link (Chat Id: group_id)\r\n  → Store Link in Database"
+        },
+        {
+          "title": "Example 3",
+          "code": "Receive Message (from user)\r\n  → Create Invite Link (Chat Id: community_group)\r\n  → Send Message (\r\n      Chat Id: message.from.id,\r\n      Message: \"Join us: \" + result\r\n    )"
+        },
+        {
+          "title": "Example 4",
+          "code": "For Each (group in groupList)\r\n  → Create Invite Link (Chat Id: group.id)\r\n  → Log (group.name + \": \" + result)"
+        }
+      ],
+      "tips": [
+        "Create links once and reuse them to avoid creating many links for the same chat",
+        "Store generated links in a database or variable for future use",
+        "The bot must remain an administrator for the link to work",
+        "Invite links work even if the group is set to private",
+        "For public groups, you can also use the @username directly",
+        "Multiple invite links can exist for the same group",
+        "Users can join via the link without needing approval (unless chat requires it)",
+        "Consider using link analytics to track which links are most effective",
+        "You can create different links for different campaigns to track sources",
+        "Links remain valid even if the bot leaves the group (until revoked by admins)"
+      ]
+    },
+    "receive-message": {
+      "namespace": "Core.Telegram.ReceiveMessage",
+      "name": "ReceiveMessage",
+      "summary": "Listens for incoming messages from Telegram in real-time. This is a trigger node that starts new flow executions whenever a message is received.",
+      "howItWorks": "The Receive Message node establishes a long-polling connection to Telegram and continuously listens for new messages. When a message is received, the node: 1. Connects to Telegram using the provided Bot Token 2. Starts a long-polling session (60-second timeout) 3. Waits for incoming messages 4. Filters messages based on Chat Id and Sender Id if specified 5. If Auto Download is enabled, downloads any files to the temp directory 6. Removes empty values from the message if Omit Empty Values is enabled 7. Triggers a new flow execution with the message data 8. Continues listening for more messages The node runs continuously while the flow is active and will trigger a new execution for each matching message received.",
+      "usage": [
+        "A valid Telegram bot token",
+        "The bot must be able to receive messages:",
+        "For private chats: Users must start a conversation with the bot first",
+        "For groups: The bot must be added as a member",
+        "For channels: The bot must be an administrator",
+        "Sufficient storage space if Auto Download is enabled"
+      ],
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "Receive Message → Log Message → Send Message (Reply)"
+        },
+        {
+          "title": "Example 2",
+          "code": "Receive Message (Filter Chat Id: 123456789)\r\n  → Process User Messages\r\n  → Send Response"
+        },
+        {
+          "title": "Example 3",
+          "code": "Receive Message\r\n  → If (message.text starts with \"/start\")\r\n    → Send Message (\"Welcome!\")\r\n  → Else If (message.text starts with \"/help\")\r\n    → Send Message (\"Help info\")"
+        },
+        {
+          "title": "Example 4",
+          "code": "Receive Message (Auto Download: true)\r\n  → If (message.document exists)\r\n    → Process Document\r\n    → Send Document (processed file)"
+        }
+      ],
+      "tips": [
+        "This is a trigger node - it has no input connectors and starts new executions",
+        "Each message creates a new, independent flow execution",
+        "The Client Id is unique per message execution",
+        "Privacy mode affects which messages bots can see in groups",
+        "Use the message_id for replying to specific messages",
+        "The chat.id is needed for sending responses back to the sender",
+        "File downloads include retry logic for reliability",
+        "Omit Empty Values makes message objects easier to work with",
+        "The node automatically handles long-polling reconnections"
+      ]
+    },
+    "send-audio": {
+      "namespace": "Core.Telegram.SendAudio",
+      "name": "SendAudio",
+      "summary": "Sends an audio file to a Telegram chat. Supports both local file paths and URLs, with options for captions, custom filenames, and MIME types.",
+      "howItWorks": "The Send Audio node uploads and sends an audio file to a specified Telegram chat. When executed, the node: 1. Either uses the provided Client Id or creates a temporary connection using Bot Token 2. Validates the Chat Id and Audio Url or Path 3. Determines if the input is a URL or file path 4. For URLs: Uses Telegram's FromURL method to send the file directly 5. For file paths: Reads the local file and uploads it to Telegram 6. Applies optional caption, custom filename, and MIME type if provided 7. If Reply Id is provided, sends the audio as a reply to that message 8. Returns success or error based on the API response",
+      "usage": [
+        "Either a valid Client Id from a Connect node OR a valid Bot Token credential",
+        "A valid Chat Id where the bot has permission to send audio files",
+        "For file paths:",
+        "The file must exist and be readable",
+        "Supported formats: MP3, M4A, OGG, WAV, FLAC, AAC",
+        "Maximum file size: 50 MB",
+        "For URLs:",
+        "The URL must be publicly accessible",
+        "Must point directly to an audio file"
+      ],
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "Connect\r\n  → Send Audio (\r\n      Chat Id: 123456789,\r\n      Audio Url or Path: \"C:\\Music\\podcast.mp3\"\r\n    )\r\n  → Disconnect"
+        },
+        {
+          "title": "Example 2",
+          "code": "Send Audio:\r\n  Chat Id: 123456789\r\n  Audio Url or Path: \"https://example.com/music.mp3\"\r\n  Caption: \"Here's the audio you requested\""
+        },
+        {
+          "title": "Example 3",
+          "code": "Send Audio:\r\n  Chat Id: 123456789\r\n  Audio Url or Path: \"/tmp/recording.ogg\"\r\n  File Name: \"Interview_2024_01_15.ogg\"\r\n  Caption: \"Interview recording\""
+        },
+        {
+          "title": "Example 4",
+          "code": "Receive Message\r\n  → Send Audio (\r\n      Chat Id: message.chat.id,\r\n      Reply Id: message.message_id,\r\n      Audio Url or Path: \"/path/to/response.mp3\"\r\n    )"
+        }
+      ],
+      "tips": [
+        "Audio files with metadata display better (artist, title, etc.)",
+        "For voice recordings, consider using Send Voice node instead (not available in this package, use Send Audio)",
+        "Telegram shows audio duration automatically if it's in the file metadata",
+        "For URLs, Telegram downloads the file to its servers",
+        "Local files are uploaded from your machine",
+        "Audio files can be up to 50 MB (vs. 10 MB for photos)",
+        "Users can download and save audio files from Telegram",
+        "Consider converting video files to audio-only to save bandwidth",
+        "MP3 is the most universally compatible format",
+        "Add metadata to audio files before sending for better user experience"
+      ]
+    },
+    "send-document": {
+      "namespace": "Core.Telegram.SendDocument",
+      "name": "SendDocument",
+      "summary": "Sends a document (file) to a Telegram chat. Supports various file types including PDF, DOCX, XLSX, ZIP, and more, with options for captions and custom filenames.",
+      "howItWorks": "The Send Document node uploads and sends a file to a specified Telegram chat. When executed, the node: 1. Either uses the provided Client Id or creates a temporary connection using Bot Token 2. Validates the Chat Id and Document Path 3. Checks that the file exists and is readable 4. Extracts the filename from the path (or uses the custom File Name if provided) 5. Applies optional caption and MIME type if provided 6. Uploads the file to Telegram 7. If Reply Id is provided, sends the document as a reply to that message 8. Returns success or error based on the API response",
+      "usage": [
+        "Either a valid Client Id from a Connect node OR a valid Bot Token credential",
+        "A valid Chat Id where the bot has permission to send files",
+        "For document files:",
+        "The file must exist on the local filesystem",
+        "The file must be readable",
+        "Maximum file size: 50 MB",
+        "All file types are supported"
+      ],
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "Connect\r\n  → Send Document (\r\n      Chat Id: 123456789,\r\n      Document Path: \"C:\\Reports\\monthly_report.pdf\"\r\n    )\r\n  → Disconnect"
+        },
+        {
+          "title": "Example 2",
+          "code": "Send Document:\r\n  Chat Id: 123456789\r\n  Document Path: \"/tmp/sales_data.xlsx\"\r\n  Caption: \"Q4 2024 Sales Data\""
+        },
+        {
+          "title": "Example 3",
+          "code": "Send Document:\r\n  Chat Id: 123456789\r\n  Document Path: \"/var/reports/output.csv\"\r\n  File Name: \"Customer_Report_2024.csv\"\r\n  Caption: \"Latest customer export\""
+        },
+        {
+          "title": "Example 4",
+          "code": "Receive Message\r\n  → Generate Report\r\n  → Send Document (\r\n      Chat Id: message.chat.id,\r\n      Reply Id: message.message_id,\r\n      Document Path: reportPath\r\n    )"
+        }
+      ],
+      "tips": [
+        "Documents preserve the original file perfectly - no compression or conversion",
+        "Users can download documents directly to their device",
+        "Telegram creates thumbnails for PDFs and some image formats",
+        "The File Name parameter affects only the display name, not the actual file",
+        "Documents can be forwarded by users (unless using Protect Content)",
+        "Consider adding version numbers or dates to filenames",
+        "For sensitive documents, use private chats instead of groups",
+        "Telegram scans files for malware automatically",
+        "You can send the same file to multiple chats without re-uploading (using file_id from first send)",
+        "Documents sent as replies create a clear reference to the original request"
+      ]
+    },
+    "send-message": {
+      "namespace": "Core.Telegram.SendMessage",
+      "name": "SendMessage",
+      "summary": "Sends a text message to a Telegram chat, user, or channel. Supports text formatting, reply-to functionality, and markdown.",
+      "howItWorks": "The Send Message node sends a text message to a specified Telegram chat using the Bot API. When executed, the node: 1. Either uses the provided Client Id or creates a temporary connection using Bot Token 2. Validates the Chat Id and Message Text 3. Applies the specified Parse Mode for text formatting 4. If Reply Id is provided, sets up the message as a reply 5. Sends the message via Telegram's Bot API 6. Returns success or error based on the API response",
+      "usage": [
+        "Either a valid Client Id from a Connect node OR a valid Bot Token credential",
+        "A valid Chat Id where the bot has permission to send messages",
+        "For channels: The bot must be an administrator",
+        "For groups: The bot must be a member",
+        "Message text must not be empty and must be under 4096 characters"
+      ],
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "Connect → Send Message (Chat Id: 123456789, Message: \"Hello!\") → Disconnect"
+        },
+        {
+          "title": "Example 2",
+          "code": "Send Message:\r\n  Chat Id: 123456789\r\n  Message: \"*Bold text* _italic_ `code` [Link](https://example.com)\"\r\n  Parse Mode: MarkdownV2"
+        },
+        {
+          "title": "Example 3",
+          "code": "Send Message:\r\n  Chat Id: 123456789\r\n  Message: \"\u003cb\u003eBold\u003c/b\u003e \u003ci\u003eitalic\u003c/i\u003e \u003ccode\u003ecode\u003c/code\u003e\"\r\n  Parse Mode: HTML"
+        },
+        {
+          "title": "Example 4",
+          "code": "Receive Message → Send Message (Reply Id: message.message_id)"
+        }
+      ],
+      "tips": [
+        "To find a user's Chat Id, use the Receive Message node and check the `from.id` field",
+        "For channels, the Chat Id is usually negative and starts with `-100`",
+        "Use `None` as Parse Mode if you want to send literal markdown/HTML characters",
+        "The Reply Id creates a visual link to the original message in Telegram",
+        "You can use emojis directly in Message Text - they're fully supported",
+        "If you're sending messages to a channel, make sure your bot is an administrator",
+        "For groups with privacy mode enabled, the bot can only see messages that mention it or are replies to it"
+      ]
+    },
+    "send-photo": {
+      "namespace": "Core.Telegram.SendPhoto",
+      "name": "SendPhoto",
+      "summary": "Sends a photo to a Telegram chat. Supports both local file paths and URLs, with optional captions and reply functionality.",
+      "howItWorks": "The Send Photo node sends an image to a specified Telegram chat. When executed, the node: 1. Either uses the provided Client Id or creates a temporary connection using Bot Token 2. Validates the Chat Id and Photo Url or Path 3. Determines if the input is a URL or file path 4. For URLs: Uses Telegram's FromURL method to send the image directly 5. For file paths: Reads the local file and uploads it to Telegram 6. Applies the optional caption if provided 7. If Reply Id is provided, sends the photo as a reply to that message 8. Returns success or error based on the API response",
+      "usage": [
+        "Either a valid Client Id from a Connect node OR a valid Bot Token credential",
+        "A valid Chat Id where the bot has permission to send photos",
+        "For file paths:",
+        "The file must exist and be readable",
+        "Supported formats: JPG, PNG, GIF, BMP, WEBP",
+        "Maximum file size: 10 MB",
+        "Recommended resolution: Up to 1280×1280 pixels",
+        "For URLs:",
+        "The URL must be publicly accessible",
+        "Must point directly to an image file",
+        "Same size and format limitations apply"
+      ],
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "Connect\r\n  → Send Photo (\r\n      Chat Id: 123456789,\r\n      Photo Url or Path: \"C:\\Reports\\chart.png\"\r\n    )\r\n  → Disconnect"
+        },
+        {
+          "title": "Example 2",
+          "code": "Send Photo:\r\n  Chat Id: 123456789\r\n  Photo Url or Path: \"https://example.com/image.jpg\"\r\n  Caption: \"Here's the image you requested\""
+        },
+        {
+          "title": "Example 3",
+          "code": "Send Photo:\r\n  Chat Id: 123456789\r\n  Photo Url or Path: \"/tmp/screenshot.png\"\r\n  Caption: \"Screenshot taken at 10:30 AM\""
+        },
+        {
+          "title": "Example 4",
+          "code": "Receive Message\r\n  → Send Photo (\r\n      Chat Id: message.chat.id,\r\n      Reply Id: message.message_id,\r\n      Photo Url or Path: \"/path/to/response.jpg\"\r\n    )"
+        }
+      ],
+      "tips": [
+        "Telegram automatically creates multiple sizes for efficient loading",
+        "Photos sent by URL are downloaded by Telegram's servers, not your bot",
+        "Local files are uploaded from your machine",
+        "For multiple photos, consider using a photo album (requires multiple Send Photo nodes)",
+        "Caption length is limited to 1024 characters (vs. 4096 for regular messages)",
+        "You can edit captions after sending using Telegram's edit message API",
+        "Photos preserve EXIF data unless removed before sending",
+        "Animated GIFs should use Send Animation node instead"
+      ]
+    }
+  }
+}

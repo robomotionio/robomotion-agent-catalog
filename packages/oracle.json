@@ -1,0 +1,133 @@
+{
+  "package": "Oracle",
+  "summary": "Connect to and interact with Oracle databases for enterprise data operations and automation.",
+  "description": "## Overview The Oracle package provides database connectivity for Oracle Database. Use it when you need to query data, insert records, execute statements, or perform transactions against Oracle databases.",
+  "nodes": {
+    "Commit": {
+      "namespace": "Core.Oracle.Commit",
+      "name": "Commit",
+      "summary": "Commits a transaction in the Oracle database.",
+      "bestPractices": [
+        "The transaction must have been previously started using the Start Transaction node",
+        "The transaction ID must be valid and correspond to an active transaction",
+        "After committing, the transaction is removed from the transactions dictionary"
+      ]
+    },
+    "Connect": {
+      "namespace": "Core.Oracle.Connect",
+      "name": "Connect",
+      "summary": "Establishes a connection to an Oracle database.",
+      "howItWorks": "The Connect node establishes a connection to an Oracle database by: 1. Collecting the connection parameters (Host Name, Port, SID/Service Name, Credentials) 2. Generating a connection string based on the provided parameters 3. Creating an OracleConnection object with the connection string 4. Opening the connection to the database 5. Storing the connection in a shared connections dictionary with a unique GUID 6. Returning the connection ID as output",
+      "usage": [
+        "Valid Oracle database server with accessible endpoint",
+        "Correct Host Name, Port, SID/Service Name",
+        "Valid database credentials with appropriate permissions",
+        "Oracle.ManagedDataAccess client library"
+      ],
+      "bestPractices": [
+        "Either SID or Service Name must be provided, but not both",
+        "The connection ID must be used in subsequent database operations",
+        "Connections should be properly closed using the Disconnect node when no longer needed",
+        "The default Oracle port is 1521"
+      ]
+    },
+    "Create": {
+      "namespace": "Core.Oracle.Create",
+      "name": "Create",
+      "summary": "Creates a new Oracle database file.",
+      "bestPractices": [
+        "This node is currently commented out in the source code and not available for use",
+        "When implemented, it would create a new Oracle database file at the specified path",
+        "The Overwrite If Exists option allows for replacing existing database files"
+      ]
+    },
+    "Disconnect": {
+      "namespace": "Core.Oracle.Disconnect",
+      "name": "Disconnect",
+      "summary": "Closes and disconnects from an Oracle database connection.",
+      "howItWorks": "The Disconnect node closes an Oracle database connection by: 1. Validating the provided Connection Id 2. Looking up the connection in the shared connections dictionary 3. Closing the database connection 4. Removing the connection from the connections dictionary",
+      "bestPractices": [
+        "The connection must have been previously established using the Connect node",
+        "The connection ID must be valid and correspond to an active connection",
+        "After disconnecting, the connection ID is no longer valid for other database operations",
+        "It's important to disconnect from connections when they are no longer needed to free up resources"
+      ]
+    },
+    "Insert": {
+      "namespace": "Core.Oracle.Insert",
+      "name": "Insert",
+      "summary": "Inserts data into an Oracle database table.",
+      "howItWorks": "The Insert node inserts data into an Oracle database table by: 1. Validating the provided Connection Id and Table Name 2. Looking up the connection and transaction in the shared dictionaries 3. Creating an INSERT command for each row in the table data 4. Executing the INSERT command for each row 5. Using a transaction if a Transaction Id is provided",
+      "usage": [
+        "An active database connection established with the Connect node",
+        "A valid table name that exists in the database",
+        "Table data in the correct format",
+        "Appropriate permissions to insert data into the specified table"
+      ],
+      "bestPractices": [
+        "The Connection Id must be valid and correspond to an active connection",
+        "If a Transaction Id is provided, it must be valid and correspond to an active transaction",
+        "The Table Data should be structured as a table with rows and columns",
+        "When using the Replace option, existing rows with matching primary keys will be replaced",
+        "For large datasets, consider using batch operations for better performance"
+      ]
+    },
+    "NonQuery": {
+      "namespace": "Core.Oracle.NonQuery",
+      "name": "NonQuery",
+      "summary": "Executes non-query SQL statements (UPDATE, DELETE, INSERT) on an Oracle database.",
+      "howItWorks": "The Execute Non Query node runs SQL statements that don't return data by: 1. Validating the provided Connection Id 2. Looking up the connection and transaction in the shared dictionaries 3. Using a template engine to render the SQL query with context data 4. Creating an OracleCommand with the rendered SQL 5. Executing the command using ExecuteNonQuery()",
+      "usage": [
+        "An active database connection established with the Connect node",
+        "Valid SQL non-query statement (UPDATE, DELETE, INSERT)",
+        "Appropriate permissions to execute the SQL statement",
+        "Valid connection and transaction IDs when provided"
+      ],
+      "bestPractices": [
+        "The SQL Query can include template variables using double curly braces (e.g., `{{variable}}`)",
+        "Template variables are populated from the message context",
+        "Non-query statements include UPDATE, DELETE, INSERT, and DDL statements",
+        "When using a Transaction Id, the statement will be part of that transaction",
+        "The node does not return any data, only executes the statement",
+        "For SELECT statements, use the Execute Query node instead"
+      ]
+    },
+    "Query": {
+      "namespace": "Core.Oracle.Query",
+      "name": "Query",
+      "summary": "Executes SELECT SQL statements on an Oracle database and returns the results.",
+      "howItWorks": "The Execute Query node retrieves data from an Oracle database by: 1. Validating the provided Connection Id 2. Looking up the connection and transaction in the shared dictionaries 3. Using a template engine to render the SQL query with context data 4. Creating an OracleCommand with the rendered SQL 5. Executing the command using ExecuteReader() to get the results 6. Loading the results into a DataTable 7. Converting the DataTable to a Table object 8. Outputting the Table object as the result",
+      "usage": [
+        "An active database connection established with the Connect node",
+        "Valid SQL SELECT statement",
+        "Appropriate permissions to execute the SQL statement and access the data",
+        "Valid connection and transaction IDs when provided"
+      ],
+      "bestPractices": [
+        "The SQL Query can include template variables using double curly braces (e.g., `{{variable}}`)",
+        "Template variables are populated from the message context",
+        "The result is returned as a table structure that can be used in subsequent nodes",
+        "For non-SELECT statements (UPDATE, DELETE, INSERT), use the Execute Non Query node instead",
+        "When using a Transaction Id, the query will be part of that transaction",
+        "Large result sets may impact performance; consider using LIMIT clauses when appropriate"
+      ]
+    },
+    "Start": {
+      "namespace": "Core.Oracle.Start",
+      "name": "Start",
+      "summary": "Starts a new transaction in an Oracle database.",
+      "howItWorks": "The Start Transaction node begins a new database transaction by: 1. Validating the provided Connection Id 2. Looking up the connection in the shared connections dictionary 3. Generating a unique GUID for the transaction 4. Beginning a transaction on the database connection using BeginTransaction() 5. Storing the transaction in the shared transactions dictionary 6. Returning the transaction ID as output",
+      "usage": [
+        "An active database connection established with the Connect node",
+        "Valid connection ID that corresponds to an active connection"
+      ],
+      "bestPractices": [
+        "The Connection Id must be valid and correspond to an active connection",
+        "The returned Transaction Id should be used with other database nodes that support transactions",
+        "Transactions should be committed using the Commit Transaction node or rolled back using a rollback mechanism",
+        "Transactions help ensure data consistency and can be rolled back in case of errors",
+        "Each transaction is isolated from other transactions until committed"
+      ]
+    }
+  }
+}

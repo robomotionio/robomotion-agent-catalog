@@ -1,0 +1,201 @@
+{
+  "package": "Pcloud",
+  "summary": "Integrate with pCloud cloud storage for file upload, download, and management.",
+  "description": "## Overview The pCloud package provides cloud storage integration with pCloud. Use it when you need to upload files, manage folders, share files via public links, or organize content in pCloud storage.",
+  "nodes": {
+    "copyfile": {
+      "namespace": "Core.Pcloud.Copyfile",
+      "name": "Copyfile",
+      "summary": "Copies a file from one location to another within pCloud.",
+      "howItWorks": "The Copy File node duplicates a file within pCloud without downloading or re-uploading it. When executed, the node: 1. Validates the Client Id 2. Validates and normalizes the source path 3. Validates and normalizes the target path 4. Retrieves the authenticated pCloud client 5. Performs the server-side copy operation 6. Returns success when the file is copied",
+      "usage": [
+        "An active pCloud connection (Client Id from Login node)",
+        "Source file must exist in pCloud",
+        "Valid source and target paths",
+        "Appropriate permissions for both source and target locations",
+        "Sufficient storage space in pCloud"
+      ],
+      "bestPractices": [
+        "The copy operation happens entirely on pCloud servers (no download/upload)",
+        "This is much faster than downloading and re-uploading files",
+        "Both source and target paths must include the file name",
+        "The target path can have a different file name",
+        "Paths are automatically normalized with leading \"/\"",
+        "If the target file exists, it will be overwritten",
+        "The original file remains unchanged"
+      ]
+    },
+    "createfolder": {
+      "namespace": "Core.Pcloud.Createfolder",
+      "name": "Createfolder",
+      "summary": "Creates a new folder at the specified path in pCloud.",
+      "howItWorks": "The Create Folder node creates a new folder at the specified location in pCloud. When executed, the node: 1. Validates the Client Id 2. Validates the path is not empty 3. Normalizes the path by adding a leading \"/\" if needed 4. Retrieves the authenticated pCloud client 5. Creates the folder at the specified path 6. Returns success when the folder is created",
+      "usage": [
+        "An active pCloud connection (Client Id from Login node)",
+        "Valid path format",
+        "Appropriate permissions in pCloud",
+        "The parent folder must exist (or use nested path creation)"
+      ],
+      "bestPractices": [
+        "Paths can be specified with or without a leading \"/\" (it will be added automatically)",
+        "Use \"/\" as the path separator",
+        "Parent folders must exist unless pCloud supports nested creation",
+        "Folder names are case-sensitive",
+        "Special characters in folder names may cause issues",
+        "The path \"/\" refers to the root directory"
+      ]
+    },
+    "deletefile": {
+      "namespace": "Core.Pcloud.Deletefile",
+      "name": "Deletefile",
+      "summary": "Permanently deletes a file from pCloud.",
+      "howItWorks": "The Delete File node permanently removes a file from pCloud. When executed, the node: 1. Validates the Client Id 2. Validates the path is not empty 3. Normalizes the path by adding a leading \"/\" if needed 4. Retrieves the authenticated pCloud client 5. Deletes the file at the specified path 6. Returns success when the file is deleted :::warning This operation is permanent. Deleted files cannot be recovered unless pCloud's trash/recycle bin feature retains them temporarily. Always verify the path before deleting. :::",
+      "usage": [
+        "An active pCloud connection (Client Id from Login node)",
+        "File must exist at the specified path",
+        "Appropriate permissions to delete the file",
+        "Valid file path"
+      ],
+      "bestPractices": [
+        "Deletion is permanent - use with caution",
+        "The path must point to a file, not a folder",
+        "Paths are automatically normalized with leading \"/\"",
+        "Use \"/\" as the path separator",
+        "File names are case-sensitive",
+        "There is no confirmation dialog - deletion happens immediately",
+        "Consider using Copy File before Delete File for backup"
+      ]
+    },
+    "deletefolder": {
+      "namespace": "Core.Pcloud.Deletefolder",
+      "name": "Deletefolder",
+      "summary": "Permanently deletes a folder and all its contents recursively from pCloud.",
+      "howItWorks": "The Delete Folder node permanently removes a folder and all of its contents from pCloud using recursive deletion. When executed, the node: 1. Validates the Client Id 2. Validates the path is not empty 3. Normalizes the path by adding a leading \"/\" if needed 4. Retrieves the authenticated pCloud client 5. Recursively deletes the folder and all its contents (files and subfolders) 6. Returns success when the folder is completely deleted :::danger This operation is PERMANENT and RECURSIVE. All files and subfolders within the specified folder will be deleted. This cannot be undone unless pCloud's trash/recycle bin feature retains them temporarily. Always verify the path before deleting. :::",
+      "usage": [
+        "An active pCloud connection (Client Id from Login node)",
+        "Folder must exist at the specified path",
+        "Appropriate permissions to delete the folder and its contents",
+        "Valid folder path"
+      ],
+      "bestPractices": [
+        "Deletion is RECURSIVE - all contents are deleted",
+        "Deletion is PERMANENT - use with extreme caution",
+        "The path must point to a folder, not a file",
+        "Paths are automatically normalized with leading \"/\"",
+        "Use \"/\" as the path separator",
+        "Folder names are case-sensitive",
+        "There is no confirmation dialog - deletion happens immediately",
+        "Consider backing up important folders before deletion",
+        "Empty folders and folders with contents are both handled"
+      ]
+    },
+    "getpubliclink": {
+      "namespace": "Core.Pcloud.Getpubliclink",
+      "name": "Getpubliclink",
+      "summary": "Generates a public sharing link for a file or folder in pCloud.",
+      "howItWorks": "The Get Public Link node creates a shareable public URL for files or folders in pCloud. When executed, the node: 1. Validates the Client Id 2. Validates the path is not empty 3. Determines whether to generate a file or folder link based on Type option 4. Retrieves the authenticated pCloud client 5. Requests a public link from pCloud's API 6. Returns the generated public URL The link allows anyone with the URL to access the file or folder without requiring pCloud authentication.",
+      "usage": [
+        "An active pCloud connection (Client Id from Login node)",
+        "File or folder must exist at the specified path",
+        "Appropriate permissions to share the item",
+        "Valid path format",
+        "Correct Type selection (File or Folder)"
+      ],
+      "bestPractices": [
+        "The Type option must match the actual item (File or Folder)",
+        "Public links do not expire by default (check pCloud's current policies)",
+        "Links can be shared via email, chat, or embedded in websites",
+        "The path is not normalized for this operation (use exact path)",
+        "Anyone with the link can access the shared item",
+        "Consider security implications before sharing sensitive files",
+        "Links can typically be revoked through pCloud's web interface"
+      ]
+    },
+    "login": {
+      "namespace": "Core.Pcloud.Login",
+      "name": "Login",
+      "summary": "Authenticates with pCloud and establishes a connection for performing cloud storage operations.",
+      "howItWorks": "The Login node is the essential first step in any pCloud automation workflow. It establishes an authenticated connection to pCloud's servers and provides a client ID for use in subsequent operations. When executed, the node: 1. Retrieves the username and password from the provided credentials 2. Determines the appropriate pCloud server based on the selected region 3. Authenticates with pCloud using the credentials 4. Creates a pCloud client instance 5. Stores the client in a thread-safe manager 6. Returns a unique client ID for use in other pCloud nodes",
+      "usage": [
+        "A valid pCloud account",
+        "Account credentials (email/username and password) stored in Robomotion credentials",
+        "Knowledge of your account's region (Europe or United States)"
+      ],
+      "bestPractices": [
+        "The Login node must be executed before any other pCloud operations",
+        "The returned Client Id must be passed to all subsequent pCloud nodes",
+        "The region selection is important - use \"Europe\" for European accounts and \"United States\" for US accounts",
+        "The client connection remains active throughout the flow execution",
+        "Each Login creates a new client session in memory"
+      ]
+    },
+    "renamefile": {
+      "namespace": "Core.Pcloud.Renamefile",
+      "name": "Renamefile",
+      "summary": "Renames a file or moves it to a different location within pCloud.",
+      "howItWorks": "The Rename File node changes a file's name or location within pCloud. When executed, the node: 1. Validates the Client Id 2. Validates and normalizes the source path 3. Validates and normalizes the target path 4. Retrieves the authenticated pCloud client 5. Renames or moves the file on the server 6. Returns success when the operation completes This node can perform two operations: * **Rename** - Change the file name in the same folder * **Move** - Change the file location (and optionally the name)",
+      "usage": [
+        "An active pCloud connection (Client Id from Login node)",
+        "Source file must exist at the specified path",
+        "Valid source and target paths",
+        "Appropriate permissions for both source and target locations",
+        "Target folder must exist (for move operations)"
+      ],
+      "bestPractices": [
+        "Both rename and move operations are supported",
+        "The operation happens entirely on pCloud servers (fast operation)",
+        "Paths are automatically normalized with leading \"/\"",
+        "Use \"/\" as the path separator",
+        "File names are case-sensitive",
+        "If the target file exists, it may be overwritten",
+        "The source and target paths must both include the file name",
+        "Moving to a different folder requires the target folder to exist"
+      ]
+    },
+    "renamefolder": {
+      "namespace": "Core.Pcloud.Renamefolder",
+      "name": "Renamefolder",
+      "summary": "Renames a folder or moves it to a different location within pCloud.",
+      "howItWorks": "The Rename Folder node changes a folder's name or location within pCloud. When executed, the node: 1. Validates the Client Id 2. Validates and normalizes the source path 3. Validates and normalizes the target path 4. Retrieves the authenticated pCloud client 5. Renames or moves the folder on the server 6. Returns success when the operation completes This node can perform two operations: * **Rename** - Change the folder name in the same location * **Move** - Change the folder location (and optionally the name) All contents of the folder (files and subfolders) are moved with the folder.",
+      "usage": [
+        "An active pCloud connection (Client Id from Login node)",
+        "Source folder must exist at the specified path",
+        "Valid source and target paths",
+        "Appropriate permissions for both source and target locations",
+        "Parent folder of target must exist (for move operations)"
+      ],
+      "bestPractices": [
+        "Both rename and move operations are supported",
+        "All folder contents are moved/renamed together",
+        "The operation happens entirely on pCloud servers",
+        "Paths are automatically normalized with leading \"/\"",
+        "Use \"/\" as the path separator",
+        "Folder names are case-sensitive",
+        "The source and target paths must both specify folder paths",
+        "Moving to a different location requires the parent folder to exist",
+        "Cannot move a folder into itself or its subdirectories"
+      ]
+    },
+    "uploadfile": {
+      "namespace": "Core.Pcloud.Uploadfile",
+      "name": "Uploadfile",
+      "summary": "Uploads a file from the local filesystem to a specified folder in pCloud.",
+      "howItWorks": "The Upload File node transfers a file from your local filesystem to pCloud. When executed, the node: 1. Validates the Client Id 2. Validates the local file path and opens the file 3. Validates the remote file name 4. Retrieves the folder ID (defaults to 0 if not specified) 5. Retrieves the authenticated pCloud client 6. Uploads the file to the specified folder 7. Closes the local file handle",
+      "usage": [
+        "An active pCloud connection (Client Id from Login node)",
+        "Read access to the local file",
+        "Valid folder ID in pCloud (or 0 for root)",
+        "Sufficient storage space in your pCloud account",
+        "Appropriate permissions for the target folder"
+      ],
+      "bestPractices": [
+        "The File Path can be absolute or relative to the robot's working directory",
+        "The Folder ID defaults to 0 (root folder) if not specified",
+        "The Remote File Name can be different from the local file name",
+        "If a file with the same name exists in the target folder, it will be overwritten",
+        "Large files are automatically handled by the pCloud API",
+        "The upload progress is not reported by this node"
+      ]
+    }
+  }
+}

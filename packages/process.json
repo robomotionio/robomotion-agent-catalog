@@ -1,0 +1,153 @@
+{
+  "package": "Process",
+  "summary": "Manage operating system processes - start applications, get process info, and control running processes.",
+  "description": "## Overview The Process package provides operating system process management capabilities. Use it when you need to start external applications, check running processes, read environment variables, or terminate processes from your automation.",
+  "nodes": {
+    "get-env-variable": {
+      "namespace": "Core.Process.GetEnvVariable",
+      "name": "GetEnvVariable",
+      "summary": "Returns the value of the specified environment variable.",
+      "howItWorks": "The Get Env Variable node retrieves environment variable values from the operating system in a simple process: 1. The node receives the variable name as input 2. It validates that the variable name is not empty 3. It queries the operating system for the environment variable value using the provided name 4. The retrieved value (or empty string if not found) is stored in the output variable 5. The message passes to the next node with the retrieved value",
+      "usage": [
+        "**Variable Name:** Must be a valid, non-empty environment variable name",
+        "**Operating System:** Works on all platforms (Windows, Linux, macOS)",
+        "**Permissions:** Standard user permissions (no special privileges required)"
+      ],
+      "bestPractices": [
+        "If the environment variable does not exist, the node returns an empty string (not an error)",
+        "Environment variable names are case-sensitive on Linux/macOS",
+        "On Windows, environment variable names are case-insensitive",
+        "The node retrieves variables from the current process environment",
+        "Changes to environment variables made during flow execution will be reflected",
+        "System-wide environment variables and user-specific variables are both accessible"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate"
+      ],
+      "tips": [
+        "Always check if the returned value is empty before using it in subsequent operations",
+        "Use this node to make flows portable across different environments",
+        "Common variables: `HOME`, `PATH`, `TEMP`, `USER`, `DISPLAY` (Linux), `USERPROFILE` (Windows)",
+        "Store configuration in environment variables rather than hardcoding values in flows",
+        "Combine with conditional nodes to handle cases where variables might not be set"
+      ]
+    },
+    "get-processes": {
+      "namespace": "Core.Process.GetProcesses",
+      "name": "GetProcesses",
+      "summary": "Gets a list of running processes based on the specified search criteria.",
+      "howItWorks": "The Get Processes node retrieves information about running processes on the system: 1. The node queries the operating system for all currently running processes 2. For each process, it retrieves the executable path or name 3. If a name filter (regex) is provided, it applies the filter to match process names 4. Matching processes are collected into two parallel arrays: PIDs and executable names 5. Both output arrays are returned with matching indices (same position = same process) 6. If no filter is provided, all running processes are returned",
+      "usage": [
+        "**Operating System:** Works on Windows, Linux, and macOS",
+        "**Permissions:** Standard user permissions (may not see system processes depending on OS restrictions)",
+        "**Output Variables:** Both output field names must be configured and non-empty"
+      ],
+      "bestPractices": [
+        "The executable name includes the full path when available",
+        "If the full path cannot be retrieved, only the process name is returned",
+        "The filter uses Go regex syntax (similar to PCRE)",
+        "Processes are matched against the executable path, not arguments",
+        "Both output arrays have the same length with corresponding indices",
+        "System processes may not be visible depending on user permissions",
+        "Process snapshots are taken at the moment of execution",
+        "Some processes may start or stop during enumeration"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOutExecs",
+        "ErrOutPids"
+      ],
+      "tips": [
+        "Use regex patterns for flexible matching: `.*\\.exe$` for all .exe files on Windows",
+        "Test regex patterns before deploying to production flows",
+        "Combine with Kill Process node to terminate specific processes",
+        "Store results in arrays and use loops to process multiple processes",
+        "Use case-insensitive regex when needed: `(?i)chrome` matches \"Chrome\", \"CHROME\", etc.",
+        "Empty filter returns all processes - use with caution on busy systems",
+        "Consider performance: getting all processes can be slow on systems with many processes"
+      ]
+    },
+    "kill-process": {
+      "namespace": "Core.Process.KillProcess",
+      "name": "KillProcess",
+      "summary": "Kills a process by name or PID",
+      "howItWorks": "The Kill Process node terminates running processes using two different methods: 1. **By Process ID (PID):** - If a PID is provided, the node directly terminates that specific process - Creates a process handle using the PID - Sends a kill signal to terminate the process immediately 2. **By Process Name:** - If only a process name is provided, the node searches all running processes - Matches the executable path against the provided pattern (supports both exact match and regex) - Terminates the first matching process found - On Windows: Uses Terminate() method - On Linux/macOS: Uses Kill() method for immediate termination",
+      "usage": [
+        "**Process Identifier:** Either Process Name (Regex) or Process ID must be provided (not both required)",
+        "**Permissions:** May require elevated permissions to kill system processes or processes owned by other users",
+        "**Operating System:** Works on Windows, Linux, and macOS with platform-specific termination methods"
+      ],
+      "bestPractices": [
+        "**Priority:** If both Process Name and PID are provided, the PID takes precedence",
+        "**Single Termination:** When using process name, only the FIRST matching process is killed",
+        "**Platform Differences:**",
+        "Windows uses Terminate() method",
+        "Linux/macOS uses Kill() method (more forceful)",
+        "**No Confirmation:** Process termination is immediate with no confirmation dialog",
+        "**Graceful Shutdown:** Processes are not given time to clean up; use with caution",
+        "**Pattern Matching:** The node checks both exact string match and regex pattern match",
+        "**Error on Non-Existent:** If PID doesn't exist, an error is thrown"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrNamePid",
+        "ErrPid"
+      ],
+      "tips": [
+        "To kill multiple processes, use Get Processes first to get all PIDs, then loop with Kill Process",
+        "Always use specific process names or PIDs to avoid accidentally killing wrong processes",
+        "Test regex patterns carefully to ensure they match only intended processes",
+        "Consider using Continue On Error if the process might not always be running",
+        "On Windows, some system processes cannot be killed even with admin privileges",
+        "Check process ownership before attempting to kill - may need elevated permissions",
+        "Use Get Processes node first to verify the process exists before attempting to kill"
+      ]
+    },
+    "start-process": {
+      "namespace": "Core.Process.StartProcess",
+      "name": "StartProcess",
+      "summary": "Runs an executable file with or without arguments.",
+      "howItWorks": "The Start Process node executes external programs and commands with full control over their execution: 1. **Configuration Phase:** - Receives the executable path, arguments, and working directory - Validates that the executable path is not empty - Processes arguments from either the Arguments array or Custom Arguments 2. **Process Setup:** - Creates a command with the executable path and arguments - Sets the working directory if provided - Prepares to capture standard output and standard error 3. **Execution:** - **Background Mode:** Starts the process and immediately returns (non-blocking) - **Foreground Mode:** Starts the process and waits for completion, capturing all output 4. **Output Collection:** - In foreground mode, combines stdout and stderr into a single output - Returns the process ID (PID) for both modes - Returns the combined output only in foreground mode",
+      "usage": [
+        "**Executable Path:** Must be a valid, non-empty path to an executable file",
+        "**File Permissions:** The executable must have execute permissions",
+        "**Working Directory:** Optional; if provided, must be a valid directory path",
+        "**Arguments Format:** Must be an array of strings, with each argument as a separate element"
+      ],
+      "bestPractices": [
+        "**Arguments Format:** Each argument must be a separate array element, not space-separated",
+        "**Quoting:** Do not manually quote arguments; each element is automatically treated as a single argument",
+        "**Path Requirements:** Use absolute paths for executables to avoid ambiguity",
+        "**Working Directory:** Affects relative paths in arguments and file operations within the process",
+        "**Output Capture:** Only available in foreground mode (Background Process disabled)",
+        "**Error Output:** stderr is combined with stdout in the output",
+        "**Platform Differences:** Executable paths vary by OS (e.g., `/usr/bin/curl` vs `C:\\Windows\\System32\\curl.exe`)",
+        "**Process Lifetime:** Background processes continue running even after the flow completes",
+        "**Exit Codes:** Non-zero exit codes are returned as errors with the output"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrMessage",
+        "ErrInPath",
+        "ErrStart"
+      ],
+      "tips": [
+        "Always use absolute paths for executables to ensure portability",
+        "Test commands manually in terminal/command prompt first",
+        "Use Get Env Variable node to find system paths (like TEMP, HOME)",
+        "For complex commands, consider creating a shell script and executing that",
+        "Set appropriate timeout values if the process might hang",
+        "Use Background Process mode for fire-and-forget operations",
+        "Capture the PID when using background mode to track or kill the process later",
+        "Quote individual arguments that contain spaces by making them single array elements",
+        "Use Custom Arguments for dynamic argument building based on flow variables",
+        "On Windows, use `.exe` extension and full paths like `C:\\Program Files\\...`"
+      ]
+    }
+  }
+}

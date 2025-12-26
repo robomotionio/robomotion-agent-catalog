@@ -1,0 +1,185 @@
+{
+  "package": "MicrosoftSql",
+  "summary": "Connect to and interact with Microsoft SQL Server databases for enterprise data operations and automation.",
+  "description": "## Overview The Microsoft SQL Server package provides database connectivity for SQL Server. Use it when you need to query data, insert records, execute stored procedures, or perform transactions against Microsoft SQL Server databases.",
+  "nodes": {
+    "commit": {
+      "namespace": "Core.MicrosoftSql.Commit",
+      "name": "Commit",
+      "summary": "Commits a database transaction to make all changes permanent in Microsoft SQL Server.",
+      "howItWorks": "The Commit Transaction node finalizes a database transaction, making all changes permanent. When executed, the node: 1. Validates the transaction ID is provided and not empty 2. Retrieves the transaction from the internal transactions dictionary 3. Calls Commit() on the SqlTransaction 4. Removes the transaction from the dictionary 5. All changes made during the transaction are permanently saved to the database 6. All locks held by the transaction are released",
+      "usage": [
+        "Valid transaction ID from a Start Transaction node",
+        "The transaction must still be active (not already committed or rolled back)",
+        "All operations within the transaction must have completed successfully"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound",
+        "ErrRuntime"
+      ]
+    },
+    "connect": {
+      "namespace": "Core.MicrosoftSql.Connect",
+      "name": "Connect",
+      "summary": "Establishes a connection to a Microsoft SQL Server database.",
+      "howItWorks": "The Connect node establishes a connection to a Microsoft SQL Server database using the provided credentials. When executed, the node: 1. Validates the provided database credentials 2. Extracts server, port, database, username, and password from the credential 3. Constructs a SQL Server connection string with the format: `User Id={username};Password={password};Database={database};Data Source={server},{port}` 4. Creates and opens a new SqlConnection 5. Generates a unique connection ID (GUID) 6. Stores the connection in an internal connections dictionary 7. Returns the connection ID as output",
+      "usage": [
+        "Valid SQL Server database credentials with the following fields:",
+        "**server** - Hostname or IP address of the SQL Server instance",
+        "**port** - Port number (default: 1433)",
+        "**database** - Database name (optional, can connect to default database)",
+        "**username** - SQL Server username (required)",
+        "**password** - SQL Server password",
+        "SQL Server must be accessible from the robot",
+        "Proper network connectivity and firewall rules",
+        "SQL Server Authentication must be enabled (not Windows Authentication)"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrConnection"
+      ]
+    },
+    "disconnect": {
+      "namespace": "Core.MicrosoftSql.Disconnect",
+      "name": "Disconnect",
+      "summary": "Closes an existing Microsoft SQL Server database connection.",
+      "howItWorks": "The Disconnect node closes an active SQL Server database connection. When executed, the node: 1. Validates the connection ID is provided and not empty 2. Retrieves the connection from the internal connections dictionary 3. Removes the connection from the dictionary 4. Closes the SQL Server connection 5. Releases all resources associated with the connection",
+      "usage": [
+        "Valid connection ID from a Connect node",
+        "The connection must not have been previously closed"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound"
+      ]
+    },
+    "insert": {
+      "namespace": "Core.MicrosoftSql.Insert",
+      "name": "Insert",
+      "summary": "Inserts table data into a Microsoft SQL Server database table. This node is optimized for bulk inserts of structured data.",
+      "howItWorks": "The Insert Table node inserts structured table data into a SQL Server table. When executed, the node: 1. Retrieves the database connection (either from connection ID or creates new connection from credentials) 2. Optionally retrieves the transaction if a transaction ID is provided 3. Validates the table name and table data 4. For each row in the table data: - Constructs an INSERT statement based on the columns - Adds column values as parameters to prevent SQL injection - Executes the INSERT statement - If Ignore Conflicts is enabled, catches and ignores unique constraint violations (error 2627) and foreign key violations (error 547) 5. Applies all changes to the database",
+      "usage": [
+        "**Either:** A valid connection ID from Connect node **OR** valid database credentials",
+        "Valid table name that exists in the database",
+        "Table data with at least one row",
+        "Table columns must match database table columns",
+        "Appropriate INSERT permission on the table"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound",
+        "ErrConnection",
+        "ErrRuntime"
+      ]
+    },
+    "non-query": {
+      "namespace": "Core.MicrosoftSql.NonQuery",
+      "name": "NonQuery",
+      "summary": "Executes a SQL Server command that does not return data (INSERT, UPDATE, DELETE, CREATE, ALTER, etc.).",
+      "howItWorks": "The Execute Non Query node executes a SQL command that modifies data or database structure. When executed, the node: 1. Retrieves the database connection (either from connection ID or creates new connection from credentials) 2. Optionally retrieves the transaction if a transaction ID is provided 3. Processes mustache template variables in the SQL command using the message context 4. Decodes any HTML entities in the rendered command 5. Creates a SqlCommand with the SQL command and timeout settings 6. Executes the command using ExecuteNonQuery 7. Returns without output (number of affected rows is not returned)",
+      "usage": [
+        "**Either:** A valid connection ID from Connect node **OR** valid database credentials",
+        "Valid SQL command (INSERT, UPDATE, DELETE, CREATE, ALTER, DROP, TRUNCATE, etc.)",
+        "If using transactions, a valid transaction ID from Start Transaction node",
+        "Appropriate permissions (INSERT, UPDATE, DELETE, CREATE, ALTER, DROP, etc.)"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound",
+        "ErrConnection",
+        "ErrRuntime"
+      ]
+    },
+    "query": {
+      "namespace": "Core.MicrosoftSql.Query",
+      "name": "Query",
+      "summary": "Executes a SQL Server SELECT query and returns the results as a table.",
+      "howItWorks": "The Execute Query node executes a SQL SELECT statement and returns the results. When executed, the node: 1. Retrieves the database connection (either from connection ID or creates new connection from credentials) 2. Optionally retrieves the transaction if a transaction ID is provided 3. Processes mustache template variables in the SQL query using the message context 4. Decodes any HTML entities in the rendered query 5. Creates a SqlCommand with the SQL query and timeout settings 6. Executes the query using ExecuteReader 7. Loads the results into a DataTable 8. Converts the DataTable to a table structure with columns and rows 9. Returns the table structure as output",
+      "usage": [
+        "**Either:** A valid connection ID from Connect node **OR** valid database credentials",
+        "Valid SQL SELECT statement",
+        "If using transactions, a valid transaction ID from Start Transaction node",
+        "Appropriate SELECT permission on the queried tables"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound",
+        "ErrConnection",
+        "ErrRuntime"
+      ]
+    },
+    "start-transaction": {
+      "namespace": "Core.MicrosoftSql.StartTransaction",
+      "name": "StartTransaction",
+      "summary": "Starts a new database transaction for atomic operations in Microsoft SQL Server.",
+      "howItWorks": "The Start Transaction node begins a new database transaction. When executed, the node: 1. Retrieves the database connection (either from connection ID or creates new connection from credentials) 2. Calls BeginTransaction() on the SqlConnection 3. Generates a unique transaction ID (GUID) 4. Stores the transaction in an internal transactions dictionary 5. Returns the transaction ID as output All subsequent database operations that use this transaction ID will be part of the same transaction and can be committed or rolled back together.",
+      "usage": [
+        "**Either:** A valid connection ID from Connect node **OR** valid database credentials",
+        "The connection must be open and active",
+        "No other active transaction on the same connection"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound",
+        "ErrConnection",
+        "ErrRuntime"
+      ]
+    },
+    "wait-column": {
+      "namespace": "Core.MicrosoftSql.WaitColumn",
+      "name": "WaitColumn",
+      "summary": "Waits until a new column is added to a specified table in Microsoft SQL Server.",
+      "howItWorks": "The Wait Column node monitors a table for new columns being added. When executed, the node: 1. Retrieves the database connection (either from connection ID or creates new connection from credentials) 2. Validates the table name is provided 3. Queries INFORMATION_SCHEMA.COLUMNS to count columns in the table 4. On first execution, records the initial count of columns 5. Continuously polls the database at the specified interval 6. When the count increases (new column added), the node completes 7. Supports both simple table names and schema-qualified names",
+      "usage": [
+        "**Either:** A valid connection ID from Connect node **OR** valid database credentials",
+        "Valid table name (table must exist before monitoring starts)",
+        "Appropriate SELECT permission on INFORMATION_SCHEMA views",
+        "Connection must remain open during monitoring"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound",
+        "ErrConnection",
+        "ErrRuntime"
+      ]
+    },
+    "wait-row": {
+      "namespace": "Core.MicrosoftSql.WaitRow",
+      "name": "WaitRow",
+      "summary": "Waits until a new row is inserted into a specified table in Microsoft SQL Server.",
+      "howItWorks": "The Wait Row node monitors a table for new rows being inserted. When executed, the node: 1. Retrieves the database connection (either from connection ID or creates new connection from credentials) 2. Validates the table name and sort column are provided 3. Queries the table for the highest value in the sort column (TOP 1 ORDER BY sort column DESC) 4. On first execution, records the initial maximum value 5. Continuously polls the database at the specified interval 6. Compares the current maximum value with the last recorded value 7. When a new row is detected (value increased), the node completes 8. Handles tables with no rows initially",
+      "usage": [
+        "**Either:** A valid connection ID from Connect node **OR** valid database credentials",
+        "Valid table name (table must exist)",
+        "Valid sort column that increases with new rows (ID, timestamp, sequence, etc.)",
+        "Appropriate SELECT permission on the table",
+        "Connection must remain open during monitoring"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound",
+        "ErrConnection",
+        "ErrRuntime"
+      ]
+    },
+    "wait-table": {
+      "namespace": "Core.MicrosoftSql.WaitTable",
+      "name": "WaitTable",
+      "summary": "Waits until a new table matching the pattern is created in the Microsoft SQL Server database.",
+      "howItWorks": "The Wait Table node monitors the database for new tables matching a specified pattern. When executed, the node: 1. Retrieves the database connection (either from connection ID or creates new connection from credentials) 2. Validates the table name pattern is provided 3. Queries INFORMATION_SCHEMA.TABLES to count tables matching the pattern 4. On first execution, records the initial count of matching tables 5. Continuously polls the database at the specified interval 6. When the count increases (new table created), the node completes 7. Uses SQL LIKE pattern matching for flexible table name patterns",
+      "usage": [
+        "**Either:** A valid connection ID from Connect node **OR** valid database credentials",
+        "Valid table name pattern (can include wildcards)",
+        "Appropriate SELECT permission on INFORMATION_SCHEMA views",
+        "Connection must remain open during monitoring"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrNotFound",
+        "ErrConnection",
+        "ErrRuntime"
+      ]
+    }
+  }
+}

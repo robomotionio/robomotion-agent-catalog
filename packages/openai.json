@@ -1,0 +1,244 @@
+{
+  "package": "Openai",
+  "summary": "The OpenAI package provides comprehensive integration with OpenAI's AI services including GPT-5, GPT-4o, o3, DALL-E 3, GPT-Image-1, Whisper, and more. This package enables you to build powerful automation workflows using state-of-the-art AI capabilities.",
+  "description": "## Features - **Text Generation**: Generate text using GPT-5, GPT-4o, o3, o1, and other language models with support for vision, tool calling, and streaming",
+  "nodes": {
+    "connect": {
+      "namespace": "Core.Openai.Connect",
+      "name": "Connect",
+      "summary": "Establishes a connection to the OpenAI API service for accessing AI models and capabilities.",
+      "howItWorks": "The Connect node establishes a connection to OpenAI's API service. When executed: 1. Validates the API key from your Vault (if not using Robomotion Credits) 2. Creates a connection session to the OpenAI service 3. Returns a connection identifier that can be reused across multiple OpenAI nodes",
+      "usage": [
+        "**With API Key**: A valid OpenAI API key stored in your Robomotion Vault",
+        "**With Robomotion Credits**: An active Robomotion account with available AI credits",
+        "Network access to OpenAI API endpoints"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg"
+      ]
+    },
+    "create-image-variation": {
+      "namespace": "Core.Openai.CreateImageVariation",
+      "name": "CreateImageVariation",
+      "summary": "Create variations of an existing image using DALL-E 2.",
+      "howItWorks": "Creates variations of your image while maintaining its essential elements: 1. Validates Robomotion Credits connection 2. Loads the source PNG image 3. Generates variations based on the image 4. Saves generated images to temporary storage 5. Returns file paths",
+      "tips": [
+        "Only PNG format supported (max 4MB)",
+        "Requires Robomotion Credits mode",
+        "Useful for generating logo variations, design alternatives, or creative iterations",
+        "Higher resolutions take longer and cost more"
+      ]
+    },
+    "delete-file": {
+      "namespace": "Core.Openai.DeleteFile",
+      "name": "DeleteFile",
+      "summary": "Delete a file from OpenAI file storage to free up space and remove unused files.",
+      "howItWorks": "Permanently deletes a file from OpenAI storage: 1. Validates connection and file ID 2. Sends delete request to OpenAI 3. Confirms deletion 4. Returns deletion status",
+      "tips": [
+        "Deletion is permanent and cannot be undone",
+        "Files in use by assistants or fine-tuning jobs may not be immediately deletable",
+        "Use List Files to identify files to delete"
+      ]
+    },
+    "disconnect": {
+      "namespace": "Core.Openai.Disconnect",
+      "name": "Disconnect",
+      "summary": "Closes an established connection to the OpenAI API service and releases associated resources.",
+      "howItWorks": "The Disconnect node properly closes an OpenAI connection. When executed: 1. Validates that a connection ID was provided 2. Locates the active connection 3. Closes the connection and releases resources 4. Removes the connection from the active connection pool",
+      "usage": [
+        "A valid connection ID from a Connect node",
+        "The connection must still be active (not already disconnected)"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg"
+      ]
+    },
+    "download-file": {
+      "namespace": "Core.Openai.DownloadFile",
+      "name": "DownloadFile",
+      "summary": "Download a file from OpenAI file storage to your local filesystem.",
+      "howItWorks": "Downloads a file from OpenAI to local storage: 1. Validates connection and file ID 2. Retrieves file metadata 3. Downloads file content 4. Saves to temporary directory 5. Returns local file path",
+      "tips": [
+        "Files are saved to temp directory - move to permanent location if needed",
+        "Use with Retrieve File Metadata to check size before downloading",
+        "Original filename is preserved when possible"
+      ]
+    },
+    "edit-image": {
+      "namespace": "Core.Openai.EditImage",
+      "name": "EditImage",
+      "summary": "Edit an existing image based on a text prompt using DALL-E and GPT-Image models.",
+      "howItWorks": "The Edit Image node modifies existing images using AI. When executed: 1. Validates the connection with Robomotion Credits enabled 2. Loads the source image from the specified path 3. Loads the optional mask image (if provided) 4. Sends the image, mask, and edit prompt to OpenAI 5. Downloads and saves the edited image(s) 6. Returns the file path(s) to the edited image(s)",
+      "usage": [
+        "**Robomotion AI Credits enabled** (direct API key not supported)",
+        "Connection Id from Connect node with Robomotion Credits enabled",
+        "Source image in PNG format (max 4MB)",
+        "Optional mask image in PNG format",
+        "Non-empty edit prompt",
+        "Write access to temporary file storage"
+      ],
+      "errorCodes": [
+        "ErrUnsupportedFeature",
+        "ErrInvalidArg",
+        "ErrAPICall"
+      ]
+    },
+    "generate-batch-embeddings": {
+      "namespace": "Core.Openai.GenerateBatchEmbeddings",
+      "name": "GenerateBatchEmbeddings",
+      "summary": "Generate vector embeddings for multiple texts in a single batch request for improved efficiency.",
+      "howItWorks": "Processes multiple texts in a single API call: 1. Validates connection and input array 2. Sends all texts to embedding model 3. Receives embeddings for all texts 4. Returns array of embeddings",
+      "usage": [
+        "Connection Id from Connect node",
+        "Non-empty array of texts"
+      ]
+    },
+    "generate-embedding": {
+      "namespace": "Core.Openai.GenerateEmbedding",
+      "name": "GenerateEmbedding",
+      "summary": "Generate vector embeddings from text using OpenAI embedding models for semantic search and similarity matching.",
+      "howItWorks": "Converts text into a numerical vector representation: 1. Validates connection and input text 2. Sends text to embedding model 3. Receives vector representation 4. Returns embedding array",
+      "usage": [
+        "Connection Id from Connect node",
+        "Non-empty text input"
+      ]
+    },
+    "generate-image": {
+      "namespace": "Core.Openai.GenerateImage",
+      "name": "GenerateImage",
+      "summary": "Generates images from text descriptions using OpenAI's DALL-E and GPT-Image models.",
+      "howItWorks": "The Generate Image node creates images based on text descriptions. When executed: 1. Validates the connection or API key 2. Processes your text prompt 3. Configures size, quality, and style parameters 4. Sends the request to the selected image model 5. Downloads and saves the generated image(s) to temporary storage 6. Returns the file path(s) to the generated image(s)",
+      "usage": [
+        "Either a Connection Id from Connect node OR an API Key credential",
+        "Non-empty prompt describing the desired image",
+        "Sufficient API credits or balance",
+        "Write access to temporary file storage"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrAPICall"
+      ]
+    },
+    "generate-speech": {
+      "namespace": "Core.Openai.GenerateSpeech",
+      "name": "GenerateSpeech",
+      "summary": "Convert text to natural-sounding speech using OpenAI's TTS models with multiple voice options.",
+      "howItWorks": "Converts text to speech using advanced TTS models: 1. Validates connection and input text 2. Configures voice, format, and speed 3. Sends text to the TTS model 4. Downloads generated audio 5. Saves to temporary storage 6. Returns file path",
+      "usage": [
+        "Connection Id from Connect node",
+        "Text between 1 and 4096 characters",
+        "Write access to temporary storage"
+      ]
+    },
+    "generate-text": {
+      "namespace": "Core.Openai.GenerateText",
+      "name": "GenerateText",
+      "summary": "Generates text completions using OpenAI's language models with support for vision, chat history, tool calling, and streaming responses.",
+      "howItWorks": "The Generate Text node sends your prompt to OpenAI's language models. When executed: 1. Validates the connection or API key 2. Builds the conversation with system prompt, user prompt, and optional chat history 3. Processes any images (encodes local files to base64 or uses URLs directly) 4. Configures all generation parameters 5. Sends the request to the selected model 6. Returns the generated text response",
+      "usage": [
+        "Either a Connection Id from Connect node OR an API Key credential",
+        "Non-empty User Prompt",
+        "For vision: GPT-4o or GPT-4o-mini model",
+        "For JSON mode: Compatible model (GPT-4o, GPT-4-turbo, etc.)",
+        "For tool calling: Model with function calling support",
+        "Local images must be in JPEG, PNG, WebP, or GIF format (max 20MB)"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrAPICall"
+      ]
+    },
+    "list-files": {
+      "namespace": "Core.Openai.ListFiles",
+      "name": "ListFiles",
+      "summary": "List all files uploaded to your OpenAI file storage with optional filtering by purpose.",
+      "howItWorks": "Retrieves the list of files from your OpenAI account: 1. Validates connection uses own API key 2. Optionally filters by purpose 3. Retrieves file list from OpenAI 4. Returns array of file objects",
+      "tips": [
+        "Use Purpose Filter to focus on specific file types",
+        "Store file IDs from the list for later operations",
+        "Regularly clean up unused files to manage storage"
+      ]
+    },
+    "list-models": {
+      "namespace": "Core.Openai.ListModels",
+      "name": "ListModels",
+      "summary": "List all available OpenAI models with their details and capabilities.",
+      "howItWorks": "Retrieves the list of available models: 1. Validates connection 2. Requests model list from OpenAI 3. Returns array of model objects",
+      "tips": [
+        "Models list includes text, embedding, image, and audio models",
+        "Model availability depends on your API access level",
+        "Use with Retrieve Model for detailed model information"
+      ]
+    },
+    "moderate": {
+      "namespace": "Core.Openai.Moderate",
+      "name": "Moderate",
+      "summary": "Check text content for policy violations using OpenAI's moderation models to detect harmful or inappropriate content.",
+      "howItWorks": "Analyzes content for policy violations: 1. Validates connection and input text 2. Sends text to moderation model 3. Checks against policy categories 4. Returns flagged status and categories",
+      "usage": [
+        "Connection Id from Connect node",
+        "Non-empty text to check"
+      ]
+    },
+    "retrieve-file-metadata": {
+      "namespace": "Core.Openai.RetrieveFileMetadata",
+      "name": "RetrieveFileMetadata",
+      "summary": "Retrieve metadata about a specific file in OpenAI file storage without downloading the file content.",
+      "howItWorks": "Retrieves metadata for a specific file: 1. Validates connection and file ID 2. Requests file metadata from OpenAI 3. Returns file information object",
+      "tips": [
+        "Use this instead of Download File when you only need metadata",
+        "Faster than downloading the full file"
+      ]
+    },
+    "retrieve-model": {
+      "namespace": "Core.Openai.RetrieveModel",
+      "name": "RetrieveModel",
+      "summary": "Retrieve detailed information about a specific OpenAI model including its capabilities and specifications.",
+      "howItWorks": "Retrieves information about a specific model: 1. Validates connection and model ID 2. Requests model details from OpenAI 3. Returns model information object",
+      "tips": [
+        "Use List Models first to discover available model IDs",
+        "Model info includes creation date and ownership"
+      ]
+    },
+    "similarity": {
+      "namespace": "Core.Openai.Similarity",
+      "name": "Similarity",
+      "summary": "Calculate cosine similarity between embeddings to find the most relevant content based on semantic meaning.",
+      "howItWorks": "Finds the most similar content using cosine similarity: 1. Reads search query embedding from first CSV 2. Reads all content embeddings from second CSV 3. Calculates cosine similarity between query and each content 4. Sorts by similarity (highest first) 5. Returns top N matches"
+    },
+    "transcribe-audio": {
+      "namespace": "Core.Openai.TranscribeAudio",
+      "name": "TranscribeAudio",
+      "summary": "Transcribe audio files to text using OpenAI Whisper and GPT-4o transcription models.",
+      "howItWorks": "Transcribes speech in audio files to text: 1. Validates connection and audio file path 2. Checks file format is supported 3. Uploads audio to OpenAI 4. Processes with selected model 5. Returns transcribed text",
+      "usage": [
+        "Connection Id from Connect node",
+        "Valid audio file in supported format",
+        "File must exist and be accessible"
+      ]
+    },
+    "translate-audio": {
+      "namespace": "Core.Openai.TranslateAudio",
+      "name": "TranslateAudio",
+      "summary": "Translate audio from any language to English text using OpenAI Whisper model.",
+      "howItWorks": "Translates speech from any language to English: 1. Validates connection and audio file 2. Uploads audio to OpenAI 3. Detects source language automatically 4. Transcribes and translates to English 5. Returns English text",
+      "usage": [
+        "Connection Id from Connect node",
+        "Valid audio file in supported format",
+        "Audio must contain speech (not just music or silence)"
+      ]
+    },
+    "upload-file": {
+      "namespace": "Core.Openai.UploadFile",
+      "name": "UploadFile",
+      "summary": "Upload a file to OpenAI file storage for use with assistants, fine-tuning, or batch operations.",
+      "howItWorks": "Uploads a file to your OpenAI account storage: 1. Validates connection is using your own API key (not Robomotion Credits) 2. Checks file exists and has supported extension 3. Uploads file to OpenAI 4. Returns file ID for use with other OpenAI features",
+      "usage": [
+        "Connection with your own OpenAI API key (Robomotion Credits NOT supported)",
+        "File in supported format",
+        "File must exist and be accessible",
+        "Sufficient storage quota in your OpenAI account"
+      ]
+    }
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "package": "Clipboard",
+  "summary": "Access and manipulate the system clipboard for copying and pasting data in your automation workflows.",
+  "description": "## Overview The Clipboard package provides direct access to the operating system's clipboard. Use it when you need to copy data for pasting into applications, transfer text between different programs, or retrieve data that was copied to the clipboard.",
+  "nodes": {
+    "get-from-clipboard": {
+      "namespace": "Core.Clipboard.GetFromClipboard",
+      "name": "GetFromClipboard",
+      "summary": "Retrieves the contents of the clipboard",
+      "howItWorks": "The Get From Clipboard node performs the following steps: 1. **Accesses System Clipboard** - Connects to the operating system's clipboard service 2. **Reads Clipboard Content** - Retrieves the current text content stored in the clipboard 3. **Converts to String** - Ensures the clipboard data is in string format 4. **Outputs Data** - Returns the clipboard content through the Clipboard Data output property 5. **Handles Empty Clipboard** - If clipboard is empty, returns an empty string",
+      "usage": [
+        "**Clipboard Access** - The automation must have permission to access the system clipboard",
+        "**Desktop Environment** - Must run in an environment with clipboard support (desktop automation, not server-only)",
+        "**Text Format** - The clipboard must contain text data (images and files are not supported)",
+        "**Operating System Support** - Compatible with Windows, macOS, and Linux desktop environments"
+      ],
+      "bestPractices": [
+        "**Timing Considerations** - Add a small delay after copy operations before reading clipboard to ensure data is available.",
+        "**Clipboard State** - The clipboard retains its content until overwritten, so data may be from a previous operation.",
+        "**Concurrent Access** - Other applications or users can modify clipboard content between operations.",
+        "**Text Only** - This node only retrieves text. Images, files, and formatted content are not supported.",
+        "**Empty Results** - An empty string output may indicate either an empty clipboard or non-text content.",
+        "**Cross-Platform Differences** - Clipboard behavior may vary slightly between Windows, macOS, and Linux.",
+        "**Security** - Be aware that clipboard content may contain sensitive data copied by users."
+      ],
+      "errorCodes": [
+        "Error"
+      ],
+      "relatedNodes": [
+        "Set To Clipboard",
+        "Send Keys"
+      ],
+      "tips": [
+        "**Add Delays** - Always add a small delay (100-200ms) after programmatic copy operations before reading clipboard.",
+        "**Validate Content** - Check that retrieved data matches expected format before processing.",
+        "**Clear Clipboard** - Consider clearing clipboard with Set To Clipboard after retrieving sensitive data.",
+        "**Error Handling** - Use Try-Catch to handle cases where clipboard is empty or contains non-text data.",
+        "**Avoid Race Conditions** - In multi-threaded environments, synchronize clipboard access to prevent conflicts.",
+        "**Log for Debugging** - Log clipboard content during development to verify data flow.",
+        "**User Interaction** - In attended automation, inform users when clipboard will be used to avoid conflicts.",
+        "**Temporary Storage** - Store clipboard data in a variable immediately to prevent loss if clipboard changes."
+      ]
+    },
+    "set-to-clipboard": {
+      "namespace": "Core.Clipboard.SetToClipboard",
+      "name": "SetToClipboard",
+      "summary": "Sets the specified text to the clipboard.",
+      "howItWorks": "The Set To Clipboard node performs the following steps: 1. **Receives Input** - Takes the text string provided in the Clipboard Data input 2. **Accesses System Clipboard** - Connects to the operating system's clipboard service 3. **Clears Existing Content** - Removes any existing clipboard content 4. **Writes Data** - Stores the new text data to the clipboard 5. **Makes Available** - The data is now available for paste operations (Ctrl+V) in any application",
+      "usage": [
+        "**Clipboard Access** - The automation must have permission to access the system clipboard",
+        "**Desktop Environment** - Must run in an environment with clipboard support",
+        "**Text Data** - Input must be text or convertible to text (images and files are not supported)",
+        "**Operating System Support** - Compatible with Windows, macOS, and Linux desktop environments"
+      ],
+      "bestPractices": [
+        "**Overwrites Previous Content** - Setting clipboard data replaces any existing clipboard content.",
+        "**Persists Until Changed** - Clipboard content remains available until overwritten by another operation.",
+        "**User Visible** - Users can manually paste clipboard content (Ctrl+V) while automation is running.",
+        "**Text Only** - This node only sets text data. Images, files, and formatted content are not supported.",
+        "**Immediate Availability** - Data is immediately available for paste operations after the node executes.",
+        "**Cross-Platform Support** - Works across Windows, macOS, and Linux, but clipboard behavior may vary slightly.",
+        "**No Size Limit (Usually)** - Most systems support large text blocks, but extremely large data may cause issues."
+      ],
+      "errorCodes": [
+        "Error"
+      ],
+      "relatedNodes": [
+        "Get From Clipboard",
+        "Send Keys",
+        "Type Text"
+      ],
+      "tips": [
+        "**Add Small Delay** - After setting clipboard, add a small delay (50-100ms) before pasting to ensure data is ready.",
+        "**Verify Paste Operations** - After pasting, verify the content was inserted correctly.",
+        "**Security Considerations** - Clear sensitive data from clipboard after use by setting it to an empty string.",
+        "**Combine with Get From Clipboard** - Use Get From Clipboard to verify data was set correctly.",
+        "**Handle Special Characters** - Test with special characters to ensure they're preserved correctly.",
+        "**Use for Legacy Systems** - Clipboard is ideal for automating applications without APIs or automation support.",
+        "**Backup Original Content** - If needed, use Get From Clipboard first to save the original clipboard content.",
+        "**Error Handling** - Use Try-Catch blocks to handle clipboard access errors gracefully."
+      ]
+    }
+  }
+}

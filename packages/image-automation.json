@@ -1,0 +1,244 @@
+{
+  "package": "ImageAutomation",
+  "summary": "Automate desktop applications using visual recognition - find and click images, read text from screens, and interact with any application regardless of its technology.",
+  "description": "## Overview The Image Automation package enables visual-based desktop automation using image recognition and OCR. Use it when you need to automate applications that don't have accessible UI elements, legacy systems, Citrix/virtual environments, or any scenario where traditional element-based automation isn't possible.",
+  "nodes": {
+    "actions": {
+      "namespace": "Core.ImageAutomation.Actions",
+      "name": "Actions",
+      "summary": "Performs image-based automation actions such as clicking images and typing text based on image recognition.",
+      "howItWorks": "The Actions node performs image-based automation tasks. When executed, the node: 1. Downloads and prepares the reference image if needed 2. Takes a screenshot of the current screen 3. Identifies target regions defined in the workflow 4. For each target region: - If it's a ClickImage action, performs a click at the identified location - If it's a ClickType action, clicks at the location and types the specified text 5. Uses image recognition to find anchor points and target coordinates 6. Applies confidence thresholds to ensure accurate image matching",
+      "usage": [
+        "Valid reference image for image recognition",
+        "Confidence value between 0 and 1",
+        "Properly defined regions in the workflow designer"
+      ],
+      "bestPractices": [
+        "This node is designed for complex image automation workflows with multiple actions",
+        "It supports both ClickImage and ClickType actions within a single node",
+        "The confidence level affects the accuracy of image recognition",
+        "Higher confidence values require more precise image matching",
+        "Lower confidence values may result in false positives but can handle variations better",
+        "The node uses computer vision libraries (OpenCV) for image processing",
+        "Coordinates are calculated based on screen resolution and image dimensions",
+        "Actions are performed using pyautogui for mouse and keyboard automation"
+      ]
+    },
+    "click_image": {
+      "namespace": "Core.ImageAutomation.Click_image",
+      "name": "Click_image",
+      "summary": "Locates an image on the screen and performs a click action at its position.",
+      "howItWorks": "The Click Image node finds a specified image on the screen and clicks it. When executed, the node: 1. Downloads and prepares the reference image if needed 2. Uses pyautogui to locate the image on screen with the specified confidence level 3. Moves the mouse cursor to the image's position (adjusted by deltaX and deltaY if specified) 4. Performs the specified click action with any modifier keys 5. Releases any modifier keys after clicking",
+      "usage": [
+        "Valid reference image for matching",
+        "Confidence value between 0 and 1",
+        "Valid mouse button and click type selections"
+      ],
+      "bestPractices": [
+        "The confidence level affects the accuracy of image matching",
+        "Higher confidence values require more precise image matching",
+        "Lower confidence values may result in false positives but can handle variations better",
+        "The deltaX and deltaY properties can be used to adjust the click position relative to the found image",
+        "Modifier keys can be used for special click actions (e.g., Ctrl+Click)",
+        "This node is useful for automating UI interactions where specific images need to be clicked",
+        "Works best with high-contrast, static images"
+      ]
+    },
+    "click_text": {
+      "namespace": "Core.ImageAutomation.Click_text",
+      "name": "Click_text",
+      "summary": "Uses OCR (Optical Character Recognition) to locate specific text on the screen and performs a click action at its position.",
+      "howItWorks": "The Click Text node finds specific text on the screen using OCR and clicks it. When executed, the node: 1. Takes a screenshot of the current screen or uses a reference image if provided 2. Uses OCR (pytesseract) to extract text from the image 3. Searches for the specified text within the recognized text 4. Moves the mouse cursor to the center of the found text 5. Performs the specified click action with any modifier keys 6. Releases any modifier keys after clicking",
+      "usage": [
+        "Valid text to search for",
+        "Confidence value between 0 and 1 (when using reference images)",
+        "Valid mouse button and click type selections",
+        "Valid index value (non-negative integer)",
+        "Tesseract OCR engine installed and configured"
+      ],
+      "bestPractices": [
+        "This node combines OCR text recognition with mouse automation",
+        "Useful for automating interactions with text-based UI elements",
+        "Can work with the entire screen or specific regions defined by reference images",
+        "When multiple instances of the same text are found, the Index option determines which one to click",
+        "The mouse is positioned at the center of the text bounding box",
+        "Modifier keys can be used for special click actions (e.g., Ctrl+Click)",
+        "Works best with clear, high-contrast text",
+        "May require adjusting confidence levels based on text quality and font",
+        "The deltaX and deltaY properties can be used to adjust the click position relative to the found text"
+      ]
+    },
+    "click_type": {
+      "namespace": "Core.ImageAutomation.Click_type",
+      "name": "Click_type",
+      "summary": "Locates an image on the screen, clicks it, and types specified text into the clicked area.",
+      "howItWorks": "The Click \u0026 Type node finds a specified image on the screen, clicks it, and types text. When executed, the node: 1. Downloads and prepares the reference image if needed 2. Uses pyautogui to locate the image on screen with the specified confidence level 3. Moves the mouse cursor to the image's position (adjusted by deltaX and deltaY if specified) 4. Clicks the left mouse button at the image location 5. Optionally clears existing content (if Clear Before Typing is enabled) 6. Types the specified text 7. Optionally presses Enter (if Press Enter is enabled)",
+      "usage": [
+        "Valid reference image for matching",
+        "Valid text to type",
+        "Confidence value between 0 and 1"
+      ],
+      "bestPractices": [
+        "This node is useful for automating form filling or text input in UI elements",
+        "The confidence level affects the accuracy of image matching",
+        "Higher confidence values require more precise image matching",
+        "Lower confidence values may result in false positives but can handle variations better",
+        "The deltaX and deltaY properties can be used to adjust the click position relative to the found image",
+        "The Clear Before Typing option is useful for replacing existing content",
+        "The Press Enter option is useful for submitting forms after text input",
+        "Works best with high-contrast, static images that represent clickable input fields"
+      ]
+    },
+    "find_image": {
+      "namespace": "Core.ImageAutomation.Find_image",
+      "name": "Find_image",
+      "summary": "Locates an image on the screen and returns its position coordinates and confidence level.",
+      "howItWorks": "The Find Image node searches for a specified image on the screen and returns its position. When executed, the node: 1. Downloads and prepares the reference image if needed 2. Takes a screenshot of the current screen 3. Uses OpenCV template matching to find the image with the specified confidence level 4. Returns the coordinates and confidence of the best match found",
+      "usage": [
+        "Valid reference image for matching",
+        "Confidence value between 0 and 1"
+      ],
+      "bestPractices": [
+        "The confidence level affects the accuracy of image matching",
+        "Higher confidence values require more precise image matching",
+        "Lower confidence values may result in false positives but can handle variations better",
+        "The returned coordinates represent the top-left corner of the found image",
+        "This node is useful for locating UI elements before performing actions on them",
+        "Works best with high-contrast, static images",
+        "The actual confidence returned may be higher than the minimum threshold specified"
+      ]
+    },
+    "find_text": {
+      "namespace": "Core.ImageAutomation.Find_text",
+      "name": "Find_text",
+      "summary": "Uses OCR (Optical Character Recognition) to locate specific text on the screen and returns its position information.",
+      "howItWorks": "The Find Text node uses OCR to locate specific text on the screen. When executed, the node: 1. Takes a screenshot of the current screen or uses a reference image if provided 2. Processes the image using OCR (pytesseract) to extract text 3. Searches for the specified text within the recognized text 4. Returns position information for all instances of the found text",
+      "usage": [
+        "Valid text to search for",
+        "Confidence value between 0 and 1",
+        "Tesseract OCR engine installed and configured",
+        "Reference image (optional, for targeted search areas)"
+      ],
+      "bestPractices": [
+        "The confidence level affects the accuracy of text recognition",
+        "Higher confidence values require clearer, more readable text",
+        "Lower confidence values may recognize more text but with less accuracy",
+        "Works best with clear, high-contrast text",
+        "Can be used with a reference image to limit the search area",
+        "Supports multi-word text searches",
+        "Returns detailed position information for each text instance found",
+        "Useful for automating interactions with text-based UI elements",
+        "May require adjusting confidence levels based on text quality and font"
+      ]
+    },
+    "get_text": {
+      "namespace": "Core.ImageAutomation.Get_text",
+      "name": "Get_text",
+      "summary": "Uses OCR (Optical Character Recognition) to extract text from a specified region of the screen or from a reference image.",
+      "howItWorks": "The Get Text node extracts text from images using OCR technology. When executed, the node: 1. Downloads and prepares the reference image if needed 2. Takes a screenshot of the current screen 3. Uses OCR (pytesseract) to extract text from either: - The entire reference image - A specific region defined by anchor and target regions 4. Returns the extracted text",
+      "usage": [
+        "Valid reference image (optional, for targeted text extraction)",
+        "Confidence value between 0 and 1 (when using reference images)",
+        "Tesseract OCR engine installed and configured"
+      ],
+      "bestPractices": [
+        "This node is useful for extracting text from UI elements, documents, or images",
+        "Can work with the entire screen or specific regions",
+        "When using regions, it first locates an anchor image and then extracts text from a target region",
+        "Works best with clear, high-contrast text",
+        "The confidence level affects the accuracy of anchor image recognition",
+        "Higher confidence values require more precise image matching",
+        "Lower confidence values may result in false positives but can handle variations better",
+        "Returns all text found in the specified area as a single string",
+        "May require preprocessing of images for better OCR results"
+      ]
+    },
+    "select_copy": {
+      "namespace": "Core.ImageAutomation.Select_copy",
+      "name": "Select_copy",
+      "summary": "Locates an image on the screen, clicks it, selects all text in the area, and copies it to the clipboard.",
+      "howItWorks": "The Select \u0026 Copy node finds a specified image on the screen, clicks it, and copies text. When executed, the node: 1. Downloads and prepares the reference image if needed 2. Takes a screenshot of the current screen 3. Uses image recognition to locate a defined region on screen 4. Calculates the target click position based on anchor and target regions 5. Moves the mouse cursor to the calculated position 6. Clicks the left mouse button 7. Selects all text (Ctrl+A) 8. Copies the selected text to clipboard (Ctrl+C)",
+      "usage": [
+        "Valid reference image with defined regions",
+        "Confidence value between 0 and 1"
+      ],
+      "bestPractices": [
+        "This node is useful for automating text extraction from UI elements",
+        "Requires properly defined regions in the workflow designer:",
+        "An anchor region to locate on screen",
+        "A target region to determine click position",
+        "The confidence level affects the accuracy of image matching",
+        "Higher confidence values require more precise image matching",
+        "Lower confidence values may result in false positives but can handle variations better",
+        "The click position is calculated to be within the target region",
+        "Uses standard keyboard shortcuts (Ctrl+A, Ctrl+C) for text selection and copying",
+        "The copied text can be accessed from the system clipboard in subsequent nodes",
+        "Works best with UI elements that contain selectable text"
+      ]
+    },
+    "take_screenshot": {
+      "namespace": "Core.ImageAutomation.Take_screenshot",
+      "name": "Take_screenshot",
+      "summary": "Captures a screenshot of the entire screen and saves it to a specified file path.",
+      "howItWorks": "The Take Screenshot node captures the current screen and saves it as an image file. When executed, the node: 1. Takes a screenshot of the entire screen using pyautogui 2. Converts the screenshot to the appropriate color format 3. Saves the image to the specified file path using OpenCV",
+      "usage": [
+        "Valid file path for saving the screenshot",
+        "Write permissions to the specified directory"
+      ],
+      "bestPractices": [
+        "This node captures the entire screen, not just a specific region",
+        "The saved image format is determined by the file extension in the save path",
+        "Common formats include PNG, JPG, and BMP",
+        "Useful for debugging automation workflows or documenting steps",
+        "Can be combined with other image processing nodes for further analysis",
+        "The screenshot is saved immediately to the specified path",
+        "Make sure the directory in the save path exists and is writable",
+        "This node is helpful for creating visual logs of automation processes"
+      ]
+    },
+    "text_exists": {
+      "namespace": "Core.ImageAutomation.Text_exists",
+      "name": "Text_exists",
+      "summary": "Uses OCR (Optical Character Recognition) to check if specific text exists on the screen or in a reference image.",
+      "howItWorks": "The Text Exists node determines if specific text is present on the screen. When executed, the node: 1. Takes a screenshot of the current screen or uses a reference image if provided 2. Uses OCR (pytesseract) to extract text from either: - The entire screen - A specific region defined by anchor and target regions in a reference image 3. Searches for the specified text within the recognized text 4. Returns a boolean result indicating whether the text was found",
+      "usage": [
+        "Valid text to search for",
+        "Confidence value between 0 and 1 (when using reference images)",
+        "Tesseract OCR engine installed and configured"
+      ],
+      "bestPractices": [
+        "This node is useful for conditional automation flows based on the presence of specific text",
+        "Can work with the entire screen or specific regions defined by reference images",
+        "When using regions, it first locates an anchor image and then searches for text in a target region",
+        "Works best with clear, high-contrast text",
+        "The confidence level affects the accuracy of anchor image recognition (when using regions)",
+        "Higher confidence values require more precise image matching",
+        "Lower confidence values may result in false positives but can handle variations better",
+        "Returns a simple boolean value that can be used in conditional logic",
+        "Useful for verifying that certain UI elements or messages are displayed"
+      ]
+    },
+    "wait_image": {
+      "namespace": "Core.ImageAutomation.Wait_image",
+      "name": "Wait_image",
+      "summary": "Waits for a specified image to appear on the screen within a given timeout period.",
+      "howItWorks": "The Wait Image node pauses execution until a specified image appears on screen. When executed, the node: 1. Downloads and prepares the reference image if needed 2. Continuously takes screenshots of the screen at regular intervals 3. Uses OpenCV template matching to search for the image on each screenshot 4. Continues looping until either: - The image is found with the specified confidence level - The timeout period is exceeded 5. Proceeds with the workflow if the image is found, or raises an error if timeout is reached",
+      "usage": [
+        "Valid reference image for matching",
+        "Confidence value between 0 and 1",
+        "Valid timeout value (positive number)"
+      ],
+      "bestPractices": [
+        "This node is useful for synchronizing automation workflows with dynamic UI elements",
+        "The confidence level affects the accuracy of image matching",
+        "Higher confidence values require more precise image matching",
+        "Lower confidence values may result in false positives but can handle variations better",
+        "The timeout value determines the maximum wait time before giving up",
+        "Uses a polling mechanism with 0.2 second intervals between checks",
+        "Useful for waiting for loading indicators, popups, or other UI elements to appear",
+        "Can help make automation workflows more robust by ensuring elements are ready before interacting with them",
+        "Works best with static images that appear consistently on screen"
+      ]
+    }
+  }
+}

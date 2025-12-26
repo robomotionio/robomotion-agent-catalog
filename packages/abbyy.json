@@ -1,0 +1,6 @@
+{
+  "package": "Abbyy",
+  "summary": "Powerful OCR and document processing using ABBYY's industry-leading recognition technology.",
+  "description": "## Overview The ABBYY package provides advanced OCR (Optical Character Recognition) and document processing capabilities using ABBYY technology. Use it when you need to extract text from images, recognize barcodes, process business cards, receipts, or other structured documents.",
+  "nodes": {}
+}

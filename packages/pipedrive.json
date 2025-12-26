@@ -1,0 +1,126 @@
+{
+  "package": "Pipedrive",
+  "summary": "Integrate with Pipedrive CRM for managing deals, contacts, and sales pipeline automation.",
+  "description": "## Overview The Pipedrive package provides integration with Pipedrive CRM. Use it when you need to create or update deals, manage contacts, sync data with Pipedrive, or automate your sales pipeline.",
+  "nodes": {
+    "connect": {
+      "namespace": "Core.Pipedrive.Connect",
+      "name": "Connect",
+      "summary": "Establishes a connection to the Pipedrive CRM API using an API key.",
+      "howItWorks": "The Connect node establishes a connection to the Pipedrive CRM API and stores the connection for use by other nodes. When executed, the node: 1. Validates the provided Company Domain input 2. Retrieves the API Key from the credential store 3. Creates a Pipedrive client with the provided credentials 4. Stores the client connection and returns a unique connection ID",
+      "usage": [
+        "A valid Pipedrive account",
+        "A Pipedrive API key with appropriate permissions",
+        "The company domain of your Pipedrive account"
+      ],
+      "bestPractices": [
+        "The connection ID returned by this node must be passed to other Pipedrive nodes to perform operations",
+        "Each connection is stored in memory and can be used by multiple nodes",
+        "Use the Disconnect node to properly close connections when they are no longer needed",
+        "The API key should be stored as a credential in the Robomotion vault for security"
+      ]
+    },
+    "create": {
+      "namespace": "Core.Pipedrive.Create",
+      "name": "Create",
+      "summary": "Creates a new object in Pipedrive CRM (Activity, Deal, Note, Organization, Person, or Lead).",
+      "howItWorks": "The Create node creates a new object in Pipedrive CRM. When executed, the node: 1. Validates the provided Connection Id 2. Validates the Data input 3. Uses the selected Type option to determine what kind of object to create 4. Calls the appropriate Pipedrive API endpoint to create the object 5. Returns the API response as the result",
+      "usage": [
+        "A valid connection to Pipedrive established using the Connect node",
+        "Properly formatted data object for the selected object type",
+        "Appropriate permissions in Pipedrive to create the selected object type"
+      ],
+      "bestPractices": [
+        "The Data input should be an object with properties matching the fields of the object type being created",
+        "The Connection Id must be obtained from a previous Connect node",
+        "Different object types require different data structures in the Data input",
+        "The result contains the full response from the Pipedrive API, including the ID of the created object"
+      ]
+    },
+    "delete": {
+      "namespace": "Core.Pipedrive.Delete",
+      "name": "Delete",
+      "summary": "Deletes an object from Pipedrive CRM (Activity, Deal, Note, Organization, Person, or Lead).",
+      "howItWorks": "The Delete node removes an object from Pipedrive CRM. When executed, the node: 1. Validates the provided Connection Id 2. Validates the Object Id input 3. Uses the selected Type option to determine what kind of object to delete 4. Calls the appropriate Pipedrive API endpoint to delete the object 5. Returns the API response as the result",
+      "usage": [
+        "A valid connection to Pipedrive established using the Connect node",
+        "The ID of the object to be deleted",
+        "Appropriate permissions in Pipedrive to delete the selected object type"
+      ],
+      "bestPractices": [
+        "The Object Id should be obtained from a previous operation (e.g., Create or Get)",
+        "The Connection Id must be obtained from a previous Connect node",
+        "Deleted objects cannot be recovered through the API",
+        "The result contains the full response from the Pipedrive API confirming the deletion"
+      ]
+    },
+    "disconnect": {
+      "namespace": "Core.Pipedrive.Disconnect",
+      "name": "Disconnect",
+      "summary": "Closes a connection to the Pipedrive CRM API and releases associated resources.",
+      "howItWorks": "The Disconnect node closes a connection to the Pipedrive CRM API and releases associated resources. When executed, the node: 1. Validates the provided Connection Id 2. Removes the connection from the internal connection store 3. Releases any resources associated with the connection",
+      "usage": [
+        "A valid connection to Pipedrive established using the Connect node"
+      ],
+      "bestPractices": [
+        "Use this node to properly close connections when they are no longer needed",
+        "Each connection should be closed exactly once",
+        "After disconnecting, the connection ID becomes invalid and cannot be used by other nodes",
+        "It's good practice to disconnect when finishing a workflow to free up resources"
+      ]
+    },
+    "get": {
+      "namespace": "Core.Pipedrive.Get",
+      "name": "Get",
+      "summary": "Retrieves a specific object from Pipedrive CRM by its ID (Activity, Deal, Note, Organization, Person, or Lead).",
+      "howItWorks": "The Get node retrieves a specific object from Pipedrive CRM by its ID. When executed, the node: 1. Validates the provided Connection Id 2. Validates the Object Id input 3. Uses the selected Type option to determine what kind of object to retrieve 4. Calls the appropriate Pipedrive API endpoint to get the object 5. Returns the API response as the result",
+      "usage": [
+        "A valid connection to Pipedrive established using the Connect node",
+        "The ID of the object to be retrieved",
+        "Appropriate permissions in Pipedrive to read the selected object type"
+      ],
+      "bestPractices": [
+        "The Object Id should be obtained from a previous operation (e.g., Create or search)",
+        "The Connection Id must be obtained from a previous Connect node",
+        "The result contains the full response from the Pipedrive API with all object details",
+        "Different object types will return different data structures in the result"
+      ]
+    },
+    "get_all": {
+      "namespace": "Core.Pipedrive.Get_all",
+      "name": "Get_all",
+      "summary": "Retrieves all objects of a specific type from Pipedrive CRM (Activity, Deal, Note, Organization, Person, or Lead).",
+      "howItWorks": "The Get All node retrieves all objects of a specific type from Pipedrive CRM. When executed, the node: 1. Validates the provided Connection Id 2. Uses the selected Type option to determine what kind of objects to retrieve 3. Calls the appropriate Pipedrive API endpoint to get all objects of that type 4. Returns the API response as the result",
+      "usage": [
+        "A valid connection to Pipedrive established using the Connect node",
+        "Appropriate permissions in Pipedrive to read the selected object type"
+      ],
+      "bestPractices": [
+        "The Connection Id must be obtained from a previous Connect node",
+        "The result contains the full response from the Pipedrive API with all objects of the specified type",
+        "For large datasets, consider using pagination options if available",
+        "Different object types will return different data structures in the result",
+        "This operation may take longer for object types with many records"
+      ]
+    },
+    "update": {
+      "namespace": "Core.Pipedrive.Update",
+      "name": "Update",
+      "summary": "Updates an existing object in Pipedrive CRM (Activity, Deal, Note, Organization, Person, or Lead).",
+      "howItWorks": "The Update node modifies an existing object in Pipedrive CRM. When executed, the node: 1. Validates the provided Connection Id 2. Validates the Object Id input 3. Validates the Data input 4. Uses the selected Type option to determine what kind of object to update 5. Calls the appropriate Pipedrive API endpoint to update the object 6. Returns the API response as the result",
+      "usage": [
+        "A valid connection to Pipedrive established using the Connect node",
+        "The ID of the object to be updated",
+        "Properly formatted data object with the fields to be updated",
+        "Appropriate permissions in Pipedrive to update the selected object type"
+      ],
+      "bestPractices": [
+        "The Object Id should be obtained from a previous operation (e.g., Create or Get)",
+        "The Data input should be an object with properties matching the fields of the object type being updated",
+        "Only the fields specified in the Data input will be updated; other fields remain unchanged",
+        "The Connection Id must be obtained from a previous Connect node",
+        "The result contains the full response from the Pipedrive API with the updated object details"
+      ]
+    }
+  }
+}

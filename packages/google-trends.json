@@ -1,0 +1,213 @@
+{
+  "package": "GoogleTrends",
+  "summary": "Access Google Trends data for market research, keyword analysis, and trend monitoring.",
+  "description": "## Overview The Google Trends package enables you to retrieve search trend data from Google. Use it for market research, content planning, keyword analysis, and monitoring search interest over time.",
+  "nodes": {
+    "Categories": {
+      "namespace": "Core.GoogleTrends.Categories",
+      "name": "Categories",
+      "summary": "Retrieves Google Trends categories for further analysis.",
+      "howItWorks": "The Categories node connects to Google Trends API and retrieves the available categories that can be used for trend analysis. When executed, the node: 1. Validates the provided inputs (Host Language and Timezone Offset are required) 2. Creates a connection to Google Trends with the specified parameters 3. Retrieves the categories data from Google Trends 4. Returns the categories data as the response",
+      "usage": [
+        "Valid internet connection",
+        "Access to Google Trends service",
+        "Properly configured proxy settings if required by network"
+      ],
+      "bestPractices": [
+        "The Host Language parameter determines the language used for accessing Google Trends",
+        "The Timeout parameter should be specified as \"connect,read\" in seconds (e.g., \"2,5\")",
+        "The Timezone Offset should be specified in minutes (e.g., 360 for US CST)",
+        "The Proxies parameter is optional and should only be used if required by your network",
+        "The Retries and Backoff Factor parameters can help with reliability in unstable network conditions",
+        "The response contains the categories data that can be used with other Google Trends nodes"
+      ]
+    },
+    "InterestByRegion": {
+      "namespace": "Core.GoogleTrends.InterestByRegion",
+      "name": "InterestByRegion",
+      "summary": "Retrieves Google Trends interest by region data for a specific keyword.",
+      "howItWorks": "The Interest By Region node connects to Google Trends API and retrieves interest data by geographical region for a specific keyword. When executed, the node: 1. Validates the required inputs (Host Language, Timezone Offset, and Keyword) 2. Creates a connection to Google Trends with the specified parameters 3. Builds a payload with the keyword and other parameters 4. Retrieves the interest by region data from Google Trends 5. Formats the data for easier consumption 6. Returns the formatted data as the response",
+      "usage": [
+        "Valid internet connection",
+        "Access to Google Trends service",
+        "Properly configured proxy settings if required by network",
+        "A valid keyword to search for"
+      ],
+      "bestPractices": [
+        "The Host Language parameter determines the language used for accessing Google Trends",
+        "The Timeout parameter should be specified as \"connect,read\" in seconds (e.g., \"2,5\")",
+        "The Timezone Offset should be specified in minutes (e.g., 360 for US CST)",
+        "The Keyword is a required field and should be relevant to your analysis",
+        "The Category parameter can help narrow down results to specific categories",
+        "The Country Abbreviation can limit results to a specific country",
+        "The Date range parameter controls how far back the data goes",
+        "The Google property filter can focus on specific Google services",
+        "The Resolution option controls the geographical granularity of the data",
+        "The Proxies parameter is optional and should only be used if required by your network",
+        "The Retries and Backoff Factor parameters can help with reliability in unstable network conditions"
+      ]
+    },
+    "InterestOverTime": {
+      "namespace": "Core.GoogleTrends.InterestOverTime",
+      "name": "InterestOverTime",
+      "summary": "Retrieves Google Trends interest over time data for a specific keyword.",
+      "howItWorks": "The Interest Over Time node connects to Google Trends API and retrieves interest data over time for a specific keyword. When executed, the node: 1. Validates the required inputs (Host Language, Timezone Offset, and Keyword) 2. Creates a connection to Google Trends with the specified parameters 3. Builds a payload with the keyword and other parameters 4. Retrieves the interest over time data from Google Trends 5. Formats the data for easier consumption 6. Returns the formatted data as the response",
+      "usage": [
+        "Valid internet connection",
+        "Access to Google Trends service",
+        "Properly configured proxy settings if required by network",
+        "A valid keyword to search for"
+      ],
+      "bestPractices": [
+        "The Host Language parameter determines the language used for accessing Google Trends",
+        "The Timeout parameter should be specified as \"connect,read\" in seconds (e.g., \"2,5\")",
+        "The Timezone Offset should be specified in minutes (e.g., 360 for US CST)",
+        "The Keyword is a required field and should be relevant to your analysis",
+        "The Category parameter can help narrow down results to specific categories",
+        "The Country Abbreviation can limit results to a specific country",
+        "The Date range parameter controls how far back the data goes",
+        "The Google property filter can focus on specific Google services",
+        "The Proxies parameter is optional and should only be used if required by your network",
+        "The Retries and Backoff Factor parameters can help with reliability in unstable network conditions",
+        "The response contains time-series data that can be used for trend analysis"
+      ]
+    },
+    "RealtimeSearchTrends": {
+      "namespace": "Core.GoogleTrends.RealtimeSearchTrends",
+      "name": "RealtimeSearchTrends",
+      "summary": "Retrieves real-time Google Trends search data for a specific country.",
+      "howItWorks": "The Realtime Search Trends node connects to Google Trends API and retrieves real-time trending search data for a specific country. When executed, the node: 1. Validates the required inputs (Host Language, Timezone Offset, and Trending Searche) 2. Creates a connection to Google Trends with the specified parameters 3. Retrieves the real-time trending searches data from Google Trends 4. Returns the data as the response",
+      "usage": [
+        "Valid internet connection",
+        "Access to Google Trends service",
+        "Properly configured proxy settings if required by network",
+        "A valid country code for which to retrieve trending searches"
+      ],
+      "bestPractices": [
+        "The Host Language parameter determines the language used for accessing Google Trends",
+        "The Timeout parameter should be specified as \"connect,read\" in seconds (e.g., \"2,5\")",
+        "The Timezone Offset should be specified in minutes (e.g., 360 for US CST)",
+        "The Trending Searche parameter should be a valid country code (e.g., 'US' for United States)",
+        "The Proxies parameter is optional and should only be used if required by your network",
+        "The Retries and Backoff Factor parameters can help with reliability in unstable network conditions",
+        "The response contains real-time trending search data that can be used for current trend analysis"
+      ]
+    },
+    "RelatedQueries": {
+      "namespace": "Core.GoogleTrends.RelatedQueries",
+      "name": "RelatedQueries",
+      "summary": "Retrieves Google Trends related queries data for a specific keyword.",
+      "howItWorks": "The Related Queries node connects to Google Trends API and retrieves related queries data for a specific keyword. When executed, the node: 1. Validates the required inputs (Host Language, Timezone Offset, and Keyword) 2. Creates a connection to Google Trends with the specified parameters 3. Builds a payload with the keyword and other parameters 4. Retrieves the related queries data from Google Trends 5. Processes the data using pandas for easier consumption 6. Returns the processed data as the response",
+      "usage": [
+        "Valid internet connection",
+        "Access to Google Trends service",
+        "Properly configured proxy settings if required by network",
+        "A valid keyword to search for"
+      ],
+      "bestPractices": [
+        "The Host Language parameter determines the language used for accessing Google Trends",
+        "The Timeout parameter should be specified as \"connect,read\" in seconds (e.g., \"2,5\")",
+        "The Timezone Offset should be specified in minutes (e.g., 360 for US CST)",
+        "The Keyword is a required field and should be relevant to your analysis",
+        "The Category parameter can help narrow down results to specific categories",
+        "The Country Abbreviation can limit results to a specific country",
+        "The Date range parameter controls how far back the data goes",
+        "The Google property filter can focus on specific Google services",
+        "The Proxies parameter is optional and should only be used if required by your network",
+        "The Retries and Backoff Factor parameters can help with reliability in unstable network conditions",
+        "The response contains related queries data that can be used for SEO and content planning"
+      ]
+    },
+    "RelatedTopics": {
+      "namespace": "Core.GoogleTrends.RelatedTopics",
+      "name": "RelatedTopics",
+      "summary": "Retrieves Google Trends related topics data for a specific keyword.",
+      "howItWorks": "The Related Topics node connects to Google Trends API and retrieves related topics data for a specific keyword. When executed, the node: 1. Validates the required inputs (Host Language, Timezone Offset, and Keyword) 2. Creates a connection to Google Trends with the specified parameters 3. Builds a payload with the keyword and other parameters 4. Retrieves the related topics data from Google Trends 5. Processes the data using pandas for easier consumption 6. Returns the processed data as the response",
+      "usage": [
+        "Valid internet connection",
+        "Access to Google Trends service",
+        "Properly configured proxy settings if required by network",
+        "A valid keyword to search for"
+      ],
+      "bestPractices": [
+        "The Host Language parameter determines the language used for accessing Google Trends",
+        "The Timeout parameter should be specified as \"connect,read\" in seconds (e.g., \"2,5\")",
+        "The Timezone Offset should be specified in minutes (e.g., 360 for US CST)",
+        "The Keyword is a required field and should be relevant to your analysis",
+        "The Category parameter can help narrow down results to specific categories",
+        "The Country Abbreviation can limit results to a specific country",
+        "The Date range parameter controls how far back the data goes",
+        "The Google property filter can focus on specific Google services",
+        "The Proxies parameter is optional and should only be used if required by your network",
+        "The Retries and Backoff Factor parameters can help with reliability in unstable network conditions",
+        "The response contains related topics data that can be used for content planning and research"
+      ]
+    },
+    "Suggestions": {
+      "namespace": "Core.GoogleTrends.Suggestions",
+      "name": "Suggestions",
+      "summary": "Retrieves Google Trends keyword suggestions for a specific keyword.",
+      "howItWorks": "The Suggestions node connects to Google Trends API and retrieves keyword suggestions for a specific keyword. When executed, the node: 1. Validates the required inputs (Host Language, Timezone Offset, and Keyword) 2. Creates a connection to Google Trends with the specified parameters 3. Retrieves the keyword suggestions data from Google Trends 4. Returns the data as the response",
+      "usage": [
+        "Valid internet connection",
+        "Access to Google Trends service",
+        "Properly configured proxy settings if required by network",
+        "A valid keyword for which to retrieve suggestions"
+      ],
+      "bestPractices": [
+        "The Host Language parameter determines the language used for accessing Google Trends",
+        "The Timeout parameter should be specified as \"connect,read\" in seconds (e.g., \"2,5\")",
+        "The Timezone Offset should be specified in minutes (e.g., 360 for US CST)",
+        "The Keyword is a required field and should be relevant to your analysis",
+        "The Proxies parameter is optional and should only be used if required by your network",
+        "The Retries and Backoff Factor parameters can help with reliability in unstable network conditions",
+        "The response contains keyword suggestions that can be used for SEO and content planning"
+      ]
+    },
+    "TopCharts": {
+      "namespace": "Core.GoogleTrends.TopCharts",
+      "name": "TopCharts",
+      "summary": "Retrieves Google Trends top charts data for a specific year and country.",
+      "howItWorks": "The Top Charts node connects to Google Trends API and retrieves top charts data for a specific year and country. When executed, the node: 1. Validates the required inputs (Host Language, Timezone Offset, Top Chart Date, and Country Abbreviation) 2. Creates a connection to Google Trends with the specified parameters 3. Retrieves the top charts data from Google Trends for the specified year and country 4. Returns the data as the response",
+      "usage": [
+        "Valid internet connection",
+        "Access to Google Trends service",
+        "Properly configured proxy settings if required by network",
+        "A valid year for which to retrieve top chart data",
+        "A valid country abbreviation"
+      ],
+      "bestPractices": [
+        "The Host Language parameter determines the language used for accessing Google Trends",
+        "The Timeout parameter should be specified as \"connect,read\" in seconds (e.g., \"2,5\")",
+        "The Timezone Offset should be specified in minutes (e.g., 360 for US CST)",
+        "The Top Chart Date should be a valid year (e.g., 2019)",
+        "The Country Abbreviation should be a valid two-letter country code (e.g., 'US' for United States)",
+        "The default Country Abbreviation is 'GLOBAL' which retrieves worldwide data",
+        "The Proxies parameter is optional and should only be used if required by your network",
+        "The Retries and Backoff Factor parameters can help with reliability in unstable network conditions",
+        "The response contains top charts data that can be used for trend analysis and research"
+      ]
+    },
+    "TrendingSearches": {
+      "namespace": "Core.GoogleTrends.TrendingSearches",
+      "name": "TrendingSearches",
+      "summary": "Retrieves Google Trends trending searches data for a specific country.",
+      "howItWorks": "The Trending Searches node connects to Google Trends API and retrieves trending searches data for a specific country. When executed, the node: 1. Validates the required inputs (Host Language, Timezone Offset, and Trending Searche) 2. Creates a connection to Google Trends with the specified parameters 3. Retrieves the trending searches data from Google Trends 4. Returns the data as the response",
+      "usage": [
+        "Valid internet connection",
+        "Access to Google Trends service",
+        "Properly configured proxy settings if required by network",
+        "A valid country identifier for which to retrieve trending searches"
+      ],
+      "bestPractices": [
+        "The Host Language parameter determines the language used for accessing Google Trends",
+        "The Timeout parameter should be specified as \"connect,read\" in seconds (e.g., \"2,5\")",
+        "The Timezone Offset should be specified in minutes (e.g., 360 for US CST)",
+        "The Trending Searche parameter should be a valid country identifier (e.g., 'united_states' for United States)",
+        "The Proxies parameter is optional and should only be used if required by your network",
+        "The Retries and Backoff Factor parameters can help with reliability in unstable network conditions",
+        "The response contains trending searches data that can be used for current trend analysis"
+      ]
+    }
+  }
+}

@@ -1,0 +1,284 @@
+{
+  "package": "GoogleStorage",
+  "summary": "The Google Cloud Storage package provides comprehensive automation for Google Cloud Storage operations. This package enables you to upload, download, manage files and buckets in Google Cloud Storage directly from your RPA workflows.",
+  "description": "## Overview Google Cloud Storage is a unified object storage service for storing and accessing data on Google Cloud Platform. With this package, you can automate file operations, bucket management, and integrate cloud storage into your automation workflows.",
+  "nodes": {
+    "connect": {
+      "namespace": "Core.GoogleStorage.Connect",
+      "name": "Connect",
+      "summary": "Establishes a connection to Google Cloud Storage service and creates a reusable client session for subsequent storage operations.",
+      "howItWorks": "The Connect node establishes a connection to Google Cloud Storage service using provided credentials. When executed, the node: 1. Validates the provided Google Cloud service account credentials 2. Authenticates with Google Cloud Storage API 3. Creates a storage client instance 4. Generates a unique client ID 5. Stores the client session for reuse by other nodes 6. Returns the client ID as output",
+      "usage": [
+        "Valid Google Cloud service account credentials with appropriate permissions",
+        "Cloud Storage API enabled in your Google Cloud project",
+        "Appropriate IAM roles assigned to the service account:",
+        "`roles/storage.admin` for full access",
+        "`roles/storage.objectAdmin` for object operations",
+        "`roles/storage.objectViewer` for read-only access"
+      ],
+      "bestPractices": [
+        "This node should be executed before using other Google Storage nodes",
+        "The output GCS Client Id is required as input for other Storage operations",
+        "Alternatively, you can provide credentials directly to each node without using Connect",
+        "The connection remains active for the duration of the flow execution",
+        "Multiple Connect nodes can be used to establish connections to different Google Cloud projects",
+        "The client identifier is automatically managed and cleaned up by the system",
+        "Storing the connection improves performance when performing multiple operations"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrCredentials",
+        "ErrRuntime"
+      ]
+    },
+    "createbucket": {
+      "namespace": "Core.GoogleStorage.Createbucket",
+      "name": "Createbucket",
+      "summary": "Creates a new storage bucket in Google Cloud Storage with configurable access control, storage class, and labels.",
+      "howItWorks": "The Create Bucket node creates a new GCS bucket. When executed, the node: 1. Establishes connection using either GCS Client Id or credentials 2. Validates Project Id and Bucket Name 3. Configures bucket attributes (access control, storage class, labels) 4. Creates the bucket in the specified project 5. Returns success once bucket is created",
+      "usage": [
+        "Either valid GCS Client Id OR credentials provided directly",
+        "Valid Google Cloud Project ID",
+        "Globally unique bucket name",
+        "Appropriate IAM permissions:",
+        "`storage.buckets.create` permission",
+        "`roles/storage.admin` role",
+        "Project must have Cloud Storage API enabled"
+      ],
+      "bestPractices": [
+        "Bucket names are globally unique across all GCS users",
+        "Choose storage class based on access frequency and cost",
+        "Uniform access control is recommended for most use cases",
+        "Storage class affects pricing and minimum storage duration",
+        "Labels are useful for cost allocation and filtering",
+        "Default location is based on project settings (usually US multi-region)",
+        "Some properties cannot be changed after creation"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrInvalidArg"
+      ]
+    },
+    "deletebucket": {
+      "namespace": "Core.GoogleStorage.Deletebucket",
+      "name": "Deletebucket",
+      "summary": "Permanently deletes an empty bucket from Google Cloud Storage.",
+      "howItWorks": "The Delete Bucket node removes an empty bucket from Google Cloud Storage. When executed, the node: 1. Establishes connection using either GCS Client Id or provided credentials 2. Validates the bucket name 3. Attempts to delete the specified bucket 4. Operation completes with a 10-second timeout 5. Returns success if bucket is deleted",
+      "usage": [
+        "Either valid GCS Client Id OR credentials provided directly",
+        "Valid bucket name that exists",
+        "Bucket must be completely empty (no objects)",
+        "Appropriate IAM permissions:",
+        "`storage.buckets.delete` permission",
+        "`roles/storage.admin` role"
+      ],
+      "bestPractices": [
+        "Bucket must be empty before deletion",
+        "Delete all objects first using Delete Object or List + Loop",
+        "Operation has 10-second timeout",
+        "Deletion is permanent and cannot be undone",
+        "Bucket name may become available for reuse after some time",
+        "Cannot delete buckets with object versions if versioning enabled"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrInvalidArg"
+      ]
+    },
+    "deleteobject": {
+      "namespace": "Core.GoogleStorage.Deleteobject",
+      "name": "Deleteobject",
+      "summary": "Permanently deletes an object (file) from a Google Cloud Storage bucket.",
+      "howItWorks": "The Delete Object node removes an object from a Google Cloud Storage bucket. When executed, the node: 1. Establishes connection using either GCS Client Id or provided credentials 2. Validates the bucket name and object name 3. Locates the specified object in the bucket 4. Permanently deletes the object (or creates a delete marker if versioning is enabled) 5. Completes successfully if object is deleted or doesn't exist",
+      "usage": [
+        "Either a valid GCS Client Id from Connect node OR credentials provided directly",
+        "Valid bucket name that exists in Google Cloud Storage",
+        "Appropriate IAM permissions:",
+        "`storage.objects.delete` permission",
+        "`roles/storage.objectAdmin` or higher",
+        "Object name to delete (object doesn't need to exist)"
+      ],
+      "bestPractices": [
+        "Object names can include folder-like paths using forward slashes",
+        "This operation is immediate and cannot be undone",
+        "The node succeeds even if the object doesn't exist (idempotent operation)",
+        "Once deleted, objects cannot be recovered unless versioning is enabled",
+        "If versioning is enabled, deletion creates a delete marker instead of permanent deletion",
+        "Deleted objects free up storage space immediately",
+        "No confirmation is required - deletion happens immediately",
+        "Bulk deletions should be done carefully with proper validation"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrInvalidArg"
+      ]
+    },
+    "getbucket": {
+      "namespace": "Core.GoogleStorage.Getbucket",
+      "name": "Getbucket",
+      "summary": "Retrieves detailed metadata and configuration attributes of a Google Cloud Storage bucket.",
+      "howItWorks": "The Get Bucket node retrieves bucket information. When executed, the node: 1. Establishes connection using either GCS Client Id or credentials 2. Validates bucket name 3. Retrieves bucket attributes from GCS 4. Formats information into structured object 5. Returns bucket details",
+      "usage": [
+        "Either valid GCS Client Id OR credentials provided directly",
+        "Valid bucket name that exists",
+        "Appropriate IAM permissions:",
+        "`storage.buckets.get` permission",
+        "`roles/storage.objectViewer` or higher"
+      ],
+      "bestPractices": [
+        "Returns current bucket configuration",
+        "Useful for validation and auditing",
+        "Labels are included in output",
+        "Access control settings provided",
+        "Creation timestamp available",
+        "Read-only operation, doesn't modify bucket",
+        "Information is current at time of execution"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrInvalidArg"
+      ]
+    },
+    "listbuckets": {
+      "namespace": "Core.GoogleStorage.Listbuckets",
+      "name": "Listbuckets",
+      "summary": "Retrieves a list of all storage buckets in a Google Cloud project.",
+      "howItWorks": "The List Buckets node retrieves all buckets in a project. When executed, the node: 1. Establishes connection using either GCS Client Id or credentials 2. Validates the project ID 3. Queries Google Cloud Storage for all buckets in the project 4. Iterates through bucket list (10-second timeout) 5. Returns array of bucket names",
+      "usage": [
+        "Either valid GCS Client Id OR credentials provided directly",
+        "Valid Google Cloud Project ID",
+        "Appropriate IAM permissions:",
+        "`storage.buckets.list` permission",
+        "`roles/storage.objectViewer` or higher"
+      ],
+      "bestPractices": [
+        "Returns simple array of bucket names",
+        "Only buckets with read access are included",
+        "10-second timeout for operation",
+        "Empty projects return empty array `[]`",
+        "List may be incomplete if permissions limited",
+        "Useful for inventory and validation",
+        "Bucket names are unique within a project"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrInvalidArg",
+        "ErrBucketAttribute",
+        "ErrIterator"
+      ]
+    },
+    "listobjects": {
+      "namespace": "Core.GoogleStorage.Listobjects",
+      "name": "Listobjects",
+      "summary": "Retrieves a list of all objects (files) stored in a Google Cloud Storage bucket with their names and sizes.",
+      "howItWorks": "The List Bucket Objects node retrieves all objects from a Google Cloud Storage bucket. When executed, the node: 1. Establishes connection using either GCS Client Id or provided credentials 2. Validates the bucket name 3. Queries Google Cloud Storage for all objects in the bucket 4. Iterates through all objects, collecting names and sizes 5. Returns an array with object details",
+      "usage": [
+        "Either a valid GCS Client Id from Connect node OR credentials provided directly",
+        "Valid bucket name that exists in Google Cloud Storage",
+        "Appropriate IAM permissions:",
+        "`storage.objects.list` permission",
+        "`roles/storage.objectViewer` or higher"
+      ],
+      "bestPractices": [
+        "Returns an array with Name and Size for each object",
+        "Objects in folder-like paths are listed with full paths (e.g., \"folder/file.txt\")",
+        "All objects in the bucket are returned, regardless of storage class",
+        "Large buckets (100,000+ objects) may take time to list",
+        "The operation is read-only and doesn't modify objects",
+        "Empty buckets return an empty array `[]`",
+        "The list is not sorted by default - sort in JavaScript if needed",
+        "Size is always in bytes - convert to KB/MB/GB as needed"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrInvalidArg"
+      ]
+    },
+    "readobject": {
+      "namespace": "Core.GoogleStorage.Readobject",
+      "name": "Readobject",
+      "summary": "Reads and retrieves the contents of an object (file) from a Google Cloud Storage bucket.",
+      "howItWorks": "The Read Object node retrieves the contents of an object from a Google Cloud Storage bucket. When executed, the node: 1. Establishes connection using either GCS Client Id or provided credentials 2. Validates the bucket name and object name 3. Locates the specified object in the bucket 4. Reads the complete object content 5. Converts the content to a string 6. Returns the content as output",
+      "usage": [
+        "Either a valid GCS Client Id from Connect node OR credentials provided directly",
+        "Valid bucket name that exists in Google Cloud Storage",
+        "Valid object name that exists in the specified bucket",
+        "Appropriate IAM permissions:",
+        "`storage.objects.get` permission",
+        "`roles/storage.objectViewer` or higher"
+      ],
+      "bestPractices": [
+        "The object content is returned as a string",
+        "For text files (CSV, JSON, TXT), the content is directly usable",
+        "For binary files (images, PDFs), consider using alternative methods or download to local file",
+        "The node reads the entire object into memory - be cautious with very large files (over 100MB)",
+        "Object names can include folder-like paths using forward slashes",
+        "There's no actual folder structure in GCS - paths are part of object names",
+        "Works with all storage classes (Standard, Nearline, Coldline, Archive)"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrInvalidArg",
+        "ErrInternal"
+      ]
+    },
+    "updatebucket": {
+      "namespace": "Core.GoogleStorage.Updatebucket",
+      "name": "Updatebucket",
+      "summary": "Updates bucket properties including storage class, versioning, and labels.",
+      "howItWorks": "The Update Bucket node modifies bucket properties. When executed, the node: 1. Establishes connection using either GCS Client Id or credentials 2. Validates bucket name and inputs 3. Updates storage class if specified 4. Updates versioning if specified 5. Adds/updates label if label name and value provided 6. Returns success after updates applied",
+      "usage": [
+        "Either valid GCS Client Id OR credentials provided directly",
+        "Valid bucket name that exists",
+        "Appropriate IAM permissions:",
+        "`storage.buckets.update` permission",
+        "`roles/storage.admin` role"
+      ],
+      "bestPractices": [
+        "Storage class changes affect pricing and retrieval costs",
+        "Versioning protects data but increases storage costs",
+        "Labels are key for cost allocation and organization",
+        "Multiple properties can be updated in one call",
+        "Some properties (location, name) cannot be changed",
+        "Storage class changes apply to new objects immediately",
+        "Existing objects retain their storage class unless changed"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrInvalidArg"
+      ]
+    },
+    "upload": {
+      "namespace": "Core.GoogleStorage.Upload",
+      "name": "Upload",
+      "summary": "Uploads a file from the local filesystem to a Google Cloud Storage bucket.",
+      "howItWorks": "The Upload File node transfers a file from the local filesystem to a Google Cloud Storage bucket. When executed, the node: 1. Establishes connection using either GCS Client Id or provided credentials 2. Validates all required inputs (Bucket Name, File Path) 3. Opens the local file for reading 4. Determines the object name (custom or original filename) 5. Uploads the file content to the specified bucket 6. Returns the GCS URI of the uploaded file",
+      "usage": [
+        "Either a valid GCS Client Id from Connect node OR credentials provided directly",
+        "Valid bucket name that exists in Google Cloud Storage",
+        "Valid local file path that exists and is readable",
+        "Appropriate IAM permissions:",
+        "`storage.objects.create` permission",
+        "`roles/storage.objectCreator` or higher",
+        "Sufficient network connectivity and bandwidth",
+        "Adequate timeout for large file uploads"
+      ],
+      "bestPractices": [
+        "The File Name option allows you to rename the file during upload",
+        "If File Name is not specified, the original filename from File Path is used",
+        "Object names can include forward slashes to create folder-like paths",
+        "GCS doesn't have actual folders - paths are part of the object name",
+        "The Timeout option helps prevent hanging operations for large files",
+        "Default timeout is 30 seconds; increase for files over 10MB",
+        "The output File Path provides a direct GCS URI reference",
+        "Existing objects with the same name will be overwritten without warning",
+        "All file types are supported (text, binary, images, etc.)",
+        "File size limits depend on your GCS bucket configuration"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrInvalidArg"
+      ]
+    }
+  }
+}

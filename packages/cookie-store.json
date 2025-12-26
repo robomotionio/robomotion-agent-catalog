@@ -1,0 +1,57 @@
+{
+  "package": "CookieStore",
+  "summary": "Cookie Store is a package designed to securely manage your digital cookies. It stores these cookies in an encrypted file on your local system, ensuring enhanced security and privacy for your web automation activities.",
+  "description": "## Overview The Cookie Store package provides secure cookie management capabilities for web automation workflows. It uses AES (Advanced Encryption Standard) encryption to protect sensitive session data, making it ideal for scenarios where you need to:",
+  "nodes": {
+    "load-cookies": {
+      "namespace": "Core.CookieStore.LoadCookies",
+      "name": "LoadCookies",
+      "summary": "Loads and decrypts browser cookies from an encrypted file using AES decryption. This node allows you to restore previously saved browser sessions for web automation workflows.",
+      "howItWorks": "The Load Cookies node performs the following operations: 1. Validates the load path 2. Reads the encrypted cookie file from disk 3. Retrieves the AES decryption key from credentials 4. Decrypts the file data using AES-CBC 5. Parses the decrypted JSON data into cookie objects 6. Stores the cookies in the message scope for use by other nodes",
+      "bestPractices": [
+        "The encrypted cookie file must have been created by the Save Cookies node",
+        "Cookies can only be decrypted with the exact same AES key used for encryption",
+        "Loaded cookies are automatically placed in `msg.cookies` for easy use with Set Cookies",
+        "The node supports cookie files created on any platform (Windows, Linux, macOS)",
+        "Cookie expiration is based on the original expiration time when they were saved",
+        "If cookies have expired, they may not work even if successfully loaded",
+        "The decryption process validates the integrity of the data using PKCS7 padding",
+        "Large cookie files (1000+ cookies) may take slightly longer to decrypt but are fully supported"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrRuntime",
+        "ErrCredentials"
+      ],
+      "relatedNodes": [
+        "**Get Cookies**",
+        "**Open Browser**"
+      ]
+    },
+    "save-cookies": {
+      "namespace": "Core.CookieStore.SaveCookies",
+      "name": "SaveCookies",
+      "summary": "Encrypts and saves browser cookies to a secure file using AES encryption. This node is essential for preserving authenticated browser sessions between automation runs.",
+      "howItWorks": "The Save Cookies node performs the following operations: 1. Validates the save path and cookies input 2. Converts browser cookies to a standardized JSON format 3. Serializes the cookies to JSON 4. Retrieves the AES encryption key from credentials 5. Encrypts the cookie data using AES-CBC with PKCS7 padding 6. Writes the encrypted data to the specified file",
+      "bestPractices": [
+        "The encrypted file is in binary format and cannot be read without the correct AES key",
+        "Cookie files are platform-independent and can be used across Windows, Linux, and macOS",
+        "The same AES key used to save cookies must be used to load them",
+        "Cookies include session tokens, authentication data, and preferences",
+        "Large numbers of cookies (100+) will create larger encrypted files but are handled efficiently",
+        "The node uses AES-CBC mode with random IV (Initialization Vector) for each encryption",
+        "Each save operation creates a new encrypted file; it doesn't append to existing files"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrRuntime",
+        "Error",
+        "ErrCredentials"
+      ],
+      "relatedNodes": [
+        "**Get Cookies**",
+        "**Open Browser**"
+      ]
+    }
+  }
+}

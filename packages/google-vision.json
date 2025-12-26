@@ -1,0 +1,170 @@
+{
+  "package": "GoogleVision",
+  "summary": "Google Cloud Vision API provides powerful image analysis capabilities using machine learning, enabling you to detect objects, extract text, analyze content safety, and understand images at scale.",
+  "description": "```mdx-code-block import DocCardList from '@theme/DocCardList';",
+  "nodes": {
+    "connect": {
+      "namespace": "Core.GoogleVision.Connect",
+      "name": "Connect",
+      "summary": "Establishes a connection to Google Vision API service for subsequent image analysis operations.",
+      "howItWorks": "The Connect node establishes a connection to the Google Vision API service using the provided credentials. When executed, the node: 1. Retrieves the provided credentials and validates them 2. Creates a new ImageAnnotatorClient using the Google Cloud Vision API 3. Stores the client connection and assigns it a unique ID 4. Returns the unique Vision ID that can be used by other nodes",
+      "usage": [
+        "Valid Google Cloud credentials with appropriate permissions for Vision API",
+        "Enabled Vision API in your Google Cloud project",
+        "Proper network access to Google Cloud services"
+      ],
+      "bestPractices": [
+        "The Vision ID output should be passed to other Vision nodes that require a connection",
+        "The credentials should have appropriate permissions for the Vision API services you plan to use",
+        "This connection should be established before using any other Vision nodes",
+        "The connection is managed internally and doesn't require explicit disconnection",
+        "Alternative: You can provide credentials directly to each Vision node instead of using Connect"
+      ],
+      "tips": [
+        "**Reuse Connections**: Create one connection and reuse it across multiple Vision nodes to improve performance",
+        "**Credential Storage**: Store Google Cloud credentials in Robomotion's vault for security",
+        "**Service Account**: Use a dedicated service account with minimum required permissions",
+        "**Error Recovery**: Wrap Connect node in error handling to manage authentication failures gracefully",
+        "**Direct Credentials Option**: For single operations, you can skip Connect and provide credentials directly to Vision nodes"
+      ]
+    },
+    "extractimagelabels": {
+      "namespace": "Core.GoogleVision.Extractimagelabels",
+      "name": "Extractimagelabels",
+      "summary": "Extracts labels and tags from images using Google Vision API's label detection feature.",
+      "howItWorks": "The Extract Image Labels node analyzes an image and returns descriptive labels that represent the content of the image. When executed, the node: 1. Retrieves the Vision API client using the provided client ID 2. Validates that the image path is not empty 3. Opens and reads the image file from the specified path 4. Creates a Vision API image object from the file 5. Calls the DetectLabels method to identify labels in the image 6. Processes the results and returns the detected labels",
+      "usage": [
+        "A valid connection to Vision API established with the Connect node",
+        "Valid Google Cloud credentials with appropriate permissions",
+        "An image file accessible from the specified path",
+        "Enabled Vision API in your Google Cloud project"
+      ],
+      "bestPractices": [
+        "The Vision Client ID must be obtained from a successful Connect node execution (or provide credentials directly)",
+        "The image file must be accessible from the specified path",
+        "Supported image formats include JPEG, PNG, GIF, BMP, TIFF, and WebP",
+        "The node returns up to 10 labels for each image",
+        "Labels are returned as an array of strings describing the image content",
+        "If no labels are found, the output will be \"No labels found\"",
+        "Labels can be used for image categorization, tagging, or search indexing",
+        "Labels are machine-generated and may not perfectly match human descriptions"
+      ],
+      "tips": [
+        "**Label Relevance**: First few labels are usually most relevant and have higher confidence",
+        "**Multiple Variations**: Labels may include synonyms (e.g., \"Footwear\" and \"Shoe\")",
+        "**Generic to Specific**: Labels range from generic (\"Product\") to specific (\"Running shoe\")",
+        "**Combine with Text**: Use with Image to Text for complete image understanding",
+        "**Threshold Logic**: Implement your own filtering if 10 labels is too many for your use case",
+        "**Case Sensitivity**: Labels are returned with proper capitalization",
+        "**Batch Processing**: Reuse connection for processing multiple images efficiently",
+        "**Label Validation**: Cross-reference with your own taxonomy if needed"
+      ]
+    },
+    "imagesafety": {
+      "namespace": "Core.GoogleVision.Imagesafety",
+      "name": "Imagesafety",
+      "summary": "Analyzes images for potentially unsafe content using Google Vision API's safe search detection feature.",
+      "howItWorks": "The Check Image Safety node analyzes an image to detect potentially unsafe content using Google Vision API's safe search detection. When executed, the node: 1. Retrieves the Vision API client using the provided client ID 2. Validates that the image path is not empty 3. Opens and reads the image file from the specified path 4. Creates a Vision API image object from the file 5. Calls the DetectSafeSearch method to analyze the image for unsafe content 6. Processes the results and returns the safety assessment",
+      "usage": [
+        "A valid connection to Vision API established with the Connect node",
+        "Valid Google Cloud credentials with appropriate permissions",
+        "An image file accessible from the specified path",
+        "Enabled Vision API in your Google Cloud project"
+      ],
+      "bestPractices": [
+        "The Vision Client ID must be obtained from a successful Connect node execution (or provide credentials directly)",
+        "The image file must be accessible from the specified path",
+        "Supported image formats include JPEG, PNG, GIF, BMP, TIFF, and WebP",
+        "Each safety category is assessed with a likelihood level (UNKNOWN, VERY_UNLIKELY, UNLIKELY, POSSIBLE, LIKELY, VERY_LIKELY)",
+        "This node is useful for content moderation and filtering applications",
+        "Results can be used to automatically flag or filter images based on safety criteria",
+        "The safety detection is not 100% accurate and should be used as part of a broader content moderation strategy",
+        "Safe Search is designed for broad categories; for specific content policies, consider additional validation"
+      ],
+      "tips": [
+        "**Set Clear Thresholds**: Define what likelihood levels trigger action (e.g., block at \"LIKELY\" or higher)",
+        "**Category-Specific Rules**: Different categories may need different thresholds",
+        "**Combine Checks**: Use multiple safety checks if you need both image and text moderation",
+        "**Human Review**: Always include human review option for edge cases",
+        "**Context Matters**: Medical content might be appropriate in some contexts but not others",
+        "**User Communication**: Clearly explain to users why content was flagged",
+        "**False Positives**: Vision API may flag legitimate content; allow appeal process",
+        "**Continuous Monitoring**: Regularly review flagged content to adjust thresholds",
+        "**Logging**: Keep detailed logs of safety decisions for compliance and improvement"
+      ]
+    },
+    "imagetotext": {
+      "namespace": "Core.GoogleVision.Imagetotext",
+      "name": "Imagetotext",
+      "summary": "Extracts text from images using Google Vision API's optical character recognition (OCR) feature.",
+      "howItWorks": "The Image To Text node uses optical character recognition (OCR) to extract text from images using Google Vision API. When executed, the node: 1. Retrieves the Vision API client using the provided client ID 2. Validates that the image path is not empty 3. Opens and reads the image file from the specified path 4. Creates a Vision API image object from the file 5. Calls the DetectDocumentText method to extract text from the image 6. Processes the results and returns both the extracted text and confidence scores",
+      "usage": [
+        "A valid connection to Vision API established with the Connect node",
+        "Valid Google Cloud credentials with appropriate permissions",
+        "An image file accessible from the specified path",
+        "Enabled Vision API in your Google Cloud project"
+      ],
+      "bestPractices": [
+        "The Vision Client ID must be obtained from a successful Connect node execution (or provide credentials directly)",
+        "The image file must be accessible from the specified path",
+        "Supported image formats include JPEG, PNG, GIF, BMP, TIFF, and WebP",
+        "Works with printed and handwritten text in many languages",
+        "The node returns the complete text found in the image",
+        "Confidence scores indicate the reliability of the text detection for each page (0.0 to 1.0)",
+        "If no text is found, the output will be \"No text found\"",
+        "Text extraction quality depends on image quality, font, and text clarity",
+        "For PDFs stored in Google Cloud Storage, use the PDF to Text node instead"
+      ],
+      "tips": [
+        "**Image Quality**: Use high-resolution images (at least 300 DPI) for best OCR accuracy",
+        "**Preprocessing**: For poor-quality images, consider preprocessing (contrast adjustment, noise reduction)",
+        "**Orientation**: Ensure text is right-side up - Vision API handles slight rotation but not 90/180 degree flips",
+        "**Multi-language**: Vision API automatically detects language, no configuration needed",
+        "**Confidence Scores**: Use confidence scores to determine if manual review is needed (e.g., \u003c 0.8)",
+        "**File Paths**: Use absolute paths or ensure relative paths are correctly resolved",
+        "**Large Images**: Vision API handles large images, but consider resizing extremely large files for faster processing",
+        "**Handwriting**: Works with neat handwriting; messy handwriting may have lower accuracy",
+        "**Direct Credentials**: For single-use scenarios, provide credentials directly instead of using Connect node"
+      ]
+    },
+    "pdftotext": {
+      "namespace": "Core.GoogleVision.Pdftotext",
+      "name": "Pdftotext",
+      "summary": "Extracts text from PDF documents using Google Vision API's document text detection feature.",
+      "howItWorks": "The Pdf To Text node uses Google Vision API to extract text from PDF documents and save the results as JSON files in Google Cloud Storage. When executed, the node: 1. Retrieves the Vision API client using the provided client ID 2. Validates that both source and destination URIs are not empty 3. Calls the AsyncBatchAnnotateFiles method to initiate asynchronous text extraction 4. Waits for the operation to complete 5. Returns the path to the output JSON file containing the extracted text",
+      "usage": [
+        "A valid connection to Vision API established with the Connect node",
+        "Valid Google Cloud credentials with appropriate permissions",
+        "A PDF file stored in Google Cloud Storage",
+        "Enabled Vision API in your Google Cloud project",
+        "Proper permissions to read from the source GCS bucket and write to the destination GCS bucket"
+      ],
+      "bestPractices": [
+        "The Vision Client ID must be obtained from a successful Connect node execution (or provide credentials directly)",
+        "Both source and destination must be valid Google Cloud Storage URIs starting with `gs://`",
+        "The source PDF file must be accessible from the specified GCS URI",
+        "The destination GCS URI should end with a forward slash (/) to specify a directory",
+        "This is an asynchronous operation that may take some time to complete depending on the PDF size",
+        "The output is saved as JSON files in the specified destination GCS bucket",
+        "The node processes PDF files with support for multiple pages (batch size: 2 pages per JSON file)",
+        "The output JSON contains structured text data with positional information, bounding boxes, and confidence scores",
+        "Output file naming format: `output-1-to-2.json`, `output-3-to-4.json`, etc.",
+        "For local PDF files, upload to GCS first using the Google Storage package",
+        "The operation uses Google Cloud Storage for both input and output",
+        "Supports both `application/pdf` and `image/tiff` file formats"
+      ],
+      "tips": [
+        "**GCS Setup**: Ensure your service account has read access to source bucket and write access to destination bucket",
+        "**URI Format**: Always use `gs://bucket-name/path` format for GCS URIs",
+        "**Batch Size**: Default batch size is 2 pages per JSON file - process all output files for complete document",
+        "**Large PDFs**: For very large PDFs, processing may take several minutes - use appropriate timeout settings",
+        "**File Naming**: Output files follow pattern `output-X-to-Y.json` where X and Y are page numbers",
+        "**Destination Directory**: Always end destination URI with `/` to create files in a directory",
+        "**Local Files**: Use Google Storage \u003e Upload File to move local PDFs to GCS first",
+        "**Parsing Results**: Use JSON parsing to extract text from the structured output",
+        "**Error Recovery**: Implement retry logic for long-running operations",
+        "**Cost Optimization**: Vision API charges per page, so monitor usage for large document sets"
+      ]
+    }
+  }
+}

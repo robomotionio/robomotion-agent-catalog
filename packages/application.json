@@ -1,0 +1,240 @@
+{
+  "package": "Application",
+  "summary": "Build interactive applications with custom inputs, outputs, logging, and file handling through the Robomotion platform.",
+  "description": "## Overview The Application package provides nodes for creating interactive RPA applications that communicate with the Robomotion platform. Use it when you need to receive input from users, send results back to the platform, handle file uploads/downloads, or create custom logging.",
+  "nodes": {
+    "app-download": {
+      "namespace": "Core.Application.AppDownload",
+      "name": "AppDownload",
+      "summary": "Downloads a file from a remote location to a local folder. Currently, it is used for downloading files that are uploaded to the Robomotion Assistant chat session or from custom Applications developed to run",
+      "howItWorks": "The App Download node downloads files from Robomotion's cloud storage to a local folder. This is primarily used in Robomotion Apps and Assistant sessions. The execution follows these steps: 1. **Delay Before** - Waits for the specified delay before execution (if configured) 2. **Connection Validation** - Ensures connection to Robomotion application service is established 3. **Path Retrieval** - Retrieves the remote file name and local download folder path from input variables 4. **Path Validation** - Validates that both paths are not empty 5. **Decryption Setup** - If decryption is enabled: - For \"session_key\": Retrieves the session ID from the message - For \"custom_aes_key\": Retrieves the AES key from the vault 6. **File Download** - Downloads the file from remote storage to the local folder using the Robomotion App Download API 7. **Decryption** - If applicable, decrypts the downloaded file using the specified key 8. **Delay After** - Waits for the specified delay after execution (if configured) The node supports backward compatibility with versions before 24.2.0.",
+      "usage": [
+        "**Robomotion Deskbot** - This node only works with Robomotion Deskbot",
+        "**Application Context** - Must be running within a Robomotion App or Assistant session",
+        "**Connection** - Active connection to Robomotion application service",
+        "**Permissions** - Write permissions to the local download folder",
+        "**Encryption** - Valid AES key credentials if using custom decryption"
+      ],
+      "bestPractices": [
+        "**Version Compatibility** - The node supports both new (24.2.0+) and legacy versions with different parameter structures",
+        "**File Paths** - Remote file names are relative to the application/session storage root",
+        "**Local Folders** - The local download folder must exist; the node does not create directories",
+        "**File Naming** - The downloaded file retains its remote file name in the local folder",
+        "**Encryption** - Encrypted files are automatically decrypted during download when configured",
+        "**Session Scope** - Files are typically scoped to the current session, user, or application"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnConnect",
+        "ErrOnMessage",
+        "ErrCredentials"
+      ],
+      "relatedNodes": [
+        "App Upload",
+        "App In",
+        "App Out"
+      ]
+    },
+    "app-in": {
+      "namespace": "Core.Application.AppIn",
+      "name": "AppIn",
+      "summary": "Starts the automation when an instance is started from Robomotion Apps or when a Robomotion Assistant session is initiated from the browser.",
+      "howItWorks": "The App In node is the entry point for automation flows triggered by Robomotion Apps or Assistant sessions. It waits for incoming requests and injects them into the flow. The execution follows these steps: 1. **Connection Establishment** - On node creation, establishes connection to Robomotion application service 2. **Queue Listening** - Starts a background goroutine that listens for incoming application/assistant requests 3. **Request Reception** - When a request arrives: - Creates a new message with a unique ID - Extracts the session ID and stores it for later use - Sets global variables: `$AppUserID$` (and legacy `$AppID$`, `$InstanceID$`, `$RunID$` for older versions) 4. **Payload Processing** - Parses the incoming payload and meta information from the request 5. **Message Injection** - Injects the processed message into the flow, triggering downstream nodes 6. **Flow Execution** - The automation flow proceeds with the injected data 7. **Log Upload** - On node close, automatically uploads log files to Robomotion storage for debugging and auditing The node runs continuously, processing multiple requests sequentially as they arrive.",
+      "usage": [
+        "**Robomotion Deskbot** - This node only works with Robomotion Deskbot",
+        "**Network Connection** - Active internet connection to communicate with Robomotion service",
+        "**Application/Assistant Context** - Must be triggered from Robomotion Apps or Assistant",
+        "**Authentication** - Valid Robomotion credentials configured in Deskbot"
+      ],
+      "bestPractices": [
+        "**Single Instance** - Only one App In node should be used per flow",
+        "**Flow Entry Point** - Must be the first node in the flow for application/assistant triggered automations",
+        "**Global Variables** - Automatically sets `$AppUserID$` global variable",
+        "**Session Context** - Maintains session ID for use with other App nodes (Upload, Download, Out)",
+        "**Log Management** - Automatically uploads log files when the flow completes",
+        "**Backward Compatibility** - Supports legacy payload structures from older Robomotion versions",
+        "**Continuous Operation** - Remains active to process multiple sequential requests"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnConnect"
+      ],
+      "relatedNodes": [
+        "App Out",
+        "App Download",
+        "App Upload",
+        "App Log",
+        "App Push"
+      ]
+    },
+    "app-log": {
+      "namespace": "Core.Application.AppLog",
+      "name": "AppLog",
+      "summary": "Logs a message to the designated output for your app. This log message can be seen in Robomotion Apps.",
+      "howItWorks": "The App Log node sends log messages to the Robomotion Apps interface, allowing users to monitor automation progress in real-time. The execution follows these steps: 1. **Delay Before** - Waits for the specified delay before execution (if configured) 2. **Log Message Retrieval** - Retrieves the log message from the input variable 3. **Context Validation** - Validates that the automation is running in an application context: - Checks for `$InstanceID$` global variable - Checks for `$RunID$` global variable 4. **Log Transmission** - Sends the log message to Robomotion's application service using the instance and run IDs 5. **Display** - The log message appears in the Robomotion Apps interface for the user to view 6. **Delay After** - Waits for the specified delay after execution (if configured) The logs are visible in real-time in the Robomotion Apps UI, providing transparency into automation execution.",
+      "usage": [
+        "**Robomotion Deskbot** - This node only works with Robomotion Deskbot",
+        "**Application Context** - Must be running within a Robomotion App instance",
+        "**App In Node** - Requires an App In node earlier in the flow to establish context",
+        "**Network Connection** - Active connection to Robomotion service"
+      ],
+      "bestPractices": [
+        "**Real-time Display** - Logs appear immediately in the Robomotion Apps interface",
+        "**String Conversion** - Non-string values are automatically converted to strings",
+        "**Context Required** - Only works when running through Robomotion Apps (not standalone)",
+        "**No Persistence** - Logs are for real-time viewing; they are not permanently stored",
+        "**Performance** - Excessive logging can slow down automation; use judiciously",
+        "**User Visibility** - All logs are visible to the user running the app"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrOutputMarshal"
+      ],
+      "relatedNodes": [
+        "App In",
+        "App Out",
+        "App Push"
+      ]
+    },
+    "app-out": {
+      "namespace": "Core.Application.AppOut",
+      "name": "AppOut",
+      "summary": "This node sends a response back to the App In initiated request back to the running instance",
+      "howItWorks": "The App Out node sends the final response back to the Robomotion App or Assistant that initiated the automation. The execution follows these steps: 1. **Delay Before** - Waits for the specified delay before execution (if configured) 2. **Context Validation** - Validates that the automation is running in an application context: - Checks for `$AppID$` global variable - Checks for `$AppUserID$` global variable - Retrieves the session ID from the message 3. **Output Processing** - If an output is specified: - Retrieves the output value from the input variable - Serializes the output to JSON format 4. **Message Creation** - Creates a queue message containing: - Message ID (from App In or newly generated) - Application ID, User ID, Session ID - Robot ID and version - Encrypted payload 5. **Response Transmission** - Sends the response back through the application service websocket connection 6. **Flow Control** - (Deprecated) Optionally stops the flow if the \"Stop Flow\" option is enabled 7. **Delay After** - Waits for the specified delay after execution (if configured) The response appears in the Robomotion Apps UI or is returned to the Assistant chat.",
+      "usage": [
+        "**Robomotion Deskbot** - This node only works with Robomotion Deskbot",
+        "**Application Context** - Must be running within a Robomotion App or Assistant session",
+        "**App In Node** - Requires an App In node earlier in the flow to establish context",
+        "**Network Connection** - Active connection to Robomotion service"
+      ],
+      "bestPractices": [
+        "**JSON Format** - The output must be a valid JSON object",
+        "**Encryption** - The response is automatically encrypted before transmission",
+        "**Single Response** - Each App In request should have one corresponding App Out response",
+        "**Empty Output** - If no output variable is specified, the node completes without sending a response",
+        "**Stop Flow Deprecated** - The \"Stop Flow\" option is deprecated; use Instance Stop node instead",
+        "**Variable Support** - Output can include variables that are resolved before sending"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrWrite"
+      ],
+      "relatedNodes": [
+        "App In",
+        "App Log",
+        "App Push"
+      ]
+    },
+    "app-push": {
+      "namespace": "Core.Application.AppPush",
+      "name": "AppPush",
+      "summary": "Pushes specified data to a running instance.",
+      "howItWorks": "The App Push node sends real-time updates to the Robomotion App interface without waiting for a response. Unlike App Out which sends a final response, App Push can be used multiple times to send intermediate updates during automation execution. The execution follows these steps: 1. **Delay Before** - Waits for the specified delay before execution (if configured) 2. **Context Validation** - Validates the application context: - Checks for `$AppID$` global variable - Checks for `$AppUserID$` global variable - Retrieves the session ID from the message 3. **Data Processing** - Retrieves and serializes the data to JSON format 4. **Message Creation** - Creates a push message with: - New unique message ID - Application ID, User ID, Session ID - Robot ID and version - Encrypted payload 5. **Push Transmission** - Sends the update through the websocket connection without waiting for acknowledgment 6. **Delay After** - Waits for the specified delay after execution (if configured) The pushed data appears in the Robomotion Apps UI in real-time.",
+      "usage": [
+        "**Robomotion Deskbot** - This node only works with Robomotion Deskbot",
+        "**Application Context** - Must be running within a Robomotion App instance",
+        "**App In Node** - Requires an App In node earlier in the flow to establish context",
+        "**Network Connection** - Active websocket connection to Robomotion service"
+      ],
+      "bestPractices": [
+        "**Multiple Pushes** - Can be used multiple times in a single flow execution",
+        "**No Response** - Does not wait for or receive a response from the UI",
+        "**JSON Format** - Data must be serializable to JSON",
+        "**Encryption** - All pushed data is automatically encrypted",
+        "**UI Updates** - The receiving app UI must handle pushed messages appropriately",
+        "**Order Guaranteed** - Messages are sent in the order they're pushed",
+        "**Non-Blocking** - Does not block flow execution while sending"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnConnect",
+        "ErrOnMessage",
+        "ErrWrite"
+      ],
+      "relatedNodes": [
+        "App Out",
+        "App Log",
+        "App In",
+        "App Request"
+      ]
+    },
+    "app-request": {
+      "namespace": "Core.Application.AppRequest",
+      "name": "AppRequest",
+      "summary": "Sends a custom request to an application instance. The flow may request something from the Bot's UI Application with this node.",
+      "howItWorks": "The App Request node enables bidirectional communication between the automation and the Robomotion App UI. It sends a request to the UI and waits for a response, allowing the automation to ask for user input or additional data. The execution follows these steps: 1. **Delay Before** - Waits for the specified delay before execution (if configured) 2. **Context Validation** - Validates the application context: - Checks for `$AppID$` global variable - Checks for `$AppUserID$` global variable - Retrieves the session ID from the message 3. **Request Processing** - Retrieves and serializes the request data to JSON 4. **Message Creation** - Creates a request message with: - New unique message ID - Application ID, User ID, Session ID - Robot ID and version - Encrypted payload 5. **Request Transmission** - Sends the request through the websocket connection 6. **Response Waiting** - Waits for the response from the UI: - With timeout if specified (default 10 seconds) - Blocks until response received or timeout occurs 7. **Response Processing** - Parses the received response and stores it in the output variable 8. **Delay After** - Waits for the specified delay after execution (if configured) This enables interactive automation where the UI can provide input during execution.",
+      "usage": [
+        "**Robomotion Deskbot** - This node only works with Robomotion Deskbot",
+        "**Application Context** - Must be running within a Robomotion App instance",
+        "**App In Node** - Requires an App In node earlier in the flow to establish context",
+        "**Network Connection** - Active websocket connection to Robomotion service",
+        "**UI Implementation** - The App UI must be implemented to handle and respond to requests"
+      ],
+      "bestPractices": [
+        "**Blocking Operation** - The automation pauses and waits for the response",
+        "**Timeout** - Request will fail if no response received within the timeout period",
+        "**JSON Format** - Both request and response must be valid JSON",
+        "**Encryption** - All communication is automatically encrypted",
+        "**UI Requirements** - The App UI must implement request handlers",
+        "**Session Context** - Request is tied to the specific session",
+        "**Single Response** - Each request expects exactly one response"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnConnect",
+        "ErrOnMessage",
+        "ErrRequest"
+      ],
+      "relatedNodes": [
+        "App In",
+        "App Out",
+        "App Push",
+        "App Log"
+      ]
+    },
+    "app-upload": {
+      "namespace": "Core.Application.AppUpload",
+      "name": "AppUpload",
+      "summary": "Uploads a file from the local file system to a remote location. Currently, it is used for uploading a file generated from the flow to be downloaded later via the Robomotion Apps run history tab.",
+      "howItWorks": "The App Upload node uploads files from the local filesystem to Robomotion's cloud storage, making them accessible through the Robomotion Apps interface. The execution follows these steps: 1. **Delay Before** - Waits for the specified delay before execution (if configured) 2. **Connection Validation** - Ensures connection to Robomotion application service is established 3. **Path Validation** - Validates that the local file path is not empty and the file exists 4. **Remote Path Handling** - Uses provided remote path or generates one automatically 5. **Scope Determination** - Sets the storage scope (defaults to \"run_scope\" if not specified) 6. **Encryption Setup** - If encryption is enabled: - For \"session_key\": Retrieves the session ID from the message - For \"custom_aes_key\": Retrieves the AES key from the vault 7. **Public/Private Validation** - Ensures public files are not encrypted (incompatible) 8. **File Upload** - Uploads the file to Robomotion storage using the App Upload API 9. **URL Generation** - If public, generates and returns a public URL for the uploaded file 10. **Delay After** - Waits for the specified delay after execution (if configured) The uploaded file becomes available in the Robomotion Apps run history or can be downloaded via App Download node.",
+      "usage": [
+        "**Robomotion Deskbot** - This node only works with Robomotion Deskbot",
+        "**Application Context** - Must be running within a Robomotion App instance",
+        "**App In Node** - Requires an App In node earlier in the flow to establish context",
+        "**File Exists** - The local file must exist at the specified path",
+        "**Read Permissions** - Read permissions for the local file",
+        "**Network Connection** - Active connection to Robomotion service"
+      ],
+      "bestPractices": [
+        "**Public vs Private** - Public files get a shareable URL; private files require authentication",
+        "**Encryption Incompatibility** - Public files cannot be encrypted (will cause an error)",
+        "**Scope Persistence** - Different scopes determine how long files are retained",
+        "**Default Scope** - If scope is not specified, defaults to \"run_scope\"",
+        "**Remote Path** - If not specified, uses the original filename",
+        "**File Size** - Large files may take time to upload; consider timeout settings",
+        "**Automatic Cleanup** - Files may be cleaned up based on retention policies for each scope"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnConnect",
+        "ErrOnMessage",
+        "ErrCredentials",
+        "ErrPublic"
+      ],
+      "relatedNodes": [
+        "App Download",
+        "App In",
+        "App Out"
+      ]
+    }
+  }
+}

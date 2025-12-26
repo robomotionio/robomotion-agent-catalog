@@ -1,0 +1,85 @@
+{
+  "package": "MicrosoftWord",
+  "summary": "Create, edit, and manipulate Word documents programmatically for document generation and processing automation.",
+  "description": "## Overview The Microsoft Word package provides comprehensive Word document manipulation capabilities. Use it when you need to generate reports, fill templates, create documents from data, or process existing Word files.",
+  "nodes": {
+    "add-footer": {
+      "namespace": "Core.MicrosoftWord.AddFooter",
+      "name": "AddFooter",
+      "summary": "Adds a footer to all sections of the Word document. The footer appears at the bottom of each page and can be aligned left, center, or right."
+    },
+    "add-header": {
+      "namespace": "Core.MicrosoftWord.AddHeader",
+      "name": "AddHeader",
+      "summary": "Adds a header to all sections of the Word document. The header appears at the top of each page and can be aligned left, center, or right."
+    },
+    "add-heading": {
+      "namespace": "Core.MicrosoftWord.AddHeading",
+      "name": "AddHeading",
+      "summary": "Adds a formatted heading to the Word document with a specified style. Headings are automatically formatted with bold text and can use predefined Word styles for consistent document structure.",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// Document Title\r\n// Heading: \"Annual Financial Report 2024\"\r\n// Size: 24\r\n// Font Name: \"Arial\"\r\n// Style: \"Title\"\r\n// Space After: 18\r\n\r\n// Section Heading (Level 1)\r\n// Heading: \"Executive Summary\"\r\n// Size: 18\r\n// Font Name: \"Arial\"\r\n// Style: \"Heading 1\"\r\n// Space After: 12\r\n\r\n// Subsection Heading (Level 2)\r\n// Heading: \"Revenue Overview\"\r\n// Size: 16\r\n// Font Name: \"Arial\"\r\n// Style: \"Heading 2\"\r\n// Space After: 10\r\n\r\n// Subsection Heading (Level 3)\r\n// Heading: \"Quarterly Breakdown\"\r\n// Size: 14\r\n// Font Name: \"Arial\"\r\n// Style: \"Heading 3\"\r\n// Space After: 8"
+        }
+      ]
+    },
+    "add-image": {
+      "namespace": "Core.MicrosoftWord.AddImage",
+      "name": "AddImage",
+      "summary": "Adds an image to the Word document with specified dimensions. The image is inserted at the end of the document as an inline shape."
+    },
+    "add-table": {
+      "namespace": "Core.MicrosoftWord.AddTable",
+      "name": "AddTable",
+      "summary": "Adds a table to the Word document with data from a Table object. The table is formatted with borders and can optionally display headers with special formatting.",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// Prepare table data\r\nlet employeeTable = {\r\n  \"columns\": [\"Name\", \"Department\", \"Position\"],\r\n  \"rows\": [\r\n    {\"Name\": \"John Smith\", \"Department\": \"Sales\", \"Position\": \"Manager\"},\r\n    {\"Name\": \"Jane Doe\", \"Department\": \"Marketing\", \"Position\": \"Director\"},\r\n    {\"Name\": \"Bob Johnson\", \"Department\": \"IT\", \"Position\": \"Developer\"}\r\n  ]\r\n};\r\n\r\n// Add to Word document\r\n// File Descriptor: word_fd\r\n// Table: employeeTable\r\n// Space After: 12\r\n// Headers: true"
+        }
+      ]
+    },
+    "add-text": {
+      "namespace": "Core.MicrosoftWord.AddText",
+      "name": "AddText",
+      "summary": "Adds a paragraph of text to the Word document with specified formatting options. The text is appended to the end of the document as a new paragraph."
+    },
+    "clear-word": {
+      "namespace": "Core.MicrosoftWord.ClearWord",
+      "name": "ClearWord",
+      "summary": "Clears all content from the Word document, removing all text, images, tables, and other elements. This operation empties the document body while preserving headers and footers."
+    },
+    "close-word": {
+      "namespace": "Core.MicrosoftWord.CloseWord",
+      "name": "CloseWord",
+      "summary": "Closes an open Word document and optionally saves changes. This node can also export the document to different formats (PDF, Text, Doc, Docx) before closing."
+    },
+    "create-word": {
+      "namespace": "Core.MicrosoftWord.CreateWord",
+      "name": "CreateWord",
+      "summary": "Creates a new Word document file at the specified path. This node creates an empty Word document and saves it to disk without opening it."
+    },
+    "open-word": {
+      "namespace": "Core.MicrosoftWord.OpenWord",
+      "name": "OpenWord",
+      "summary": "Opens an existing Word document file for editing and manipulation. This node creates a file descriptor that is used by other Word nodes to perform operations on the document."
+    },
+    "read-word": {
+      "namespace": "Core.MicrosoftWord.ReadWord",
+      "name": "ReadWord",
+      "summary": "Reads the content from a Word document, including text from each page and optionally headers and footers. This node extracts all readable content from the document for further processing.",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// result array (page content)\r\n[\r\n  \"This is the content of page 1...\",\r\n  \"This is the content of page 2...\",\r\n  \"This is the content of page 3...\"\r\n]\r\n\r\n// header_footer array (when Get Header and Footer is enabled)\r\n[\r\n  {\r\n    \"header\": \"Company Report 2024\",\r\n    \"footer\": \"Page 1 - Confidential\"\r\n  },\r\n  {\r\n    \"header\": \"Company Report 2024\",\r\n    \"footer\": \"Page 2 - Confidential\"\r\n  }\r\n]"
+        }
+      ]
+    },
+    "replace-text": {
+      "namespace": "Core.MicrosoftWord.ReplaceText",
+      "name": "ReplaceText",
+      "summary": "Finds and replaces text in the Word document. Supports both single text replacement and multiple replacements using a dictionary. All occurrences of the search text are replaced throughout the entire document."
+    }
+  }
+}

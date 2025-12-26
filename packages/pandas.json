@@ -1,0 +1,307 @@
+{
+  "package": "Pandas",
+  "summary": "Powerful data table manipulation using pandas-style operations - filter, transform, merge, and convert tabular data.",
+  "description": "## Overview The Pandas package provides advanced data table manipulation capabilities inspired by Python's pandas library. Use it when you need to work with structured tabular data, perform complex queries, merge datasets, or convert between data formats.",
+  "nodes": {
+    "add_column": {
+      "namespace": "Core.Pandas.Add_column",
+      "name": "Add_column",
+      "summary": "Adds a new column to a table with specified values.",
+      "howItWorks": "The Add Column node adds a new column to an existing table with the specified values. When executed, the node: 1. Validates that the input table is not empty and is valid 2. Checks if the table is a reference table and handles it appropriately 3. Validates that the column name is not empty 4. Adds the new column with the provided values to the table 5. Returns the updated table",
+      "usage": [
+        "A valid input table",
+        "A non-empty column name",
+        "Values for the new column"
+      ],
+      "bestPractices": [
+        "The Output Type option can be set to \"Pass By Reference\" for handling large datasets more efficiently",
+        "The new column will be added to the end of the table",
+        "The values provided should match the number of rows in the table for proper alignment"
+      ]
+    },
+    "add_row": {
+      "namespace": "Core.Pandas.Add_row",
+      "name": "Add_row",
+      "summary": "Adds a new row to a table with specified values.",
+      "howItWorks": "The Add Row node adds a new row to an existing table with the specified values. When executed, the node: 1. Validates that the input table is not empty and is valid 2. Checks if the table is a reference table and handles it appropriately 3. Validates that the row data is not empty 4. Adds the new row to the table 5. Returns the updated table",
+      "usage": [
+        "A valid input table",
+        "Valid row data to add to the table"
+      ],
+      "bestPractices": [
+        "The Output Type option can be set to \"Pass By Reference\" for handling large datasets more efficiently",
+        "The new row will be added to the end of the table",
+        "The row data should be provided as an object with keys matching the column names of the table"
+      ]
+    },
+    "append_table": {
+      "namespace": "Core.Pandas.Append_table",
+      "name": "Append_table",
+      "summary": "Combines two tables by appending the rows of the second table to the first table.",
+      "howItWorks": "The Append Table node combines two tables by appending the rows of the second table to the first table. When executed, the node: 1. Validates that both input tables are not empty and are valid 2. Checks if the tables are reference tables and handles them appropriately 3. Ensures that both tables have the same column structure 4. Concatenates the rows of both tables 5. Returns the combined table",
+      "usage": [
+        "Two valid input tables",
+        "Both tables must have identical column structures (same column names and order)"
+      ],
+      "bestPractices": [
+        "The Output Type option can be set to \"Pass By Reference\" for handling large datasets more efficiently",
+        "The rows from the second table are appended to the end of the first table",
+        "Both input tables must have exactly the same columns for the operation to succeed"
+      ]
+    },
+    "convert_type": {
+      "namespace": "Core.Pandas.Convert_type",
+      "name": "Convert_type",
+      "summary": "Converts the data type of a specified column in a table.",
+      "howItWorks": "The Convert Type node changes the data type of a specified column in a table. When executed, the node: 1. Validates that the input table is not empty and is valid 2. Checks if the table is a reference table and handles it appropriately 3. Validates that the column name is not empty 4. Ensures a data type is selected 5. Converts the specified column to the selected data type 6. Returns the updated table",
+      "usage": [
+        "A valid input table",
+        "A valid column name that exists in the table",
+        "A selected target data type"
+      ],
+      "bestPractices": [
+        "The Output Type option can be set to \"Pass By Reference\" for handling large datasets more efficiently",
+        "Ensure that the data in the column is compatible with the target data type",
+        "Converting to numeric types (int64, float64) may fail if the column contains non-numeric data"
+      ]
+    },
+    "csv_to_datatable": {
+      "namespace": "Core.Pandas.Csv_to_datatable",
+      "name": "Csv_to_datatable",
+      "summary": "Converts a CSV file to a data table format.",
+      "howItWorks": "The CSV To Data Table node reads a CSV file and converts it to a data table format. When executed, the node: 1. Validates that the CSV file path is not empty 2. Checks if the CSV file exists at the specified path 3. Reads the CSV file using pandas 4. Replaces any NaN values with empty strings 5. Converts the data to a dictionary format with columns and rows 6. Returns the data table",
+      "usage": [
+        "A valid CSV file path",
+        "The CSV file must exist at the specified location",
+        "Proper file system permissions to read the file"
+      ],
+      "bestPractices": [
+        "The Output Type option can be set to \"Pass By Reference\" for handling large CSV files more efficiently",
+        "NaN values in the CSV file are automatically converted to empty strings",
+        "The first row of the CSV file is used as column headers",
+        "The node supports standard CSV formats with comma separators"
+      ]
+    },
+    "datatable_to_csv": {
+      "namespace": "Core.Pandas.Datatable_to_csv",
+      "name": "Datatable_to_csv",
+      "summary": "Converts a data table to a CSV file format.",
+      "howItWorks": "The Data Table To CSV node converts a data table to a CSV file format. When executed, the node: 1. Validates that the input table is not empty and is valid 2. Checks if the table is a reference table and handles it appropriately 3. Validates that the CSV file path is not empty 4. Checks if a file already exists at the specified path and handles overwrite settings 5. Converts the data table to a pandas DataFrame 6. Saves the DataFrame as a CSV file at the specified path",
+      "usage": [
+        "A valid input data table",
+        "A valid file path for saving the CSV file",
+        "Proper file system permissions to write to the specified location"
+      ],
+      "bestPractices": [
+        "The CSV file will be saved at the specified path",
+        "If Overwrite If Exists is set to False, the node will not overwrite existing files",
+        "The first row of the CSV file will contain the column headers from the data table",
+        "The node supports standard CSV format with comma separators"
+      ]
+    },
+    "excel_to_datatable": {
+      "namespace": "Core.Pandas.Excel_to_datatable",
+      "name": "Excel_to_datatable",
+      "summary": "Converts an Excel file to a data table format.",
+      "howItWorks": "The Excel To Data Table node reads an Excel file and converts it to a data table format. When executed, the node: 1. Validates that the Excel file path is not empty 2. Checks if the Excel file exists at the specified path 3. Reads the Excel file using pandas 4. Replaces any NaN values with empty strings 5. Converts the data to a dictionary format with columns and rows 6. Returns the data table",
+      "usage": [
+        "A valid Excel file path",
+        "The Excel file must exist at the specified location",
+        "Proper file system permissions to read the file"
+      ],
+      "bestPractices": [
+        "The Output Type option can be set to \"Pass By Reference\" for handling large Excel files more efficiently",
+        "NaN values in the Excel file are automatically converted to empty strings",
+        "The first row of the Excel file is used as column headers",
+        "The node supports standard Excel formats"
+      ]
+    },
+    "get_column": {
+      "namespace": "Core.Pandas.Get_column",
+      "name": "Get_column",
+      "summary": "Extracts a specific column from a data table.",
+      "howItWorks": "The Get Column node extracts a specific column from a data table. When executed, the node: 1. Validates that the input table is not empty and is valid 2. Checks if the table is a reference table and handles it appropriately 3. Validates that the column name is not empty 4. Converts the data table to a pandas DataFrame 5. Extracts the specified column as a list of values 6. Returns the column data",
+      "usage": [
+        "A valid input data table",
+        "A valid column name that exists in the table"
+      ],
+      "bestPractices": [
+        "The output is a list of values from the specified column",
+        "The order of values in the output list matches the order of rows in the input table",
+        "The node works with tables of any size"
+      ]
+    },
+    "html_to_datatable": {
+      "namespace": "Core.Pandas.Html_to_datatable",
+      "name": "Html_to_datatable",
+      "summary": "Converts HTML table data to a data table format.",
+      "howItWorks": "The Html To Data Table node extracts table data from HTML content and converts it to a data table format. When executed, the node: 1. Validates that the HTML content is not empty 2. Validates that the table index is a valid integer 3. Reads the HTML content and extracts all tables using pandas 4. Selects the table at the specified index 5. Replaces any NaN values with empty strings 6. Converts the data to a dictionary format with columns and rows 7. Returns the data table",
+      "usage": [
+        "Valid HTML content containing at least one table",
+        "A valid table index (if multiple tables exist in the HTML)"
+      ],
+      "bestPractices": [
+        "The Html input can accept either a file path, URL, or direct HTML content",
+        "The Table Index is zero-based (0 for the first table, 1 for the second, etc.)",
+        "The Output Type option can be set to \"Pass By Reference\" for handling large HTML tables more efficiently",
+        "NaN values in the HTML table are automatically converted to empty strings",
+        "The first row of the HTML table is used as column headers"
+      ]
+    },
+    "json_to_datatable": {
+      "namespace": "Core.Pandas.Json_to_datatable",
+      "name": "Json_to_datatable",
+      "summary": "Converts JSON data to a data table format.",
+      "howItWorks": "The Json To Data Table node converts JSON data to a data table format. When executed, the node: 1. Validates that the JSON data is not empty 2. Converts the JSON data to a pandas DataFrame 3. Converts the DataFrame to a dictionary format with columns and rows 4. Returns the data table",
+      "usage": [
+        "Valid JSON data in a format compatible with pandas DataFrame conversion",
+        "The JSON data should be structured as an array of objects or a dictionary"
+      ],
+      "bestPractices": [
+        "The Output Type option can be set to \"Pass By Reference\" for handling large JSON datasets more efficiently",
+        "The JSON data should be structured appropriately for conversion to a tabular format",
+        "The keys in the JSON objects become column headers in the resulting table",
+        "Nested JSON structures may need to be flattened before conversion"
+      ]
+    },
+    "merge_tables": {
+      "namespace": "Core.Pandas.Merge_tables",
+      "name": "Merge_tables",
+      "summary": "Combines two tables by merging their columns side by side.",
+      "howItWorks": "The Merge Tables node combines two tables by merging their columns side by side. When executed, the node: 1. Validates that both input tables are not empty and are valid 2. Checks if the tables are reference tables and handles them appropriately 3. Converts both tables to pandas DataFrames 4. Renames columns in the second table if there are naming conflicts 5. Concatenates the DataFrames horizontally (side by side) 6. Replaces any NaN values with empty strings 7. Converts the result back to the data table format 8. Returns the merged table",
+      "usage": [
+        "Two valid input tables",
+        "Sufficient memory to handle the merged table"
+      ],
+      "bestPractices": [
+        "The Output Type option can be set to \"Pass By Reference\" for handling large tables more efficiently",
+        "If both tables have columns with the same name, the columns from the second table will be renamed with a \"_2\" suffix",
+        "The number of rows in the output table will match the number of rows in the input tables",
+        "NaN values are automatically converted to empty strings"
+      ]
+    },
+    "pdf_to_datatable": {
+      "namespace": "Core.Pandas.Pdf_to_datatable",
+      "name": "Pdf_to_datatable",
+      "summary": "Extracts tables from a PDF file and converts them to data table format.",
+      "howItWorks": "The Pdf To Data Table node extracts tables from a PDF file and converts them to data table format. When executed, the node: 1. Validates that the PDF file path is not empty 2. Checks if the PDF file exists at the specified path 3. Sets the TABULA_JAR environment variable for table extraction 4. Reads the PDF file and extracts tables using the tabula library 5. Converts each extracted table to a dictionary format with columns and rows 6. Replaces any NaN values with empty strings 7. Returns a list of all extracted tables",
+      "usage": [
+        "A valid PDF file path",
+        "The PDF file must exist at the specified location",
+        "Proper file system permissions to read the file",
+        "The tabula-1.0.5-jar-with-dependencies.jar file must be available"
+      ],
+      "bestPractices": [
+        "The output is a list of tables, as a single PDF file may contain multiple tables",
+        "The Pages option allows you to specify which pages to extract tables from",
+        "NaN values in the PDF tables are automatically converted to empty strings",
+        "The node uses the tabula library for PDF table extraction",
+        "The first row of each extracted table is used as column headers"
+      ]
+    },
+    "query": {
+      "namespace": "Core.Pandas.Query",
+      "name": "Query",
+      "summary": "Filters a data table using a query string.",
+      "howItWorks": "The Query node filters a data table using a query string. When executed, the node: 1. Validates that the input table is not empty and is valid 2. Checks if the table is a reference table and handles it appropriately 3. Validates that the query string is not empty 4. Converts the data table to a pandas DataFrame 5. Applies the query string to filter the DataFrame 6. Converts the filtered DataFrame back to the data table format 7. Returns the filtered table",
+      "usage": [
+        "A valid input data table",
+        "A valid query string compatible with pandas query syntax"
+      ],
+      "bestPractices": [
+        "The Output Type option can be set to \"Pass By Reference\" for handling large tables more efficiently",
+        "The query string should follow pandas query syntax",
+        "Examples of query strings:",
+        "\"column_name == 'value'\" - Filter rows where column_name equals 'value'",
+        "\"column_name \u003e 10\" - Filter rows where column_name is greater than 10",
+        "\"column1 == 'value1' \u0026 column2 \u003e 5\" - Filter rows matching multiple conditions",
+        "The node supports all standard pandas query operations"
+      ]
+    },
+    "remove_column": {
+      "namespace": "Core.Pandas.Remove_column",
+      "name": "Remove_column",
+      "summary": "Removes a specified column from a data table.",
+      "howItWorks": "The Remove Column node removes a specified column from a data table. When executed, the node: 1. Validates that the input table is not empty and is valid 2. Checks if the table is a reference table and handles it appropriately 3. Validates that the column name is not empty 4. Converts the data table to a pandas DataFrame 5. Removes the specified column from the DataFrame 6. Converts the modified DataFrame back to the data table format 7. Returns the updated table",
+      "usage": [
+        "A valid input data table",
+        "A valid column name that exists in the table"
+      ],
+      "bestPractices": [
+        "The Output Type option can be set to \"Pass By Reference\" for handling large tables more efficiently",
+        "The node permanently removes the specified column from the table",
+        "All data in the removed column is lost",
+        "The node supports removing any column from the table regardless of its position"
+      ]
+    },
+    "remove_duplicates": {
+      "namespace": "Core.Pandas.Remove_duplicates",
+      "name": "Remove_duplicates",
+      "summary": "Removes duplicate rows from a data table.",
+      "howItWorks": "The Remove Duplicates node removes duplicate rows from a data table. When executed, the node: 1. Validates that the input table is not empty and is valid 2. Checks if the table is a reference table and handles it appropriately 3. Converts the data table to a pandas DataFrame 4. Removes duplicate rows based on the specified options 5. Converts the modified DataFrame back to the data table format 6. Returns the updated table",
+      "usage": [
+        "A valid input data table"
+      ],
+      "bestPractices": [
+        "The Output Type option can be set to \"Pass By Reference\" for handling large tables more efficiently",
+        "If Column Names is not specified, duplicates are identified based on all columns",
+        "The Keep option determines which duplicate rows are retained:",
+        "\"First\" keeps the first occurrence and removes subsequent duplicates",
+        "\"Last\" keeps the last occurrence and removes previous duplicates",
+        "\"None\" removes all duplicate rows, including the first occurrence",
+        "The node preserves the original column order in the output table"
+      ]
+    },
+    "remove_row": {
+      "namespace": "Core.Pandas.Remove_row",
+      "name": "Remove_row",
+      "summary": "Removes a specified row from a data table.",
+      "howItWorks": "The Remove Row node removes a specified row from a data table. When executed, the node: 1. Validates that the input table is not empty and is valid 2. Checks if the table is a reference table and handles it appropriately 3. Validates that the row index is a valid integer 4. Removes the row at the specified index from the table 5. Converts the modified table to a pandas DataFrame 6. Converts the DataFrame back to the data table format 7. Returns the updated table",
+      "usage": [
+        "A valid input data table",
+        "A valid row index (must be an integer)"
+      ],
+      "bestPractices": [
+        "The Output Type option can be set to \"Pass By Reference\" for handling large tables more efficiently",
+        "Row indices are zero-based (0 for the first row, 1 for the second, etc.)",
+        "Use -1 as the Row Index to remove the last row",
+        "The node permanently removes the specified row from the table",
+        "All data in the removed row is lost"
+      ]
+    },
+    "replace": {
+      "namespace": "Core.Pandas.Replace",
+      "name": "Replace",
+      "summary": "Replaces specified values in a data table with new values.",
+      "howItWorks": "The Replace Values node replaces specified values in a data table with new values. When executed, the node: 1. Validates that the input table is not empty and is valid 2. Checks if the table is a reference table and handles it appropriately 3. Validates that both Old Value and New Value are provided 4. Converts the data table to a pandas DataFrame 5. Replaces all occurrences of the Old Value with the New Value 6. Converts the modified DataFrame back to the data table format 7. Returns the updated table",
+      "usage": [
+        "A valid input data table",
+        "Valid Old Value and New Value inputs"
+      ],
+      "bestPractices": [
+        "The Output Type option can be set to \"Pass By Reference\" for handling large tables more efficiently",
+        "When Regex is set to True, the Old Value is treated as a regular expression pattern",
+        "When Regex is set to False, the Old Value is treated as a literal value",
+        "The replacement operation affects all columns in the table",
+        "The node replaces all occurrences of the Old Value with the New Value"
+      ]
+    },
+    "sort": {
+      "namespace": "Core.Pandas.Sort",
+      "name": "Sort",
+      "summary": "Sorts a data table based on the values in a specified column.",
+      "howItWorks": "The Sort Table node sorts a data table based on the values in a specified column. When executed, the node: 1. Validates that the input table is not empty and is valid 2. Checks if the table is a reference table and handles it appropriately 3. Validates that the column name is not empty 4. Converts the data table to a pandas DataFrame 5. Sorts the DataFrame based on the specified column and options 6. Converts the sorted DataFrame back to the data table format 7. Returns the sorted table",
+      "usage": [
+        "A valid input data table",
+        "A valid column name that exists in the table"
+      ],
+      "bestPractices": [
+        "The Output Type option can be set to \"Pass By Reference\" for handling large tables more efficiently",
+        "The Order Type option determines whether the table is sorted in ascending or descending order",
+        "The Locale option can be used to specify locale-specific sorting rules for string values",
+        "The node sorts the entire table based on the values in the specified column",
+        "All rows in the table maintain their integrity during the sorting process"
+      ]
+    }
+  }
+}

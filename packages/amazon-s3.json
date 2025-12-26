@@ -1,0 +1,269 @@
+{
+  "package": "AmazonS3",
+  "summary": "Integrate with Amazon Simple Storage Service (S3) for cloud file storage operations in your automation workflows.",
+  "description": "## Overview The Amazon S3 package provides comprehensive file and bucket management capabilities for AWS S3. Use it when your automation needs to store files in the cloud, process files from S3, or manage backup and archival workflows.",
+  "nodes": {
+    "connect": {
+      "namespace": "Core.AmazonS3.Connect",
+      "name": "Connect",
+      "summary": "Establishes a connection to Amazon S3 or S3-compatible storage services by creating an authenticated client session.",
+      "howItWorks": "The Connect node is the first step in any Amazon S3 automation flow. It establishes an authenticated connection to S3 and returns a client ID for use in subsequent operations. When executed, the node: 1. Retrieves the Access Key ID and Secret Access Key from the provided credentials 2. Validates that both credentials are provided and not empty 3. Determines the connection security based on the endpoint (HTTPS for AWS, HTTP for local MinIO) 4. Creates a new S3 client with the provided credentials 5. Stores the client in a thread-safe client pool 6. Returns a unique client ID that references the stored connection",
+      "usage": [
+        "A valid AWS account with S3 access, or access to an S3-compatible storage service",
+        "AWS Access Key ID and Secret Access Key with appropriate S3 permissions",
+        "The credentials must be stored as credentials in Robomotion",
+        "A valid S3 endpoint URL"
+      ],
+      "bestPractices": [
+        "The Connect node should be executed before any other S3 operations",
+        "The returned Client Id must be passed to subsequent S3 nodes",
+        "Each Connect node creates a new client session that should be cleaned up with a Disconnect node",
+        "For AWS S3, use regional endpoints for better performance (e.g., `s3.us-east-1.amazonaws.com`)",
+        "For MinIO or other S3-compatible services, provide the full endpoint including port if needed",
+        "The client connection is stored in memory and automatically removed when the flow stops",
+        "Connections ending with `minio:9000` automatically use insecure HTTP instead of HTTPS"
+      ]
+    },
+    "createbucket": {
+      "namespace": "Core.AmazonS3.Createbucket",
+      "name": "Createbucket",
+      "summary": "Creates a new S3 bucket in the specified AWS region or S3-compatible storage service.",
+      "howItWorks": "The Create Bucket node creates a new S3 bucket with the specified name and region. When executed, the node: 1. Retrieves the S3 client using either the Client ID or creates a new client from credentials 2. Validates that the bucket name is provided and not empty 3. Retrieves the optional region parameter 4. Sends a request to S3 to create the bucket with the specified options 5. Completes successfully once the bucket is created",
+      "usage": [
+        "Either a valid Client ID from a Connect node, or Access Key ID and Secret Access Key credentials",
+        "A unique bucket name that follows S3 naming conventions",
+        "Appropriate S3 permissions to create buckets (s3:CreateBucket)"
+      ],
+      "bestPractices": [
+        "Bucket names must be globally unique across all AWS S3 accounts",
+        "Once created, a bucket name cannot be changed",
+        "Newly created buckets are private by default",
+        "Region selection affects latency and compliance requirements",
+        "Some regions may require additional setup or account verification",
+        "Bucket creation is eventually consistent - it may take a moment before the bucket appears in all regions",
+        "Creating too many buckets in rapid succession may be rate limited"
+      ]
+    },
+    "deletebucket": {
+      "namespace": "Core.AmazonS3.Deletebucket",
+      "name": "Deletebucket",
+      "summary": "Deletes an empty S3 bucket from your AWS account or S3-compatible storage service.",
+      "howItWorks": "The Delete Bucket node permanently removes an empty S3 bucket. When executed, the node: 1. Retrieves the S3 client using either the Client ID or creates a new client from credentials 2. Validates that the bucket name is provided and not empty 3. Sends a request to S3 to delete the specified bucket 4. Completes successfully once the bucket is deleted",
+      "usage": [
+        "Either a valid Client ID from a Connect node, or Access Key ID and Secret Access Key credentials",
+        "A valid bucket name",
+        "The bucket must be completely empty (no objects, including versioned objects and delete markers)",
+        "Appropriate S3 permissions to delete buckets (s3:DeleteBucket)"
+      ],
+      "bestPractices": [
+        "The bucket must be completely empty before deletion",
+        "This includes all object versions and delete markers in versioned buckets",
+        "Bucket deletion is permanent and cannot be undone",
+        "After deletion, the bucket name becomes available for reuse by any AWS account",
+        "If you want to reuse the same bucket name, delete and recreate it immediately",
+        "Bucket deletion is eventually consistent",
+        "There is no confirmation prompt - the deletion happens immediately"
+      ]
+    },
+    "deleteobject": {
+      "namespace": "Core.AmazonS3.Deleteobject",
+      "name": "Deleteobject",
+      "summary": "Deletes an object from an S3 bucket, optionally targeting a specific version.",
+      "howItWorks": "The Delete Object node permanently removes an object from an S3 bucket. When executed, the node: 1. Retrieves the S3 client using either the Client ID or creates a new client from credentials 2. Validates that the bucket name and object name are provided and not empty 3. Retrieves the optional version ID parameter 4. Sends a request to S3 to delete the object (or specific version) 5. Completes successfully once the object is deleted",
+      "usage": [
+        "Either a valid Client ID from a Connect node, or Access Key ID and Secret Access Key credentials",
+        "A valid S3 bucket",
+        "Appropriate S3 permissions to delete objects (s3:DeleteObject)",
+        "For versioned objects, s3:DeleteObjectVersion permission"
+      ],
+      "bestPractices": [
+        "Object deletion is permanent and cannot be undone",
+        "If the object doesn't exist, the operation succeeds without error (idempotent)",
+        "For non-versioned buckets, deletion removes the object completely",
+        "For versioned buckets without version ID, a delete marker is added (soft delete)",
+        "For versioned buckets with version ID, the specific version is permanently deleted",
+        "Deleting all versions of an object requires multiple delete operations",
+        "There is no confirmation prompt - deletion happens immediately"
+      ]
+    },
+    "disconnect": {
+      "namespace": "Core.AmazonS3.Disconnect",
+      "name": "Disconnect",
+      "summary": "Closes the S3 client connection and releases associated resources from memory.",
+      "howItWorks": "The Disconnect node properly terminates an S3 client connection and cleans up resources. When executed, the node: 1. Validates that the Client ID is provided and not empty 2. Removes the client from the internal client pool 3. Releases all associated resources from memory 4. Completes successfully once the client is removed",
+      "usage": [
+        "A valid Client ID from a Connect node",
+        "The client must exist in the client pool"
+      ],
+      "bestPractices": [
+        "The Disconnect node should be executed at the end of your S3 automation flow",
+        "Each Connect node should have a corresponding Disconnect node",
+        "Disconnecting removes the client from memory, preventing resource leaks",
+        "After disconnecting, the Client ID can no longer be used for S3 operations",
+        "If the flow terminates unexpectedly, clients are automatically cleaned up",
+        "It is safe to call Disconnect on an already disconnected client (no error will occur)"
+      ]
+    },
+    "downloadobject": {
+      "namespace": "Core.AmazonS3.Downloadobject",
+      "name": "Downloadobject",
+      "summary": "Downloads an object from an S3 bucket to a local file on your system.",
+      "howItWorks": "The Download Object node retrieves a file from S3 and saves it to your local file system. When executed, the node: 1. Retrieves the S3 client using either the Client ID or creates a new client from credentials 2. Validates that the bucket name, object name, and file path are provided and not empty 3. Sends a request to S3 to download the specified object 4. Saves the downloaded content to the specified local file path 5. Completes successfully once the file is saved",
+      "usage": [
+        "Either a valid Client ID from a Connect node, or Access Key ID and Secret Access Key credentials",
+        "A valid S3 bucket with the object to download",
+        "Appropriate S3 permissions to read objects (s3:GetObject)",
+        "Write permissions on the local file system path",
+        "Sufficient disk space for the downloaded file"
+      ],
+      "bestPractices": [
+        "The file is downloaded to the local file system where the robot is running",
+        "If the target file already exists, it will be overwritten without warning",
+        "The parent directory must exist before downloading",
+        "File paths should use the correct separator for your operating system",
+        "Large files are automatically handled with efficient streaming",
+        "The download is atomic - the file appears only after the complete download",
+        "Object metadata is not downloaded, only the file content"
+      ]
+    },
+    "downloadpresignedurl": {
+      "namespace": "Core.AmazonS3.Downloadpresignedurl",
+      "name": "Downloadpresignedurl",
+      "summary": "Generates a presigned URL that allows temporary download access to an S3 object without requiring AWS credentials, with optional inline display or forced download.",
+      "howItWorks": "The Download Pre Signed URL node generates a temporary, secure URL that allows anyone with the URL to download or view a file from S3 without AWS credentials. When executed, the node: 1. Retrieves the S3 client using either the Client ID or creates a new client from credentials 2. Validates that the bucket name, object name, and expiration time are provided 3. Determines the content disposition based on the Share option 4. Generates a presigned GET URL with the specified expiration time and response headers 5. Returns the complete presigned URL 6. The URL grants read-only access for the specified object and expires after the set time",
+      "usage": [
+        "Either a valid Client ID from a Connect node, or Access Key ID and Secret Access Key credentials",
+        "A valid S3 bucket with the object to share",
+        "Appropriate S3 permissions to read objects (s3:GetObject)",
+        "The object must exist in the bucket"
+      ],
+      "bestPractices": [
+        "The presigned URL is valid only for the specified duration",
+        "After expiration, the URL returns an access denied error",
+        "The URL grants read-only access - it cannot be used to modify or delete",
+        "Anyone with the URL can access the file during the valid period",
+        "No AWS credentials are required by the downloader",
+        "URL security depends on keeping the URL private",
+        "The File Name option only works when Share is disabled",
+        "Browsers may override inline display based on security settings"
+      ],
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "https://s3.amazonaws.com/company-invoices/2024/march/invoice-2024-001.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256\u0026X-Amz-Credential=...\u0026X-Amz-Date=20240315T120000Z\u0026X-Amz-Expires=3600\u0026X-Amz-SignedHeaders=host\u0026response-content-disposition=attachment%3B%20filename%3D%22Invoice-2024-001.pdf%22\u0026X-Amz-Signature=..."
+        }
+      ]
+    },
+    "getobject": {
+      "namespace": "Core.AmazonS3.Getobject",
+      "name": "Getobject",
+      "summary": "Retrieves metadata information about an S3 object without downloading the actual file content.",
+      "howItWorks": "The Get Object node retrieves detailed information about an S3 object without downloading the file content. When executed, the node: 1. Retrieves the S3 client using either the Client ID or creates a new client from credentials 2. Validates that the bucket name and object name are provided and not empty 3. Sends a HEAD request to S3 to retrieve object metadata 4. Returns the metadata information as the result 5. Completes successfully without downloading the file content",
+      "usage": [
+        "Either a valid Client ID from a Connect node, or Access Key ID and Secret Access Key credentials",
+        "A valid S3 bucket with the object to query",
+        "Appropriate S3 permissions to read object metadata (s3:GetObject)"
+      ],
+      "bestPractices": [
+        "This operation is much faster than downloading the file",
+        "No data transfer costs are incurred (only metadata retrieval)",
+        "Useful for checking if an object exists before downloading",
+        "ETag can be used to verify file integrity",
+        "Size information helps with disk space planning",
+        "LastModified helps with synchronization logic",
+        "Custom metadata is returned in the Metadata field"
+      ]
+    },
+    "listbuckets": {
+      "namespace": "Core.AmazonS3.Listbuckets",
+      "name": "Listbuckets",
+      "summary": "Retrieves a list of all S3 buckets accessible with the current credentials.",
+      "howItWorks": "The List Buckets node retrieves all S3 buckets that are accessible with the provided credentials. When executed, the node: 1. Retrieves the S3 client using either the Client ID or creates a new client from credentials 2. Sends a request to S3 to list all buckets 3. Returns an array containing information about each bucket 4. Each bucket object includes the bucket name and creation timestamp",
+      "usage": [
+        "Either a valid Client ID from a Connect node, or Access Key ID and Secret Access Key credentials",
+        "Appropriate S3 permissions to list buckets (s3:ListAllMyBuckets)"
+      ],
+      "bestPractices": [
+        "The node returns all buckets accessible to the credentials, regardless of region",
+        "Buckets from all regions are included in the response",
+        "The default AWS account limit is 100 buckets",
+        "The operation is relatively fast even with many buckets",
+        "The creation date is returned in ISO 8601 format",
+        "Buckets are not returned in any particular order"
+      ]
+    },
+    "listobjects": {
+      "namespace": "Core.AmazonS3.Listobjects",
+      "name": "Listobjects",
+      "summary": "Retrieves a list of all objects in an S3 bucket, including nested objects in subdirectories.",
+      "howItWorks": "The List Objects node retrieves all objects in a bucket recursively, including objects in nested folders. When executed, the node: 1. Retrieves the S3 client using either the Client ID or creates a new client from credentials 2. Validates that the bucket name is provided and not empty 3. Sends a request to S3 to list all objects recursively 4. Processes the object stream and collects all objects 5. Filters and formats the object information 6. Returns an array of object metadata",
+      "usage": [
+        "Either a valid Client ID from a Connect node, or Access Key ID and Secret Access Key credentials",
+        "A valid S3 bucket",
+        "Appropriate S3 permissions to list objects (s3:ListBucket)"
+      ],
+      "bestPractices": [
+        "The node lists objects recursively, including all subdirectories",
+        "Objects are returned in no particular order",
+        "The operation may take time for buckets with many objects",
+        "All objects are loaded into memory - be cautious with very large buckets",
+        "The list includes objects at all levels of the folder hierarchy",
+        "Empty \"folders\" (common prefixes with no objects) are not included"
+      ],
+      "errorCodes": [
+        "Errors"
+      ]
+    },
+    "uploadobject": {
+      "namespace": "Core.AmazonS3.Uploadobject",
+      "name": "Uploadobject",
+      "summary": "Uploads a local file to an S3 bucket with optional metadata and content type configuration.",
+      "howItWorks": "The Upload Object node transfers a file from your local file system to an S3 bucket. When executed, the node: 1. Retrieves the S3 client using either the Client ID or creates a new client from credentials 2. Validates that the bucket name and object name are provided and not empty 3. Validates that the file path exists and is accessible 4. Retrieves optional content type and user metadata 5. Uploads the file to S3 with the specified options 6. Completes successfully once the upload is finished",
+      "usage": [
+        "Either a valid Client ID from a Connect node, or Access Key ID and Secret Access Key credentials",
+        "A valid, existing S3 bucket",
+        "A local file that exists and is readable",
+        "Appropriate S3 permissions to upload objects (s3:PutObject)",
+        "Sufficient disk space for the file being uploaded"
+      ],
+      "bestPractices": [
+        "The file is uploaded from the local file system where the robot is running",
+        "Object names can include forward slashes (/) to simulate folder structures",
+        "If an object with the same name already exists, it will be overwritten",
+        "The upload is atomic - the object appears in S3 only after the complete upload",
+        "Large files are automatically handled with multipart uploads",
+        "File paths should use the correct separator for your operating system",
+        "User metadata keys are automatically prefixed with `x-amz-meta-` by S3",
+        "All metadata values must be strings"
+      ]
+    },
+    "uploadpresignedurl": {
+      "namespace": "Core.AmazonS3.Uploadpresignedurl",
+      "name": "Uploadpresignedurl",
+      "summary": "Generates a presigned URL that allows temporary upload access to an S3 object without requiring AWS credentials.",
+      "howItWorks": "The Upload Pre Signed URL node generates a temporary, secure URL that allows anyone with the URL to upload a file to S3 without AWS credentials. When executed, the node: 1. Retrieves the S3 client using either the Client ID or creates a new client from credentials 2. Validates that the bucket name, object name, and expiration time are provided 3. Generates a presigned PUT URL with the specified expiration time 4. Returns the URL query string that can be used for uploading 5. The URL grants upload permission only for the specified object and expires after the set time",
+      "usage": [
+        "Either a valid Client ID from a Connect node, or Access Key ID and Secret Access Key credentials",
+        "A valid S3 bucket",
+        "Appropriate S3 permissions to upload objects (s3:PutObject)",
+        "The bucket must exist and be accessible with the provided credentials"
+      ],
+      "bestPractices": [
+        "The presigned URL is valid only for the specified duration",
+        "After expiration, the URL cannot be used for uploads",
+        "The URL grants upload permission only - it cannot be used to download or delete",
+        "Anyone with the URL can upload to the specified object key",
+        "The upload will overwrite any existing object with the same key",
+        "No AWS credentials are required by the uploader",
+        "The URL is specific to the object name - different objects require different URLs",
+        "URL security depends on keeping the URL private"
+      ],
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "X-Amz-Algorithm=AWS4-HMAC-SHA256\u0026X-Amz-Credential=...\u0026X-Amz-Date=20240315T120000Z\u0026X-Amz-Expires=3600\u0026X-Amz-SignedHeaders=host\u0026X-Amz-Signature=..."
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "package": "Dropcontact",
+  "summary": "Enrich and verify B2B contact data using Dropcontact's data enrichment service.",
+  "description": "## Overview The Dropcontact package integrates with Dropcontact's B2B contact enrichment API. Use it when you need to find missing contact information, verify email addresses, or enrich lead data for sales and marketing automation.",
+  "nodes": {
+    "batch-post": {
+      "namespace": "Core.Dropcontact.BatchPost",
+      "name": "BatchPost",
+      "summary": "Submits a batch of contact data to Dropcontact for enrichment and returns a request ID for retrieving results.",
+      "howItWorks": "The Batch Post node submits contact data to Dropcontact's batch enrichment API. When executed, the node: 1. Validates the input data object 2. Serializes the data to JSON format 3. Constructs an HTTP POST request to the Dropcontact API endpoint 4. Adds authentication headers with the API key 5. Sends the request to `https://api.dropcontact.io/batch` 6. Parses the response to extract the request ID 7. Returns the request ID for use with the Batch Result node",
+      "usage": [
+        "A valid Dropcontact account with API access",
+        "API key configured in credentials",
+        "Properly formatted contact data matching Dropcontact's requirements",
+        "At least one of the following data combinations per contact:",
+        "first_name + last_name + company (or full_name + company)",
+        "LinkedIn URL",
+        "Email address"
+      ],
+      "bestPractices": [
+        "You can submit up to 250 contacts per batch request",
+        "Each contact data must be less than 15 kB",
+        "The API processes requests asynchronously - use the returned request ID with the Batch Result node to retrieve results",
+        "Credits are only charged when emails are found or verified",
+        "Use the Batch Result node to poll for results after submission",
+        "Consider using the Credits Left node to check remaining credits before large batch operations"
+      ],
+      "errorCodes": [
+        "ErrInternal",
+        "ErrRuntime",
+        "ErrInvalidArg"
+      ]
+    },
+    "batch-result": {
+      "namespace": "Core.Dropcontact.BatchResult",
+      "name": "BatchResult",
+      "summary": "Retrieves the enriched contact data for a previously submitted batch request from Dropcontact.",
+      "howItWorks": "The Batch Result node retrieves enrichment results for a previously submitted batch. When executed, the node: 1. Validates the request ID is not empty 2. Constructs a GET request to the Dropcontact API endpoint 3. Adds authentication headers with the API key 4. Sends the request to `https://api.dropcontact.io/batch/{request_id}` 5. Parses the JSON response containing enriched contact data 6. Returns the complete result object",
+      "usage": [
+        "A valid Dropcontact account with API access",
+        "API key configured in credentials",
+        "A valid request ID from a previous Batch Post operation",
+        "Sufficient time elapsed for Dropcontact to process the batch (typically 30-60 seconds)"
+      ],
+      "bestPractices": [
+        "Wait at least 30-60 seconds after submitting a batch before retrieving results",
+        "The result object includes processing status information",
+        "You can poll this node multiple times with the same request ID",
+        "Results remain available for retrieval for a reasonable time period",
+        "The API may return partial results if processing is still in progress",
+        "Check the response status to determine if processing is complete"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrCredentials",
+        "ErrInternal",
+        "ErrRuntime"
+      ]
+    },
+    "credits-left": {
+      "namespace": "Core.Dropcontact.CreditsLeft",
+      "name": "CreditsLeft",
+      "summary": "Checks the number of API credits remaining in your Dropcontact account.",
+      "howItWorks": "The Credits Left node queries your Dropcontact account to check remaining credits. When executed, the node: 1. Constructs a minimal POST request to the Dropcontact batch API 2. Sends a dummy payload with an empty data object 3. Adds authentication headers with the API key 4. Sends the request to `https://api.dropcontact.io/batch` 5. Parses the response to extract the `credits_left` field 6. Returns the credit count as a numeric value",
+      "usage": [
+        "A valid Dropcontact account with API access",
+        "API key configured in credentials"
+      ],
+      "bestPractices": [
+        "This node does not consume credits when checking the balance",
+        "Use this node before large batch operations to ensure sufficient credits",
+        "Credits are only consumed when emails are found or verified",
+        "One credit equals one successfully found or verified email",
+        "The node makes a lightweight API call that returns credit information",
+        "Credits are shared across all API operations on your account"
+      ],
+      "errorCodes": [
+        "ErrCredentials",
+        "ErrInternal",
+        "ErrRuntime"
+      ]
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "package": "2fa",
+  "summary": "Two-Factor Authentication (2FA) package for generating and validating time-based one-time passwords (TOTP) in your automation workflows.",
+  "description": "## Overview The 2FA package enables you to work with two-factor authentication systems programmatically. Use it when your automation needs to log into services protected by 2FA, or when you need to generate OTP codes for testing and verification purposes.",
+  "nodes": {
+    "decode_qr": {
+      "namespace": "Core.2fa.Decode_qr",
+      "name": "Decode_qr",
+      "summary": "Decodes QR codes from image files and extracts their payload data"
+    },
+    "generate_otp": {
+      "namespace": "Core.2fa.Generate_otp",
+      "name": "Generate_otp",
+      "summary": "Generates a Time-based One-Time Password (TOTP) using a secret key"
+    },
+    "generate_qr": {
+      "namespace": "Core.2fa.Generate_qr",
+      "name": "Generate_qr",
+      "summary": "Generates a QR code containing TOTP (Time-based One-Time Password) setup information"
+    }
+  }
+}

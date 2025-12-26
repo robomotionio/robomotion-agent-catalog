@@ -1,0 +1,139 @@
+{
+  "package": "Calendly",
+  "summary": "Integrate with Calendly scheduling platform to manage webhooks and automate scheduling workflows.",
+  "description": "## Overview The Calendly package connects your automation with Calendly's scheduling system. Use it to receive notifications when meetings are scheduled or cancelled, and to manage webhook subscriptions programmatically.",
+  "nodes": {
+    "add-webhook-subscription": {
+      "namespace": "Core.Calendly.AddWebhookSubscription",
+      "name": "AddWebhookSubscription",
+      "summary": "Creates a webhook subscription to receive real-time notifications when specific events occur in your Calendly account, such as new meeting bookings or cancellations.",
+      "howItWorks": "The Add Webhook Subscription node configures Calendly to send HTTP POST requests to your specified endpoint whenever monitored events occur. This enables real-time automation based on Calendly activity. When executed, the node: 1. Uses either the Client ID from Connect or direct credentials 2. Validates the webhook URL and organization URL 3. Configures the event types to monitor (create, cancel, or both) 4. Makes a POST request to `/webhook_subscriptions` endpoint 5. Returns the webhook subscription details including the subscription ID",
+      "usage": [
+        "A publicly accessible HTTPS endpoint to receive webhooks",
+        "A valid Calendly organization URL (get from organization settings or API)",
+        "For user-scoped webhooks: A valid user URL (get from Get Me node)",
+        "Webhook endpoint must respond with HTTP 200-299 status code"
+      ],
+      "bestPractices": [
+        "Webhook URLs must use HTTPS (HTTP is not supported)",
+        "Your endpoint must respond quickly (within 10 seconds) to avoid timeouts",
+        "Calendly retries failed webhook deliveries with exponential backoff",
+        "Maximum of 100 webhook subscriptions per organization",
+        "Webhooks can be organization-scoped or user-scoped",
+        "User-scoped webhooks only fire for that specific user's events"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrInternal"
+      ]
+    },
+    "connect": {
+      "namespace": "Core.Calendly.Connect",
+      "name": "Connect",
+      "summary": "Establishes a connection to the Calendly API using a Personal Access Token and returns a client ID for use in subsequent Calendly operations.",
+      "howItWorks": "The Connect node is the entry point for all Calendly automations in Robomotion. It authenticates your flow with the Calendly API and establishes a reusable connection. When executed, the node: 1. Retrieves your Calendly API token from the provided credentials 2. Creates an authenticated HTTP client with the authorization header 3. Validates the credentials by making a test request to the `/users/me` endpoint 4. Returns a unique Client ID that references the authenticated connection 5. This Client ID is then used by other Calendly nodes to make API calls",
+      "usage": [
+        "A Calendly account (Free, Standard, Teams, or Enterprise)",
+        "A Calendly Personal Access Token (generate from Account Settings \u003e Integrations \u003e API \u0026 Webhooks)",
+        "The API token must be stored as a credential in Robomotion's Vault"
+      ],
+      "bestPractices": [
+        "Always use Connect as the first node in your Calendly automation",
+        "The returned Client ID is stored in the message context and automatically flows to connected nodes",
+        "Each Connect creates a new authenticated session that persists for the flow duration",
+        "Alternative: Some Calendly nodes support direct credentials without using Connect (see individual node documentation)",
+        "The connection is stored in memory and automatically cleaned up when the flow ends"
+      ],
+      "errorCodes": [
+        "ErrCredentials",
+        "ErrInvalidArg",
+        "ErrInternal"
+      ]
+    },
+    "delete-webhook-subscription": {
+      "namespace": "Core.Calendly.DeleteWebhookSubscription",
+      "name": "DeleteWebhookSubscription",
+      "summary": "Deletes an existing webhook subscription from Calendly, stopping all event notifications to the associated webhook URL.",
+      "howItWorks": "The Delete Webhook Subscription node permanently removes a webhook subscription from your Calendly account. After deletion, Calendly will no longer send event notifications to the associated webhook URL. When executed, the node: 1. Uses either the Client ID from Connect or direct credentials 2. Validates that a Webhook ID is provided 3. Makes a DELETE request to `/webhook_subscriptions/{webhook_id}` 4. Removes the subscription from Calendly 5. Returns successfully if deletion completes (HTTP 200-299)",
+      "usage": [
+        "A valid webhook subscription ID from a previously created webhook",
+        "The webhook must belong to your organization",
+        "Appropriate permissions to delete webhook subscriptions"
+      ],
+      "bestPractices": [
+        "Deletion is permanent and cannot be undone",
+        "Once deleted, Calendly immediately stops sending events to the webhook URL",
+        "Deleting a non-existent webhook returns a 404 error",
+        "You cannot delete webhooks from other organizations",
+        "The node doesn't return any output on success (just completes)",
+        "No events are sent to the webhook about its own deletion"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrInternal"
+      ]
+    },
+    "disconnect": {
+      "namespace": "Core.Calendly.Disconnect",
+      "name": "Disconnect",
+      "summary": "Disconnects from the Calendly API by releasing the client connection and cleaning up resources.",
+      "howItWorks": "The Disconnect node safely terminates a Calendly API connection that was established with a Connect node. It removes the stored authentication credentials from memory and releases associated resources. When executed, the node: 1. Receives the Client ID from the Connect node 2. Locates the associated connection in the internal client registry 3. Removes the connection and cleans up authentication data 4. Releases memory resources",
+      "usage": [
+        "A valid Client ID from a previously executed Connect node",
+        "The Client ID must correspond to an active connection"
+      ],
+      "bestPractices": [
+        "The Disconnect node should be the last Calendly operation in your flow",
+        "Always disconnect to prevent memory leaks in long-running automations",
+        "The Client ID is required to identify which connection to close",
+        "If a flow ends without calling Disconnect, connections are automatically cleaned up",
+        "Disconnecting an already-closed connection will result in an error",
+        "The node doesn't make any API calls to Calendly - it only cleans up local resources"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrInternal"
+      ]
+    },
+    "get-me": {
+      "namespace": "Core.Calendly.GetMe",
+      "name": "GetMe",
+      "summary": "Retrieves information about the currently authenticated Calendly user, including profile details, scheduling preferences, and account settings.",
+      "howItWorks": "The Get Me node retrieves the profile and settings of the authenticated Calendly user. This is useful for verifying authentication, getting the user's scheduling link, or extracting account details for automation logic. When executed, the node: 1. Uses either the Client ID from Connect or direct credentials 2. Makes a GET request to the Calendly `/users/me` endpoint 3. Receives user profile data as a JSON response 4. Parses and outputs the data as an object",
+      "bestPractices": [
+        "Get Me is useful for testing API connectivity before performing other operations",
+        "The scheduling_url field is the public link users can share for booking meetings",
+        "The user URI is needed for some webhook subscription operations",
+        "Timezone information is useful for scheduling-related automations",
+        "This endpoint doesn't consume significant rate limits (1 request per call)"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrInternal"
+      ]
+    },
+    "list-webhook-subscriptions": {
+      "namespace": "Core.Calendly.ListWebhookSubscriptions",
+      "name": "ListWebhookSubscriptions",
+      "summary": "Retrieves all webhook subscriptions configured for a Calendly organization or specific user, including their URLs, events, and status information.",
+      "howItWorks": "The List Webhook Subscriptions node retrieves all active webhook configurations for an organization or user. This is useful for auditing, managing, and troubleshooting webhook integrations. When executed, the node: 1. Uses either the Client ID from Connect or direct credentials 2. Validates the Organization URL is provided 3. Optionally filters by User URL if specified 4. Makes a GET request to `/webhook_subscriptions` endpoint 5. Returns a paginated list of all matching subscriptions",
+      "usage": [
+        "A valid Calendly organization URL (get from Get Me node)",
+        "For user-scoped filtering: A valid user URL",
+        "Appropriate permissions to view webhook subscriptions"
+      ],
+      "bestPractices": [
+        "Returns all webhooks for the organization or filtered by user",
+        "The `collection` array may be empty if no webhooks exist",
+        "Pagination is supported for large numbers of webhooks (over 100)",
+        "User-scoped filtering requires providing the User URL",
+        "Both active and disabled webhooks are returned",
+        "The `retry_started_at` field indicates if a webhook is failing"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrInternal"
+      ]
+    }
+  }
+}

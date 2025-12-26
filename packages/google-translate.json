@@ -1,0 +1,39 @@
+{
+  "package": "GoogleTranslate",
+  "summary": "The Google Translate package provides powerful text translation capabilities using Google Cloud Translation API. This package enables your RPA flows to translate text between multiple languages, detect source languages automatically, and build multilingual automation workflows.",
+  "description": "## Key Features - **Multi-Language Translation** - Translate text between 60+ languages",
+  "nodes": {
+    "translate": {
+      "namespace": "Core.GoogleTranslate.Translate",
+      "name": "Translate",
+      "summary": "Translates text between languages or detects the source language using Google Cloud Translation API. This node supports 60+ languages and automatically detects the source language for seamless translation workflows.",
+      "howItWorks": "The Text Translate node provides flexible translation capabilities using Google Cloud Translation API. When executed, the node: 1. **Validates Inputs** - Ensures text input is not empty and credentials are valid 2. **Authenticates** - Establishes a connection to Google Cloud Translation API using the provided service account credentials 3. **Detects Source Language** - Automatically identifies the language of the input text 4. **Translation Mode:** * **Normal Mode** - Translates the text from the detected source language to the specified target language * **Detection Only Mode** - When \"Only Detect Language\" is enabled, skips translation and only returns the detected source language 5. **Returns Results** - Outputs the translated text (if applicable), source language code, and target language code",
+      "usage": [
+        "Google Cloud account with Translation API enabled",
+        "Service account with Cloud Translation API User role or equivalent permissions",
+        "Service account credentials JSON file stored in Robomotion vault",
+        "Text content to translate or analyze (cannot be empty)",
+        "Network connectivity to Google Cloud services"
+      ],
+      "bestPractices": [
+        "The node automatically detects the source language, so you don't need to specify it",
+        "Source language detection is included in the translation process at no additional cost",
+        "When \"Only Detect Language\" is enabled, translation is skipped entirely",
+        "The Source Language output uses ISO 639-1 language codes (e.g., \"en\", \"es\", \"fr\")",
+        "Regional variants provide more culturally appropriate translations (e.g., \"pt-BR\" for Brazilian Portuguese vs. \"pt\" for European Portuguese)",
+        "Large texts (thousands of characters) may require longer processing time",
+        "The Translation API has character limits per request; very large texts may need to be split",
+        "Translation quality is generally highest for widely-spoken language pairs (e.g., English ↔ Spanish)",
+        "Some language pairs may go through an intermediate language (pivot translation) which can affect quality",
+        "The service is stateless - each translation is independent and doesn't benefit from previous context",
+        "Pricing is based on characters processed, not API calls - monitor usage to control costs"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrCredentials",
+        "ErrRuntime",
+        "ErrTranslate"
+      ]
+    }
+  }
+}

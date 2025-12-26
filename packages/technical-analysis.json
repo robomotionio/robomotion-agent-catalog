@@ -1,0 +1,215 @@
+{
+  "package": "TechnicalAnalysis",
+  "summary": "Calculate financial technical indicators and create charts for trading and market analysis.",
+  "description": "## Overview The Technical Analysis package provides financial market analysis capabilities. Use it when you need to calculate technical indicators like moving averages, RSI, MACD, or create charts for trading analysis and automation.",
+  "nodes": {
+    "cycles": {
+      "namespace": "Core.TechnicalAnalysis.Cycles",
+      "name": "Cycles",
+      "summary": "Calculates technical analysis indicators related to cycles in financial data.",
+      "howItWorks": "The Cycles Indicators node calculates technical analysis indicators related to cycles in financial data. When executed, the node: 1. Reads the input data from the specified Data Path 2. Sets the Index Key column as the index for the data 3. Calculates the selected cycle indicator using the specified Length parameter 4. Saves the results to the specified Indicator Path",
+      "usage": [
+        "A CSV file with financial data at the specified Data Path",
+        "Valid column names in the CSV file",
+        "Write permissions for the specified Indicator Path"
+      ],
+      "bestPractices": [
+        "The default Length is 10, but can be adjusted based on your analysis needs",
+        "The calculated indicators are saved in CSV format at the specified Indicator Path",
+        "For best results, ensure your input data is properly formatted with consistent intervals"
+      ]
+    },
+    "momentum": {
+      "namespace": "Core.TechnicalAnalysis.Momentum",
+      "name": "Momentum",
+      "summary": "Calculates technical analysis indicators related to momentum in financial data.",
+      "howItWorks": "The Momentum Indicators node calculates technical analysis indicators related to momentum in financial data. When executed, the node: 1. Reads the input data from the specified Data Path 2. Sets the Index Key column as the index for the data 3. Calculates the selected momentum indicator using the specified Length and Signal Length parameters 4. Saves the results to the specified Indicator Path",
+      "usage": [
+        "A CSV file with financial data at the specified Data Path",
+        "Valid column names in the CSV file",
+        "Write permissions for the specified Indicator Path"
+      ],
+      "bestPractices": [
+        "The default Length is 10 and Signal Length is 9, but can be adjusted based on your analysis needs",
+        "The calculated indicators are saved in CSV format at the specified Indicator Path",
+        "For best results, ensure your input data is properly formatted with consistent intervals"
+      ]
+    },
+    "overlap": {
+      "namespace": "Core.TechnicalAnalysis.Overlap",
+      "name": "Overlap",
+      "summary": "Calculates technical analysis indicators related to overlap in financial data.",
+      "howItWorks": "The Overlap Indicators node calculates technical analysis indicators related to overlap in financial data. When executed, the node: 1. Reads the input data from the specified Data Path 2. Sets the Index Key column as the index for the data 3. Calculates the selected overlap indicator using the specified Length parameter 4. Saves the results to the specified Indicator Path",
+      "usage": [
+        "A CSV file with financial data at the specified Data Path",
+        "Valid column names in the CSV file",
+        "Write permissions for the specified Indicator Path"
+      ],
+      "bestPractices": [
+        "The default Length is 10, but can be adjusted based on your analysis needs",
+        "The calculated indicators are saved in CSV format at the specified Indicator Path",
+        "For best results, ensure your input data is properly formatted with consistent intervals"
+      ]
+    },
+    "performance": {
+      "namespace": "Core.TechnicalAnalysis.Performance",
+      "name": "Performance",
+      "summary": "Calculates technical analysis indicators related to performance in financial data.",
+      "howItWorks": "The Performance Indicators node calculates technical analysis indicators related to performance in financial data. When executed, the node: 1. Reads the input data from the specified Data Path 2. Sets the Index Key column as the index for the data 3. Calculates the selected performance indicator using the specified Length parameter 4. Saves the results to the specified Indicator Path",
+      "usage": [
+        "A CSV file with financial data at the specified Data Path",
+        "Valid column names in the CSV file",
+        "Write permissions for the specified Indicator Path"
+      ],
+      "bestPractices": [
+        "The default Length is 10, but can be adjusted based on your analysis needs",
+        "The calculated indicators are saved in CSV format at the specified Indicator Path",
+        "For best results, ensure your input data is properly formatted with consistent intervals"
+      ]
+    },
+    "plot_create": {
+      "namespace": "Core.TechnicalAnalysis.Plot_create",
+      "name": "Plot_create",
+      "summary": "Creates a plot visualization from financial data.",
+      "howItWorks": "The Plot Create node generates a plot visualization from financial data. When executed, the node: 1. Reads the input data from the specified Data Path 2. Uses the Date Key column as the x-axis values 3. Creates a candlestick chart using the open, high, low, and close values 4. Sets the axis titles based on the provided inputs 5. Adds the plot to the internal plot storage and returns a Plot ID",
+      "usage": [
+        "A CSV file with financial data at the specified Data Path",
+        "Valid column names in the CSV file (date, open, high, low, close)",
+        "Write permissions for the specified Data Path"
+      ],
+      "bestPractices": [
+        "The plot is created using Plotly for interactive visualizations",
+        "The Plot ID can be used with other plot nodes to modify or display the plot",
+        "For best results, ensure your input data is properly formatted with consistent intervals"
+      ]
+    },
+    "plot_label": {
+      "namespace": "Core.TechnicalAnalysis.Plot_label",
+      "name": "Plot_label",
+      "summary": "Adds labels to an existing plot visualization.",
+      "howItWorks": "The Plot Label node adds labels to an existing plot visualization. When executed, the node: 1. Retrieves the plot using the provided Plot ID 2. Reads the label data from the specified Data Path 3. For each row in the data, adds an annotation to the plot with: * Position based on Date Key and Value Key * Text from the Label Key * Background color from the Background Color Key (if provided) * Text color from the Text Color Key (if provided) 4. Updates the plot with the new annotations",
+      "usage": [
+        "A valid Plot ID from a previously created plot",
+        "A CSV file with label data at the specified Data Path",
+        "Valid column names in the CSV file (date, value, label, and optional color columns)"
+      ],
+      "bestPractices": [
+        "The label data should be formatted to match the coordinate system of the original plot",
+        "Colors can be specified in various formats (hex, rgb, named colors)",
+        "For best results, ensure your label data aligns properly with the existing plot data"
+      ]
+    },
+    "plot_line": {
+      "namespace": "Core.TechnicalAnalysis.Plot_line",
+      "name": "Plot_line",
+      "summary": "Adds a line to an existing plot visualization.",
+      "howItWorks": "The Plot Line node adds a line to an existing plot visualization. When executed, the node: 1. Retrieves the plot using the provided Plot ID 2. Reads the line data from the specified Data Path 3. Adds a scatter trace to the plot with: * X-axis values from the Date Key column * Y-axis values from the Value Key column * Line color as specified * Display mode as selected (lines, markers, or both) 4. Updates the plot with the new line",
+      "usage": [
+        "A valid Plot ID from a previously created plot",
+        "A CSV file with line data at the specified Data Path",
+        "Valid column names in the CSV file (date and value columns)"
+      ],
+      "bestPractices": [
+        "The line data should be formatted to match the coordinate system of the original plot",
+        "Colors can be specified in various formats (hex, rgb, named colors)",
+        "For best results, ensure your line data aligns properly with the existing plot data"
+      ]
+    },
+    "plot_write": {
+      "namespace": "Core.TechnicalAnalysis.Plot_write",
+      "name": "Plot_write",
+      "summary": "Writes a plot visualization to an HTML file.",
+      "howItWorks": "The Plot Write node saves a plot visualization to an HTML file. When executed, the node: 1. Retrieves the plot using the provided Plot ID 2. Writes the plot to an HTML file at the specified Output Path 3. Enables scroll zoom functionality in the saved HTML file 4. Deletes the plot from internal storage after saving",
+      "usage": [
+        "A valid Plot ID from a previously created plot",
+        "Write permissions for the specified Output Path"
+      ],
+      "bestPractices": [
+        "The saved HTML file is interactive and can be opened in any web browser",
+        "Scroll zoom is enabled by default in the saved HTML file",
+        "After writing, the plot is removed from internal storage",
+        "For best results, ensure the Output Path has the .html extension"
+      ]
+    },
+    "statistic": {
+      "namespace": "Core.TechnicalAnalysis.Statistic",
+      "name": "Statistic",
+      "summary": "Calculates technical analysis indicators related to statistics in financial data.",
+      "howItWorks": "The Statistic Indicators node calculates technical analysis indicators related to statistics in financial data. When executed, the node: 1. Reads the input data from the specified Data Path 2. Sets the Index Key column as the index for the data 3. Calculates the selected statistic indicator using the specified Length parameter 4. Saves the results to the specified Indicator Path",
+      "usage": [
+        "A CSV file with financial data at the specified Data Path",
+        "Valid column names in the CSV file",
+        "Write permissions for the specified Indicator Path"
+      ],
+      "bestPractices": [
+        "The default Length is 10, but can be adjusted based on your analysis needs",
+        "The calculated indicators are saved in CSV format at the specified Indicator Path",
+        "For best results, ensure your input data is properly formatted with consistent intervals"
+      ]
+    },
+    "trend": {
+      "namespace": "Core.TechnicalAnalysis.Trend",
+      "name": "Trend",
+      "summary": "Calculates technical analysis indicators related to trends in financial data.",
+      "howItWorks": "The Trend Indicators node calculates technical analysis indicators related to trends in financial data. When executed, the node: 1. Reads the input data from the specified Data Path 2. Sets the Index Key column as the index for the data 3. Calculates the selected trend indicator using the specified Length parameter 4. Saves the results to the specified Indicator Path",
+      "usage": [
+        "A CSV file with financial data at the specified Data Path",
+        "Valid column names in the CSV file",
+        "Write permissions for the specified Indicator Path"
+      ],
+      "bestPractices": [
+        "The default Length is 10, but can be adjusted based on your analysis needs",
+        "The calculated indicators are saved in CSV format at the specified Indicator Path",
+        "For best results, ensure your input data is properly formatted with consistent intervals"
+      ]
+    },
+    "utility": {
+      "namespace": "Core.TechnicalAnalysis.Utility",
+      "name": "Utility",
+      "summary": "Calculates technical analysis utility indicators in financial data.",
+      "howItWorks": "The Utility Indicators node calculates technical analysis utility indicators in financial data. When executed, the node: 1. Reads the input data from the specified Data Path 2. Sets the Index Key column as the index for the data 3. Calculates the selected utility indicator using the specified Length parameter 4. Saves the results to the specified Indicator Path",
+      "usage": [
+        "A CSV file with financial data at the specified Data Path",
+        "Valid column names in the CSV file",
+        "Write permissions for the specified Indicator Path"
+      ],
+      "bestPractices": [
+        "The default Length is 10, but can be adjusted based on your analysis needs",
+        "The calculated indicators are saved in CSV format at the specified Indicator Path",
+        "For best results, ensure your input data is properly formatted with consistent intervals"
+      ]
+    },
+    "volatility": {
+      "namespace": "Core.TechnicalAnalysis.Volatility",
+      "name": "Volatility",
+      "summary": "Calculates technical analysis indicators related to volatility in financial data.",
+      "howItWorks": "The Volatility Indicators node calculates technical analysis indicators related to volatility in financial data. When executed, the node: 1. Reads the input data from the specified Data Path 2. Sets the Index Key column as the index for the data 3. Calculates the selected volatility indicator using the specified Length parameter 4. Saves the results to the specified Indicator Path",
+      "usage": [
+        "A CSV file with financial data at the specified Data Path",
+        "Valid column names in the CSV file",
+        "Write permissions for the specified Indicator Path"
+      ],
+      "bestPractices": [
+        "The default Length is 10, but can be adjusted based on your analysis needs",
+        "The calculated indicators are saved in CSV format at the specified Indicator Path",
+        "For best results, ensure your input data is properly formatted with consistent intervals"
+      ]
+    },
+    "volume": {
+      "namespace": "Core.TechnicalAnalysis.Volume",
+      "name": "Volume",
+      "summary": "Calculates technical analysis indicators related to volume in financial data.",
+      "howItWorks": "The Volume Indicators node calculates technical analysis indicators related to volume in financial data. When executed, the node: 1. Reads the input data from the specified Data Path 2. Sets the Index Key column as the index for the data 3. Calculates the selected volume indicator using the specified Length parameter 4. Saves the results to the specified Indicator Path",
+      "usage": [
+        "A CSV file with financial data at the specified Data Path",
+        "Valid column names in the CSV file",
+        "Write permissions for the specified Indicator Path"
+      ],
+      "bestPractices": [
+        "The default Length is 10, but can be adjusted based on your analysis needs",
+        "The calculated indicators are saved in CSV format at the specified Indicator Path",
+        "For best results, ensure your input data is properly formatted with consistent intervals"
+      ]
+    }
+  }
+}

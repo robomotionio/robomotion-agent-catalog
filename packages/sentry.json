@@ -1,0 +1,24 @@
+{
+  "package": "Sentry",
+  "summary": "Send error tracking and monitoring messages to Sentry for application monitoring.",
+  "description": "## Overview The Sentry package provides integration with Sentry error tracking. Use it when you need to track errors, exceptions, and custom messages from your automation workflows for monitoring and debugging.",
+  "nodes": {
+    "capture_message": {
+      "namespace": "Core.Sentry.Capture_message",
+      "name": "Capture_message",
+      "summary": "Captures messages or exceptions and sends them to Sentry for error tracking and monitoring.",
+      "howItWorks": "The Capture node integrates with the Sentry service to send error reports and messages for tracking and monitoring. When executed, the node: 1. Validates the provided inputs (Message) 2. Initializes the Sentry client with the provided DSN 3. Captures the message or exception based on the selected Type 4. Flushes the Sentry client to ensure all data is sent",
+      "usage": [
+        "A valid Sentry account and project",
+        "The Sentry DSN for your project",
+        "A non-empty message to capture"
+      ],
+      "bestPractices": [
+        "The Type option determines whether the message is captured as an info message or error exception",
+        "Ensure your Sentry DSN is correctly configured in the credentials",
+        "The message content should not be empty",
+        "Sentry captures additional context about the environment automatically"
+      ]
+    }
+  }
+}

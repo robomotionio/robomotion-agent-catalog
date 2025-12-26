@@ -1,0 +1,109 @@
+{
+  "package": "Ffmpeg",
+  "summary": "The FFmpeg package enables powerful video and audio processing capabilities within your RPA workflows. Built on the industry-standard FFmpeg multimedia framework, this package provides nodes for converting, editing, analyzing, and playing media files.",
+  "description": "## Overview FFmpeg is a complete, cross-platform solution to record, convert and stream audio and video. The Robomotion FFmpeg package wraps this functionality in easy-to-use nodes that can be connected together to create complex media processing pipelines.",
+  "nodes": {
+    "Create": {
+      "namespace": "Core.Ffmpeg.Create",
+      "name": "Create",
+      "summary": "Initializes a new FFmpeg session for media processing operations. This is the starting point for building FFmpeg workflows.",
+      "howItWorks": "The Create node initializes a new FFmpeg session by generating a unique session identifier. This session serves as a container for your media processing pipeline, allowing you to: 1. Add multiple input files 2. Apply filters and transformations 3. Define output files 4. Execute the complete processing command The session ID output from this node is used by subsequent nodes (Input, Filter, Output, Run) to build and execute the media processing pipeline.",
+      "bestPractices": [
+        "Each Create node generates a unique session ID",
+        "The session is automatically cleaned up after the Run node executes",
+        "You can create multiple independent sessions in the same flow for parallel processing",
+        "The session ID is stored in the message scope and can be accessed by downstream nodes",
+        "Sessions are lightweight - creating multiple sessions has minimal overhead"
+      ]
+    },
+    "Filter": {
+      "namespace": "Core.Ffmpeg.Filter",
+      "name": "Filter",
+      "summary": "Applies FFmpeg filters to transform video and audio streams. Filters enable operations like scaling, cropping, rotating, overlaying, concatenating, and applying visual or audio effects.",
+      "howItWorks": "The Filter node applies transformations to media streams. When executed, the node: 1. Validates that the filter name and at least one stream are provided 2. Retrieves the input stream(s) from the session 3. Parses filter options into arguments and keyword arguments 4. Applies the specified filter with the given options 5. Returns a new stream ID representing the filtered output Filters can be chained together, with the output of one filter becoming the input to another.",
+      "bestPractices": [
+        "Filter names are case-sensitive",
+        "Some filters require specific numbers of input streams (e.g., overlay needs 2)",
+        "Filter options syntax varies by filter - consult FFmpeg documentation for specific filters",
+        "Complex filters can be built by chaining multiple Filter nodes",
+        "Video and audio filters are different - use appropriate filters for each stream type",
+        "Expressions can be used in filter options (e.g., `x=(w-text_w)/2` for centering)"
+      ]
+    },
+    "Input": {
+      "namespace": "Core.Ffmpeg.Input",
+      "name": "Input",
+      "summary": "Adds an input media file to an FFmpeg session. Input files can be local paths or URLs, and multiple inputs can be added to the same session for complex operations like merging or overlaying.",
+      "howItWorks": "The Input node adds a media file to the FFmpeg session and returns a stream identifier. When executed, the node: 1. Validates that both the FFmpeg session ID and input file path are provided 2. Parses any input options specified 3. Creates an FFmpeg input stream with the specified file and options 4. Registers the stream with the session 5. Returns a unique stream ID that can be used by downstream nodes",
+      "bestPractices": [
+        "The input file path can be absolute or relative to the working directory",
+        "URLs must be accessible and supported by FFmpeg (HTTP, HTTPS, FTP, etc.)",
+        "Each Input node creates a new stream, even if pointing to the same file",
+        "Input options are applied before any filters or output settings",
+        "Use `ss` option on input for seeking (faster than output seeking)",
+        "File validation happens at Run time, not when the Input node executes"
+      ]
+    },
+    "Output": {
+      "namespace": "Core.Ffmpeg.Output",
+      "name": "Output",
+      "summary": "Defines the output file for an FFmpeg session. This node specifies where processed media will be saved and what encoding parameters to apply.",
+      "howItWorks": "The Output node defines the final destination and encoding parameters for your media processing pipeline. When executed, the node: 1. Validates the input stream ID and output file path 2. Retrieves the input stream(s) from the session 3. Parses output options 4. Creates an FFmpeg output stream with the specified settings 5. Returns an output stream ID for use with the Run node",
+      "bestPractices": [
+        "The output file format is determined by the file extension",
+        "Some codecs may not be available depending on your FFmpeg build",
+        "Using `c=copy` or `c:v=copy` copies streams without re-encoding (fastest)",
+        "The CRF (Constant Rate Factor) scale is 0-51, where lower values mean better quality",
+        "For web videos, use `movflags=+faststart` to enable progressive playback",
+        "Multiple audio tracks can be added using Additional Stream IDs",
+        "The actual file is not created until the Run node executes"
+      ]
+    },
+    "Play": {
+      "namespace": "Core.Ffmpeg.Play",
+      "name": "Play",
+      "summary": "Plays media files using FFplay, FFmpeg's built-in media player. This node is useful for previewing videos, testing media files, and verifying processing results during automation development.",
+      "howItWorks": "The Play node launches FFplay to display media files. When executed, the node: 1. Validates that the file path is provided 2. Checks that the file exists and is not a directory 3. Constructs FFplay command with specified options 4. Launches FFplay to play the media 5. Blocks until playback is complete or window is closed 6. Returns when playback finishes Note: The flow execution pauses while the media is playing. The node completes when the player window is closed.",
+      "bestPractices": [
+        "Play is independent - it doesn't require Create node or session ID",
+        "Execution blocks until the player window is closed",
+        "Works only with local files",
+        "Player window must be closed manually (or via automation)",
+        "On headless systems (no display), this node will fail",
+        "Large files may take a moment to start playing",
+        "Not recommended for production automation (use for development/testing)",
+        "Some formats may not play depending on codecs available"
+      ]
+    },
+    "Probe": {
+      "namespace": "Core.Ffmpeg.Probe",
+      "name": "Probe",
+      "summary": "Analyzes media files to extract detailed information about format, streams, codecs, duration, bitrate, resolution, and other metadata. This node uses FFprobe under the hood to inspect media files without processing them.",
+      "howItWorks": "The Probe node uses FFprobe to analyze media files and extract detailed information. When executed, the node: 1. Validates that the file path is provided 2. Checks that the file exists and is not a directory 3. Executes FFprobe with JSON output format 4. Parses the JSON response 5. Returns the complete media information as an object This operation is read-only and does not modify the file. It's fast and lightweight compared to media processing operations.",
+      "bestPractices": [
+        "Probe is independent - it doesn't require Create node or session ID",
+        "Works only with local files - URLs are not supported",
+        "Fast operation - typically completes in milliseconds",
+        "Read-only - never modifies the file",
+        "Can be used before or after FFmpeg processing",
+        "Some properties may be missing for certain file types",
+        "Corrupted files may cause errors or return incomplete information"
+      ]
+    },
+    "Run": {
+      "namespace": "Core.Ffmpeg.Run",
+      "name": "Run",
+      "summary": "Executes the FFmpeg command to process media files. This is the final node in an FFmpeg pipeline that actually performs the media processing operation.",
+      "howItWorks": "The Run node executes the FFmpeg command based on the pipeline built by previous nodes. When executed, the node: 1. Validates that a stream ID is provided 2. Retrieves the complete stream pipeline from the session 3. Applies the overwrite setting if enabled 4. Adds any global options specified 5. Compiles the FFmpeg command 6. Executes the command 7. Waits for completion 8. Cleans up the session 9. Returns the executed command string The actual media processing happens during this node's execution. Processing time depends on file size, complexity of operations, and system resources.",
+      "bestPractices": [
+        "This node actually executes the FFmpeg process - all previous nodes only build the command",
+        "Processing time varies greatly based on file size and operations",
+        "The session is automatically cleaned up after execution",
+        "The Overwrite setting only affects the final output file, not intermediate processing",
+        "If execution fails, the session is still cleaned up",
+        "Large files may require significant time - consider timeout settings in production",
+        "Progress cannot be monitored during execution (FFmpeg runs to completion)"
+      ]
+    }
+  }
+}

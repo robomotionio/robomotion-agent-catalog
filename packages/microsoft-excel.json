@@ -1,0 +1,962 @@
+{
+  "package": "MicrosoftExcel",
+  "summary": "The Microsoft Excel package provides comprehensive automation capabilities for working with Excel files on Windows. This package uses the Microsoft Office Interop library to interact with Excel applications, enabling you to automate complex spreadsheet operations.",
+  "description": ":::info Platform Requirement This package is available only on **Windows** platforms and requires Microsoft Excel to be installed.",
+  "nodes": {
+    "activate-sheet": {
+      "namespace": "Core.MicrosoftExcel.ActivateSheet",
+      "name": "ActivateSheet",
+      "summary": "Activates a sheet by name or index, making it the active worksheet for subsequent operations.",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// File Descriptor: message.excel_fd\r\n// Sheet Name: \"Sales Data\"\r\n// Sheet Index: (leave empty)"
+        },
+        {
+          "title": "Example 2",
+          "code": "// File Descriptor: message.excel_fd\r\n// Sheet Name: (leave empty)\r\n// Sheet Index: 2  // Activates the second sheet"
+        },
+        {
+          "title": "Example 3",
+          "code": "// 1. Open Excel\r\n// Out File Descriptor: excel_fd\r\n\r\n// 2. Activate first sheet\r\n// Sheet Index: 1\r\n\r\n// 3. Read data from first sheet...\r\n\r\n// 4. Activate second sheet\r\n// Sheet Index: 2\r\n\r\n// 5. Write data to second sheet..."
+        }
+      ],
+      "tips": [
+        "Provide either **Sheet Name** or **Sheet Index**, not both. If both are provided, Sheet Index takes precedence.",
+        "Sheet indices are 1-based (the first sheet is 1, not 0).",
+        "After activating a sheet, all subsequent operations (like Read Cell, Set Range, etc.) will work on the active sheet.",
+        "Use [Get Sheets](/reference/packages/microsoft-excel/get-sheets) node to discover available sheet names and indices."
+      ]
+    },
+    "chart-to-image": {
+      "namespace": "Core.MicrosoftExcel.ChartToImage",
+      "name": "ChartToImage",
+      "summary": "Exports a chart from the worksheet to an image file (PNG format).",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// File Descriptor: message.excel_fd\r\n// Chart Title: \"Sales by Region\"\r\n// Image Path: \"C:\\\\Reports\\\\sales_chart.png\"\r\n// Output: \"C:\\\\Reports\\\\sales_chart.png\""
+        },
+        {
+          "title": "Example 2",
+          "code": "// Chart Title: \"Monthly Revenue\"\r\n// Image Path: (leave empty)\r\n// Output: A temporary file path like \"C:\\\\Users\\\\...\\\\tmp12345.png\""
+        },
+        {
+          "title": "Example 3",
+          "code": "// Loop through chart titles:\r\n// Chart Title: message.chart_title\r\n// Image Path: \"C:\\\\Charts\\\\\" + message.chart_title + \".png\""
+        },
+        {
+          "title": "Example 4",
+          "code": "// 1. Chart to Image\r\n// Output: image_path\r\n\r\n// 2. Use the image in email or report\r\n// Attach file: message.image_path"
+        }
+      ],
+      "tips": [
+        "The chart must have a title set in Excel for this node to find it.",
+        "If multiple charts have the same title, the first one found is exported.",
+        "The image is exported in PNG format with transparent background if applicable.",
+        "Chart formatting, colors, and styles are preserved in the exported image.",
+        "Use this for generating reports with visual data representations.",
+        "The exported image quality is suitable for documents and presentations."
+      ]
+    },
+    "clear-range": {
+      "namespace": "Core.MicrosoftExcel.ClearRange",
+      "name": "ClearRange",
+      "summary": "Clears all content and formatting from a range of cells in the active sheet.",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// File Descriptor: message.excel_fd\r\n// From Cell: \"A1\"\r\n// To Cell: \"D10\"\r\n// Range: Specific-Range\r\n// Clears cells A1 through D10"
+        },
+        {
+          "title": "Example 2",
+          "code": "// Range: All-Range\r\n// Clears all cells with data in the active sheet"
+        },
+        {
+          "title": "Example 3",
+          "code": "// From Cell: \"F1\"\r\n// To Cell: \"H20\"\r\n// Range: Specific-Range\r\n// Useful for clearing calculated or temporary columns"
+        }
+      ],
+      "tips": [
+        "This operation clears both **content** and **formatting** (colors, borders, fonts, etc.).",
+        "The cells remain in the worksheet structure (they're not deleted).",
+        "Use this when you want to reset a range before writing new data.",
+        "For clearing an entire sheet by name, use [Clear Sheet](/reference/packages/microsoft-excel/clear-sheet).",
+        "**All-Range** only clears the \"used range\" - cells that have or had data."
+      ]
+    },
+    "clear-sheet": {
+      "namespace": "Core.MicrosoftExcel.ClearSheet",
+      "name": "ClearSheet",
+      "summary": "Clears all content from a specific sheet, removing all cell values and formatting.",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// File Descriptor: message.excel_fd\r\n// Sheet Name: \"Temp Data\"\r\n// All content in \"Temp Data\" sheet is removed"
+        },
+        {
+          "title": "Example 2",
+          "code": "// 1. Clear Sheet\r\n// Sheet Name: \"Monthly Report\"\r\n\r\n// 2. Activate Sheet\r\n// Sheet Name: \"Monthly Report\"\r\n\r\n// 3. Set Range\r\n// Write new data to the cleared sheet"
+        },
+        {
+          "title": "Example 3",
+          "code": "// Loop through sheet names\r\n// Sheet Name: message.sheet_name"
+        }
+      ],
+      "tips": [
+        "This operation clears **all content and formatting** from the sheet.",
+        "The sheet structure remains (it's not deleted, just emptied).",
+        "Use [Delete Sheet](/reference/packages/microsoft-excel/delete-sheet) if you want to remove the sheet entirely.",
+        "For clearing only a specific range, use [Clear Range](/reference/packages/microsoft-excel/clear-range).",
+        "The sheet becomes a completely blank worksheet after this operation.",
+        "Any charts, images, or objects on the sheet are also removed."
+      ]
+    },
+    "clone-range": {
+      "namespace": "Core.MicrosoftExcel.CloneRange",
+      "name": "CloneRange",
+      "summary": "Copies a range of cells to a destination location, optionally in a different Excel file or sheet. Unlike Copy/Paste Range, this node performs the operation in one step.",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// File Descriptor: message.excel_fd\r\n// Source From Cell: \"A1\"\r\n// Source To Cell: \"D10\"\r\n// Source Range: Specific-Range\r\n// Destination Start Cell: \"F1\"\r\n// Copies A1:D10 to F1:I10"
+        },
+        {
+          "title": "Example 2",
+          "code": "// Source From Cell: \"A1\"\r\n// Source To Cell: \"C5\"\r\n// Source Range: Specific-Range\r\n// Destination Start Cell: \"A1\"\r\n// Destination Sheet Index: 2\r\n// Copies data to sheet 2"
+        },
+        {
+          "title": "Example 3",
+          "code": "// Source Range: All-Range\r\n// Destination Start Cell: \"A1\"\r\n// Destination Excel Path: \"C:\\\\Reports\\\\destination.xlsx\"\r\n// Destination Sheet Index: 1\r\n// Copies all data to a different file"
+        },
+        {
+          "title": "Example 4",
+          "code": "// Source Range: All-Range\r\n// Destination Start Cell: \"A1\"\r\n// Destination Sheet Index: 3\r\n// Copies all used cells to sheet 3"
+        }
+      ],
+      "tips": [
+        "This node combines copy and paste in a single operation.",
+        "When **Destination Excel Path** is provided, the destination file is opened, modified, and saved automatically.",
+        "Both **values** and **formatting** (colors, borders, fonts) are cloned.",
+        "If cloning to a different file, the destination file is saved and closed after the operation.",
+        "Sheet indices are 1-based (first sheet is 1, second is 2, etc.)."
+      ]
+    },
+    "close-excel": {
+      "namespace": "Core.MicrosoftExcel.CloseExcel",
+      "name": "CloseExcel",
+      "summary": "Closes an Excel file and releases the application resources. This node properly cleans up COM objects to prevent memory leaks.",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// File Descriptor: message.excel_fd\r\n// The Excel application instance is closed and resources are released"
+        },
+        {
+          "title": "Example 2",
+          "code": "// 1. Open Excel\r\n// Out File Descriptor: excel_fd\r\n\r\n// 2. Perform operations...\r\n\r\n// 3. Save Excel (if needed)\r\n// File Descriptor: message.excel_fd\r\n\r\n// 4. Close Excel\r\n// File Descriptor: message.excel_fd"
+        }
+      ],
+      "tips": [
+        "Always close Excel files when finished to free up system resources and prevent memory leaks.",
+        "Unsaved changes will be lost. Use [Save Excel](/reference/packages/microsoft-excel/save-excel) before closing if you want to keep changes.",
+        "After closing, the file descriptor becomes invalid and cannot be reused.",
+        "This node quits the Excel application instance, so all workbooks opened in that instance will be closed."
+      ]
+    },
+    "copy-range": {
+      "namespace": "Core.MicrosoftExcel.CopyRange",
+      "name": "CopyRange",
+      "summary": "Copies a range of cells to the clipboard for later pasting. This node should be used together with [Paste Range](/reference/packages/microsoft-excel/paste-range).",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// File Descriptor: message.excel_fd\r\n// From Cell: \"A1\"\r\n// To Cell: \"D10\"\r\n// Range: Specific-Range\r\n// Copies cells A1 through D10 to clipboard"
+        },
+        {
+          "title": "Example 2",
+          "code": "// 1. Copy Range\r\n// From Cell: \"A1\"\r\n// To Cell: \"C5\"\r\n// Range: Specific-Range\r\n\r\n// 2. Paste Range\r\n// From Cell: \"F1\"\r\n// To Cell: \"H5\"\r\n// Range: Specific-Range"
+        },
+        {
+          "title": "Example 3",
+          "code": "// Copy Range\r\n// Range: All-Range\r\n// Copies all used cells"
+        },
+        {
+          "title": "Example 4",
+          "code": "// 1. Activate source sheet\r\n// Sheet Index: 1\r\n\r\n// 2. Copy Range\r\n// Range: All-Range\r\n\r\n// 3. Activate destination sheet\r\n// Sheet Index: 2\r\n\r\n// 4. Paste Range"
+        }
+      ],
+      "tips": [
+        "The copied data stays in the clipboard until pasted or until another copy operation.",
+        "This copies both **values** and **formatting** (colors, borders, fonts, etc.).",
+        "For copying to a different Excel file or with more control, use [Clone Range](/reference/packages/microsoft-excel/clone-range) instead.",
+        "Always follow Copy Range with [Paste Range](/reference/packages/microsoft-excel/paste-range) to complete the operation."
+      ]
+    },
+    "copy-sheet": {
+      "namespace": "Core.MicrosoftExcel.CopySheet",
+      "name": "CopySheet",
+      "summary": "Creates a copy of a sheet within the same workbook. The copied sheet includes all data, formatting, and formulas.",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// File Descriptor: message.excel_fd\r\n// Sheet Name: \"Sales Data\"\r\n// Copied Sheet Name: \"Sales Data Backup\""
+        },
+        {
+          "title": "Example 2",
+          "code": "// File Descriptor: message.excel_fd\r\n// Sheet Name: \"Template\"\r\n// Copied Sheet Name: \"January Report\"\r\n// The copied sheet becomes the active sheet"
+        },
+        {
+          "title": "Example 3",
+          "code": "// Sheet Name: \"Monthly Template\"\r\n// Copied Sheet Name: message.month_name  // e.g., \"January\", \"February\""
+        }
+      ],
+      "tips": [
+        "The copied sheet is placed at the end of the workbook.",
+        "The copied sheet becomes the active sheet after the operation.",
+        "All cell values, formulas, formatting, and structures are copied.",
+        "Charts and images are also copied to the new sheet.",
+        "The new sheet name must be unique within the workbook."
+      ]
+    },
+    "create-excel": {
+      "namespace": "Core.MicrosoftExcel.CreateExcel",
+      "name": "CreateExcel",
+      "summary": "Creates a new Excel file at the specified path with a default worksheet.",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// Path: C:\\Reports\\monthly_report.xlsx\r\n// This creates a blank workbook with one default sheet"
+        },
+        {
+          "title": "Example 2",
+          "code": "// Path: C:\\Automation\\macro_enabled.xlsm\r\n// Use .xlsm extension for macro-enabled workbooks"
+        }
+      ],
+      "tips": [
+        "The file is created and immediately closed by this node. Use Open Excel afterwards to work with the file.",
+        "If the directory doesn't exist, you'll get an error. Create the directory first using File System nodes if needed.",
+        "The created workbook contains one default worksheet named \"Sheet1\".",
+        "Use `.xlsx` for standard Excel files or `.xlsm` for macro-enabled files."
+      ]
+    },
+    "create-sheet": {
+      "namespace": "Core.MicrosoftExcel.CreateSheet",
+      "name": "CreateSheet",
+      "summary": "Creates a new sheet in the workbook at the specified position.",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// File Descriptor: message.excel_fd\r\n// New Sheet Name: \"Summary\"\r\n// Sheet Index: 1\r\n// This creates \"Summary\" as the first sheet"
+        },
+        {
+          "title": "Example 2",
+          "code": "// File Descriptor: message.excel_fd\r\n// New Sheet Name: \"Archive\"\r\n// Sheet Index: 99  // If workbook has fewer sheets, it's added at the end"
+        },
+        {
+          "title": "Example 3",
+          "code": "// 1. Create first sheet\r\n// New Sheet Name: \"Q1 Data\"\r\n// Sheet Index: 1\r\n\r\n// 2. Create second sheet\r\n// New Sheet Name: \"Q2 Data\"\r\n// Sheet Index: 2\r\n\r\n// 3. Create third sheet\r\n// New Sheet Name: \"Q3 Data\"\r\n// Sheet Index: 3"
+        }
+      ],
+      "tips": [
+        "Sheet names must be unique within a workbook.",
+        "Sheet indices are 1-based (position 1 means insert before the first sheet).",
+        "If the specified index exceeds the total number of sheets, the new sheet is added at the end.",
+        "The new sheet is created with default Excel formatting and is empty.",
+        "After creation, the active sheet remains unchanged unless you use [Activate Sheet](/reference/packages/microsoft-excel/activate-sheet)."
+      ]
+    },
+    "delete-cell": {
+      "namespace": "Core.MicrosoftExcel.DeleteCell",
+      "name": "DeleteCell",
+      "summary": "Deletes or clears a specific cell in the active sheet.",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// File Descriptor: message.excel_fd\r\n// Cell: \"A5\"\r\n// Clear: true\r\n// The cell A5 is emptied but remains in place"
+        },
+        {
+          "title": "Example 2",
+          "code": "// Cell: \"B3\"\r\n// Clear: false\r\n// The cell B3 is deleted, and cells to the right shift left"
+        },
+        {
+          "title": "Example 3",
+          "code": "// Loop through cell addresses\r\n// Cell: message.cell_address\r\n// Clear: true"
+        },
+        {
+          "title": "Example 4",
+          "code": "// Cell: \"D10\"\r\n// Clear: true\r\n// Removes #DIV/0! or other error values"
+        }
+      ],
+      "tips": [
+        "Use **Clear: true** (default) when you want to empty the cell but maintain the worksheet structure.",
+        "Use **Clear: false** when you want to remove the cell entirely and shift adjacent cells.",
+        "When Clear is `false`, cells to the right shift left to fill the gap.",
+        "Clearing removes both the value and any formatting (like colors or borders).",
+        "For deleting entire rows or columns, use [Delete Row](/reference/packages/microsoft-excel/delete-row) or [Delete Column](/reference/packages/microsoft-excel/delete-column)."
+      ]
+    },
+    "delete-column": {
+      "namespace": "Core.MicrosoftExcel.DeleteColumn",
+      "name": "DeleteColumn",
+      "summary": "Deletes or clears a column at the specified position in the active sheet.",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// File Descriptor: message.excel_fd\r\n// Column Number: 3\r\n// Clear: false\r\n// Column C is deleted, columns D and beyond shift left"
+        },
+        {
+          "title": "Example 2",
+          "code": "// Column Number: 5\r\n// Clear: true\r\n// Column E is emptied but remains in place"
+        },
+        {
+          "title": "Example 3",
+          "code": "// Column Number: 10  // Column J\r\n// Clear: false\r\n// Deletes column J completely"
+        },
+        {
+          "title": "Example 4",
+          "code": "// Loop through columns to clear\r\n// Column Number: message.column_index\r\n// Clear: true"
+        }
+      ],
+      "tips": [
+        "When **Clear** is `false`, the column is completely removed and columns to the right shift left.",
+        "When **Clear** is `true`, only the content and formatting are removed; the column structure stays.",
+        "Use **Clear: false** to remove unwanted columns and compact your data.",
+        "Use **Clear: true** to reset a column for reuse while maintaining the structure.",
+        "Column indices are 1-based (column 1 = A, column 2 = B, etc.).",
+        "Be careful when deleting columns in loops - indices change as columns are deleted."
+      ]
+    },
+    "delete-row": {
+      "namespace": "Core.MicrosoftExcel.DeleteRow",
+      "name": "DeleteRow",
+      "summary": "Deletes or clears a row at the specified position in the active sheet.",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// File Descriptor: message.excel_fd\r\n// Row Number: 5\r\n// Clear: false\r\n// Row 5 is deleted, rows 6 and below shift up"
+        },
+        {
+          "title": "Example 2",
+          "code": "// Row Number: 3\r\n// Clear: true\r\n// Row 3 is emptied but remains in place"
+        },
+        {
+          "title": "Example 3",
+          "code": "// Row Number: 1\r\n// Clear: false\r\n// Deletes the first row"
+        },
+        {
+          "title": "Example 4",
+          "code": "// Loop through rows to clear\r\n// Row Number: message.row_index\r\n// Clear: true"
+        }
+      ],
+      "tips": [
+        "When **Clear** is `false`, the row is completely removed and rows below shift up.",
+        "When **Clear** is `true`, only the content and formatting are removed; the row structure stays.",
+        "Use **Clear: false** to remove unwanted rows and compact your data.",
+        "Use **Clear: true** to reset a row for reuse while maintaining the structure.",
+        "Row indices are 1-based (row 1 is the first row).",
+        "Be careful when deleting rows in loops - indices change as rows are deleted."
+      ]
+    },
+    "delete-sheet": {
+      "namespace": "Core.MicrosoftExcel.DeleteSheet",
+      "name": "DeleteSheet",
+      "summary": "Deletes a sheet from the workbook by name.",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// File Descriptor: message.excel_fd\r\n// Sheet Name: \"Temp Calculations\""
+        },
+        {
+          "title": "Example 2",
+          "code": "// Loop through old sheet names\r\n// Sheet Name: message.old_sheet_name"
+        }
+      ],
+      "tips": [
+        "Sheet deletion is permanent and cannot be undone.",
+        "Excel workbooks must have at least one sheet. You cannot delete the last remaining sheet.",
+        "If the deleted sheet was the active sheet, Excel automatically activates another sheet.",
+        "Use [Get Sheets](/reference/packages/microsoft-excel/get-sheets) to get a list of all sheets before deletion."
+      ]
+    },
+    "get-column": {
+      "namespace": "Core.MicrosoftExcel.GetColumn",
+      "name": "GetColumn",
+      "summary": "Retrieves all cell values from a specific column in the active sheet.",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// File Descriptor: message.excel_fd\r\n// Column Name: \"A\"\r\n// Output: [\r\n//   [\"$A$1\", \"Header\"],\r\n//   [\"$A$2\", \"Value1\"],\r\n//   [\"$A$3\", \"Value2\"],\r\n//   ...\r\n// ]"
+        },
+        {
+          "title": "Example 2",
+          "code": "// Column Name: \"AA\"\r\n// Returns all values from column AA"
+        },
+        {
+          "title": "Example 3",
+          "code": "// After Get Column, iterate through the result:\r\n// For Each with message.Result\r\n// message.item[0] = cell address (e.g., \"$A$1\")\r\n// message.item[1] = cell value"
+        },
+        {
+          "title": "Example 4",
+          "code": "// Column Name: \"D\"  // Price column\r\n// Then calculate sum or average from the results"
+        }
+      ],
+      "tips": [
+        "The column is retrieved from row 1 to the last used row.",
+        "Only cells with data are included (based on the used range).",
+        "Column names are case-insensitive (\"A\" and \"a\" are the same).",
+        "Cell addresses in the output include dollar signs (e.g., \"$A$1\", \"$A$2\").",
+        "For getting multiple columns efficiently, use [Get Range](/reference/packages/microsoft-excel/get-range) instead."
+      ]
+    },
+    "get-formula": {
+      "namespace": "Core.MicrosoftExcel.GetFormula",
+      "name": "GetFormula",
+      "summary": "Retrieves formulas from cells in a range and returns them as a dictionary mapping cell addresses to their formulas.",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// File Descriptor: message.excel_fd\r\n// Range: All-Range\r\n// Output: {\"A5\": \"=SUM(A1:A4)\", \"B5\": \"=AVERAGE(B1:B4)\", \"C1\": \"\", ...}"
+        },
+        {
+          "title": "Example 2",
+          "code": "// From Cell: \"D1\"\r\n// To Cell: \"D10\"\r\n// Range: Specific-Range\r\n// Returns formulas only from column D"
+        },
+        {
+          "title": "Example 3",
+          "code": "// After Get Formula, check if a formula exists:\r\n// if (message.Result[\"A5\"] !== \"\") {\r\n//   // Cell A5 has a formula\r\n// }"
+        },
+        {
+          "title": "Example 4",
+          "code": "// 1. Get Formula from source range\r\n// 2. Loop through results\r\n// 3. Use Set Formula to recreate formulas in destination"
+        }
+      ],
+      "tips": [
+        "Cells without formulas return empty strings in the result dictionary.",
+        "Formulas are returned in A1 reference style (e.g., `=SUM(A1:A10)`).",
+        "Cell addresses in the dictionary keys do not include dollar signs.",
+        "Use this to audit which cells contain calculations vs. static values.",
+        "For getting cell values (calculated results), use [Get Range](/reference/packages/microsoft-excel/get-range) instead."
+      ]
+    },
+    "get-hyperlink": {
+      "namespace": "Core.MicrosoftExcel.GetHyperlink",
+      "name": "GetHyperlink",
+      "summary": "Retrieves hyperlink information from a specific cell, including the link address and display text.",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// File Descriptor: message.excel_fd\r\n// Cell: \"A1\"\r\n// Output: {\r\n//   Text: \"Visit our website\",\r\n//   Address: \"http://example.com\",\r\n//   SubAddress: \"\",\r\n//   HasHyperlink: true\r\n// }"
+        },
+        {
+          "title": "Example 2",
+          "code": "// Cell: \"B5\"\r\n// Output: {\r\n//   Text: \"Go to Summary\",\r\n//   Address: \"\",\r\n//   SubAddress: \"Summary!A1\",\r\n//   HasHyperlink: true\r\n// }"
+        },
+        {
+          "title": "Example 3",
+          "code": "// Cell: \"C10\"\r\n// Output: {\r\n//   Text: \"Regular text\",\r\n//   Address: \"\",\r\n//   SubAddress: \"\",\r\n//   HasHyperlink: false\r\n// }"
+        },
+        {
+          "title": "Example 4",
+          "code": "// After Get Hyperlink:\r\n// if (message.hyperlink.HasHyperlink) {\r\n//   let url = message.hyperlink.Address;\r\n//   // Use the URL for web scraping or validation\r\n// }"
+        }
+      ],
+      "tips": [
+        "**Address** contains external URLs (http://, https://) or file paths.",
+        "**SubAddress** contains internal Excel references (e.g., \"Sheet2!A1\").",
+        "A hyperlink can have both Address and SubAddress (link to a file with a specific location).",
+        "**HasHyperlink** is `true` even if the cell has only formatting that looks like a link.",
+        "Use this to extract and validate links before processing them."
+      ]
+    },
+    "get-range": {
+      "namespace": "Core.MicrosoftExcel.GetRange",
+      "name": "GetRange",
+      "summary": "Reads data from a range of cells and returns it as a table structure with columns and rows.",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// File Descriptor: message.excel_fd\r\n// Range: All-Range\r\n// Headers: false\r\n// Output: message.table\r\n// Structure: { columns: [\"A\", \"B\", \"C\"], rows: [{A: \"val1\", B: \"val2\", C: \"val3\"}, ...] }"
+        },
+        {
+          "title": "Example 2",
+          "code": "// From Cell: \"A1\"\r\n// To Cell: \"D10\"\r\n// Range: Specific-Range\r\n// Headers: true\r\n// Output: message.table\r\n// Structure: { columns: [\"Name\", \"Age\", \"City\", \"Score\"], rows: [{Name: \"John\", Age: 25, ...}, ...] }"
+        },
+        {
+          "title": "Example 3",
+          "code": "// From Cell: \"A1\"\r\n// To Cell: \"B5\"\r\n// Range: Specific-Range\r\n// Headers: true\r\n// Include Hyperlinks: true\r\n// Output includes: { text: \"Click Here\", hyperlink: \"http://example.com\" }"
+        },
+        {
+          "title": "Example 4",
+          "code": "// After Get Range, iterate through rows\r\n// For Each node with message.table.rows\r\n// Access columns: message.item.ColumnName"
+        }
+      ],
+      "tips": [
+        "The table structure is compatible with [Set Range](/reference/packages/microsoft-excel/set-range) for copying data between sheets.",
+        "Use **Headers: true** when your data has column names in the first row for more readable code.",
+        "**All-Range** reads only the \"used range\" (cells that have or had data), not the entire worksheet.",
+        "When **Include Hyperlinks** is enabled, each cell value becomes an object with `text` and `hyperlink` properties.",
+        "The output can be directly passed to other nodes that accept table format."
+      ]
+    },
+    "get-row": {
+      "namespace": "Core.MicrosoftExcel.GetRow",
+      "name": "GetRow",
+      "summary": "Retrieves all cell values from a specific row in the active sheet.",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// File Descriptor: message.excel_fd\r\n// Row Index: 5\r\n// Include Hyperlinks: false\r\n// Output: {\"$A$5\": \"Product\", \"$B$5\": \"100\", \"$C$5\": \"In Stock\"}"
+        },
+        {
+          "title": "Example 2",
+          "code": "// Row Index: 1\r\n// Include Hyperlinks: true\r\n// Output: {\"$A$1\": {text: \"Website\", hyperlink: \"http://example.com\"}, ...}"
+        },
+        {
+          "title": "Example 3",
+          "code": "// After Get Row, access specific cells:\r\n// let productName = message.Result[\"$A$5\"];\r\n// let quantity = message.Result[\"$B$5\"];"
+        },
+        {
+          "title": "Example 4",
+          "code": "// Loop through row indices 1 to 10\r\n// For each iteration:\r\n// - Get Row with Row Index: message.loop_index\r\n// - Process message.Result"
+        }
+      ],
+      "tips": [
+        "The row index is 1-based (first row is 1, not 0).",
+        "Only cells within the used range are included in the result.",
+        "Cell addresses in the output include the dollar signs (e.g., \"$A$5\", \"$B$5\").",
+        "Use this when you need all values from a specific row for processing.",
+        "For getting multiple rows efficiently, use [Get Range](/reference/packages/microsoft-excel/get-range) instead."
+      ]
+    },
+    "get-sheets": {
+      "namespace": "Core.MicrosoftExcel.GetSheets",
+      "name": "GetSheets",
+      "summary": "Retrieves a list of all sheets in the workbook, optionally including detailed metadata.",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// File Descriptor: message.excel_fd\r\n// Show Metadata: false\r\n// Output: [\"Sheet1\", \"Data\", \"Summary\"]"
+        },
+        {
+          "title": "Example 2",
+          "code": "// File Descriptor: message.excel_fd\r\n// Show Metadata: true\r\n// Output: [\r\n//   { Index: 1, SheetName: \"Sheet1\", Dimension: \"A1:D10\" },\r\n//   { Index: 2, SheetName: \"Data\", Dimension: \"A1:Z100\" },\r\n//   { Index: 3, SheetName: \"Summary\", Dimension: \"A1:E5\" }\r\n// ]"
+        },
+        {
+          "title": "Example 3",
+          "code": "// 1. Get Sheets\r\n// File Descriptor: message.excel_fd\r\n// Output: sheets\r\n\r\n// 2. Loop through sheets\r\n// Use a For Each node with message.sheets\r\n\r\n// 3. Inside loop, activate each sheet\r\n// Sheet Name: message.item"
+        },
+        {
+          "title": "Example 4",
+          "code": "// Get Sheets with metadata\r\n// Show Metadata: true\r\n// Then use JavaScript to find the largest dimension"
+        }
+      ],
+      "tips": [
+        "Use **Show Metadata** when you need to know the used range of each sheet.",
+        "The `Dimension` property shows the range of cells with data (e.g., \"A1:D10\").",
+        "Sheet indices are 1-based and reflect the order of sheets in the workbook.",
+        "This is useful for discovering sheet names dynamically in automated workflows."
+      ]
+    },
+    "insert-column": {
+      "namespace": "Core.MicrosoftExcel.InsertColumn",
+      "name": "InsertColumn",
+      "summary": "Inserts a new empty column at the specified position in the active sheet.",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// File Descriptor: message.excel_fd\r\n// Column Number: 1\r\n// A new blank column is inserted at column A, existing columns shift right"
+        },
+        {
+          "title": "Example 2",
+          "code": "// Column Number: 3\r\n// A new blank column is inserted at column C, columns C and beyond shift right"
+        },
+        {
+          "title": "Example 3",
+          "code": "// Column Number: 5\r\n// Insert column E for calculations"
+        },
+        {
+          "title": "Example 4",
+          "code": "// Loop 3 times:\r\n// - Insert Column at position 10\r\n// This inserts 3 new columns starting from column J"
+        }
+      ],
+      "tips": [
+        "The column is inserted **before** the specified position. Existing columns shift right.",
+        "The new column is completely empty with default formatting.",
+        "If the column number exceeds the number of used columns, the column is inserted at the rightmost position of the used range.",
+        "Column indices are 1-based (column 1 = A, column 2 = B, etc.).",
+        "Formulas in other columns that reference shifted columns are automatically updated.",
+        "The width of the new column inherits formatting from adjacent columns."
+      ]
+    },
+    "insert-row": {
+      "namespace": "Core.MicrosoftExcel.InsertRow",
+      "name": "InsertRow",
+      "summary": "Inserts a new empty row at the specified position in the active sheet.",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// File Descriptor: message.excel_fd\r\n// Row Number: 1\r\n// A new blank row is inserted at row 1, existing rows shift down"
+        },
+        {
+          "title": "Example 2",
+          "code": "// Row Number: 5\r\n// A new blank row is inserted at row 5, rows 5 and below shift down"
+        },
+        {
+          "title": "Example 3",
+          "code": "// Loop 5 times:\r\n// - Insert Row at position 10\r\n// This inserts 5 new rows starting from row 10"
+        },
+        {
+          "title": "Example 4",
+          "code": "// Row Number: message.insert_position\r\n// Useful for inserting rows dynamically based on calculations"
+        }
+      ],
+      "tips": [
+        "The row is inserted **before** the specified position. Existing rows shift down.",
+        "The new row is completely empty with default formatting.",
+        "If the row number is beyond the last used row, the row is inserted at the end.",
+        "Row indices are 1-based (row 1 is the first row).",
+        "Formulas in other rows that reference shifted rows are automatically updated."
+      ]
+    },
+    "open-excel": {
+      "namespace": "Core.MicrosoftExcel.OpenExcel",
+      "name": "OpenExcel",
+      "summary": "Opens an existing Excel file and returns a file descriptor for subsequent operations. This node supports password-protected files and can optionally share the same Excel application instance for files with cross-references (like VLOOKUP to another workbook).",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// The file descriptor will be stored in message.excel_fd\r\n// Path: C:\\Data\\sales_report.xlsx"
+        },
+        {
+          "title": "Example 2",
+          "code": "// Path: C:\\Data\\confidential.xlsx\r\n// Password To Open: Use a credential vault entry"
+        },
+        {
+          "title": "Example 3",
+          "code": "// First file (contains source data)\r\n// Path: C:\\Data\\source.xlsx\r\n// Out File Descriptor: excel_fd\r\n\r\n// Second file (has VLOOKUP to first file)\r\n// Path: C:\\Data\\report.xlsx\r\n// In File Descriptor: message.excel_fd (from first Open Excel)\r\n// This ensures both files use the same Excel instance"
+        }
+      ],
+      "tips": [
+        "Always store the file descriptor in a variable (default is `message.excel_fd`) to use in subsequent Excel nodes.",
+        "When opening multiple files that reference each other, use the **In File Descriptor** input to share the same Excel application instance.",
+        "Set **Visible** to `false` for better performance in production automations.",
+        "Use the **Update Links** option when your file depends on external data sources that need to be current."
+      ]
+    },
+    "paste-range": {
+      "namespace": "Core.MicrosoftExcel.PasteRange",
+      "name": "PasteRange",
+      "summary": "Pastes the copied range from clipboard to a specified location. This node should be used after [Copy Range](/reference/packages/microsoft-excel/copy-range).",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// File Descriptor: message.excel_fd\r\n// From Cell: \"F1\"\r\n// To Cell: \"H5\"\r\n// Range: Specific-Range\r\n// Pastes previously copied data to cells F1 through H5"
+        },
+        {
+          "title": "Example 2",
+          "code": "// 1. Copy Range\r\n// From Cell: \"A1\"\r\n// To Cell: \"D10\"\r\n// Range: Specific-Range\r\n\r\n// 2. Paste Range\r\n// From Cell: \"A15\"\r\n// To Cell: \"D24\"\r\n// Range: Specific-Range\r\n// Creates a duplicate of the data 14 rows below"
+        },
+        {
+          "title": "Example 3",
+          "code": "// 1. Copy Range from Sheet1\r\n\r\n// 2. Activate Sheet2\r\n// Sheet Name: \"Destination\"\r\n\r\n// 3. Paste Range\r\n// From Cell: \"A1\"\r\n// To Cell: \"D10\""
+        }
+      ],
+      "tips": [
+        "The **From Cell** and **To Cell** define the destination range dimensions.",
+        "Both **values** and **formatting** are pasted.",
+        "If the destination range is smaller than the copied range, only the portion that fits is pasted.",
+        "If the destination range is larger, the copied data is repeated or the extra cells remain unchanged.",
+        "Always use [Copy Range](/reference/packages/microsoft-excel/copy-range) before Paste Range."
+      ]
+    },
+    "range-to-image": {
+      "namespace": "Core.MicrosoftExcel.RangeToImage",
+      "name": "RangeToImage",
+      "summary": "Exports a range of cells to an image file (PNG format), capturing the exact appearance of the cells including formatting.",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// File Descriptor: message.excel_fd\r\n// Range: \"A1:D10\"\r\n// Image Path: \"C:\\\\Reports\\\\data_table.png\"\r\n// Output: \"C:\\\\Reports\\\\data_table.png\""
+        },
+        {
+          "title": "Example 2",
+          "code": "// Range: \"B5:F20\"\r\n// Image Path: (leave empty)\r\n// Output: A temporary file path like \"C:\\\\Users\\\\...\\\\tmp12345.png\""
+        },
+        {
+          "title": "Example 3",
+          "code": "// Range: \"A1:H50\"\r\n// Image Path: \"C:\\\\Screenshots\\\\report_section.png\"\r\n// Captures the visual appearance including colors, borders, and fonts"
+        },
+        {
+          "title": "Example 4",
+          "code": "// 1. Range to Image\r\n// Range: \"A1:E15\"\r\n// Output: image_path\r\n\r\n// 2. Send email with the image\r\n// Attachment: message.image_path"
+        }
+      ],
+      "tips": [
+        "The image captures the **visual appearance** of the range, including:",
+        "Cell values and formatting (fonts, colors, alignment)",
+        "Borders and gridlines",
+        "Background colors and patterns",
+        "Merged cells",
+        "The range must be valid Excel notation (e.g., \"A1:C10\").",
+        "The exported image is in PNG format with transparent background where applicable.",
+        "Use this to create snapshots of formatted reports or data tables.",
+        "The image resolution is based on the current screen display settings.",
+        "For exporting charts, use [Chart to Image](/reference/packages/microsoft-excel/chart-to-image) instead."
+      ]
+    },
+    "read-cell-value": {
+      "namespace": "Core.MicrosoftExcel.ReadCellValue",
+      "name": "ReadCellValue",
+      "summary": "Reads the value from a specific cell in the active Excel sheet.",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// File Descriptor: message.excel_fd\r\n// Cell: \"A1\"\r\n// Output stored in: message.Value"
+        },
+        {
+          "title": "Example 2",
+          "code": "// Cell: \"D5\"  // Price column\r\n// The value is stored in message.Value"
+        },
+        {
+          "title": "Example 3",
+          "code": "// 1. Read Cell Value\r\n// Cell: \"A1\"\r\n// Output: cell_a1\r\n\r\n// 2. Read Cell Value\r\n// Cell: \"B1\"\r\n// Output: cell_b1\r\n\r\n// 3. Read Cell Value\r\n// Cell: \"C1\"\r\n// Output: cell_c1"
+        },
+        {
+          "title": "Example 4",
+          "code": "// Cell: \"E10\"  // Contains =SUM(E1:E9)\r\n// Returns the calculated result, not the formula"
+        }
+      ],
+      "tips": [
+        "This node returns the **displayed text** of the cell, not the underlying value. For example, if a cell contains the number 1234.56 but is formatted to show \"$1,234.56\", the node returns \"$1,234.56\".",
+        "Use the active sheet. If you need to read from a different sheet, use [Activate Sheet](/reference/packages/microsoft-excel/activate-sheet) first.",
+        "For reading multiple cells efficiently, consider using [Get Range](/reference/packages/microsoft-excel/get-range) instead.",
+        "To get formulas instead of values, use [Get Formula](/reference/packages/microsoft-excel/get-formula)."
+      ]
+    },
+    "run-macro": {
+      "namespace": "Core.MicrosoftExcel.RunMacro",
+      "name": "RunMacro",
+      "summary": "Executes a VBA macro in the Excel workbook. Supports both macros embedded in the workbook and external macro files.",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// File Descriptor: message.excel_fd\r\n// Macro Name: \"FormatReport\"\r\n// Macro File Path: (leave empty)\r\n// Executes the FormatReport macro from the active workbook"
+        },
+        {
+          "title": "Example 2",
+          "code": "// Macro Name: \"CustomCalculations\"\r\n// Macro File Path: \"C:\\\\Macros\\\\calculations.xlam\"\r\n// Opens the macro file, runs the macro, then closes it"
+        },
+        {
+          "title": "Example 3",
+          "code": "// If macro is in a specific module:\r\n// Macro Name: \"Module1.FormatData\""
+        },
+        {
+          "title": "Example 4",
+          "code": "// 1. Run Macro\r\n// Macro Name: \"PrepareData\"\r\n\r\n// 2. Run Macro\r\n// Macro Name: \"CalculateTotals\"\r\n\r\n// 3. Run Macro\r\n// Macro Name: \"GenerateCharts\""
+        }
+      ],
+      "tips": [
+        "The Excel file must be macro-enabled (.xlsm, .xlsb) to contain macros.",
+        "Macro names are case-sensitive in some Excel versions.",
+        "When using **Macro File Path**, the file is opened, the macro runs, and the file is closed automatically.",
+        "If the macro name doesn't include the workbook reference, it's automatically added when using an external file.",
+        "Macros can modify the worksheet, so ensure you have backups if testing.",
+        "VBA macros must be enabled in Excel's Trust Center for this to work."
+      ]
+    },
+    "save-excel": {
+      "namespace": "Core.MicrosoftExcel.SaveExcel",
+      "name": "SaveExcel",
+      "summary": "Saves the Excel file to the specified path or saves changes to the current file location.",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// File Descriptor: message.excel_fd\r\n// Path: (leave empty)\r\n// This saves changes to the original file location"
+        },
+        {
+          "title": "Example 2",
+          "code": "// File Descriptor: message.excel_fd\r\n// Path: C:\\Reports\\updated_report.xlsx\r\n// This saves the file to a new location"
+        },
+        {
+          "title": "Example 3",
+          "code": "// File Descriptor: message.excel_fd\r\n// Path: C:\\Automation\\report_with_macros.xlsm\r\n// The node automatically detects .xlsm extension and saves in macro-enabled format"
+        }
+      ],
+      "tips": [
+        "If **Path** is empty, the file is saved to its current location (same as Ctrl+S in Excel).",
+        "If **Path** is provided, the file is saved to the new location (same as Save As).",
+        "The node automatically detects macro-enabled workbooks (.xlsm) and saves them with the appropriate format.",
+        "You can save to a different format by changing the file extension in the path (e.g., .xlsx, .xlsm, .xls).",
+        "After saving to a new path, the workbook remains open at the new location."
+      ]
+    },
+    "search-sheet": {
+      "namespace": "Core.MicrosoftExcel.SearchSheet",
+      "name": "SearchSheet",
+      "summary": "Searches for a term in a sheet and returns a list of cell addresses where the term was found.",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// File Descriptor: message.excel_fd\r\n// Search Term: \"Invoice\"\r\n// Sheet Selection: Active-Sheet\r\n// Output: [\"A5\", \"B12\", \"D20\"]"
+        },
+        {
+          "title": "Example 2",
+          "code": "// Search Term: \"Total\"\r\n// Sheet Selection: Specific-Sheet\r\n// Sheet Name: \"Summary\"\r\n// Searches only in the Summary sheet"
+        },
+        {
+          "title": "Example 3",
+          "code": "// Search Term: \"PRD-001\"\r\n// Returns all cells containing this product code"
+        },
+        {
+          "title": "Example 4",
+          "code": "// After Search Sheet:\r\n// For Each with message.cells\r\n// - Read cell value at message.item\r\n// - Perform action based on location"
+        },
+        {
+          "title": "Example 5",
+          "code": "// Search Term: \"error\"\r\n// Finds \"Error\", \"ERROR\", \"error\", etc."
+        }
+      ],
+      "tips": [
+        "The search is **case-insensitive** by default.",
+        "The search looks for **partial matches** (e.g., searching \"cat\" will find \"catalog\").",
+        "Cell addresses are returned without dollar signs (e.g., \"A1\", not \"$A$1\").",
+        "The search covers only the used range of the sheet.",
+        "If no matches are found, an error is thrown (use Continue On Error to handle this).",
+        "Search is performed row by row from left to right, top to bottom."
+      ]
+    },
+    "set-active-cell": {
+      "namespace": "Core.MicrosoftExcel.SetActiveCell",
+      "name": "SetActiveCell",
+      "summary": "Sets the active cell in the worksheet by address or relative movement from the current position.",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// File Descriptor: message.excel_fd\r\n// Cell Address: \"D5\"\r\n// Target: Specific"
+        },
+        {
+          "title": "Example 2",
+          "code": "// Target: Down\r\n// Moves from current cell (e.g., A1) to the cell below (A2)"
+        },
+        {
+          "title": "Example 3",
+          "code": "// 1. Set Active Cell to A1\r\n// Cell Address: \"A1\"\r\n// Target: Specific\r\n\r\n// 2. Read current cell value...\r\n\r\n// 3. Move to next cell in row\r\n// Target: Right\r\n\r\n// 4. Read value...\r\n\r\n// 5. Move to start of next row\r\n// Target: Next Row\r\n\r\n// Repeat for each row"
+        },
+        {
+          "title": "Example 4",
+          "code": "// Move to beginning of current row\r\n// Target: Row Start\r\n\r\n// Move to end of current row\r\n// Target: Row End"
+        },
+        {
+          "title": "Example 5",
+          "code": "// Start at A1\r\n// Target: Specific, Cell Address: \"A1\"\r\n\r\n// Move right\r\n// Target: Right  // Now at B1\r\n\r\n// Move down\r\n// Target: Down   // Now at B2\r\n\r\n// Move left\r\n// Target: Left   // Now at A2"
+        }
+      ],
+      "tips": [
+        "Use relative movements (Up, Down, Left, Right) for processing data in loops.",
+        "**Row Start** moves to column A of the current row.",
+        "**Row End** moves to the last column with data in the current row.",
+        "**Next Row** is equivalent to moving down and then to Row Start.",
+        "This node only changes the active cell selection; it doesn't modify any data."
+      ]
+    },
+    "set-cell-value": {
+      "namespace": "Core.MicrosoftExcel.SetCellValue",
+      "name": "SetCellValue",
+      "summary": "Sets the value of a specific cell in the active Excel sheet with type formatting support.",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// File Descriptor: message.excel_fd\r\n// Cell: \"A1\"\r\n// Value: \"Product Name\"\r\n// Format: string"
+        },
+        {
+          "title": "Example 2",
+          "code": "// Cell: \"B2\"\r\n// Value: \"1234.56\"\r\n// Format: number\r\n// Excel will treat this as a numeric value for calculations"
+        },
+        {
+          "title": "Example 3",
+          "code": "// Cell: \"C3\"\r\n// Value: \"true\"\r\n// Format: boolean\r\n// Excel will display TRUE in the cell"
+        },
+        {
+          "title": "Example 4",
+          "code": "// Cell: \"A1\"\r\n// Value: \"00123\"\r\n// Format: string\r\n// Keeps the leading zeros by storing as text"
+        },
+        {
+          "title": "Example 5",
+          "code": "// Get a value from another source\r\n// Cell: \"D5\"\r\n// Value: message.calculated_total\r\n// Format: number"
+        }
+      ],
+      "tips": [
+        "Choose the correct **Format** to ensure Excel treats the data appropriately.",
+        "Use `string` format for data like product codes (e.g., \"00123\") to preserve leading zeros.",
+        "Use `number` format for numeric calculations to enable Excel formulas to work with the data.",
+        "Use `boolean` format for TRUE/FALSE values in conditional logic.",
+        "The cell retains any existing formatting (colors, borders, etc.) but the value is replaced."
+      ]
+    },
+    "set-formula": {
+      "namespace": "Core.MicrosoftExcel.SetFormula",
+      "name": "SetFormula",
+      "summary": "Sets a formula in a specific cell in the active Excel sheet.",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// File Descriptor: message.excel_fd\r\n// Cell: \"A11\"\r\n// Formula: \"=SUM(A1:A10)\""
+        },
+        {
+          "title": "Example 2",
+          "code": "// Cell: \"D2\"\r\n// Formula: \"=B2*C2\"\r\n// Multiplies values in B2 and C2"
+        },
+        {
+          "title": "Example 3",
+          "code": "// Cell: \"E5\"\r\n// Formula: \"=IF(D5\u003e100,\\\"High\\\",\\\"Low\\\")\""
+        },
+        {
+          "title": "Example 4",
+          "code": "// Cell: \"F\" + message.row_number\r\n// Formula: \"=E\" + message.row_number + \"*0.1\"\r\n// Creates formulas like =E5*0.1, =E6*0.1, etc."
+        },
+        {
+          "title": "Example 5",
+          "code": "// SUM: \"=SUM(A1:A10)\"\r\n// AVERAGE: \"=AVERAGE(B1:B10)\"\r\n// COUNT: \"=COUNT(C1:C10)\"\r\n// IF: \"=IF(D1\u003e50,\\\"Pass\\\",\\\"Fail\\\")\"\r\n// VLOOKUP: \"=VLOOKUP(E1,A:B,2,FALSE)\"\r\n// CONCATENATE: \"=CONCATENATE(A1,\\\" \\\",B1)\""
+        }
+      ],
+      "tips": [
+        "The formula must start with `=` (equals sign).",
+        "Use Excel's standard formula syntax and functions.",
+        "Formulas are calculated immediately upon setting.",
+        "Use quotes within formulas carefully - escape them in your code if needed.",
+        "Cell references are relative unless you use absolute references (e.g., `$A$1`).",
+        "Test formulas manually in Excel first to ensure they work correctly."
+      ]
+    },
+    "set-range": {
+      "namespace": "Core.MicrosoftExcel.SetRange",
+      "name": "SetRange",
+      "summary": "Writes a table of data to a range of cells starting from a specified cell.",
+      "examples": [
+        {
+          "title": "Example 1",
+          "code": "// File Descriptor: message.excel_fd\r\n// Start Cell: \"A1\"\r\n// Range: message.table\r\n// Headers: false\r\n// Data is written starting at A1, filling columns and rows sequentially"
+        },
+        {
+          "title": "Example 2",
+          "code": "// Excel sheet has headers: Name, Age, City, Score in row 1\r\n// Start Cell: \"A2\"  // Start writing from row 2\r\n// Range: message.table (with columns: Name, Age, City, Score)\r\n// Headers: true\r\n// Data is matched to corresponding columns by name"
+        },
+        {
+          "title": "Example 3",
+          "code": "// 1. Get Range from Sheet1\r\n// Output: source_data\r\n\r\n// 2. Activate Sheet2\r\n\r\n// 3. Set Range to Sheet2\r\n// Start Cell: \"A1\"\r\n// Range: message.source_data"
+        },
+        {
+          "title": "Example 4",
+          "code": "// Find last row with data first\r\n// Then Set Range\r\n// Start Cell: \"A10\"  // Start after existing data\r\n// Range: message.new_data"
+        }
+      ],
+      "tips": [
+        "The **Range** input must be a table object with `columns` (array of strings) and `rows` (array of objects).",
+        "When **Headers** is `true`, the node looks for matching column names in row 1 and writes data to those specific columns.",
+        "When **Headers** is `false`, data is written sequentially regardless of column names.",
+        "The output from [Get Range](/reference/packages/microsoft-excel/get-range) can be directly used as input here.",
+        "Large datasets are written efficiently in bulk for better performance."
+      ]
+    }
+  }
+}

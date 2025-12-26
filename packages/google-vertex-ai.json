@@ -1,0 +1,260 @@
+{
+  "package": "GoogleVertexAi",
+  "summary": "Google Vertex AI is Google Cloud's unified platform for building, deploying, and scaling machine learning models and AI applications, offering powerful APIs for text generation, chat, code generation, and embeddings.",
+  "description": "```mdx-code-block import DocCardList from '@theme/DocCardList';",
+  "nodes": {
+    "GenerateChat": {
+      "namespace": "Core.GoogleVertexAi.GenerateChat",
+      "name": "GenerateChat",
+      "summary": "Generates conversational AI responses using Google Vertex AI's PaLM 2 chat models (Chat Bison) with context and few-shot learning support.",
+      "howItWorks": "The Generate Chat node creates conversational responses using Chat Bison models optimized for dialogue. When executed: 1. Validates connection (either via Connection ID or direct credentials) 2. Retrieves authentication token and project ID 3. Validates message author and content are not empty 4. Parses optional context and examples (if provided) 5. Validates that Examples Input and Output are both provided or both empty 6. Parses and validates generation parameters (temperature, tokens, etc.) 7. Constructs request payload with message, context, examples, and parameters 8. Sends POST request to Vertex AI chat predict endpoint 9. Processes response and extracts chat content 10. Returns complete response object with chat messages and metadata Chat Bison models are specifically tuned for multi-turn conversations, maintaining context and providing natural, coherent responses.",
+      "usage": [
+        "**Either**:",
+        "Connection ID from Connect node, **OR**",
+        "Direct credentials + Project ID",
+        "**Author of The Message** (non-empty, typically \"user\")",
+        "**Content of The Message** (non-empty string)",
+        "**Max Output Tokens** (required, must be set)",
+        "**Examples**: Both Input and Output must be provided together, or both left empty",
+        "**Vertex AI API** enabled in Google Cloud project",
+        "**IAM permissions**: `aiplatform.endpoints.predict`"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrInvalidArg",
+        "ErrNotFound",
+        "ErrStatus"
+      ],
+      "tips": [
+        "**Context is Key**: Use Context to set role, tone, and behavior guidelines",
+        "**Few-Shot Learning**: Provide Examples to demonstrate desired response style",
+        "**Author Roles**: Use \"user\" for customer/user messages, \"bot\" for assistant responses",
+        "**Temperature Settings**:",
+        "**0.0-0.2**: Factual, customer support, documentation",
+        "**0.3-0.5**: Balanced conversations, general assistance",
+        "**0.6-0.8**: Creative, brainstorming, entertainment",
+        "**Model Selection**:",
+        "**chat-bison@001**: Stable for production chatbots",
+        "**chat-bison-32k**: For conversations with long history",
+        "**Token Management**: Reserve tokens for multi-turn conversations",
+        "**Conversation History**: Manually maintain history by including previous messages in Context"
+      ]
+    },
+    "GenerateCode": {
+      "namespace": "Core.GoogleVertexAi.GenerateCode",
+      "name": "GenerateCode",
+      "summary": "Generates code snippets, functions, and complete programs using Google Vertex AI's PaLM 2 code generation model (Code Bison).",
+      "howItWorks": "The Generate Code node creates code using Code Bison, a model trained specifically on source code. When executed: 1. Validates connection (either via Connection ID or direct credentials) 2. Retrieves authentication token and project ID 3. Validates that prompt is not empty 4. Parses optional generation parameters (temperature, tokens, candidate count) 5. Constructs request payload with prompt (as \"prefix\") and parameters 6. Sends POST request to Vertex AI code predict endpoint 7. Processes response and extracts generated code 8. Returns complete response object with code and metadata Code Bison is optimized for code generation, completion, documentation, and explanation across multiple programming languages.",
+      "usage": [
+        "**Either**:",
+        "Connection ID from Connect node, **OR**",
+        "Direct credentials + Project ID",
+        "**Prompt** (non-empty string describing code to generate)",
+        "**Max Output Tokens** (required, must be set)",
+        "**Vertex AI API** enabled in Google Cloud project",
+        "**IAM permissions**: `aiplatform.endpoints.predict`"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrInvalidArg",
+        "ErrNotFound",
+        "ErrStatus"
+      ],
+      "tips": [
+        "**Temperature Settings**:",
+        "**0.0-0.2**: Deterministic, production code, bug fixes",
+        "**0.3-0.5**: Balanced, general code generation",
+        "**0.6-1.0**: Creative, exploratory, multiple approaches",
+        "**Prompt Engineering for Code**:",
+        "Specify programming language explicitly",
+        "Include context (libraries, frameworks, versions)",
+        "Request specific features (error handling, documentation)",
+        "Provide input/output examples",
+        "Specify code style or conventions",
+        "**Token Management**:",
+        "Estimate code length before setting Max Output Tokens",
+        "Simple functions: 100-300 tokens",
+        "Complex functions: 300-600 tokens",
+        "Classes with methods: 600-1000 tokens",
+        "**Multi-Language Support**:",
+        "Python, JavaScript, Java, C++, C#, Go, Ruby, PHP",
+        "SQL, HTML, CSS",
+        "Shell scripts, Dockerfile, YAML configurations",
+        "**Quality Control**:",
+        "Always review and test generated code",
+        "Use Candidate Count \u003e 1 for critical functions",
+        "Lower temperature for production code",
+        "Verify security implications"
+      ]
+    },
+    "GenerateText": {
+      "namespace": "Core.GoogleVertexAi.GenerateText",
+      "name": "GenerateText",
+      "summary": "Generates high-quality text content using Google Vertex AI's PaLM 2 text generation models (Text Bison).",
+      "howItWorks": "The Generate Text node creates text content using Google's PaLM 2 models. When executed: 1. Validates connection (either via Connection ID or direct credentials) 2. Retrieves authentication token and project ID 3. Validates that prompt is not empty 4. Parses and validates generation parameters (temperature, tokens, etc.) 5. Constructs request payload with prompt and parameters 6. Sends POST request to Vertex AI predict endpoint 7. Processes response and extracts generated text 8. Returns complete response object with text and metadata The Text Bison models are optimized for a wide range of text generation tasks including summarization, question answering, creative writing, and content generation.",
+      "usage": [
+        "**Either**:",
+        "Connection ID from Connect node, **OR**",
+        "Direct credentials + Project ID",
+        "**Prompt** (non-empty string)",
+        "**Max Output Tokens** (required, must be set)",
+        "**Vertex AI API** enabled in Google Cloud project",
+        "**IAM permissions**: `aiplatform.endpoints.predict`"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrInvalidArg",
+        "ErrNotFound",
+        "ErrStatus"
+      ],
+      "tips": [
+        "**Temperature Settings**:",
+        "**0.0-0.3**: Factual, deterministic outputs (summaries, data extraction)",
+        "**0.4-0.7**: Balanced creativity and consistency (emails, descriptions)",
+        "**0.8-1.0**: Highly creative outputs (stories, brainstorming)",
+        "**Model Selection**:",
+        "**text-bison@001**: Stable, predictable for production",
+        "**text-bison**: Latest improvements, may change over time",
+        "**text-bison-32k**: For longer context (documents, conversations)",
+        "**Token Management**:",
+        "~4 characters = 1 token",
+        "100 tokens ≈ 75 words",
+        "Set Max Output Tokens based on expected response length",
+        "**Prompt Engineering**:",
+        "Be specific and clear in your prompts",
+        "Provide examples for better results",
+        "Use delimiters (\"\"\", ###) to separate sections",
+        "Specify format (bullet points, JSON, paragraph)",
+        "**Quality Control**:",
+        "Use Candidate Count \u003e 1 for critical content",
+        "Lower temperature for consistency",
+        "Test prompts with different parameter combinations",
+        "Review safetyAttributes in response"
+      ]
+    },
+    "GetMultimodalEmbeddings": {
+      "namespace": "Core.GoogleVertexAi.GetMultimodalEmbeddings",
+      "name": "GetMultimodalEmbeddings",
+      "summary": "Generates semantic embeddings for text, images, or both using Google Vertex AI's multimodal embedding models for cross-modal search and similarity.",
+      "howItWorks": "The Get Multimodal Embeddings node generates embeddings that can represent text, images, or both in a unified vector space. When executed: 1. Validates connection (either via Connection ID or direct credentials) 2. Retrieves authentication token and project ID 3. Validates that at least one input (text or image) is provided 4. If image path provided: - Reads image file from local filesystem - Encodes image as base64 string 5. Constructs request payload based on inputs: - Text + Image: Both embeddings in unified space - Image only: Image embedding - Text only: Returns error (recommends using Get Text Embeddings instead) 6. Sends POST request to Vertex AI predict endpoint 7. Processes response and returns embedding vectors 8. Returns complete response object with embeddings The multimodal model projects text and images into the same vector space, enabling cross-modal similarity search (e.g., find images similar to a text query).",
+      "usage": [
+        "**Either**:",
+        "Connection ID from Connect node, **OR**",
+        "Direct credentials + Project ID",
+        "**At least one of**:",
+        "Text input, **OR**",
+        "Valid image file path",
+        "**Image requirements** (if provided):",
+        "Supported formats: JPEG, PNG, GIF, BMP, WebP",
+        "File must be accessible on local filesystem",
+        "Recommended max size: 5MB",
+        "**Vertex AI API** enabled in Google Cloud project",
+        "**IAM permissions**: `aiplatform.endpoints.predict`"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrInvalidArg",
+        "ErrEmptyArg",
+        "ErrNotFound",
+        "ErrStatus"
+      ],
+      "tips": [
+        "**Text + Image**: Use both for best semantic representation",
+        "**Image Only**: Best for visual similarity search",
+        "**Text Only**: Use Get Text Embeddings node instead (better optimized)",
+        "**Preprocessing**: Resize large images before embedding to reduce latency",
+        "**Batch Processing**: Reuse connection for multiple requests",
+        "**Vector Database**: Store embeddings in specialized vector DB (Pinecone, Weaviate)",
+        "**Similarity Metric**: Use cosine similarity for comparing embeddings",
+        "**Normalization**: Embeddings are normalized for efficient comparison",
+        "**Cross-Modal**: Text and image embeddings share the same vector space"
+      ]
+    },
+    "GetTextEmbeddings": {
+      "namespace": "Core.GoogleVertexAi.GetTextEmbeddings",
+      "name": "GetTextEmbeddings",
+      "summary": "Generates semantic vector embeddings for text using Google Vertex AI's Gecko embedding models.",
+      "howItWorks": "The Get Text Embeddings node converts text into high-dimensional vector representations. When executed: 1. Validates connection (either via Connection ID or direct credentials) 2. Retrieves authentication token and project ID 3. Validates that text input is not empty 4. Configures the embedding model and endpoint 5. Constructs request payload with text and auto-truncate setting 6. Sends POST request to Vertex AI predict endpoint 7. Processes response and extracts embedding vectors 8. Returns complete response object with embeddings and metadata The embeddings are numerical vectors (typically 768 dimensions for Gecko models) that capture semantic meaning, enabling similarity comparisons and machine learning tasks.",
+      "usage": [
+        "**Either**:",
+        "Connection ID from Connect node, **OR**",
+        "Direct credentials + Project ID",
+        "**Text input** (non-empty, max 3072 tokens)",
+        "**Vertex AI API** enabled in Google Cloud project",
+        "**IAM permissions**: `aiplatform.endpoints.predict`"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrInvalidArg",
+        "ErrNotFound",
+        "ErrStatus"
+      ],
+      "tips": [
+        "**Auto Truncate**: Enable for variable-length text to avoid errors",
+        "**Model Selection**:",
+        "Use **@001** for stable, predictable embeddings",
+        "Use **@latest** for best quality",
+        "Use **multilingual** for cross-language tasks",
+        "**Token Limits**: Monitor token count in response statistics",
+        "**Batch Processing**: Reuse connection for multiple embedding requests",
+        "**Similarity Metrics**: Use cosine similarity for comparing embeddings",
+        "**Caching**: Cache embeddings for frequently accessed content",
+        "**Normalization**: Gecko embeddings are pre-normalized for cosine similarity",
+        "**Dimensionality**: Gecko models produce 768-dimensional vectors"
+      ]
+    },
+    "connect": {
+      "namespace": "Core.GoogleVertexAi.Connect",
+      "name": "Connect",
+      "summary": "Establishes a connection to Google Vertex AI service using Google Cloud credentials and project ID.",
+      "howItWorks": "The Connect node establishes a connection to Google Vertex AI by authenticating with Google Cloud credentials. When executed: 1. Retrieves the service account credentials from the vault 2. Validates that credentials contain valid JSON content 3. Extracts an OAuth2 access token from the credentials 4. Validates that Project ID is provided and not empty 5. Creates a unique connection ID 6. Stores the token and project ID associated with the connection ID 7. Returns the connection ID for use by other Vertex AI nodes The connection ID can then be passed to other Vertex AI nodes (Generate Text, Generate Chat, Generate Code, Get Text Embeddings, Get Multimodal Embeddings) to authenticate API requests.",
+      "usage": [
+        "**Google Cloud Project** with Vertex AI API enabled",
+        "**Service Account** with appropriate IAM permissions:",
+        "Vertex AI User (`roles/aiplatform.user`) or",
+        "Custom role with `aiplatform.endpoints.predict` permission",
+        "**Service Account Key** in JSON format stored in Robomotion vault",
+        "**Project ID** from your Google Cloud Console"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrInvalidArgs",
+        "ErrGetTokenFromVault",
+        "ErrGetToken",
+        "ErrInvalidArg"
+      ],
+      "tips": [
+        "**Store Credentials Securely**: Always use Robomotion vault for service account keys",
+        "**Reuse Connections**: Create one connection and reuse the Connection ID across multiple nodes",
+        "**Project Organization**: Use different projects for dev/staging/prod environments",
+        "**Minimal Permissions**: Grant service accounts only the permissions they need",
+        "**Connection Pooling**: For high-throughput scenarios, maintain persistent connections",
+        "**Error Recovery**: Implement error handling to reconnect on token expiration",
+        "**Monitoring**: Track API usage in Google Cloud Console for cost management"
+      ]
+    },
+    "disconnect": {
+      "namespace": "Core.GoogleVertexAi.Disconnect",
+      "name": "Disconnect",
+      "summary": "Closes an active Vertex AI connection and releases associated resources.",
+      "howItWorks": "The Disconnect node terminates an active Vertex AI connection and cleans up resources. When executed: 1. Retrieves the Connection ID from input 2. Validates that Connection ID is not empty 3. Removes the stored authentication token and project ID 4. Releases the connection from the internal connection pool 5. Invalidates the Connection ID for future use After disconnection, the Connection ID can no longer be used with any Vertex AI nodes.",
+      "usage": [
+        "Valid Connection ID from a Connect node",
+        "Connection must not have been previously disconnected"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrInvalidArg"
+      ],
+      "tips": [
+        "**Resource Management**: Always disconnect when workflow completes",
+        "**Error Handling**: Use in Finally block to ensure cleanup",
+        "**Connection Reuse**: Disconnect only after all operations complete",
+        "**Long-Running Flows**: For flows running hours, consider periodic reconnection",
+        "**Multiple Connections**: Track different Connection IDs if using multiple projects",
+        "**Optional Step**: Disconnection is optional - connections auto-cleanup on flow end",
+        "**Performance**: For high-frequency automations, consider connection pooling strategies"
+      ]
+    }
+  }
+}

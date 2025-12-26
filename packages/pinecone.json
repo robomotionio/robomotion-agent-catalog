@@ -1,0 +1,246 @@
+{
+  "package": "Pinecone",
+  "summary": "The Pinecone package enables you to integrate Pinecone's vector database into your RPA automation workflows. Pinecone is a fully-managed, developer-friendly vector database designed for AI applications, enabling semantic search, recommendation systems, and Retrieval-Augmented Generation (RAG) workflows.",
+  "description": "## Features - Create and manage vector database indexes",
+  "nodes": {
+    "connect": {
+      "namespace": "Core.Pinecone.Connect",
+      "name": "Connect",
+      "summary": "Establishes a connection to Pinecone by storing the API key for use in subsequent Pinecone operations.",
+      "howItWorks": "The Connect node is the first step in most Pinecone automation flows. It securely stores your Pinecone API key and returns a connection ID that is used by all other Pinecone nodes in the flow. When executed, the node: 1. Retrieves the API key from the provided credentials 2. Stores the API key in a thread-safe connection manager 3. Returns a unique connection ID that references the stored API key 4. This connection ID can then be used by other Pinecone nodes to access the API",
+      "usage": [
+        "A valid Pinecone account",
+        "A Pinecone API key (can be generated in your Pinecone console)",
+        "The API key must be stored as a credential in Robomotion"
+      ],
+      "bestPractices": [
+        "The Connect node should be executed before any other Pinecone operations",
+        "The returned Connection Id must be passed to subsequent Pinecone nodes",
+        "Each Connect node creates a new connection entry in memory",
+        "The connection is automatically removed when the flow stops",
+        "Alternatively, you can skip Connect and provide API Key credentials directly to each node"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg"
+      ]
+    },
+    "create-index": {
+      "namespace": "Core.Pinecone.CreateIndex",
+      "name": "CreateIndex",
+      "summary": "Creates a new Pinecone index with specified configuration including dimension, metric, and infrastructure settings.",
+      "howItWorks": "The Create Index node initializes a new vector database index in Pinecone with your specified configuration. When executed, the node: 1. Validates the required inputs (environment, name, dimension) 2. Validates that dimension is a valid integer 3. Converts pod and replica counts from strings to integers if provided 4. Constructs the index configuration with all specified parameters 5. Sends a POST request to Pinecone's controller API to create the index 6. Returns success (202) if the index creation is initiated :::warning Index creation is an asynchronous operation. The node returns success when creation is initiated, but the index may take several minutes to become fully ready. Use the List or Describe Indexes node to check the index status before performing operations. :::",
+      "usage": [
+        "A valid Pinecone account and API key",
+        "Sufficient quota in your Pinecone plan for the requested index configuration",
+        "Unique index name within your project"
+      ],
+      "bestPractices": [
+        "The dimension must exactly match your embedding model's output dimension",
+        "Choose the metric based on your use case:",
+        "**Cosine** - Best for most text embeddings (handles different vector magnitudes)",
+        "**Euclidean** - Good when magnitude matters (e.g., image embeddings)",
+        "**Dotproduct** - Fast when vectors are pre-normalized",
+        "Index names must be lowercase and can contain letters, numbers, and hyphens",
+        "You cannot change the dimension or metric after index creation",
+        "Index creation typically takes 2-5 minutes to complete"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrStatus"
+      ]
+    },
+    "delete": {
+      "namespace": "Core.Pinecone.Delete",
+      "name": "Delete",
+      "summary": "Deletes vectors from a Pinecone index by ID, metadata filter, or deletes all vectors in a namespace. This operation is permanent and cannot be undone.",
+      "howItWorks": "The Delete node removes vectors from your Pinecone index based on the specified criteria. When executed, the node: 1. Validates required inputs (Host URL) 2. Constructs the delete request with one of three deletion methods: - By IDs: Deletes specific vectors - By Filter: Deletes vectors matching metadata criteria - Delete All: Removes all vectors in the namespace 3. Sends a POST request to the index's `/vectors/delete` endpoint 4. Returns a confirmation response :::warning Delete operations are permanent and cannot be undone. Always verify your deletion criteria before executing, especially when using Delete All or Filter options. :::",
+      "usage": [
+        "An existing Pinecone index with data",
+        "At least one deletion criterion (Ids, Filter, or Delete All)",
+        "Sufficient permissions to delete vectors"
+      ],
+      "bestPractices": [
+        "You can use Ids, Filter, or Delete All - use any one or combination",
+        "Deleting non-existent IDs does not cause an error",
+        "Filter-based deletion is eventually consistent",
+        "Delete All only affects the specified namespace",
+        "Deletion is asynchronous - vectors may not disappear immediately",
+        "Use Describe Index Stats to verify deletion completion"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrInternal",
+        "ErrStatus"
+      ]
+    },
+    "delete-index": {
+      "namespace": "Core.Pinecone.DeleteIndex",
+      "name": "DeleteIndex",
+      "summary": "Permanently deletes a Pinecone index and all its data. This operation cannot be undone.",
+      "howItWorks": "The Delete Index node permanently removes a Pinecone index and all its vectors. When executed, the node: 1. Validates required inputs (Environment, Index Name) 2. Constructs a DELETE request to Pinecone's controller API 3. Sends the request to delete the specified index 4. Returns success if the deletion is initiated :::danger This operation is PERMANENT and IRREVERSIBLE. All vectors, metadata, and index configuration will be lost forever. There is no way to recover a deleted index. :::",
+      "usage": [
+        "A valid Pinecone account and API key",
+        "Valid environment identifier",
+        "An existing index to delete",
+        "Appropriate permissions to delete indexes"
+      ],
+      "bestPractices": [
+        "Index deletion is permanent and cannot be undone",
+        "All vectors and data in the index are permanently lost",
+        "Pod resources are released and billing stops",
+        "The index name becomes available for reuse after deletion",
+        "Deletion may take a few minutes to complete",
+        "You cannot delete an index that is already being deleted"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrStatus"
+      ]
+    },
+    "describe-index-stats": {
+      "namespace": "Core.Pinecone.DescribeIndexStats",
+      "name": "DescribeIndexStats",
+      "summary": "Retrieves statistics about a Pinecone index, including total vector count, dimension, and namespace-specific information. This is useful for monitoring index usage and verifying data ingestion.",
+      "howItWorks": "The Describe Index Stats node provides insights into your index's current state. When executed, the node: 1. Validates required inputs (Host URL) 2. Constructs the request with optional filter 3. Sends a POST request to the index's `/describe_index_stats` endpoint 4. Returns comprehensive statistics about the index",
+      "usage": [
+        "An existing Pinecone index (in any status)",
+        "Valid Host URL for the index"
+      ],
+      "bestPractices": [
+        "Stats are eventually consistent - recent upserts may take a few seconds to reflect",
+        "The empty string key `\"\"` in namespaces represents the default namespace",
+        "Index fullness ranges from 0 to 1 (0% to 100% capacity)",
+        "When filter is provided, stats reflect only vectors matching that filter",
+        "This operation does not consume query quota"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrInternal",
+        "ErrStatus"
+      ]
+    },
+    "fetch": {
+      "namespace": "Core.Pinecone.Fetch",
+      "name": "Fetch",
+      "summary": "Retrieves specific vectors from a Pinecone index by their IDs. Unlike Query which finds similar vectors, Fetch returns exact vectors when you know their IDs.",
+      "howItWorks": "The Fetch node retrieves vectors by their exact IDs from your Pinecone index. When executed, the node: 1. Validates required inputs (Host URL, Ids) 2. Constructs a GET request with IDs as query parameters 3. Sends the request to the index's `/vectors/fetch` endpoint 4. Returns the complete vector data including values and metadata",
+      "usage": [
+        "An existing Pinecone index with data",
+        "Valid vector IDs that exist in the index",
+        "The vectors must exist in the default namespace (Fetch searches default namespace only)"
+      ],
+      "bestPractices": [
+        "Fetch always searches the default namespace (empty string \"\")",
+        "Non-existent IDs are silently ignored in the response",
+        "You can fetch multiple vectors in a single request",
+        "The response is a dictionary/object keyed by vector ID",
+        "All matched vectors include both values and metadata",
+        "There's no namespace option - only default namespace is searched"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrInternal",
+        "ErrStatus"
+      ]
+    },
+    "list-indexes": {
+      "namespace": "Core.Pinecone.ListIndexes",
+      "name": "ListIndexes",
+      "summary": "Lists all indexes in your Pinecone project or retrieves detailed information about a specific index. This node combines two operations controlled by the Method option.",
+      "howItWorks": "The List or Describe Indexes node retrieves index information from Pinecone. When executed, the node: 1. Validates required inputs (Environment, and Index Name if using Describe Index) 2. Constructs the appropriate API endpoint based on the Method 3. Sends a GET request to Pinecone's controller API 4. Returns either a list of index names or detailed index information",
+      "usage": [
+        "A valid Pinecone account and API key",
+        "Valid environment identifier",
+        "For Describe Index: a valid index name"
+      ],
+      "bestPractices": [
+        "List Indexes returns an array of index name strings",
+        "Describe Index returns detailed configuration and status",
+        "The `status.ready` field indicates if the index is ready for operations",
+        "Newly created indexes may show `ready: false` until initialization completes",
+        "This operation does not consume query quota"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrInternal",
+        "ErrStatus"
+      ]
+    },
+    "query": {
+      "namespace": "Core.Pinecone.Query",
+      "name": "Query",
+      "summary": "Searches for the most similar vectors in a Pinecone index based on a query vector or an existing vector ID. This is the primary operation for semantic search and similarity matching.",
+      "howItWorks": "The Query node performs similarity search in your Pinecone index. When executed, the node: 1. Validates required inputs (Host URL, Top K) 2. Validates that either Vector or Id is provided, but not both 3. Constructs the query request with all parameters 4. Sends a POST request to the index's `/query` endpoint 5. Returns matched vectors sorted by similarity score (highest first)",
+      "usage": [
+        "An existing Pinecone index with data",
+        "Either a query vector (same dimension as index) OR an existing vector ID",
+        "Sufficient quota in your Pinecone plan"
+      ],
+      "bestPractices": [
+        "You must provide either Vector OR Id, not both and not neither",
+        "Scores range from 0 to 1 (for cosine) or can be negative (for euclidean/dotproduct)",
+        "Higher scores indicate greater similarity for cosine and dotproduct metrics",
+        "Lower scores indicate greater similarity for euclidean metric",
+        "Top K determines how many results to return (max typically 10,000)",
+        "Setting includeValues=false reduces response size significantly",
+        "Metadata filters are applied before similarity search"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrInternal",
+        "ErrStatus"
+      ]
+    },
+    "update": {
+      "namespace": "Core.Pinecone.Update",
+      "name": "Update",
+      "summary": "Updates an existing vector's values or metadata in a Pinecone index. Use this when you need to modify a vector without changing its ID.",
+      "howItWorks": "The Update node modifies an existing vector in your Pinecone index. When executed, the node: 1. Validates required inputs (Host URL, Id, Values) 2. Constructs the update request with new values and optional metadata 3. Sends a POST request to the index's `/vectors/update` endpoint 4. Returns a confirmation response",
+      "usage": [
+        "An existing Pinecone index with data",
+        "A valid vector ID that exists in the index",
+        "New vector values with the same dimension as the index",
+        "The vector must exist in the specified namespace"
+      ],
+      "bestPractices": [
+        "The vector ID must already exist (Update won't create new vectors - use Upsert for that)",
+        "If Values is provided, it must match the index dimension",
+        "You can update just metadata by providing only metadata without values",
+        "Metadata update replaces the entire metadata object, not just specified fields",
+        "The update is atomic - either all changes succeed or none do",
+        "Updates are eventually consistent"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrInternal",
+        "ErrStatus"
+      ]
+    },
+    "upsert": {
+      "namespace": "Core.Pinecone.Upsert",
+      "name": "Upsert",
+      "summary": "Inserts new vectors or updates existing vectors in a Pinecone index. \"Upsert\" means the operation will insert new vectors or update existing ones if the ID already exists.",
+      "howItWorks": "The Upsert node adds or updates vectors in your Pinecone index. When executed, the node: 1. Validates required inputs (Host URL, Ids, Values) 2. Combines Ids, Values, and optional Metadata into vector objects 3. Constructs the upsert request with namespace if specified 4. Sends a POST request to the index's `/vectors/upsert` endpoint 5. Returns the number of successfully upserted vectors",
+      "usage": [
+        "An existing Pinecone index in ready status",
+        "Vector embeddings generated from your data (using OpenAI, Cohere, or other embedding models)",
+        "IDs must be unique strings",
+        "Vector dimensions must match the index dimension exactly"
+      ],
+      "bestPractices": [
+        "Each ID must be unique within the namespace",
+        "If an ID already exists, the vector and metadata are completely replaced",
+        "All vectors in the Values array must have the same dimension",
+        "The Ids and Values arrays must have the same length",
+        "Metadata arrays (if provided) must also match the length of Ids/Values",
+        "Pinecone has limits on batch size (typically 100-1000 vectors per request)",
+        "For large datasets, split into multiple Upsert operations"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg",
+        "ErrInternal",
+        "ErrStatus"
+      ]
+    }
+  }
+}

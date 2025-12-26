@@ -1,0 +1,110 @@
+{
+  "package": "Anthropic",
+  "summary": "Integrate with Anthropic's Claude AI models for text generation, document analysis, and intelligent automation.",
+  "description": "## Overview The Anthropic package provides access to Claude, Anthropic's AI assistant. Use it when you need advanced text generation, document understanding, or AI-powered decision making in your RPA workflows.",
+  "nodes": {
+    "analyze-document": {
+      "namespace": "Core.Anthropic.AnalyzeDocument",
+      "name": "AnalyzeDocument",
+      "summary": "Analyzes documents using Claude AI with Beta Files API support, enabling Claude to read and understand various document formats including PDFs, Word documents, and more.",
+      "howItWorks": "The Analyze Document node uses Claude's Beta Files API to analyze documents. When executed, the node: 1. Validates the connection (requires direct API mode, not Robomotion credits) 2. Collects all file paths from both individual and array inputs 3. For each file: - Opens and reads the file - Detects the MIME type based on file extension - Uploads the file to Claude's Files API - Receives a file ID for the uploaded file 4. Creates a message with the user prompt and uploaded documents 5. Sends the request to Claude's Beta Messages API 6. Extracts Claude's analysis from the response 7. Returns the analysis, file IDs, and optional thinking output 8. Optionally cleans up uploaded files (Note: Claude automatically cleans up files after some time)",
+      "usage": [
+        "**Direct API mode** - Robomotion AI Credits are not supported for document analysis",
+        "Valid Connection Id or direct API Key credentials",
+        "At least one file path must be provided",
+        "Non-empty User Prompt",
+        "Supported document formats (based on file extension)"
+      ]
+    },
+    "call-tool": {
+      "namespace": "Core.Anthropic.CallTool",
+      "name": "CallTool",
+      "summary": "Enables Claude AI to use function calling capabilities, allowing Claude to request tool executions based on natural language prompts.",
+      "howItWorks": "The Call Tool node enables Claude to use function calling. When executed, the node: 1. Validates the connection (requires direct API mode, not Robomotion credits) 2. Parses the tools definition JSON 3. Converts tools to Anthropic API format 4. Retrieves previous chat history if provided 5. Adds the current user prompt to the conversation 6. Sends the request to Claude with available tools 7. Claude analyzes the prompt and decides which tools to call 8. For each tool call Claude makes: - Extracts the tool name and input parameters - Adds the tool call to the results - Creates a placeholder tool result 9. If Max Tool Rounds is not exceeded, can make additional tool calls 10. Updates chat history with all messages and tool calls 11. Returns tool calls for external execution",
+      "usage": [
+        "**Direct API mode** - Robomotion AI Credits are not supported for tool calling",
+        "Valid Connection Id or direct API Key credentials",
+        "Non-empty Prompt",
+        "Valid Tools Definition JSON",
+        "Tools definition must follow the correct schema"
+      ]
+    },
+    "connect": {
+      "namespace": "Core.Anthropic.Connect",
+      "name": "Connect",
+      "summary": "Establishes a connection to the Anthropic Claude API and creates a client session for use in subsequent Claude operations.",
+      "howItWorks": "The Connect node is the first step in any Claude automation flow. It creates a secure connection to the Anthropic Claude API and returns a connection ID that is used by all other Claude nodes in the flow. When executed, the node: 1. Retrieves the API key from the provided credentials (if not using Robomotion credits) 2. Creates a Claude client instance 3. Stores the client in a thread-safe connection manager 4. Returns a unique connection ID that references the stored client 5. This connection ID is then used by other Claude nodes to access the API",
+      "usage": [
+        "**For API Key mode:** A valid Anthropic account and API key (can be generated at console.anthropic.com)",
+        "**For Robomotion Credits mode:** An active Robomotion account with AI credits"
+      ],
+      "bestPractices": [
+        "The Connect node should be executed before any other Claude operations",
+        "The returned Connection Id must be passed to subsequent Claude nodes",
+        "Each Connect node creates a new client session that should be cleaned up with a Disconnect node",
+        "For security, always use the Disconnect node to remove the stored client when it's no longer needed",
+        "The client session is stored in memory only and is automatically removed when the flow stops"
+      ]
+    },
+    "disconnect": {
+      "namespace": "Core.Anthropic.Disconnect",
+      "name": "Disconnect",
+      "summary": "Disconnects from the Claude API and releases the client session created by the Connect node.",
+      "howItWorks": "The Disconnect node cleans up resources by removing the stored Claude client session. When executed, the node: 1. Validates that the Connection Id is not empty 2. Removes the client session from the connection manager 3. Frees up memory resources associated with the connection",
+      "usage": [
+        "A valid Connection Id from a Connect node"
+      ],
+      "bestPractices": [
+        "The Disconnect node should be executed after all Claude operations are complete",
+        "Once disconnected, the Connection Id cannot be used anymore",
+        "If you need to make more Claude API calls after disconnecting, you must create a new connection with the Connect node",
+        "It's a best practice to always disconnect when you're done to free up resources",
+        "Use this node in a Finally block or at the end of your flow to ensure cleanup happens even if errors occur"
+      ]
+    },
+    "generate-chat-text": {
+      "namespace": "Core.Anthropic.GenerateChatText",
+      "name": "GenerateChatText",
+      "summary": "Generates chat responses from Claude AI with conversation history support, enabling multi-turn conversational interactions.",
+      "howItWorks": "The Generate Chat Text node maintains a conversation with Claude by tracking message history. When executed, the node: 1. Validates the connection or creates a temporary client using provided credentials 2. Retrieves the previous chat history (if any) 3. Appends all historical messages to the conversation 4. Adds the current user message 5. Configures the selected model and generation parameters 6. Sends the complete conversation to Claude API 7. Receives Claude's response 8. Updates the chat history with the new exchange (user message + assistant response) 9. Returns the response text and updated history",
+      "usage": [
+        "Either a valid Connection Id from Connect node OR direct API Key credentials",
+        "Non-empty User Prompt"
+      ]
+    },
+    "generate-text": {
+      "namespace": "Core.Anthropic.GenerateText",
+      "name": "GenerateText",
+      "summary": "Generates text responses from Claude AI with optional vision capabilities for analyzing images alongside text prompts.",
+      "howItWorks": "The Generate Text node sends a prompt to Claude and receives a text response. When executed, the node: 1. Validates the connection or creates a temporary client using provided credentials 2. Prepares the user prompt and optional system prompt 3. If images are provided: - Reads and encodes each image file to base64 - Validates image formats (must be supported image types) - Adds image blocks to the content 4. Configures the selected model and generation parameters 5. If extended thinking is enabled, adds thinking configuration 6. Sends the request to Claude API 7. Extracts the text response and optional thinking output 8. Returns the results",
+      "usage": [
+        "Either a valid Connection Id from Connect node OR direct API Key credentials",
+        "Non-empty User Prompt",
+        "For vision capabilities: Valid image files in supported formats (PNG, JPEG, WebP, GIF, HEIC, HEIF)"
+      ]
+    },
+    "list-models": {
+      "namespace": "Core.Anthropic.ListModels",
+      "name": "ListModels",
+      "summary": "Retrieves the list of available Claude models from the Anthropic API, including their details and capabilities.",
+      "howItWorks": "The List Models node queries the Anthropic API to retrieve available models. When executed, the node: 1. Validates the connection or creates a temporary client using provided credentials 2. Sets up the request timeout (30 seconds default, or unlimited if empty) 3. Sends a request to the Claude Models API endpoint 4. Receives the list of available models 5. For direct API mode: - Converts each model to a simple structure with id, display_name, created_at, and type - Returns the models in a standardized format 6. For Robomotion Credits mode: - Uses the gateway to fetch models - Returns the raw response from the gateway 7. Returns the models list as output",
+      "usage": [
+        "Either a valid Connection Id from Connect node OR direct API Key credentials",
+        "Active network connection to Anthropic API"
+      ]
+    },
+    "mcp-message": {
+      "namespace": "Core.Anthropic.McpMessage",
+      "name": "McpMessage",
+      "summary": "Sends messages using Claude AI with Model Context Protocol (MCP) integration, enabling Claude to access remote tools and resources through MCP servers.",
+      "howItWorks": "The MCP Message node enables Claude to work with MCP servers. When executed, the node: 1. Validates the connection (requires direct API mode, not Robomotion credits) 2. Parses the MCP servers configuration 3. Creates an MCP-enabled Claude client with the Beta header 4. Configures the selected model and parameters 5. If streaming is enabled: - Opens a streaming connection to Claude - Sends the prompt with MCP server configurations - Receives and accumulates streaming events - Each event can contain text deltas or tool interactions - Returns the final message and all events 6. If streaming is disabled: - Sends the prompt with MCP server configurations - Waits for the complete response - Returns the response text 7. Claude can use the MCP servers to access tools and data as needed",
+      "usage": [
+        "**Direct API mode** - Robomotion AI Credits are not supported for MCP",
+        "Valid Connection Id or direct API Key credentials",
+        "Non-empty Prompt",
+        "Valid MCP Servers configuration",
+        "MCP servers must be accessible from where Robomotion is running"
+      ]
+    }
+  }
+}

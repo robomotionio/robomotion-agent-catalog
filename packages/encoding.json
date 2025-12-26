@@ -1,0 +1,98 @@
+{
+  "package": "Encoding",
+  "summary": "The Encoding package provides comprehensive data encoding, decoding, and format conversion capabilities for RPA automation workflows. This package enables seamless transformation between different data formats including Base64, JSON, URL encoding, and XML.",
+  "description": "## Overview The Encoding package is essential for working with various data formats in automation scenarios. Whether you need to encode credentials for API authentication, parse JSON responses, convert XML to JSON, or handle URL parameters, this package provides the necessary tools.",
+  "nodes": {
+    "base64-decode": {
+      "namespace": "Core.Encoding.Base64Decode",
+      "name": "Base64Decode",
+      "summary": "Decodes Base64 encoded text back to its original format.",
+      "howItWorks": "The Base64 Decode node converts Base64 encoded strings back to their original text format. When executed, the node: 1. Receives a Base64 encoded string through the Text input 2. Decodes the Base64 string to bytes using standard Base64 decoding 3. Converts the bytes to a text string 4. Outputs the decoded string through the Result output This node is the reverse operation of Base64 Encode and is essential for processing Base64 encoded data.",
+      "usage": [
+        "Valid Base64 encoded string as input",
+        "Input string must not be empty"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg"
+      ]
+    },
+    "base64-encode": {
+      "namespace": "Core.Encoding.Base64Encode",
+      "name": "Base64Encode",
+      "summary": "Encodes text into Base64 format for safe transmission and storage.",
+      "howItWorks": "The Base64 Encode node converts plain text into Base64 encoding format. When executed, the node: 1. Receives text through the Text input 2. Converts the text to bytes and applies standard Base64 encoding 3. Outputs the encoded string through the Result output Base64 encoding is commonly used to encode binary data as ASCII text, making it safe for transmission over text-based protocols.",
+      "usage": [
+        "Non-empty text string as input"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg"
+      ]
+    },
+    "json-decode": {
+      "namespace": "Core.Encoding.JsonDecode",
+      "name": "JsonDecode",
+      "summary": "Parses a JSON string into a JSON object.",
+      "howItWorks": "The Json Decode node converts a JSON string to a JavaScript object. When executed, the node: 1. Receives a JSON string through the Json String input 2. Uses JSON unmarshaling to parse the string into an object 3. Outputs the parsed object through the Json output This is essential for processing JSON data from external sources like APIs, files, or databases.",
+      "usage": [
+        "Valid JSON string as input",
+        "Input string must not be empty",
+        "String must conform to JSON specification"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg"
+      ]
+    },
+    "json-encode": {
+      "namespace": "Core.Encoding.JsonEncode",
+      "name": "JsonEncode",
+      "summary": "Converts a JSON object to its string representation.",
+      "howItWorks": "The Json Encode node converts a JSON object to its string format. When executed, the node: 1. Receives a JSON object through the Json Object input 2. Uses JSON marshaling to serialize the object to a string 3. Outputs the JSON string through the Json output This is essential for storing JSON data as text or transmitting it over text-based protocols.",
+      "usage": [
+        "Valid JSON object as input",
+        "Input object cannot be null"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg"
+      ]
+    },
+    "url-decode": {
+      "namespace": "Core.Encoding.UrlDecode",
+      "name": "UrlDecode",
+      "summary": "Decodes a URL encoded string back to its original format.",
+      "howItWorks": "The Url Decode node converts URL encoded strings back to their original text format. When executed, the node: 1. Receives a URL encoded string through the Encoded Url input 2. Decodes percent-encoded characters (e.g., `%20` to space) 3. Converts `+` characters to spaces 4. Outputs the decoded string through the Result output This node is the reverse operation of Url Encode and is essential for processing URL parameters and query strings.",
+      "usage": [
+        "Valid URL encoded string as input",
+        "Input string must not be empty"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg"
+      ]
+    },
+    "url-encode": {
+      "namespace": "Core.Encoding.UrlEncode",
+      "name": "UrlEncode",
+      "summary": "Encodes a URL string for safe transmission in web requests.",
+      "howItWorks": "The Url Encode node converts text into URL-safe format by encoding special characters. When executed, the node: 1. Receives text through the Url input 2. Applies URL encoding (also known as percent-encoding) to escape special characters 3. Outputs the encoded string through the Encoded Url output URL encoding replaces unsafe ASCII characters with a \"%\" followed by two hexadecimal digits representing the character's ASCII code.",
+      "usage": [
+        "Non-empty string as input"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg"
+      ]
+    },
+    "xml-to-json": {
+      "namespace": "Core.Encoding.XmlToJson",
+      "name": "XmlToJson",
+      "summary": "Converts XML data to JSON format for easier processing and manipulation.",
+      "howItWorks": "The Xml To Json node converts XML data into JSON format. When executed, the node: 1. Receives XML data through the Input XML input (either as text or file path) 2. If input is a file path, reads the XML content from the file 3. Parses the XML structure into a map 4. Converts the XML structure to a JSON object 5. If output format is \"File Path\", writes the JSON to a temporary file 6. Outputs either the JSON object or the file path through the Output JSON output This conversion makes XML data easier to work with in modern automation workflows.",
+      "usage": [
+        "Valid XML text or file path as input",
+        "If input format is \"File Path\", the file must exist",
+        "XML must be well-formed"
+      ],
+      "errorCodes": [
+        "ErrInvalidArg"
+      ]
+    }
+  }
+}

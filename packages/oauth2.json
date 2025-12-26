@@ -1,0 +1,26 @@
+{
+  "package": "Oauth2",
+  "summary": "Handle OAuth2 authentication flows to obtain access tokens for API integrations.",
+  "description": "## Overview The OAuth2 package provides OAuth2 authentication capabilities for API integrations. Use it when you need to authenticate with services that require OAuth2, obtain access tokens, and authorize your automation to access protected resources.",
+  "nodes": {
+    "auth_code": {
+      "namespace": "Core.Oauth2.Auth_code",
+      "name": "Auth_code",
+      "summary": "Implements the OAuth 2.0 Authorization Code flow for obtaining access tokens.",
+      "howItWorks": "The Auth Code node implements the OAuth 2.0 Authorization Code flow to obtain access tokens. When executed, the node: 1. Retrieves the OAuth 2.0 credentials from the configured credential store 2. Validates the required credential fields (client_id, client_secret, token_uri) 3. Checks if an auth_uri is provided: * If present, initiates the full OAuth 2.0 authorization flow using a browser dialog * If not present, uses a refresh token to obtain a new access token 4. Updates the credential store with the new token information 5. Returns the access token as output",
+      "usage": [
+        "Valid OAuth 2.0 credentials with client_id and client_secret",
+        "For authorization flow: auth_uri, redirect_url, and scopes must be provided",
+        "For refresh flow: refresh_token must be provided",
+        "Network connectivity to the OAuth 2.0 provider's endpoints"
+      ],
+      "bestPractices": [
+        "The node automatically handles token refresh when the current token expires",
+        "Credential information is updated in the credential store after each successful token exchange",
+        "For security, access tokens and refresh tokens are stored encrypted in the credential store",
+        "The authorization flow requires user interaction through a browser dialog",
+        "The redirect URL must be properly configured in your OAuth 2.0 provider's settings"
+      ]
+    }
+  }
+}

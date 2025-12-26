@@ -1,0 +1,132 @@
+{
+  "package": "Mouse",
+  "summary": "Simulate mouse input for desktop automation - click, drag, scroll, and hover at screen coordinates.",
+  "description": "## Overview The Mouse package enables mouse simulation for desktop automation. Use it when you need to click at specific screen positions, drag items, scroll content, or hover over elements in any application.",
+  "nodes": {
+    "mouse-click": {
+      "namespace": "Core.Mouse.MouseClick",
+      "name": "MouseClick",
+      "summary": "Clicks on a specified location on the screen.",
+      "howItWorks": "The Mouse Click node simulates mouse clicks at specified screen coordinates. The execution follows these steps: 1. **Delay Before** - Waits for the specified delay before execution (if configured) 2. **Button Type Validation** - Validates that the mouse button type is one of: left, center, or right 3. **Coordinate Retrieval** - Retrieves the X and Y coordinates from input variables 4. **Coordinate Validation** - Ensures X and Y are non-negative values 5. **Mouse Movement** - Moves the mouse to the specified coordinates (if X \u003e 0 or Y \u003e 0) - If both X and Y are 0, clicks at the current mouse position without moving 6. **Key Modifier Press** - If a key modifier is specified, holds down that key 7. **Click Execution** - Performs the click based on the click type: - Single-click: One click with the specified button - Double-click: Two rapid clicks with the specified button - Button-press/Press-down: Holds the button down without releasing - Button-release/Press-release: Releases a held button 8. **Key Modifier Release** - Releases any key modifier that was pressed 9. **Delay After** - Waits for the specified delay after execution (if configured)",
+      "usage": [
+        "**Robomotion Deskbot** - This node only works with Robomotion Deskbot (desktop automation)",
+        "**Screen Coordinates** - Valid screen coordinates within your display resolution",
+        "**Operating System Support** - Compatible with Windows, macOS, and Linux",
+        "**Permissions** - May require accessibility permissions on macOS and some Linux distributions",
+        "**Display Setup** - For multi-monitor setups, coordinates are relative to the primary display"
+      ],
+      "bestPractices": [
+        "**Zero Coordinates** - When both X and Y are 0, the node clicks at the current mouse position without moving",
+        "**Coordinate System** - Screen coordinates start at (0,0) in the top-left corner",
+        "**Multi-Monitor** - For multi-monitor setups, use absolute coordinates relative to the primary display",
+        "**Key Modifiers** - Common modifiers include: shift, ctrl, alt, command (macOS)",
+        "**Press and Hold** - Use \"Button Press\" to start a drag operation, then use \"Button Release\" to complete it",
+        "**Deprecated Options** - \"Press Down\" and \"Press Release\" are deprecated; use \"Button Press\" and \"Button Release\" instead"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage",
+        "ErrButtonType",
+        "ErrClickType",
+        "ErrXY"
+      ],
+      "relatedNodes": [
+        "Mouse Hover",
+        "Mouse Drag",
+        "Mouse Scroll",
+        "Send Keys"
+      ]
+    },
+    "mouse-drag": {
+      "namespace": "Core.Mouse.MouseDrag",
+      "name": "MouseDrag",
+      "summary": "Drags the mouse to a specific point",
+      "howItWorks": "The Mouse Drag node simulates a drag operation by moving the mouse from its current position to a new position while holding down a mouse button. The execution follows these steps: 1. **Delay Before** - Waits for the specified delay before execution (if configured) 2. **Delta Retrieval** - Retrieves the Delta X and Delta Y values from input variables 3. **Current Position** - Gets the current mouse position using robotgo 4. **Button Press** - Presses and holds the specified mouse button down 5. **Mouse Drag** - Drags the mouse to the new position (current X + Delta X, current Y + Delta Y) 6. **Button Release** - Releases the mouse button 7. **Delay After** - Waits for the specified delay after execution (if configured) The drag is relative to the current mouse position, not absolute screen coordinates.",
+      "usage": [
+        "**Robomotion Deskbot** - This node only works with Robomotion Deskbot (desktop automation)",
+        "**Operating System Support** - Compatible with Windows, macOS, and Linux",
+        "**Permissions** - May require accessibility permissions on macOS and some Linux distributions",
+        "**Current Mouse Position** - The drag starts from wherever the mouse currently is"
+      ],
+      "bestPractices": [
+        "**Relative Movement** - Delta values are relative to the current mouse position, not absolute coordinates",
+        "**Negative Values** - Use negative delta values to drag in the opposite direction (left or up)",
+        "**Zero Deltas** - Using 0 for both deltas will press and release the button at the current position",
+        "**Button Types** - Left button is most common, but center and right buttons can be used for specialized applications",
+        "**Position First** - Always position the mouse at the starting point before using this node",
+        "**Smooth Movement** - The drag operation moves smoothly from start to end position"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage"
+      ],
+      "relatedNodes": [
+        "Mouse Click",
+        "Mouse Hover",
+        "Mouse Scroll"
+      ]
+    },
+    "mouse-hover": {
+      "namespace": "Core.Mouse.MouseHover",
+      "name": "MouseHover",
+      "summary": "Moves the mouse pointer to a specified location",
+      "howItWorks": "The Mouse Hover node moves the mouse pointer to a specified location on the screen without clicking. The execution follows these steps: 1. **Delay Before** - Waits for the specified delay before execution (if configured) 2. **Coordinate Retrieval** - Retrieves the X and Y coordinates from input variables 3. **Mouse Movement** - Moves the mouse cursor to the target coordinates: - If \"Smooth\" is enabled: Animates the cursor movement from current position to target - If \"Smooth\" is disabled: Instantly jumps the cursor to the target position 4. **Delay After** - Waits for the specified delay after execution (if configured) This node is useful for triggering hover effects, positioning the cursor before other actions, or revealing tooltips.",
+      "usage": [
+        "**Robomotion Deskbot** - This node only works with Robomotion Deskbot (desktop automation)",
+        "**Screen Coordinates** - Valid screen coordinates within your display resolution",
+        "**Operating System Support** - Compatible with Windows, macOS, and Linux",
+        "**Permissions** - May require accessibility permissions on macOS and some Linux distributions"
+      ],
+      "bestPractices": [
+        "**No Click** - This node only moves the cursor; it does not perform any click action",
+        "**Smooth vs. Instant** - Smooth movement is more realistic and better for triggering hover effects, but instant is faster",
+        "**Coordinate System** - Screen coordinates start at (0,0) in the top-left corner",
+        "**Hover Timing** - Use \"Delay After\" to give hover effects time to appear before the next action",
+        "**Multi-Monitor** - Coordinates are absolute and work across multi-monitor setups",
+        "**No Validation** - The node does not validate if coordinates are within screen bounds"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrOnMessage"
+      ],
+      "relatedNodes": [
+        "Mouse Click",
+        "Mouse Drag",
+        "Mouse Scroll"
+      ]
+    },
+    "mouse-scroll": {
+      "namespace": "Core.Mouse.MouseScroll",
+      "name": "MouseScroll",
+      "summary": "Scrolls the mouse wheel",
+      "howItWorks": "The Mouse Scroll node simulates scrolling the mouse wheel in a specified direction. The execution follows these steps: 1. **Delay Before** - Waits for the specified delay before execution (if configured) 2. **Line Count Retrieval** - Retrieves the number of lines to scroll from the input variable 3. **Direction Validation** - Validates that the direction is one of: down, up, left, or right 4. **Scroll Execution** - Performs the scroll operation using robotgo's ScrollDir function 5. **Delay After** - Waits for the specified delay after execution (if configured) The scroll occurs at the current mouse position, affecting whichever scrollable element is under the cursor.",
+      "usage": [
+        "**Robomotion Deskbot** - This node only works with Robomotion Deskbot (desktop automation)",
+        "**Scrollable Content** - The element under the mouse cursor must support scrolling",
+        "**Operating System Support** - Compatible with Windows, macOS, and Linux",
+        "**Permissions** - May require accessibility permissions on macOS and some Linux distributions"
+      ],
+      "bestPractices": [
+        "**Mouse Position** - The scroll affects the element currently under the mouse cursor",
+        "**Line Count** - Higher numbers scroll more; the actual distance depends on the application's scroll sensitivity",
+        "**Zero Lines** - Setting line count to 0 will not scroll",
+        "**Direction Support** - Left and right scrolling works in applications that support horizontal scrolling",
+        "**Scroll Distance** - The actual pixel distance scrolled varies by application and system settings",
+        "**Focus Matters** - Some applications require the window to be focused to accept scroll events"
+      ],
+      "errorCodes": [
+        "Error",
+        "ErrOnCreate",
+        "ErrScrollType"
+      ],
+      "relatedNodes": [
+        "Mouse Hover",
+        "Mouse Click",
+        "Mouse Drag"
+      ]
+    }
+  }
+}

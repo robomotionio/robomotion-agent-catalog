@@ -1,0 +1,3250 @@
+[
+  {
+    "id": "application",
+    "name": "Application",
+    "namespace": "Core.Application",
+    "description": "Default Application nodes",
+    "keywords": [
+      "application"
+    ],
+    "category": "default",
+    "nodeCount": 7,
+    "nodes": [
+      "App In",
+      "App Out",
+      "App Push",
+      "App Request",
+      "App Download",
+      "App Upload",
+      "App Log"
+    ],
+    "source": "default"
+  },
+  {
+    "id": "browser",
+    "name": "Browser",
+    "namespace": "Core.Browser",
+    "description": "Default Browser nodes",
+    "keywords": [
+      "browser"
+    ],
+    "category": "default",
+    "nodeCount": 26,
+    "nodes": [
+      "Open Browser",
+      "Close Browser",
+      "Open Link",
+      "Switch Window",
+      "Close Window",
+      "Send Keys",
+      "Upload File",
+      "Type Text",
+      "Move To Element",
+      "Alert",
+      "Save Image",
+      "Click Element",
+      "Wait Element",
+      "Select",
+      "Get Cookies",
+      "Set Cookies",
+      "Get Value",
+      "Set Value",
+      "Switch Frame",
+      "Go Back",
+      "Go Forward",
+      "Refresh",
+      "Screenshot",
+      "Run Script",
+      "Scrape Table",
+      "Scrape List"
+    ],
+    "source": "default"
+  },
+  {
+    "id": "clipboard",
+    "name": "Clipboard",
+    "namespace": "Core.Clipboard",
+    "description": "Default Clipboard nodes",
+    "keywords": [
+      "clipboard"
+    ],
+    "category": "default",
+    "nodeCount": 2,
+    "nodes": [
+      "Get From Clipboard",
+      "Set To Clipboard"
+    ],
+    "source": "default"
+  },
+  {
+    "id": "cognitive",
+    "name": "Cognitive",
+    "namespace": "Core.Cognitive",
+    "description": "Default Cognitive nodes",
+    "keywords": [
+      "cognitive"
+    ],
+    "category": "default",
+    "nodeCount": 5,
+    "nodes": [
+      "Detect Intent",
+      "Text Translate",
+      "Text Analyze",
+      "Text To Speech",
+      "Speech to Text"
+    ],
+    "source": "default"
+  },
+  {
+    "id": "csv",
+    "name": "CSV",
+    "namespace": "Core.CSV",
+    "description": "Default CSV nodes",
+    "keywords": [
+      "csv"
+    ],
+    "category": "default",
+    "nodeCount": 4,
+    "nodes": [
+      "Read CSV",
+      "Write CSV",
+      "Append CSV",
+      "Split CSV"
+    ],
+    "source": "default"
+  },
+  {
+    "id": "dialog",
+    "name": "Dialog",
+    "namespace": "Core.Dialog",
+    "description": "Default Dialog nodes",
+    "keywords": [
+      "dialog"
+    ],
+    "category": "default",
+    "nodeCount": 2,
+    "nodes": [
+      "Message Box",
+      "Input Box"
+    ],
+    "source": "default"
+  },
+  {
+    "id": "excel",
+    "name": "Excel",
+    "namespace": "Core.Excel",
+    "description": "Default Excel nodes",
+    "keywords": [
+      "excel"
+    ],
+    "category": "default",
+    "nodeCount": 30,
+    "nodes": [
+      "Open Excel",
+      "Close Excel",
+      "Create Excel",
+      "Save Excel",
+      "Switch To Sheet",
+      "Create Sheet",
+      "Copy Sheet",
+      "Set Style",
+      "Set Active Cell",
+      "Set Cell Value",
+      "Get Cell Value",
+      "Set Formula",
+      "Delete Cell",
+      "Insert Column",
+      "Insert Row",
+      "Delete Row",
+      "Get Range",
+      "Delete Column",
+      "Get Row",
+      "Get Column",
+      "Set Range",
+      "Excel to CSV",
+      "Get Sheets",
+      "Append Excel",
+      "Merge Excel",
+      "Find and Replace",
+      "Search Sheet",
+      "Clear Range",
+      "Create Pivot Table",
+      "Get Formula"
+    ],
+    "source": "default"
+  },
+  {
+    "id": "file system",
+    "name": "File System",
+    "namespace": "Core.File System",
+    "description": "Default File System nodes",
+    "keywords": [
+      "file",
+      "system"
+    ],
+    "category": "default",
+    "nodeCount": 12,
+    "nodes": [
+      "List Directory",
+      "Create File/Dir",
+      "Copy File/Dir",
+      "Delete File/Dir",
+      "Move File/Dir",
+      "Path Exists",
+      "Read File",
+      "Write File",
+      "Wait File",
+      "Tree",
+      "Change Encoding",
+      "File Stat"
+    ],
+    "source": "default"
+  },
+  {
+    "id": "flow",
+    "name": "Flow",
+    "namespace": "Core.Flow",
+    "description": "Default Flow nodes",
+    "keywords": [
+      "flow"
+    ],
+    "category": "default",
+    "nodeCount": 8,
+    "nodes": [
+      "Comment",
+      "Go To",
+      "Label",
+      "Fork Branch",
+      "Log",
+      "Stop",
+      "Sub Flow",
+      "Should Stop"
+    ],
+    "source": "default"
+  },
+  {
+    "id": "forms",
+    "name": "Forms",
+    "namespace": "Core.Forms",
+    "description": "Default Forms nodes",
+    "keywords": [
+      "forms"
+    ],
+    "category": "default",
+    "nodeCount": 7,
+    "nodes": [
+      "Create Form",
+      "Create Form Instance",
+      "Update Form",
+      "Delete Form",
+      "Delete Form Instance",
+      "Get Form Instance",
+      "List Forms"
+    ],
+    "source": "default"
+  },
+  {
+    "id": "ftp",
+    "name": "FTP",
+    "namespace": "Core.FTP",
+    "description": "Default FTP nodes",
+    "keywords": [
+      "ftp"
+    ],
+    "category": "default",
+    "nodeCount": 10,
+    "nodes": [
+      "Connect",
+      "Disconnect",
+      "Download",
+      "Upload",
+      "File Exists",
+      "Create Directory",
+      "List Directory",
+      "Delete Directory",
+      "Delete File",
+      "Move File"
+    ],
+    "source": "default"
+  },
+  {
+    "id": "keyboard",
+    "name": "Keyboard",
+    "namespace": "Core.Keyboard",
+    "description": "Default Keyboard nodes",
+    "keywords": [
+      "keyboard"
+    ],
+    "category": "default",
+    "nodeCount": 2,
+    "nodes": [
+      "Type Text",
+      "Send Keys"
+    ],
+    "source": "default"
+  },
+  {
+    "id": "mail",
+    "name": "Mail",
+    "namespace": "Core.Mail",
+    "description": "Default Mail nodes",
+    "keywords": [
+      "mail"
+    ],
+    "category": "default",
+    "nodeCount": 11,
+    "nodes": [
+      "Connect",
+      "Disconnect",
+      "Send Mail",
+      "Delete Mail",
+      "Get Mail",
+      "Search Mail",
+      "Save Attachments",
+      "Move Mail",
+      "Create Folder",
+      "Delete Folder",
+      "List Folders"
+    ],
+    "source": "default"
+  },
+  {
+    "id": "mouse",
+    "name": "Mouse",
+    "namespace": "Core.Mouse",
+    "description": "Default Mouse nodes",
+    "keywords": [
+      "mouse"
+    ],
+    "category": "default",
+    "nodeCount": 4,
+    "nodes": [
+      "Mouse Click",
+      "Mouse Drag",
+      "Mouse Hover",
+      "Mouse Scroll"
+    ],
+    "source": "default"
+  },
+  {
+    "id": "net",
+    "name": "Net",
+    "namespace": "Core.Net",
+    "description": "Default Net nodes",
+    "keywords": [
+      "net"
+    ],
+    "category": "default",
+    "nodeCount": 5,
+    "nodes": [
+      "Http In",
+      "Http Out",
+      "Http Request",
+      "HTML Template",
+      "Download File"
+    ],
+    "source": "default"
+  },
+  {
+    "id": "process",
+    "name": "Process",
+    "namespace": "Core.Process",
+    "description": "Default Process nodes",
+    "keywords": [
+      "process"
+    ],
+    "category": "default",
+    "nodeCount": 4,
+    "nodes": [
+      "Get Env Variable",
+      "Get Processes",
+      "Kill Process",
+      "Start Process"
+    ],
+    "source": "default"
+  },
+  {
+    "id": "programming",
+    "name": "Programming",
+    "namespace": "Core.Programming",
+    "description": "Default Programming nodes",
+    "keywords": [
+      "programming"
+    ],
+    "category": "default",
+    "nodeCount": 6,
+    "nodes": [
+      "Debug",
+      "Sleep",
+      "Function",
+      "Switch",
+      "For Each",
+      "Break"
+    ],
+    "source": "default"
+  },
+  {
+    "id": "queue",
+    "name": "Queue",
+    "namespace": "Core.Queue",
+    "description": "Default Queue nodes",
+    "keywords": [
+      "queue"
+    ],
+    "category": "default",
+    "nodeCount": 6,
+    "nodes": [
+      "Add Item",
+      "Get Items",
+      "Get Next Item",
+      "Delete Item",
+      "Update Item State",
+      "Wait Item"
+    ],
+    "source": "default"
+  },
+  {
+    "id": "trigger",
+    "name": "Trigger",
+    "namespace": "Core.Trigger",
+    "description": "Default Trigger nodes",
+    "keywords": [
+      "trigger"
+    ],
+    "category": "default",
+    "nodeCount": 3,
+    "nodes": [
+      "Inject",
+      "Catch",
+      "Timer"
+    ],
+    "source": "default"
+  },
+  {
+    "id": "vault",
+    "name": "Vault",
+    "namespace": "Core.Vault",
+    "description": "Default Vault nodes",
+    "keywords": [
+      "vault"
+    ],
+    "category": "default",
+    "nodeCount": 6,
+    "nodes": [
+      "Add Item",
+      "List Items",
+      "Get Item",
+      "Set Item",
+      "Delete Item",
+      "List Vaults"
+    ],
+    "source": "default"
+  },
+  {
+    "id": "wait group",
+    "name": "Wait Group",
+    "namespace": "Core.Wait Group",
+    "description": "Default Wait Group nodes",
+    "keywords": [
+      "group",
+      "wait"
+    ],
+    "category": "default",
+    "nodeCount": 4,
+    "nodes": [
+      "WG Create",
+      "WG Add",
+      "WG Done",
+      "WG Wait"
+    ],
+    "source": "default"
+  },
+  {
+    "id": "2fa",
+    "name": "2FA",
+    "namespace": "Robomotion.2FA",
+    "description": "Used for creating 2FA Time-based One-Time Password (OTP) code generation and registration.",
+    "keywords": [
+      "2FA",
+      "OTP",
+      "Security"
+    ],
+    "category": "external",
+    "nodeCount": 3,
+    "nodes": [
+      "Generate OTP",
+      "Generate QR",
+      "Decode QR"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "abbyycloud",
+    "name": "ABBYY Cloud",
+    "namespace": "Robomotion.ABBYYCloud",
+    "description": "Uses ABBYY software for processing document, image, text, barcode etc.",
+    "keywords": [
+      "abbyy",
+      "cloud",
+      "ocr"
+    ],
+    "category": "external",
+    "nodeCount": 13,
+    "nodes": [
+      "Delete Task",
+      "Get Task Status",
+      "Process Barcode",
+      "Process Business Card",
+      "Process Checkmark",
+      "Process Document",
+      "Process Field",
+      "Process Image",
+      "Process MRZ",
+      "Process Receipt",
+      "Process Text",
+      "Submit Image",
+      "Wait Task"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "activedirectory",
+    "name": "Active Directory",
+    "namespace": "Robomotion.ActiveDirectory",
+    "description": "Microsoft's Active Directory (Azure Active Directory, a cloud-based identity and access management service) package for group and user operations.",
+    "keywords": [
+      "robomotion",
+      "rpa",
+      "active-directory",
+      "plugin"
+    ],
+    "category": "external",
+    "nodeCount": 14,
+    "nodes": [
+      "Add User To Group",
+      "Connect",
+      "Create Group",
+      "Create User",
+      "Delete Group",
+      "Delete User",
+      "Delete User From Group",
+      "Get Group",
+      "Get User",
+      "List All Groups",
+      "List All Users",
+      "List Group Members",
+      "Update Group",
+      "Update User"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "agenttools",
+    "name": "Agent Tools",
+    "namespace": "Robomotion.AgentTools",
+    "description": "Comprehensive toolset for AI agents to perform file operations，code editing，web research，and task management across platforms.",
+    "keywords": [
+      "agent",
+      "tools",
+      "file",
+      "grep",
+      "ls",
+      "edit",
+      "web",
+      "task"
+    ],
+    "category": "Development",
+    "nodeCount": 15,
+    "nodes": [
+      "Read",
+      "Write",
+      "Edit",
+      "Multi Edit",
+      "Glob",
+      "Grep",
+      "LS",
+      "Shell",
+      "Bash Output",
+      "Kill Bash",
+      "Notebook Read",
+      "Notebook Edit",
+      "Web Fetch",
+      "Web Search",
+      "Todo Write"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "airtable",
+    "name": "Airtable",
+    "namespace": "Robomotion.Airtable",
+    "description": "Connects to Airtable for CRUD operations on Airtable records.",
+    "keywords": [
+      "Airtable"
+    ],
+    "category": "external",
+    "nodeCount": 7,
+    "nodes": [
+      "Connect",
+      "Disconnect",
+      "Create Record",
+      "Read Record",
+      "Update Record",
+      "Delete Record",
+      "List Records"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "amazons3",
+    "name": "Amazon S3",
+    "namespace": "Robomotion.AmazonS3",
+    "description": "Connects to Amazon S3 and does bucket and file operations.",
+    "keywords": [
+      "amazon",
+      "s3",
+      "storage"
+    ],
+    "category": "external",
+    "nodeCount": 10,
+    "nodes": [
+      "Upload Object",
+      "Connect",
+      "Download Object",
+      "Get Object",
+      "Delete Object",
+      "List Objects",
+      "List Buckets",
+      "Delete Bucket",
+      "Create Bucket",
+      "Download Pre Signed Url"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "anticaptcha",
+    "name": "Anti Captcha",
+    "namespace": "Robomotion.AntiCaptcha",
+    "description": "Anti Captcha entegration",
+    "keywords": [
+      "Anti Captcha",
+      "Captcha"
+    ],
+    "category": "external",
+    "nodeCount": 3,
+    "nodes": [
+      "Image Captcha",
+      "reCAPTCHA",
+      "hCaptcha"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "array",
+    "name": "Array",
+    "namespace": "Robomotion.Array",
+    "description": "Simple array operations",
+    "keywords": [
+      "array",
+      "list"
+    ],
+    "category": "external",
+    "nodeCount": 12,
+    "nodes": [
+      "Assign",
+      "Concatenate",
+      "Convert",
+      "Get Element",
+      "Get Length",
+      "Pop",
+      "Push",
+      "Remove Element",
+      "Reverse",
+      "Shift",
+      "Slice",
+      "Sort"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "audioprocessing",
+    "name": "Audio Processing",
+    "namespace": "Robomotion.AudioProcessing",
+    "description": "Performs audio processing related works",
+    "keywords": [
+      "robomotion",
+      "audio-processing",
+      "convert",
+      "mp3"
+    ],
+    "category": "external",
+    "nodeCount": 8,
+    "nodes": [
+      "Concatenate",
+      "Convert",
+      "Create",
+      "Delete",
+      "Export",
+      "Get Metadata",
+      "Slice",
+      "Speed Up"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "badgerdb",
+    "name": "BadgerDB",
+    "namespace": "Robomotion.BadgerDB",
+    "description": "BadgerDB is an embeddable, persistent and fast key-value (KV) database.",
+    "keywords": [
+      "database",
+      "badger"
+    ],
+    "category": "external",
+    "nodeCount": 14,
+    "nodes": [
+      "Open",
+      "Close",
+      "Set",
+      "Get",
+      "Delete",
+      "List",
+      "Start Merge",
+      "Merge",
+      "Stop Merge",
+      "Backup",
+      "Restore",
+      "Start Transaction",
+      "Commit Transaction",
+      "Export"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "barcode",
+    "name": "Barcode",
+    "namespace": "Robomotion.Barcode",
+    "description": "Used for encoding, decoding bacodes and QRs",
+    "keywords": [
+      "barcode",
+      "QR",
+      "encode",
+      "decode"
+    ],
+    "category": "external",
+    "nodeCount": 4,
+    "nodes": [
+      "QR Encode",
+      "QR Decode",
+      "1D Barcode Encode",
+      "1D Barcode Decode"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "binance",
+    "name": "Binance",
+    "namespace": "Robomotion.Binance",
+    "description": "Connects to the Binance Exchange Market, and does crypto operations on this market",
+    "keywords": [
+      "blockchain",
+      "crypto",
+      "binance",
+      "bitcoin",
+      "trading"
+    ],
+    "category": "external",
+    "nodeCount": 20,
+    "nodes": [
+      "Buy Order",
+      "Cancel Order",
+      "Connect",
+      "Disconnect",
+      "Get Balance",
+      "Get Coin Detail",
+      "Get Deposit Address",
+      "Get Order",
+      "Get Price",
+      "Get Price Change Info",
+      "Get Price History",
+      "List Deposits",
+      "List My Orders",
+      "List Orders",
+      "Sell Order",
+      "Stop Order",
+      "List Withdraws",
+      "List Recent Trades",
+      "Market Order",
+      "List All Pairs"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "boolean",
+    "name": "Boolean",
+    "namespace": "Robomotion.Boolean",
+    "description": "Basic boolean operations",
+    "keywords": [
+      "number"
+    ],
+    "category": "external",
+    "nodeCount": 3,
+    "nodes": [
+      "Assign",
+      "Operation",
+      "To String"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "calendly",
+    "name": "Calendly",
+    "namespace": "Robomotion.Calendly",
+    "description": "Calendly integration",
+    "keywords": [
+      "calendar",
+      "meeting"
+    ],
+    "category": "external",
+    "nodeCount": 6,
+    "nodes": [
+      "Connect",
+      "List Webhook Subscriptions",
+      "Disconnect",
+      "Get Me",
+      "Add Webhook Subscription",
+      "Delete Webhook Subscription"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "capmonster",
+    "name": "Cap Monster",
+    "namespace": "Robomotion.CapMonster",
+    "description": "Cloud service for automatic recognition of reCAPTCHA, hCaptcha and other types of captchas",
+    "keywords": [
+      "Cap Monster",
+      "Captcha",
+      "hCaptcha",
+      "reCAPTCHA"
+    ],
+    "category": "external",
+    "nodeCount": 8,
+    "nodes": [
+      "Create Session",
+      "Get Balance",
+      "Solve Captcha",
+      "Solve FunCaptcha",
+      "Solve HCaptcha",
+      "Solve Recaptcha v2",
+      "Solve Recaptcha v3",
+      "Solve Recaptcha v2 Enterprise"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "chatassistant",
+    "name": "Chat Assistant",
+    "namespace": "Robomotion.ChatAssistant",
+    "description": "Create powerful AI chat assistants for automation - supports both guided workflow assistants that follow step-by-step processes and fully agentic conversational assistants",
+    "keywords": [
+      "agentic",
+      "ai",
+      "rpa"
+    ],
+    "category": "Productivity",
+    "nodeCount": 20,
+    "nodes": [
+      "Chat In",
+      "Chat Out",
+      "Header",
+      "Text",
+      "Divider",
+      "ButtonGroup",
+      "Dropdown",
+      "Checkbox",
+      "RadioButton",
+      "Datepicker",
+      "Textbox",
+      "Image",
+      "Video",
+      "Download File",
+      "Upload File",
+      "Streaming Text",
+      "Error",
+      "Auth",
+      "Custom Widget",
+      "Progress"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "claude",
+    "name": "Claude",
+    "namespace": "Robomotion.Claude",
+    "description": "Provides a simple interface to access the Anthropic Claude API. Claude is Anthropic's powerful AI assistant capable of advanced reasoning, coding, analysis, and creative tasks.",
+    "keywords": [
+      "robomotion",
+      "rpa",
+      "ai",
+      "anthropic",
+      "claude"
+    ],
+    "category": "Productivity",
+    "nodeCount": 8,
+    "nodes": [
+      "Connect",
+      "Generate Text",
+      "Generate Chat Text",
+      "Analyze Document",
+      "Call Tool",
+      "MCP Message",
+      "List Models",
+      "Disconnect"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "clickhouse",
+    "name": "ClickHouse",
+    "namespace": "Robomotion.ClickHouse",
+    "description": "ClickHouse is the fastest and most resource efficient open-source database for real-time apps and analytics.",
+    "keywords": [
+      "database",
+      "clickhouse"
+    ],
+    "category": "external",
+    "nodeCount": 6,
+    "nodes": [
+      "Connect",
+      "Create Batch",
+      "Disconnect",
+      "Execute Non Query",
+      "Execute Query",
+      "Send Batch"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "compression",
+    "name": "Compression",
+    "namespace": "Robomotion.Compression",
+    "description": "Compresses, Decompresses, Archives and Unarchives files.",
+    "keywords": [
+      "zip",
+      "folder",
+      "compress"
+    ],
+    "category": "external",
+    "nodeCount": 6,
+    "nodes": [
+      "Archive",
+      "Unarchive",
+      "Extract File",
+      "Compress",
+      "Decompress",
+      "Inspect Archive File"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "cookiestore",
+    "name": "Cookie Store",
+    "namespace": "Robomotion.CookieStore",
+    "description": "Cookie Store is a package designed to securely manage your digital cookies. It stores these cookies in an encrypted file on your local system, ensuring enhanced security and privacy for your activities.",
+    "keywords": [
+      "cookie"
+    ],
+    "category": "Dev Tools",
+    "nodeCount": 2,
+    "nodes": [
+      "Load Cookies",
+      "Save Cookies"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "cryptography",
+    "name": "Cryptography",
+    "namespace": "Robomotion.Cryptography",
+    "description": "Cryptography package offers a comprehensive suite of tools designed to facilitate various cryptographic operations within a flow.",
+    "keywords": [
+      "hash",
+      "cryptography"
+    ],
+    "category": "external",
+    "nodeCount": 10,
+    "nodes": [
+      "File Decrypt",
+      "Text Decrypt",
+      "File Encrypt",
+      "Text Encrypt",
+      "Generate Key",
+      "HMAC Signature",
+      "File Hash",
+      "Text Hash",
+      "Sign",
+      "Verify"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "datatable",
+    "name": "Data Table",
+    "namespace": "Robomotion.DataTable",
+    "description": "DataTable package to create and manipulate DataTables",
+    "keywords": [
+      "robomotion",
+      "rpa",
+      "datatable"
+    ],
+    "category": "external",
+    "nodeCount": 14,
+    "nodes": [
+      "Add Column",
+      "Add Row",
+      "Append DataTable",
+      "Clear DataTable",
+      "Create DataTable",
+      "Filter DataTable",
+      "Get Column",
+      "Get Row",
+      "LINQ Query",
+      "Lookup DataTable",
+      "Merge DataTable",
+      "Remove Column",
+      "Remove Row",
+      "Sort Table"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "datetime",
+    "name": "Date Time",
+    "namespace": "Robomotion.DateTime",
+    "description": "Date time functions and conversions. Icons made by [Vectors Market](https://www.flaticon.com/authors/vectors-market) from [Flaticon](www.flaticon.com/)",
+    "keywords": [
+      "date",
+      "time",
+      "now",
+      "timespan"
+    ],
+    "category": "external",
+    "nodeCount": 7,
+    "nodes": [
+      "Add Time",
+      "Format Time",
+      "Now",
+      "Time Span",
+      "Is Leap Year",
+      "Split Date",
+      "Convert Timezone"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "discordbot",
+    "name": "Discord Bot",
+    "namespace": "Robomotion.DiscordBot",
+    "description": "Discord bots are AIs that can perform a number of useful automated tasks, package uses this bots and performs channel and message operations.",
+    "keywords": [
+      "Discord",
+      "Bot",
+      "Messaging"
+    ],
+    "category": "external",
+    "nodeCount": 22,
+    "nodes": [
+      "Connect",
+      "Create Channel",
+      "Create Invite link",
+      "Delete Channel",
+      "Disconnect",
+      "Get Channel Info",
+      "Get Channel Messages",
+      "Get User Info",
+      "Receive Message",
+      "Send Channel Message",
+      "Delete Channel Message",
+      "Create Command",
+      "Send Direct Message",
+      "List Commands",
+      "Delete Command",
+      "Edit Channel Message",
+      "Interaction In",
+      "Interaction Out",
+      "Add Role Member",
+      "Remove Role Member",
+      "Update Interaction Respond",
+      "Create Forum Post"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "documentprocessor",
+    "name": "Document Processor",
+    "namespace": "Robomotion.DocumentProcessor",
+    "description": "Parse and process documents for RAG applications. Supports PDF, DOCX, PPTX, TXT, HTML, Markdown and more. Extract text, chunk content for embeddings.",
+    "keywords": [
+      "document",
+      "pdf",
+      "docx",
+      "text",
+      "chunking",
+      "rag",
+      "embeddings",
+      "unstructured"
+    ],
+    "category": "AI",
+    "nodeCount": 6,
+    "nodes": [
+      "Chunk Text",
+      "Extract Tables",
+      "Extract Text",
+      "Get Document Info",
+      "Prepare for Embeddings",
+      "Read Document"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "domparser",
+    "name": "DOM Parser",
+    "namespace": "Robomotion.DOMParser",
+    "description": "DOM Parser is a powerful tool designed to facilitate HTML document parsing within flows.",
+    "keywords": [
+      "html",
+      "parser"
+    ],
+    "category": "Dev Tools",
+    "nodeCount": 10,
+    "nodes": [
+      "Find Element",
+      "Find All Elements",
+      "Get Value",
+      "Get Values",
+      "Extract Text",
+      "Extract Table",
+      "Extract Images",
+      "Count Words",
+      "Unescape HTML",
+      "Escape HTML"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "dropbox",
+    "name": "Dropbox",
+    "namespace": "Robomotion.Dropbox",
+    "description": "Connects to Dropbox (a cloud storage service) to perform file and folder operations.",
+    "keywords": [
+      "dropbox",
+      "files",
+      "storage"
+    ],
+    "category": "external",
+    "nodeCount": 10,
+    "nodes": [
+      "Connect",
+      "Copy File",
+      "Create Folder",
+      "Delete File",
+      "Disconnect",
+      "Download File",
+      "Move File",
+      "File Stat",
+      "List Files",
+      "Upload File"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "dropcontact",
+    "name": "Dropcontact",
+    "namespace": "Robomotion.Dropcontact",
+    "description": "Connects to Dropcontact for B2B email address search and data enrichment (files or CRM).",
+    "keywords": [
+      "Dropcontact"
+    ],
+    "category": "external",
+    "nodeCount": 3,
+    "nodes": [
+      "Batch Post",
+      "Batch Result",
+      "Credits Left"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "elevenlabsai",
+    "name": "ElevenLabs AI",
+    "namespace": "Robomotion.ElevenLabsAI",
+    "description": "It connects to ElevenLabs AI. It is an natural-sounding speech synthesis and text-to-speech software, using artificial intelligence and deep learning",
+    "keywords": [
+      "robomotion",
+      "rpa",
+      "ai"
+    ],
+    "category": "Productivity",
+    "nodeCount": 20,
+    "nodes": [
+      "Add Voice",
+      "Clone Voice",
+      "Connect",
+      "Delete History Item",
+      "Delete Voice",
+      "Disconnect",
+      "Edit Voice",
+      "Edit Voice Settings",
+      "Get Audio from History Item",
+      "Get History",
+      "Get History Item",
+      "Get Models",
+      "Get User Info",
+      "Get User Subscription Info",
+      "Get Voice",
+      "Get Voice Settings",
+      "Get Voices",
+      "Speech to Speech",
+      "Speech to Text",
+      "Text to Speech"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "emailvalidator",
+    "name": "Email Validator",
+    "namespace": "Robomotion.EmailValidator",
+    "description": "Verify email via Regex, DNS, SMTP and even more",
+    "keywords": [
+      "email",
+      "validator",
+      "rpa"
+    ],
+    "category": "Productivity",
+    "nodeCount": 5,
+    "nodes": [
+      "Configuration",
+      "Validate SMTP",
+      "Validate Mx Blacklist",
+      "Validate Mx",
+      "Validate Regex"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "encoding",
+    "name": "Encoding",
+    "namespace": "Robomotion.Encoding",
+    "description": "Encoding package does encoding, decoding and conversion operations with various data types",
+    "keywords": [
+      "encoding",
+      "decoding",
+      "rpa"
+    ],
+    "category": "external",
+    "nodeCount": 7,
+    "nodes": [
+      "Base64 Encode",
+      "Base64 Decode",
+      "Json Encode",
+      "Json Decode",
+      "Url Encode",
+      "Url Decode",
+      "Xml To Json"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "ffmpeg",
+    "name": "FFmpeg",
+    "namespace": "Robomotion.FFmpeg",
+    "description": "FFmpeg package for performing media operations",
+    "keywords": [
+      "video",
+      "audio",
+      "conversion",
+      "ffmpeg",
+      "ffplay",
+      "ffprobe"
+    ],
+    "category": "external",
+    "nodeCount": 7,
+    "nodes": [
+      "Create",
+      "Input",
+      "Output",
+      "Filter",
+      "Run",
+      "Probe",
+      "Play"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "flexicapture",
+    "name": "Flexicapture",
+    "namespace": "Robomotion.Flexicapture",
+    "description": "Abbyy Flexicapture integration",
+    "keywords": [
+      "robomotion",
+      "rpa",
+      "flexicapture",
+      "abbyy",
+      "ocr"
+    ],
+    "category": "external",
+    "nodeCount": 1,
+    "nodes": [
+      "Flexicapture"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "gateio",
+    "name": "Gate IO",
+    "namespace": "Robomotion.GateIO",
+    "description": "Connects to the Gate IO, and does crypto operations.",
+    "keywords": [
+      "blockchain",
+      "crypto",
+      "gateio",
+      "bitcoin",
+      "trading"
+    ],
+    "category": "external",
+    "nodeCount": 13,
+    "nodes": [
+      "Buy Order",
+      "Cancel Order",
+      "Connect",
+      "Disconnect",
+      "Get Balance",
+      "Get Price",
+      "List My Orders",
+      "List Orders",
+      "List Pairs",
+      "Sell Order",
+      "Get Fee",
+      "Get Order",
+      "Get Deposit Address"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "giphy",
+    "name": "Giphy",
+    "namespace": "Robomotion.Giphy",
+    "description": "Giphy integration",
+    "keywords": [
+      "giphy",
+      "gifs",
+      "stickers"
+    ],
+    "category": "external",
+    "nodeCount": 26,
+    "nodes": [
+      "Autocomplete",
+      "Categories",
+      "Channel Search",
+      "Emoji Variations",
+      "Emoji",
+      "Get by ID",
+      "Get by IDs (comma separated)",
+      "Random",
+      "Search Gifs",
+      "Search Suggestions",
+      "Translate",
+      "Trending Search Terms",
+      "Trending",
+      "Sticker Packs: Children Pack Listing",
+      "Get by ID",
+      "Get by IDs (comma separated)",
+      "Sticker Packs: Individual Sticker Pack",
+      "Sticker Packs: Listings",
+      "Random",
+      "Search",
+      "Trending",
+      "Translate",
+      "Content by ID",
+      "Content by IDs (comma separated)",
+      "Search",
+      "Trending"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "googlecalendar",
+    "name": "Google Calendar",
+    "namespace": "Robomotion.GoogleCalendar",
+    "description": "Google Calendar is a service that provides calendar management and scheduling capabilities.",
+    "keywords": [
+      "calendar",
+      "google",
+      "events",
+      "scheduling"
+    ],
+    "category": "Productivity",
+    "nodeCount": 7,
+    "nodes": [
+      "Create Event",
+      "Get Event",
+      "Get All Events",
+      "Update Event",
+      "Delete Event",
+      "List Events",
+      "Get Availability"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "googledialogflow",
+    "name": "Google Dialogflow",
+    "namespace": "Robomotion.GoogleDialogflow",
+    "description": "The Google Dialogflow is lifelike conversational AI with state-of-the-art virtual agents.",
+    "keywords": [
+      "google",
+      "dialogflow",
+      "cloud"
+    ],
+    "category": "Communication",
+    "nodeCount": 1,
+    "nodes": [
+      "Detect Intent"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "googledocs",
+    "name": "Google Docs",
+    "namespace": "Robomotion.GoogleDocs",
+    "description": "Google Docs (an online word processor that lets user create and format documents) integration to read, create documents or insert, delete text.",
+    "keywords": [
+      "docs",
+      "document",
+      "google"
+    ],
+    "category": "external",
+    "nodeCount": 12,
+    "nodes": [
+      "Create Document",
+      "Open Document",
+      "Delete Range",
+      "Insert Text",
+      "Read Document",
+      "Insert Link",
+      "Replace Text",
+      "Add Image",
+      "Add Hearder",
+      "Add Footer",
+      "Add Heading",
+      "PDF Export"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "googledocumentai",
+    "name": "Google Document AI",
+    "namespace": "Robomotion.GoogleDocumentAI",
+    "description": "Provides a simple interface to access Google Document AI, a service that extracts structured data from documents using machine learning and enables automated document processing.",
+    "keywords": [
+      "document",
+      "documentai",
+      "google",
+      "cloud",
+      "ai",
+      "rpa"
+    ],
+    "category": "Productivity",
+    "nodeCount": 3,
+    "nodes": [
+      "Extract Text",
+      "Extract Tables",
+      "Extract Key Values"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "googledrive",
+    "name": "Google Drive",
+    "namespace": "Robomotion.GoogleDrive",
+    "description": "Connects to Google Drive (a file storage and synchronization service developed by Google) and performs storage operations.",
+    "keywords": [
+      "drive"
+    ],
+    "category": "external",
+    "nodeCount": 14,
+    "nodes": [
+      "Connect",
+      "List Folder",
+      "Upload File",
+      "Download File",
+      "Delete File/Folder",
+      "Create Folder",
+      "Create File Permission",
+      "Delete File Permission",
+      "List File Permissions",
+      "Search",
+      "Copy File",
+      "Export File",
+      "Disconnect",
+      "Move File/Folder"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "googleforms",
+    "name": "Google Forms",
+    "namespace": "Robomotion.GoogleForms",
+    "description": "Google forms (an online form and quiz editor) integration for creating forms, and managing questions.",
+    "keywords": [
+      "form",
+      "google",
+      "quiz"
+    ],
+    "category": "external",
+    "nodeCount": 7,
+    "nodes": [
+      "Create Form",
+      "Add Open-Ended Question",
+      "Add Closed-Ended Question",
+      "Get Responses",
+      "Open Form",
+      "Get Form",
+      "Delete Question"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "googlegemini",
+    "name": "Google Gemini",
+    "namespace": "Robomotion.GoogleGemini",
+    "description": "Provides a simple interface to access the Google Gemini API. Gemini is Google's latest family of large language models.",
+    "keywords": [
+      "robomotion",
+      "rpa",
+      "ai",
+      "google"
+    ],
+    "category": "Productivity",
+    "nodeCount": 15,
+    "nodes": [
+      "Connect",
+      "Generate Text",
+      "Send Chat Message",
+      "Upload File",
+      "List Files",
+      "Get File",
+      "Delete File",
+      "List Models",
+      "Embeddings",
+      "Batch Embeddings",
+      "Compare Embeddings",
+      "Generate Image",
+      "Edit Image",
+      "Generate Video",
+      "Disconnect"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "googlelanguage",
+    "name": "Google Language",
+    "namespace": "Robomotion.GoogleLanguage",
+    "description": "The Google Language, Derive insights from unstructured text using Google machine learning.",
+    "keywords": [
+      "google",
+      "language",
+      "cloud"
+    ],
+    "category": "Communication",
+    "nodeCount": 1,
+    "nodes": [
+      "Text Analyze"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "googlemaps",
+    "name": "Google Maps",
+    "namespace": "Robomotion.GoogleMaps",
+    "description": "Google Maps is a service that provides detailed information about geographical regions and sites worldwide.",
+    "keywords": [
+      "maps",
+      "google",
+      "geo",
+      "location"
+    ],
+    "category": "Mapping",
+    "nodeCount": 4,
+    "nodes": [
+      "Address to Coordinates",
+      "Coordinates to Address",
+      "Calculate Distance",
+      "Get Route Distance"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "googlesheets",
+    "name": "Google Sheets",
+    "namespace": "Robomotion.GoogleSheets",
+    "description": "Google Sheets (an online spreadsheet app that allows you to store and organize different types of information) entegration to perform data operations.",
+    "keywords": [
+      "sheets",
+      "excel"
+    ],
+    "category": "external",
+    "nodeCount": 24,
+    "nodes": [
+      "Open Spreadsheet",
+      "Create Spreadsheet",
+      "Switch Sheet",
+      "Add Sheet",
+      "Set Cell Value",
+      "Get Cell Value",
+      "Insert Row",
+      "Delete Row",
+      "Insert Column",
+      "Delete Column",
+      "Get Row",
+      "Get Column",
+      "Clear Range",
+      "Get Range",
+      "Set Range",
+      "Append Range",
+      "Get Sheets",
+      "Rename Sheet",
+      "Delete Sheet",
+      "Trigger",
+      "Format Range",
+      "Find and Replace",
+      "Append Sheets",
+      "Merge"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "googleslides",
+    "name": "Google Slides",
+    "namespace": "Robomotion.GoogleSlides",
+    "description": "Google Slides integration (Google Slides is an online presentation tool that allows you create and modify presentations.)",
+    "keywords": [
+      "slides",
+      "google",
+      "cloud",
+      "presentation",
+      "rpa"
+    ],
+    "category": "Productivity",
+    "nodeCount": 9,
+    "nodes": [
+      "Create Presentation",
+      "Open Presentation",
+      "Get Presentation",
+      "Copy Presentation",
+      "Replace Text",
+      "Replace Image By Id",
+      "Replace Shapes With Image",
+      "Add Image",
+      "PDF Export"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "googlespeech",
+    "name": "Google Speech",
+    "namespace": "Robomotion.GoogleSpeech",
+    "description": "The Google Speech is a powerful cloud-based service that enables to integrate speech recognition and generation capabilities into applications.",
+    "keywords": [
+      "googlespeech",
+      "cloud",
+      "buckets"
+    ],
+    "category": "Communication",
+    "nodeCount": 2,
+    "nodes": [
+      "Speech to Text",
+      "Text To Speech"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "googlestorage",
+    "name": "Google Storage",
+    "namespace": "Robomotion.GoogleStorage",
+    "description": "Google Storage (a service for storing your objects in Google Cloud) entegration for managing buckets.",
+    "keywords": [
+      "googlestorage",
+      "cloud",
+      "buckets"
+    ],
+    "category": "external",
+    "nodeCount": 10,
+    "nodes": [
+      "Connect",
+      "Read Object",
+      "Upload File",
+      "Delete Object",
+      "List Bucket Objects",
+      "Create Bucket",
+      "Delete Bucket",
+      "Update Bucket",
+      "List Buckets",
+      "Get Bucket"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "googletranslate",
+    "name": "Google Translate",
+    "namespace": "Robomotion.GoogleTranslate",
+    "description": "The Google Translate is a powerful cloud-based service. This service allows you to translate text, words or sentences from one language to another.",
+    "keywords": [
+      "google",
+      "translate",
+      "cloud",
+      "buckets"
+    ],
+    "category": "Communication",
+    "nodeCount": 1,
+    "nodes": [
+      "Text Translate"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "googletrends",
+    "name": "Google Trends",
+    "namespace": "Robomotion.GoogleTrends",
+    "description": "Access Google Trends data for trend analysis and SEO research. Get trending searches with news articles and track keyword interest over time and by region. Find related queries and topics and search for categories and locations",
+    "keywords": [
+      "robomotion",
+      "rpa",
+      "google",
+      "trends",
+      "seo",
+      "marketing",
+      "research"
+    ],
+    "category": "Productivity",
+    "nodeCount": 10,
+    "nodes": [
+      "Categories",
+      "Get Trending News",
+      "Interest By Region",
+      "Interest Over Time",
+      "Related Queries",
+      "Related Topics",
+      "Suggestions",
+      "Trending News",
+      "Trending Now",
+      "Trending Searches"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "googlevision",
+    "name": "Google Vision",
+    "namespace": "Robomotion.GoogleVision",
+    "description": "Google Vision allows you to integrate Google's vision detection features like extracting text from images or pdfs, extracting image labels or checking image safety.",
+    "keywords": [
+      "googlevision",
+      "cloud",
+      "buckets"
+    ],
+    "category": "external",
+    "nodeCount": 5,
+    "nodes": [
+      "Pdf To Text",
+      "Connect",
+      "Image To Text",
+      "Extract Image Labels",
+      "Check Image Safety"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "grule",
+    "name": "Grule",
+    "namespace": "Robomotion.Grule",
+    "description": "Grule is a Rule Engine that combines facts that are inserted into the system and reaches a conclusion by the provided rules",
+    "keywords": [
+      "rules",
+      "engine",
+      "grule"
+    ],
+    "category": "external",
+    "nodeCount": 2,
+    "nodes": [
+      "Build",
+      "Execute"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "imageautomation",
+    "name": "Image Automation",
+    "namespace": "Robomotion.ImageAutomation",
+    "description": "Image Automation package helps you to automate graphical user interfaces",
+    "keywords": [
+      "image",
+      "automation",
+      "rpa"
+    ],
+    "category": "external",
+    "nodeCount": 10,
+    "nodes": [
+      "Click Image",
+      "Click Text",
+      "Click \u0026 Type",
+      "Find Image",
+      "Find Text",
+      "Get Text",
+      "Select \u0026 Copy",
+      "Take Screenshot",
+      "Text Exists",
+      "Wait Image"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "imageprocessing",
+    "name": "Image Processing",
+    "namespace": "Robomotion.ImageProcessing",
+    "description": "Image processing is a method to convert an image into digital form and perform some operations on it.",
+    "keywords": [
+      "robomotion",
+      "rpa",
+      "image",
+      "plugin"
+    ],
+    "category": "external",
+    "nodeCount": 13,
+    "nodes": [
+      "Add Text To Image",
+      "Blur Image",
+      "Convert Image",
+      "Crop Image",
+      "Enhance Borders",
+      "Grayscale Image",
+      "Image Identify",
+      "Invert Image Colors",
+      "PDF To Image",
+      "Region Crop",
+      "Resize Image",
+      "Rotate Image",
+      "Scale Image"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "instagram",
+    "name": "Instagram",
+    "namespace": "Robomotion.Instagram",
+    "description": "Comprehensive Instagram automation package for profile data, posts, stories, highlights, reels, followers, and media downloads using Instaloader",
+    "keywords": [
+      "instagram",
+      "social_media",
+      "rpa",
+      "instaloader",
+      "stories",
+      "highlights",
+      "reels",
+      "followers",
+      "posts",
+      "scraping",
+      "automation"
+    ],
+    "category": "Social Media",
+    "nodeCount": 13,
+    "nodes": [
+      "Download Post Media",
+      "Get Followers",
+      "Get Following",
+      "Get Highlights",
+      "Get Post Comments",
+      "Get Post Details",
+      "Get Profile Info",
+      "Get Profile Posts",
+      "Get Reels",
+      "Get Stories",
+      "Login",
+      "Logout",
+      "Search Hashtag"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "javaautomation",
+    "name": "Java Automation",
+    "namespace": "Robomotion.JavaAutomation",
+    "description": "Java Access Bridge is a technology that exposes the Java Accessibility API in a Microsoft Windows DLL, enabling Java applications and applets that implement the Java Accessibility API to be visible to assistive technologies on Microsoft Windows systems.",
+    "keywords": [
+      "robomotion",
+      "rpa",
+      "automation",
+      "java"
+    ],
+    "category": "external",
+    "nodeCount": 13,
+    "nodes": [
+      "Click Element",
+      "Do Action",
+      "Get Actions",
+      "Get Combobox",
+      "Get Info",
+      "Get Text",
+      "Get Title",
+      "Get Value",
+      "Is Enabled",
+      "Send Key",
+      "Set Combobox",
+      "Set Text",
+      "Wait Context"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "json",
+    "name": "JSON",
+    "namespace": "Robomotion.JSON",
+    "description": "Helper tool to manipulate JSON objects.",
+    "keywords": [
+      "robomotion",
+      "json"
+    ],
+    "category": "external",
+    "nodeCount": 11,
+    "nodes": [
+      "Clone",
+      "Create",
+      "Decode",
+      "Delete Value",
+      "Encode",
+      "Get Value",
+      "Get Keys",
+      "Set Value",
+      "Get Values",
+      "Read",
+      "Write"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "keywordanalysis",
+    "name": "Keyword Analysis",
+    "namespace": "Robomotion.KeywordAnalysis",
+    "description": "The Keyword Analysis package is a comprehensive toolkit designed for SEO professionals, content creators, and digital marketers who aim to enhance their online presence through strategic keyword optimization",
+    "keywords": [
+      "seo",
+      "serp",
+      "keyword analysis",
+      "keyword research"
+    ],
+    "category": "external",
+    "nodeCount": 6,
+    "nodes": [
+      "Cluster Keywords",
+      "Count Occurrences",
+      "Frequency Analysis",
+      "Gap Analysis",
+      "Normalize Text",
+      "TF-IDF Analysis"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "lemlist",
+    "name": "Lemlist",
+    "namespace": "Robomotion.Lemlist",
+    "description": "Lemlist integration",
+    "keywords": [
+      "marketing",
+      "campaign",
+      "crm",
+      "sales"
+    ],
+    "category": "external",
+    "nodeCount": 6,
+    "nodes": [
+      "Connect",
+      "Disconnect",
+      "Get Team",
+      "List Campaigns",
+      "Unsubscribe Lead From Campaign",
+      "Remove Lead From Campaign"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "leonardoai",
+    "name": "Leonardo AI",
+    "namespace": "Robomotion.LeonardoAI",
+    "description": "Connects to Leonardo AI API, which allows you to integrate cutting-edge create image technology into your flows.",
+    "keywords": [
+      "robomotion",
+      "rpa",
+      "ai"
+    ],
+    "category": "Productivity",
+    "nodeCount": 12,
+    "nodes": [
+      "Connect",
+      "Create Generation",
+      "Create Upscale",
+      "Delete Generation",
+      "Disconnect",
+      "Get Generation",
+      "Get User Details",
+      "Get Variation",
+      "Delete Image",
+      "Get Image",
+      "List Generations",
+      "Upload Image"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "markdown",
+    "name": "Markdown",
+    "namespace": "Robomotion.Markdown",
+    "description": "Markdown is a lightweight markup language that you can use to add formatting elements to plaintext text documents.",
+    "keywords": [
+      "markdown",
+      "html"
+    ],
+    "category": "Productivity",
+    "nodeCount": 2,
+    "nodes": [
+      "Markdown to HTML",
+      "HTML to Markdown"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "mcp",
+    "name": "MCP",
+    "namespace": "Robomotion.MCP",
+    "description": "MCP integration for Robomotion RPA",
+    "keywords": [
+      "MCP",
+      "Robomotion",
+      "Agents",
+      "Automation",
+      "AI"
+    ],
+    "category": "AI",
+    "nodeCount": 14,
+    "nodes": [
+      "Listen",
+      "Prompt In",
+      "Prompt Out",
+      "Resource In",
+      "Resource Out",
+      "Tool In",
+      "Tool Out",
+      "Call Tool",
+      "Connect",
+      "Get Prompt",
+      "List Prompts",
+      "List Resources",
+      "List Tools",
+      "Read Resource"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "memoryqueue",
+    "name": "Memory Queue",
+    "namespace": "Robomotion.MemoryQueue",
+    "description": "Provides a FIFO (First-In-First-Out) queue system utility, enabling efficient and reliable task management and processing, essential for streamlined operations in various applications.",
+    "keywords": [
+      "memory",
+      "queue",
+      "concurrent",
+      "fifo"
+    ],
+    "category": "external",
+    "nodeCount": 5,
+    "nodes": [
+      "Clear Queue",
+      "Create Queue",
+      "Delete Queue",
+      "Enqueue",
+      "Dequeue"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "microsoft365mail",
+    "name": "Microsoft365 Mail",
+    "namespace": "Robomotion.Microsoft365Mail",
+    "description": "Microsoft365 is a product family of productivity software and cloud-based services owned by Microsoft.",
+    "keywords": [
+      "robomotion",
+      "microsoft",
+      "365",
+      "mail"
+    ],
+    "category": "external",
+    "nodeCount": 5,
+    "nodes": [
+      "Get Mail",
+      "Move Mail",
+      "Save Attachments",
+      "Search Mail",
+      "Send Mail"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "microsoftexcel",
+    "name": "Microsoft Excel",
+    "namespace": "Robomotion.MicrosoftExcel",
+    "description": "Microsoft Excel organizes data in columns and rows that can be manipulated through formulas that allow the software to perform mathematical functions on the data.",
+    "keywords": [
+      "robomotion",
+      "rpa",
+      "excel",
+      "plugin"
+    ],
+    "category": "external",
+    "nodeCount": 33,
+    "nodes": [
+      "Activate Sheet",
+      "Chart to Image",
+      "Clear Range",
+      "Clear Sheet",
+      "Clone Range",
+      "Close Excel",
+      "Copy Range",
+      "Copy Sheet",
+      "Create Excel",
+      "Create Sheet",
+      "Delete Cell",
+      "Delete Column",
+      "Delete Row",
+      "Delete Sheet",
+      "Get Column",
+      "Get Formula",
+      "Get Hyperlink",
+      "Get Range",
+      "Get Row",
+      "Get Sheets",
+      "Insert Column",
+      "Insert Row",
+      "Open Excel",
+      "Paste Range",
+      "Range to Image",
+      "Read Cell Value",
+      "Run Macro",
+      "Save Excel",
+      "Search Sheet",
+      "Set Active Cell",
+      "Set Cell Value",
+      "Set Formula",
+      "Set Range"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "microsoftexchangemail",
+    "name": "Microsoft Exchange Mail",
+    "namespace": "Robomotion.MicrosoftExchangeMail",
+    "description": "Microsoft Exchange's mail integration",
+    "keywords": [
+      "robomotion",
+      "microsoft",
+      "exchange",
+      "mail"
+    ],
+    "category": "external",
+    "nodeCount": 3,
+    "nodes": [
+      "Get Mail",
+      "Save Attachments",
+      "Send Mail"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "microsoftgraph",
+    "name": "Microsoft Graph",
+    "namespace": "Robomotion.MicrosoftGraph",
+    "description": "Microsoft Graph API integration for Excel, SharePoint and Office 365 services",
+    "keywords": [
+      "robomotion",
+      "microsoft",
+      "graph",
+      "excel",
+      "sharepoint",
+      "office365"
+    ],
+    "category": "external",
+    "nodeCount": 26,
+    "nodes": [
+      "Activate Sheet",
+      "Clear Range",
+      "Clear Sheet",
+      "Connect",
+      "Create Table",
+      "Create Workbook",
+      "Create Worksheet",
+      "Delete Cell",
+      "Delete Column",
+      "Delete Row",
+      "Delete Sheet",
+      "Disconnect",
+      "Get Cell Value",
+      "Get Column",
+      "Get File Info",
+      "Get Formula",
+      "Get Range",
+      "Get Row",
+      "Get Workbook",
+      "Get Worksheet",
+      "Insert Column",
+      "Insert Row",
+      "List Files",
+      "Set Cell Value",
+      "Set Formula",
+      "Set Range"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "microsoftoutlook",
+    "name": "Microsoft Outlook",
+    "namespace": "Robomotion.MicrosoftOutlook",
+    "description": "Microsoft Outlook (a personal information manager software system from Microsoft) package for mail operations.",
+    "keywords": [
+      "robomotion",
+      "rpa",
+      "Outlook",
+      "plugin"
+    ],
+    "category": "external",
+    "nodeCount": 5,
+    "nodes": [
+      "Get Mail",
+      "Move Mail",
+      "Save Attachments",
+      "Search Mail",
+      "Send Mail"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "microsoftteams",
+    "name": "Microsoft Teams",
+    "namespace": "Robomotion.MicrosoftTeams",
+    "description": "Microsoft Teams (a collaboration app developed by Microsoft) integration",
+    "keywords": [
+      "robomotion",
+      "microsoft",
+      "teams"
+    ],
+    "category": "external",
+    "nodeCount": 15,
+    "nodes": [
+      "Connect",
+      "Create Channel",
+      "Create Team",
+      "Delete Channel",
+      "Disconnect",
+      "Get Channel",
+      "Get Chat",
+      "Get Chat Members",
+      "List Chats",
+      "Get Messages",
+      "Get Team",
+      "List Channels",
+      "List Teams",
+      "Send Message",
+      "Update Channel"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "microsoftword",
+    "name": "Microsoft Word",
+    "namespace": "Robomotion.MicrosoftWord",
+    "description": "Microsoft Word package for creating and organizing documents, letters, reports, etc.",
+    "keywords": [
+      "robomotion",
+      "rpa",
+      "word",
+      "plugin"
+    ],
+    "category": "external",
+    "nodeCount": 12,
+    "nodes": [
+      "Add Footer",
+      "Add Header",
+      "Add Heading",
+      "Add Image",
+      "Add Table",
+      "Add Text",
+      "Clear Word",
+      "Close Word",
+      "Create Word",
+      "Open Word",
+      "Read Word",
+      "Replace Text"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "mimetools",
+    "name": "Mime Tools",
+    "namespace": "Robomotion.MimeTools",
+    "description": "Used for encoding and decoding MIME (Multipurpose Internet Mail Extensions - RFC1521) formatted files",
+    "keywords": [
+      "eml",
+      "mime"
+    ],
+    "category": "external",
+    "nodeCount": 2,
+    "nodes": [
+      "Extract Attachments",
+      "Detect File"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "mongodb",
+    "name": "MongoDB",
+    "namespace": "Robomotion.MongoDB",
+    "description": "MongoDB (a source-available cross-platform document-oriented database program. Classified as a NoSQL database program) package for performing document or database operations.",
+    "keywords": [
+      "mongoDB",
+      "Database",
+      "NoSQL"
+    ],
+    "category": "external",
+    "nodeCount": 13,
+    "nodes": [
+      "Drop Database",
+      "List Databases",
+      "Connect",
+      "Create Database",
+      "Create Collection",
+      "Drop Collection",
+      "Insert Document",
+      "Delete Document",
+      "Disconnect",
+      "Update Document",
+      "Read Document",
+      "Read All",
+      "Show Collections"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "monitoring",
+    "name": "Monitoring",
+    "namespace": "Robomotion.Monitoring",
+    "description": "Monitors the availability of servers, web sites and apps and sends notifications",
+    "keywords": [
+      "availability",
+      "uptime",
+      "monitoring"
+    ],
+    "category": "external",
+    "nodeCount": 6,
+    "nodes": [
+      "DNS",
+      "Keyword",
+      "Ping",
+      "Port",
+      "SSL",
+      "Website"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "mssql",
+    "name": "MSSQL",
+    "namespace": "Robomotion.MSSQL",
+    "description": "MSSQL (a relational database management system developed by Microsoft) package for performing database operations such as execute query or non queries.",
+    "keywords": [
+      "database",
+      "mssql"
+    ],
+    "category": "external",
+    "nodeCount": 10,
+    "nodes": [
+      "Commit Transaction",
+      "Connect",
+      "Disconnect",
+      "Insert Table",
+      "Execute Non Query",
+      "Execute Query",
+      "Start Transaction",
+      "Wait Column",
+      "Wait Row",
+      "Wait Table"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "mysql",
+    "name": "MySQL",
+    "namespace": "Robomotion.MySQL",
+    "description": "MySQL (an open source relational database management system) package for performing database operations such as execute query or non queries.",
+    "keywords": [
+      "robomotion",
+      "rpa",
+      "MySQL",
+      "plugin"
+    ],
+    "category": "external",
+    "nodeCount": 12,
+    "nodes": [
+      "Backup Database",
+      "Commit Transaction",
+      "Connect",
+      "Disconnect",
+      "Insert Table",
+      "Execute Non Query",
+      "Execute Query",
+      "Restore Database",
+      "Start Transaction",
+      "Wait Column",
+      "Wait Row",
+      "Wait Table"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "number",
+    "name": "Number",
+    "namespace": "Robomotion.Number",
+    "description": "Basic number operations",
+    "keywords": [
+      "number"
+    ],
+    "category": "external",
+    "nodeCount": 5,
+    "nodes": [
+      "Assign",
+      "To String",
+      "Decrement",
+      "Increment",
+      "Random"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "oauth2",
+    "name": "Oauth2",
+    "namespace": "Robomotion.Oauth2",
+    "description": "Oauth2 package allows users to authorize their applications and get the token.",
+    "keywords": [
+      "oauth2",
+      "authentication",
+      "authorization"
+    ],
+    "category": "external",
+    "nodeCount": 1,
+    "nodes": [
+      "Auth Code"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "object",
+    "name": "Object",
+    "namespace": "Robomotion.Object",
+    "description": "Simple object operations",
+    "keywords": [
+      "object",
+      "map"
+    ],
+    "category": "external",
+    "nodeCount": 6,
+    "nodes": [
+      "Assign",
+      "Add Property",
+      "Get Keys",
+      "Get Values",
+      "Get Length",
+      "Remove Property"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "ollama",
+    "name": "Ollama",
+    "namespace": "Robomotion.Ollama",
+    "description": "Ollama package is for interacting with advanced machine learning models, supporting a wide range of operations including text generation, chat completion, model management, and multimodal functionalities.",
+    "keywords": [
+      "llm",
+      "ai"
+    ],
+    "category": "Artificial Intelligence",
+    "nodeCount": 9,
+    "nodes": [
+      "Connect",
+      "Disconnect",
+      "Generate Completion",
+      "Generate Chat Completion",
+      "List Models",
+      "Show Model Info",
+      "Delete Model",
+      "Pull Model",
+      "Generate Embeddings"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "openai",
+    "name": "OpenAI",
+    "namespace": "Robomotion.OpenAI",
+    "description": "Provides a simple interface to access the OpenAI API with simplified outputs (msg.text, msg.images, msg.audio). Supports GPT-5, GPT-4o, o3, DALL-E 3, GPT-Image-1, Whisper, and more.",
+    "keywords": [
+      "openai",
+      "ai",
+      "rpa",
+      "golang"
+    ],
+    "category": "Artificial Intelligence",
+    "nodeCount": 20,
+    "nodes": [
+      "Connect",
+      "Disconnect",
+      "Generate Text",
+      "Generate Image",
+      "Edit Image",
+      "Create Image Variation",
+      "Generate Speech",
+      "Transcribe Audio",
+      "Translate Audio",
+      "Generate Embedding",
+      "Generate Batch Embeddings",
+      "Similarity",
+      "Moderate",
+      "List Models",
+      "Retrieve Model",
+      "Upload File",
+      "List Files",
+      "Retrieve File Metadata",
+      "Download File",
+      "Delete File"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "openrouter",
+    "name": "OpenRouter",
+    "namespace": "Robomotion.OpenRouter",
+    "description": "OpenRouter integration with text generation, chat completions, image generation, reasoning mode, and streaming support. Access 480+ AI models (Gemini, Claude, GPT, Grok, DeepSeek, Flux) through a unified API with simplified outputs.",
+    "keywords": [
+      "robomotion",
+      "rpa",
+      "ai",
+      "openrouter",
+      "llm",
+      "chat"
+    ],
+    "category": "Productivity",
+    "nodeCount": 15,
+    "nodes": [
+      "Connect",
+      "Generate Text",
+      "Chat Completion",
+      "Generate Image",
+      "Get Generation",
+      "Get Credits",
+      "Get Current API Key",
+      "Create API Key",
+      "Get API Key",
+      "List API Keys",
+      "Update API Key",
+      "Delete API Key",
+      "List Models",
+      "List Model Endpoints",
+      "Disconnect"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "oracle",
+    "name": "Oracle",
+    "namespace": "Robomotion.Oracle",
+    "description": "Oracle (Oracle Database is an object-relational database management system developed and marketed by Oracle Corporation) package for performing database operations such as execute query or non queries.",
+    "keywords": [
+      "robomotion",
+      "rpa",
+      "oracle",
+      "plugin"
+    ],
+    "category": "external",
+    "nodeCount": 7,
+    "nodes": [
+      "Commit Transaction",
+      "Connect",
+      "Disconnect",
+      "Insert Table",
+      "Execute Non Query",
+      "Execute Query",
+      "Start Transaction"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "pandas",
+    "name": "Pandas",
+    "namespace": "Robomotion.Pandas",
+    "description": "Pandas package uses Pandas DataFrame library for performing table operations",
+    "keywords": [
+      "datatable",
+      "table",
+      "rpa"
+    ],
+    "category": "external",
+    "nodeCount": 18,
+    "nodes": [
+      "Add Column",
+      "Add Row",
+      "Append Table",
+      "CSV To Data Table",
+      "Convert Type",
+      "Data Table To CSV",
+      "Excel To Data Table",
+      "Get Column",
+      "Html To Data Table",
+      "Json To Data Table",
+      "Merge Tables",
+      "Pdf To Data Table",
+      "Query",
+      "Remove Column",
+      "Remove Duplicates",
+      "Remove Row",
+      "Replace Values",
+      "Sort Table"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "pcloud",
+    "name": "pCloud",
+    "namespace": "Robomotion.PCloud",
+    "description": "Used for pCloud operations which is an alternative to Google Drive",
+    "keywords": [
+      "cloud",
+      "upload",
+      "file-store",
+      "public link"
+    ],
+    "category": "external",
+    "nodeCount": 9,
+    "nodes": [
+      "Copy File",
+      "Create Folder",
+      "Delete File",
+      "Delete Folder",
+      "Login",
+      "Rename File",
+      "Rename Folder",
+      "Upload File",
+      "Get Public Link"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "pdfbox",
+    "name": "PDFBox",
+    "namespace": "Robomotion.PDFBox",
+    "description": "The Apache PDFBox® library is an open source Java tool for working with PDF documents. This project allows creation of new PDF documents, manipulation of existing documents and the ability to extract content from documents.",
+    "keywords": [
+      "pdf",
+      "pdfbox"
+    ],
+    "category": "external",
+    "nodeCount": 8,
+    "nodes": [
+      "Decrypt",
+      "Encrypt",
+      "Extract Images",
+      "Extract Text",
+      "Merge",
+      "PDF to Image",
+      "Split",
+      "Text to PDF"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "pdfprocessor",
+    "name": "PDF Processor",
+    "namespace": "Robomotion.PDFProcessor",
+    "description": "Use PDF Processor package for streamlined form filling and more.",
+    "keywords": [
+      "pdf",
+      "document",
+      "pdf processor"
+    ],
+    "category": "Productivity",
+    "nodeCount": 10,
+    "nodes": [
+      "Export To JSON",
+      "Fill From JSON",
+      "Create PDF From Json",
+      "Extract Images",
+      "Split",
+      "Merge",
+      "Optimize",
+      "Encrypt",
+      "Decrypt",
+      "Change Password"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "pinecone",
+    "name": "Pinecone",
+    "namespace": "Robomotion.Pinecone",
+    "description": "Provides a simple interface to access the Pinecone API, Pinecone's vector database is fully-managed, developer-friendly, and easily scalable.",
+    "keywords": [
+      "vector",
+      "database",
+      "ai",
+      "rpa"
+    ],
+    "category": "Productivity",
+    "nodeCount": 10,
+    "nodes": [
+      "Connect",
+      "Create Index",
+      "Upsert",
+      "Query",
+      "Describe Index Stats",
+      "Fetch",
+      "Delete",
+      "List or Describe Indexes",
+      "Delete Index",
+      "Update"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "pipedrive",
+    "name": "Pipedrive",
+    "namespace": "Robomotion.Pipedrive",
+    "description": "Pipedrive integration",
+    "keywords": [
+      "pipedrive",
+      "sales",
+      "rpa"
+    ],
+    "category": "external",
+    "nodeCount": 7,
+    "nodes": [
+      "Connect",
+      "Create",
+      "Delete",
+      "Disconnect",
+      "Get",
+      "Get All",
+      "Update"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "postgresql",
+    "name": "PostgreSQL",
+    "namespace": "Robomotion.PostgreSQL",
+    "description": "PostgreSQL (PostgreSQL Server is an open source relational database management system) package for performing database operations such as execute query or non queries.",
+    "keywords": [
+      "PostgreSQL",
+      "database"
+    ],
+    "category": "external",
+    "nodeCount": 7,
+    "nodes": [
+      "Commit Transaction",
+      "Connect",
+      "Disconnect",
+      "Insert Table",
+      "Execute Non Query",
+      "Execute Query",
+      "Start Transaction"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "replicateai",
+    "name": "Replicate AI",
+    "namespace": "Robomotion.ReplicateAI",
+    "description": "Replicate lets you run machine learning models, without needing to understand how machine learning works.",
+    "keywords": [
+      "replicat",
+      "ai",
+      "rpa"
+    ],
+    "category": "Productivity",
+    "nodeCount": 9,
+    "nodes": [
+      "Connect",
+      "Run Model",
+      "Get Prediction",
+      "Create Prediction",
+      "Get Model",
+      "Create Training",
+      "Get Training",
+      "List Prediction",
+      "Cancel a Prediction"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "sentry",
+    "name": "Sentry",
+    "namespace": "Robomotion.Sentry",
+    "description": "Sentry is a performance and error monitoring service",
+    "keywords": [
+      "sentry",
+      "error",
+      "monitoring"
+    ],
+    "category": "external",
+    "nodeCount": 1,
+    "nodes": [
+      "Capture"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "serp",
+    "name": "SERP",
+    "namespace": "Robomotion.SERP",
+    "description": "Automates and streamlines the process of extracting data from search engine results pages, enabling efficient trend and competitor analysis. It offers real-time data collection, scalability, and customized reporting, enhancing SEO and market research strategies.",
+    "keywords": [
+      "serp",
+      "search",
+      "google",
+      "rpa"
+    ],
+    "category": "Productivity",
+    "nodeCount": 3,
+    "nodes": [
+      "Search",
+      "Extract Content",
+      "Auto Complete"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "slack",
+    "name": "Slack",
+    "namespace": "Robomotion.Slack",
+    "description": "Uses a Slack bot (a type of Slack app designed to interact with users) to send or receive messages, list channels or users etc.",
+    "keywords": [
+      "slack",
+      "messaging",
+      "chat"
+    ],
+    "category": "external",
+    "nodeCount": 8,
+    "nodes": [
+      "Connect",
+      "Disconnect",
+      "List Channels",
+      "List Users",
+      "File Upload",
+      "Delete File",
+      "Send Message",
+      "Receive Message"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "sqlite",
+    "name": "SQLite",
+    "namespace": "Robomotion.SQLite",
+    "description": "SQLite is an in-process library that implements a self-contained, serverless, zero-configuration, transactional SQL database engine. It is a database, which is zero-configured, which means like other databases you do not need to configure it in your system.",
+    "keywords": [
+      "robomotion",
+      "rpa",
+      "sqlite",
+      "plugin"
+    ],
+    "category": "external",
+    "nodeCount": 9,
+    "nodes": [
+      "Commit Transaction",
+      "Connect",
+      "Create Database",
+      "Disconnect",
+      "Export Query",
+      "Insert Table",
+      "Execute Non Query",
+      "Execute Query",
+      "Start Transaction"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "ssh",
+    "name": "SSH",
+    "namespace": "Robomotion.SSH",
+    "description": "Connects to SSH servers and runs commands, uploads \u0026 downloads files from server",
+    "keywords": [
+      "ssh",
+      "remote",
+      "file_upload",
+      "file_download"
+    ],
+    "category": "external",
+    "nodeCount": 5,
+    "nodes": [
+      "Connect",
+      "Run Command",
+      "Upload File",
+      "Download File",
+      "Disconnect"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "stabilityai",
+    "name": "Stability AI",
+    "namespace": "Robomotion.StabilityAI",
+    "description": "Stability AI is a visual art tool that creates images based on text input given",
+    "keywords": [
+      "stability",
+      "ai",
+      "rpa"
+    ],
+    "category": "Artificial Intelligence",
+    "nodeCount": 9,
+    "nodes": [
+      "Connect",
+      "Disconnect",
+      "Get Engines List",
+      "Get User Account",
+      "Get User Credit",
+      "Create Images From Image",
+      "Masking",
+      "Create Images From Text",
+      "Create Upscale"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "string",
+    "name": "String",
+    "namespace": "Robomotion.String",
+    "description": "String package provides simple nodes to manipulate UTF-8 encoded strings.",
+    "keywords": [
+      "string",
+      "methods"
+    ],
+    "category": "external",
+    "nodeCount": 26,
+    "nodes": [
+      "Assign",
+      "Compare",
+      "Concatenate",
+      "To Boolean",
+      "To Number",
+      "To String",
+      "Count",
+      "Cut",
+      "Generate String",
+      "Generate UUID",
+      "Get Length",
+      "Has Prefix",
+      "Has Suffix",
+      "Includes",
+      "Index Any",
+      "Index",
+      "Join",
+      "Last Index",
+      "Lowercase",
+      "Repeat",
+      "Replace",
+      "Reverse",
+      "Split",
+      "Template",
+      "Trim",
+      "Uppercase"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "subtitles",
+    "name": "Subtitles",
+    "namespace": "Robomotion.Subtitles",
+    "description": "Subtitles Package provides functionality to convert subtitles between the srt and JSON formats",
+    "keywords": [
+      "subtitles",
+      "json",
+      "srt"
+    ],
+    "category": "Productivity",
+    "nodeCount": 2,
+    "nodes": [
+      "SRT to JSON",
+      "JSON to SRT"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "telegrambot",
+    "name": "Telegram Bot",
+    "namespace": "Robomotion.TelegramBot",
+    "description": "Uses a Telegram bot (applications that run inside Telegram) to send messages, receive messages etc.",
+    "keywords": [
+      "Telegram",
+      "Bot"
+    ],
+    "category": "Communication",
+    "nodeCount": 12,
+    "nodes": [
+      "Connect",
+      "Get Bot Info",
+      "Download File",
+      "Get File Path",
+      "Create Invite link",
+      "Send Message",
+      "Receive Message",
+      "Forward Message",
+      "Disconnect",
+      "Send Photo",
+      "Send Audio",
+      "Send Document"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "twilio",
+    "name": "Twilio",
+    "namespace": "Robomotion.Twilio",
+    "description": "Twilio entegration for sending SMS, sending whatsapp messages and voice call by using Twilio API",
+    "keywords": [
+      "whatsapp",
+      "messaging",
+      "twilio",
+      "SMS",
+      "call"
+    ],
+    "category": "external",
+    "nodeCount": 7,
+    "nodes": [
+      "Connect",
+      "Receive Message",
+      "Send Message",
+      "Send SMS",
+      "Call",
+      "Send Verification Code",
+      "Check Verification Code"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "vertexai",
+    "name": "Vertex AI",
+    "namespace": "Robomotion.VertexAI",
+    "description": "Provides a simple interface to access the Vertex AI, Vertex AI offers everything you need to build and use generative AI—from AI solutions.",
+    "keywords": [
+      "vertex",
+      "google",
+      "cloud",
+      "ai",
+      "rpa"
+    ],
+    "category": "Productivity",
+    "nodeCount": 7,
+    "nodes": [
+      "Connect",
+      "Disconnect",
+      "Get Text Embeddings",
+      "Get Multimodal Embeddings",
+      "Generate Text",
+      "Generate Chat",
+      "Generate Code"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "webautomation",
+    "name": "Web Automation",
+    "namespace": "Robomotion.WebAutomation",
+    "description": "Used for automating web related tasks",
+    "keywords": [
+      "selenium",
+      "automation",
+      "testing",
+      "web"
+    ],
+    "category": "external",
+    "nodeCount": 32,
+    "nodes": [
+      "Alert",
+      "Click Element",
+      "Close Browser",
+      "Drag \u0026 Drop",
+      "File Upload",
+      "Focus",
+      "Get Cookies",
+      "Get Page Source",
+      "Get Select Options",
+      "Get Title",
+      "Get URL",
+      "Get Value",
+      "Go Back",
+      "Go Forward",
+      "Highlight",
+      "Hover",
+      "List Windows",
+      "Open Browser",
+      "Open Link",
+      "Refresh",
+      "Run Script",
+      "Screenshot",
+      "Scroll",
+      "Select",
+      "Send Keys",
+      "Set Cookie",
+      "Set Value",
+      "Switch Frame",
+      "Switch Window",
+      "Type Text",
+      "Wait Element",
+      "Window Resize"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "whatsapp",
+    "name": "WhatsApp",
+    "namespace": "Robomotion.WhatsApp",
+    "description": "WhatsApp Business Cloud API integration for sending and receiving messages，media，interactive content，and more.",
+    "keywords": [
+      "WhatsApp",
+      "Message",
+      "Meta",
+      "Business",
+      "Cloud API",
+      "Interactive",
+      "Media"
+    ],
+    "category": "external",
+    "nodeCount": 14,
+    "nodes": [
+      "Receive Events",
+      "Send Text Message",
+      "Send Template Message",
+      "Send Image Message",
+      "Send Video Message",
+      "Send Document Message",
+      "Send Audio Message",
+      "Send Location Message",
+      "Send Contact Message",
+      "Send Reply Buttons",
+      "Send List Message",
+      "Mark As Read",
+      "Get Media URL",
+      "Upload Media"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "windowsautomation",
+    "name": "Windows Automation",
+    "namespace": "Robomotion.WindowsAutomation",
+    "description": "Helps to automate windows applications",
+    "keywords": [
+      "robomotion",
+      "windows",
+      "automation"
+    ],
+    "category": "external",
+    "nodeCount": 26,
+    "nodes": [
+      "Click Element",
+      "Click Coordinate",
+      "Close Window",
+      "Get Checkbox",
+      "Get Combobox",
+      "Get Properties",
+      "Get Session",
+      "Get Slider",
+      "Get Text",
+      "Get Value",
+      "Is Enabled",
+      "Is Selected",
+      "Keep Alive",
+      "Move Window",
+      "Screenshot",
+      "Send Key",
+      "Set Checkbox",
+      "Set Combobox",
+      "Set Focus",
+      "Set Selected",
+      "Set Slider",
+      "Set Text",
+      "Set Value",
+      "Transfer Session",
+      "Wait Element",
+      "Wait Window"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "word",
+    "name": "Word",
+    "namespace": "Robomotion.Word",
+    "description": "Helps to automate Microsoft Word operations",
+    "keywords": [
+      "robomotion",
+      "word",
+      "microsoft",
+      "office",
+      "document"
+    ],
+    "category": "Productivity",
+    "nodeCount": 9,
+    "nodes": [
+      "Add Header",
+      "Add Image",
+      "Add Table",
+      "Add Text",
+      "Create Word",
+      "Open Word",
+      "Replace Image",
+      "Replace Text",
+      "Save Word"
+    ],
+    "source": "external"
+  },
+  {
+    "id": "wordpress",
+    "name": "Wordpress",
+    "namespace": "Robomotion.Wordpress",
+    "description": "Connects to Wordpress and does post, media and category operations.",
+    "keywords": [
+      "wordpress",
+      "post"
+    ],
+    "category": "external",
+    "nodeCount": 11,
+    "nodes": [
+      "Connect",
+      "Create Post",
+      "List Posts",
+      "Create Category",
+      "List Categories",
+      "Create Media",
+      "Disconnect",
+      "Delete",
+      "Update",
+      "Get",
+      "List Media"
+    ],
+    "source": "external"
+  }
+]

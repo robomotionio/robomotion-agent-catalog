@@ -1,0 +1,297 @@
+{
+  "package": "Agents",
+  "summary": "Build AI-powered autonomous agents that can reason, use tools, and maintain state across complex multi-step workflows.",
+  "description": "## Overview The Agents package enables you to create sophisticated AI agents using LLMs (Large Language Models) that can autonomously execute tasks, call tools, and make decisions. These agents can maintain conversation history, manage artifacts, and orchestrate complex workflows with minimal human intervention.",
+  "nodes": {
+    "callback-in": {
+      "namespace": "Core.Agents.CallbackIn",
+      "name": "CallbackIn",
+      "summary": "Defines a callback entry point that intercepts agent operations at specific lifecycle stages.",
+      "howItWorks": "The Callback In node creates an interception point in the agent lifecycle: 1. **Registration** - When connected to an agent's callbacks port, registers for the selected callback type 2. **Triggering** - The agent calls the callback at the appropriate lifecycle stage 3. **Context Population** - The callback receives context data (agent name, tool info, etc.) 4. **Workflow Execution** - The connected workflow executes with the callback context 5. **Return** - The workflow must end with a Callback Out node to return control to the agent",
+      "bestPractices": [
+        "**Must Use Callback Out** - Every callback workflow must end with a Callback Out node to return control",
+        "**Connection Required** - Connect to an agent's callbacks port for the callback to be registered",
+        "**Multiple Callbacks** - You can connect multiple callback nodes of different types to the same agent",
+        "**Execution Flow** - Callbacks are synchronous; the agent waits for the callback to complete",
+        "**Error Handling** - Enable Continue On Error to prevent callback failures from stopping the agent",
+        "**Caller ID** - The Caller ID is automatically set by the agent and used for correlation"
+      ],
+      "errorCodes": [
+        "Errors",
+        "Error"
+      ]
+    },
+    "callback-out": {
+      "namespace": "Core.Agents.CallbackOut",
+      "name": "CallbackOut",
+      "summary": "Returns control from a callback workflow back to the agent.",
+      "howItWorks": "The Callback Out node completes a callback workflow: 1. **Input Reception** - Receives the Caller ID from the callback context 2. **Result Processing** - Processes the optional Result input 3. **Control Return** - Signals the callback simulation to end 4. **Agent Resumption** - Returns control to the agent, which continues execution",
+      "bestPractices": [
+        "**Required for Callbacks** - Every Callback In workflow must end with a Callback Out",
+        "**No Outputs** - This is a terminal node with no output connections",
+        "**Result Optional** - The Result input is optional; pass an empty string if no result is needed",
+        "**Caller ID Match** - The Caller ID must match the one from Callback In",
+        "**Synchronous Return** - The agent waits for Callback Out to be reached before continuing",
+        "**Single Return** - Each callback workflow should have exactly one Callback Out execution path"
+      ]
+    },
+    "create-session": {
+      "namespace": "Core.Agents.CreateSession",
+      "name": "CreateSession",
+      "summary": "Creates a new session for managing conversation state and artifacts in agent workflows.",
+      "howItWorks": "The Create Session node initializes a new conversation session: 1. **Auto-Detection** - Detects if running in Robomotion environment and auto-configures if using Robomotion services 2. **Service Configuration** - Sets up the selected session and artifact services 3. **Session Creation** - Creates a new session with the provided App Name, User ID, and initial state 4. **Artifact Service Setup** - Configures the artifact service (Memory, GCS, or Robomotion) 5. **ID Generation** - Generates and returns a unique Session ID for future reference",
+      "bestPractices": [
+        "**Auto-Detection** - When running in Robomotion cloud, the service automatically detects context and configures Robomotion services",
+        "**Service Selection** - Choose between Memory (temporary), Database (persistent), or Robomotion (managed) based on your needs",
+        "**State Initialization** - The State input can be an empty object `{}` or contain initial key-value pairs",
+        "**Session Persistence** - Database and Robomotion services persist sessions across workflow restarts; Memory does not",
+        "**GCS Setup** - For GCS artifact service, you need a valid service account with storage permissions",
+        "**Database Support** - Database service supports PostgreSQL and other SQL databases via connection URL",
+        "**Robomotion Benefits** - Robomotion services are managed, scaled, and require no additional configuration"
+      ]
+    },
+    "delete-artifact": {
+      "namespace": "Core.Agents.DeleteArtifact",
+      "name": "DeleteArtifact",
+      "summary": "Deletes an artifact from the session's artifact storage.",
+      "howItWorks": "The Delete Artifact node removes files from the session's artifact service: 1. **Input Validation** - Verifies that Session ID and Filename are provided 2. **Service Connection** - Connects to the session's artifact service 3. **Deletion** - Removes the specified artifact from storage 4. **Completion** - Returns successfully after deletion",
+      "bestPractices": [
+        "**Permanent Deletion** - Deleted artifacts cannot be recovered. Ensure you have the correct filename before deletion.",
+        "**All Versions Deleted** - Deleting an artifact removes all versions of that file, not just the latest.",
+        "**User-Scoped Artifacts** - To delete user-scoped artifacts, include the \"user:\" prefix in the filename.",
+        "**Session-Scoped Artifacts** - Regular filenames (without \"user:\" prefix) delete session-specific artifacts.",
+        "**Non-Existent Files** - Attempting to delete a non-existent artifact will result in an error unless Continue On Error is enabled.",
+        "**No Undo** - There is no built-in undo mechanism. Consider backing up important artifacts before deletion.",
+        "**Cascading Effects** - Ensure no other parts of your workflow depend on the artifact before deleting it."
+      ]
+    },
+    "delete-session": {
+      "namespace": "Core.Agents.DeleteSession",
+      "name": "DeleteSession",
+      "summary": "Deletes a session and all its associated data from the session service.",
+      "howItWorks": "The Delete Session node removes a session and its data: 1. **Input Validation** - Verifies that Session ID is provided 2. **Service Connection** - Connects to the session service 3. **Session Deletion** - Removes the session and all associated data 4. **Completion** - Returns successfully after deletion",
+      "bestPractices": [
+        "**Permanent Deletion** - Deleted sessions cannot be recovered. Ensure you have the correct Session ID.",
+        "**Complete Removal** - Deletes all session data including:",
+        "Conversation history",
+        "Session state",
+        "Agent interactions",
+        "Events and metadata",
+        "**Artifacts Not Deleted** - Session deletion does not automatically delete associated artifacts. Use Delete Artifact separately if needed.",
+        "**No Confirmation** - The node deletes immediately without confirmation prompts.",
+        "**Service Independent** - Works with any session service (Memory, Database, or Robomotion).",
+        "**Error Handling** - Enable Continue On Error if deletion failures should not stop the workflow."
+      ]
+    },
+    "get-state": {
+      "namespace": "Core.Agents.GetState",
+      "name": "GetState",
+      "summary": "Retrieves the current state data from a session.",
+      "howItWorks": "The Get State node retrieves session state: 1. **Input Validation** - Verifies that Session ID is provided 2. **Session Lookup** - Retrieves the session from the session service 3. **State Extraction** - Extracts the state object from the session 4. **Output** - Returns the complete state as an object",
+      "bestPractices": [
+        "**Complete State** - Returns the entire state object with all key-value pairs",
+        "**Read-Only Operation** - This node does not modify the state; use Update State to change values",
+        "**State Structure** - The state is a JavaScript object (dictionary/map) with string keys and any value types",
+        "**Empty State** - If no state has been set, returns an empty object `{}`",
+        "**Nested Objects** - State can contain nested objects and arrays",
+        "**Agent Updates** - State includes all updates made by agents during the conversation",
+        "**Session Required** - The session must exist; use Create Session or Load Session first"
+      ]
+    },
+    "list-artifacts": {
+      "namespace": "Core.Agents.ListArtifacts",
+      "name": "ListArtifacts",
+      "summary": "Retrieves a list of all artifacts stored in a session's artifact storage.",
+      "howItWorks": "The List Artifacts node queries the session's artifact service: 1. **Session Validation** - Verifies that the Session ID is provided 2. **Service Query** - Queries the session's artifact service for all stored artifacts 3. **Result Processing** - Retrieves the list of artifacts with their metadata 4. **Output** - Returns an array of artifact objects, or an empty array if no artifacts exist",
+      "bestPractices": [
+        "**Empty Results** - If no artifacts exist in the session, an empty array is returned (not an error)",
+        "**Metadata Only** - This node returns artifact metadata, not the actual file contents. Use Load Artifact to retrieve files.",
+        "**Session Scope** - Only artifacts in the specified session are listed",
+        "**User-Scoped Artifacts** - Both session-scoped and user-scoped artifacts are included in the list",
+        "**Version Information** - The artifact list may include version information for each artifact",
+        "**Performance** - Listing is typically fast, even with many artifacts"
+      ]
+    },
+    "llm-agent": {
+      "namespace": "Core.Agents.LlmAgent",
+      "name": "LlmAgent",
+      "summary": "An intelligent agent powered by Large Language Models (LLMs) that can process queries, use tools, manage sub-agents, and maintain conversation state across sessions.",
+      "howItWorks": "The LLM Agent node creates an AI agent that can: 1. **Process Natural Language** - Accepts queries and responds using the configured LLM model 2. **Maintain Context** - Uses session management to remember conversation history 3. **Use Tools** - Can call connected tools to perform actions (web search, code execution, custom workflows) 4. **Manage Sub-Agents** - Delegates tasks to specialized sub-agents for complex workflows 5. **Handle Files** - Processes images, PDFs, and other files through the artifact service 6. **Execute Code** - When Code Execution is enabled, can write and run Python code 7. **Structured Output** - Can return responses in a specified JSON schema format The agent uses the Google Agent Development Kit (ADK) internally and supports multimodal interactions with text, images, and files.",
+      "bestPractices": [
+        "**Session Management** - The Session ID input allows you to continue previous conversations. If not provided, a new session will be created automatically.",
+        "**Template Support** - Both Instructions and Query support Mustache templates, allowing dynamic content based on session state.",
+        "**File Handling** - Files can be referenced in queries using `{{file:filename}}` syntax to embed their content.",
+        "**Tool Limitations** - When using Output Schema for structured output, tools cannot be used simultaneously.",
+        "**Model Selection** - Different models have different capabilities, costs, and performance characteristics. Choose based on your needs.",
+        "**Robomotion Credits** - When running in Robomotion cloud, you can use the managed AI service without providing API keys.",
+        "**Code Execution** - The built-in code executor runs Python code in a sandboxed environment with common libraries available.",
+        "**Callbacks** - Use callbacks to monitor agent behavior, log interactions, or implement custom logic at various stages."
+      ],
+      "errorCodes": [
+        "Error"
+      ]
+    },
+    "load-artifact": {
+      "namespace": "Core.Agents.LoadArtifact",
+      "name": "LoadArtifact",
+      "summary": "Loads an artifact from the session's artifact storage and saves it to a local file.",
+      "howItWorks": "The Load Artifact node retrieves files from the session's artifact service: 1. **Artifact Retrieval** - Fetches the artifact from the session's artifact service using the filename and optional version 2. **Version Resolution** - If no version is specified, loads the latest version 3. **Directory Creation** - Ensures the output directory exists 4. **File Writing** - Writes the artifact data to the specified output file path 5. **Output Setting** - Sets the output variables with the file path and version number",
+      "bestPractices": [
+        "**Version Management** - If Version is not specified, the latest version is automatically loaded",
+        "**Output Path** - The node automatically creates any necessary parent directories for the output file",
+        "**User-Scoped Artifacts** - Prefix the filename with \"user:\" to load user-specific artifacts that persist across sessions",
+        "**Session-Scoped Artifacts** - Regular filenames (without \"user:\" prefix) load session-specific artifacts",
+        "**File Overwriting** - If the output file already exists, it will be overwritten",
+        "**Version Output** - The Version output indicates which version was loaded, useful when not specifying a version",
+        "**Empty Output Path** - If Output File Path is not provided, the artifact is loaded but not saved to disk (only version is output)"
+      ]
+    },
+    "load-session": {
+      "namespace": "Core.Agents.LoadSession",
+      "name": "LoadSession",
+      "summary": "Loads an existing session to retrieve conversation state and configure artifact services.",
+      "howItWorks": "The Load Session node retrieves an existing conversation session: 1. **Input Validation** - Verifies that Session ID is provided 2. **Auto-Detection** - Detects if running in Robomotion environment for auto-configuration 3. **Service Selection** - Connects to the appropriate session service (Memory, Database, or Robomotion) 4. **Session Retrieval** - Loads the session using the Session ID, App Name, and User ID 5. **Artifact Configuration** - Sets up the artifact service for the loaded session 6. **State Output** - Returns the session's state data",
+      "bestPractices": [
+        "**Session ID Required** - Unlike Create Session, Load Session always requires a Session ID",
+        "**Service Consistency** - Load the session using the same service type it was created with",
+        "**Auto-Detection** - When using Robomotion services, App Name and User ID may be auto-detected from context",
+        "**State Availability** - The loaded state contains all variables and context from the session's history",
+        "**Artifact Access** - After loading, you can access artifacts stored in the session using artifact nodes",
+        "**Service Configuration** - Both session and artifact services must be configured to match the session's storage",
+        "**GCS Credentials** - For GCS artifact service, provide valid service account credentials"
+      ]
+    },
+    "loop-agent": {
+      "namespace": "Core.Agents.LoopAgent",
+      "name": "LoopAgent",
+      "summary": "A composite agent that runs sub-agents in a loop until a maximum number of iterations is reached or a stopping condition is met.",
+      "howItWorks": "The Loop Agent node creates an iterative agent workflow: 1. **Initialization** - Creates a loop agent with the specified name, description, and max iterations 2. **Sub-Agent Connection** - Connects to all agents on the sub-agents port 3. **Ordering** - Orders the sub-agents according to the Custom Sub-Agents Order configuration 4. **Loop Execution** - Executes the sub-agent sequence repeatedly: - Each iteration runs all sub-agents in order - Sub-agents can access and modify session state - The loop continues until max iterations or a stop condition - Session state accumulates across iterations 5. **Termination** - Stops when max iterations is reached, timeout occurs, or agents signal completion 6. **Response** - Returns the final result from the last iteration",
+      "bestPractices": [
+        "**Ordering is Required** - All connected sub-agents must be specified in the Custom Sub-Agents Order configuration",
+        "**State Accumulation** - Session state persists across loop iterations, allowing agents to build upon previous results",
+        "**Early Termination** - Agents can signal loop completion before max iterations by setting appropriate state values",
+        "**Callbacks** - Before and after callbacks can be connected to monitor each loop iteration",
+        "**Nested Loops** - Loop agents can contain other loop, sequential, or parallel agents for complex workflows",
+        "**Session Management** - Provide a Session ID to maintain context across the entire loop",
+        "**Performance** - Total execution time = iterations × (time per iteration)",
+        "**Iteration Tracking** - Loop iteration count and state is maintained in the session"
+      ],
+      "errorCodes": [
+        "Error"
+      ]
+    },
+    "mcp-tool": {
+      "namespace": "Core.Agents.McpTool",
+      "name": "McpTool",
+      "summary": "Configures a connection to an external tool server using the Model Context Protocol (MCP), enabling agents to use external tools and services.",
+      "howItWorks": "The MCP Tool node establishes a connection to an external tool server: 1. **Configuration** - Defines the command, arguments, and environment for starting the MCP server 2. **Server Connection** - When an agent needs the tools, it starts the MCP server process using the configuration 3. **Tool Discovery** - The server provides a list of available tools via the MCP protocol 4. **Tool Registration** - Tools from the server become available to the agent 5. **Tool Execution** - When the agent calls a tool, the request is forwarded to the MCP server 6. **Response Handling** - The server's response is returned to the agent",
+      "bestPractices": [
+        "**No Outputs** - This node configures the agent but doesn't produce workflow outputs",
+        "**Connection Required** - Must be connected to an LLM Agent's tools port",
+        "**Server Lifecycle** - The MCP server is started when needed and managed automatically",
+        "**Multiple Servers** - You can connect multiple MCP Tool nodes to provide access to different servers",
+        "**Tool Availability** - Tools from the MCP server appear alongside other agent tools",
+        "**Arguments Format** - Each argument should be a separate array entry",
+        "**Environment Format** - Use \"KEY=VALUE\" format for environment variables",
+        "**Path Resolution** - Use absolute paths for executables and configurations when possible"
+      ]
+    },
+    "parallel-agent": {
+      "namespace": "Core.Agents.ParallelAgent",
+      "name": "ParallelAgent",
+      "summary": "A composite agent that runs multiple sub-agents concurrently, allowing parallel processing of tasks with aggregated results.",
+      "howItWorks": "The Parallel Agent node executes multiple agents simultaneously: 1. **Initialization** - Creates a parallel agent with the specified name and description 2. **Sub-Agent Connection** - Connects to all agents on the sub-agents port 3. **Concurrent Execution** - All sub-agents execute at the same time: - Each agent receives the same query - Agents run independently without waiting for each other - All agents share the same session state 4. **Result Aggregation** - Waits for all agents to complete and aggregates their responses 5. **Response** - Returns the combined results from all sub-agents",
+      "bestPractices": [
+        "**No Ordering Required** - Unlike Sequential Agent, parallel agents don't need a specific execution order",
+        "**Concurrent Execution** - All sub-agents run simultaneously, reducing total execution time",
+        "**State Sharing** - All sub-agents share the same session state, but concurrent updates may lead to race conditions",
+        "**Callbacks** - Before and after callbacks can be connected to monitor the parallel agent's execution",
+        "**Nested Agents** - Parallel agents can contain other sequential, parallel, or loop agents",
+        "**Session Management** - Provide a Session ID to maintain conversation context",
+        "**Performance** - Execution time is approximately equal to the slowest sub-agent (plus overhead)",
+        "**Resource Usage** - Running agents in parallel consumes more resources than sequential execution"
+      ],
+      "errorCodes": [
+        "Errors",
+        "Error"
+      ]
+    },
+    "save-artifact": {
+      "namespace": "Core.Agents.SaveArtifact",
+      "name": "SaveArtifact",
+      "summary": "Saves a file as an artifact in the session's artifact storage, making it accessible to agents in the conversation.",
+      "howItWorks": "The Save Artifact node stores files in the session's artifact service: 1. **File Reading** - Reads the file from the specified file path 2. **MIME Type Detection** - Auto-detects the MIME type if not provided based on file extension 3. **Artifact Creation** - Creates an artifact object with the file data and MIME type 4. **Storage** - Saves the artifact to the session's artifact service using the specified filename 5. **Versioning** - Artifacts are versioned, allowing multiple versions of the same filename",
+      "bestPractices": [
+        "**MIME Type** - If not specified, the node attempts to guess the MIME type from the file extension. For best results, specify it explicitly for non-standard file types.",
+        "**File Paths** - Use absolute file paths for reliability. Relative paths are resolved from the current working directory.",
+        "**User-Scoped Artifacts** - Prefix the filename with \"user:\" to create user-specific artifacts that persist across sessions.",
+        "**Session-Scoped Artifacts** - Regular filenames (without \"user:\" prefix) are scoped to the specific session.",
+        "**Versioning** - Each save creates a new version of the artifact. Use Load Artifact to retrieve specific versions.",
+        "**Storage Limits** - Be mindful of storage limits when saving large files or many artifacts.",
+        "**Supported Types** - Supports all file types including images (PNG, JPG, GIF), documents (PDF, DOCX), data files (CSV, JSON, Excel), and more."
+      ]
+    },
+    "sequential-agent": {
+      "namespace": "Core.Agents.SequentialAgent",
+      "name": "SequentialAgent",
+      "summary": "A composite agent that runs multiple sub-agents in a defined sequence, where each agent's output is made available to the next agent through session state.",
+      "howItWorks": "The Sequential Agent node orchestrates a pipeline of agents: 1. **Initialization** - Creates a sequential agent with the specified name and description 2. **Sub-Agent Connection** - Connects to all agents on the sub-agents port 3. **Ordering** - Orders the sub-agents according to the Sub-Agents Order configuration 4. **Sequential Execution** - Executes each agent in order: - The first agent processes the initial query - Each subsequent agent has access to the previous agents' outputs via session state - Results accumulate in the session state as the pipeline progresses 5. **Response** - Returns the final response from the last agent in the sequence",
+      "bestPractices": [
+        "**Ordering is Required** - All connected sub-agents must be specified in the Sub-Agents Order configuration",
+        "**State Sharing** - Sub-agents share state through the session, enabling data flow between agents",
+        "**Callbacks** - Before and after callbacks can be connected to monitor the sequential agent's execution",
+        "**Nested Agents** - Sequential agents can contain other sequential, parallel, or loop agents for complex workflows",
+        "**Session Management** - Provide a Session ID to maintain conversation context across multiple executions",
+        "**Performance** - Execution time is the sum of all sub-agents' execution times",
+        "**Output Access** - Each agent can access previous agents' outputs via session state keys"
+      ],
+      "errorCodes": [
+        "Error"
+      ]
+    },
+    "tool-in": {
+      "namespace": "Core.Agents.ToolIn",
+      "name": "ToolIn",
+      "summary": "Defines a custom tool that can be called by LLM agents, allowing agents to execute workflow logic.",
+      "howItWorks": "The Tool In node creates a custom tool for agents: 1. **Registration** - When connected to an LLM Agent's tools port, registers as an available tool 2. **Schema Definition** - Provides the tool name, description, and parameter schema to the agent 3. **Tool Call** - When the agent decides to use the tool, it calls it with appropriate arguments 4. **Parameter Extraction** - The node receives and outputs the tool parameters 5. **Workflow Execution** - The connected workflow executes with the tool parameters 6. **Return** - The workflow must end with a Tool Out node to return results to the agent",
+      "bestPractices": [
+        "**Must Use Tool Out** - Every tool workflow must end with a Tool Out node to return results",
+        "**Connection Required** - Connect to an LLM Agent's tools port for the tool to be available",
+        "**Clear Descriptions** - Use clear, descriptive tool and parameter descriptions to help the LLM use the tool correctly",
+        "**Schema Accuracy** - Ensure the JSON schema accurately represents what your tool expects",
+        "**Parameter Validation** - Validate parameters in your workflow to handle unexpected inputs",
+        "**Error Handling** - Use error handling to gracefully handle tool failures"
+      ]
+    },
+    "tool-out": {
+      "namespace": "Core.Agents.ToolOut",
+      "name": "ToolOut",
+      "summary": "Returns results from a custom tool workflow back to the calling agent.",
+      "howItWorks": "The Tool Out node completes a tool execution: 1. **Input Reception** - Receives the Caller ID from the tool context 2. **Result Processing** - Processes the Result input 3. **Control Return** - Signals the tool simulation to end 4. **Result Delivery** - Returns the result to the agent 5. **Agent Continuation** - The agent receives the result and continues processing",
+      "bestPractices": [
+        "**Required for Tools** - Every Tool In workflow must end with a Tool Out",
+        "**No Outputs** - This is a terminal node with no output connections",
+        "**Result Required** - Unlike Callback Out, Tool Out typically needs a meaningful result",
+        "**Caller ID Match** - The Caller ID must match the one from Tool In",
+        "**Synchronous Return** - The agent waits for Tool Out to be reached before continuing",
+        "**Single Return** - Each tool workflow should have exactly one Tool Out execution path",
+        "**Result Format** - The result should match what the agent expects based on the tool's purpose"
+      ]
+    },
+    "update-state": {
+      "namespace": "Core.Agents.UpdateState",
+      "name": "UpdateState",
+      "summary": "Updates specific key-value pairs in a session's state.",
+      "howItWorks": "The Update State node modifies session state: 1. **Input Validation** - Verifies that Session ID and State Changes are provided 2. **Session Lookup** - Retrieves the session from the session service 3. **Event Creation** - Creates a state update event with the specified changes 4. **State Merge** - Merges the changes into the existing state (adds new keys, updates existing ones) 5. **Session Update** - Appends the event to the session history 6. **Output** - Returns the complete updated state",
+      "bestPractices": [
+        "**Merge Behavior** - Updates merge with existing state; they don't replace the entire state",
+        "**Adding Keys** - New keys are added to the state",
+        "**Updating Keys** - Existing keys are updated with new values",
+        "**Preserving Keys** - Keys not mentioned in State Changes remain unchanged",
+        "**Nested Objects** - You can update nested objects by providing the full path or structure",
+        "**Value Types** - State values can be strings, numbers, booleans, objects, arrays, or null",
+        "**Event History** - Each update is recorded as an event in the session history"
+      ]
+    }
+  }
+}

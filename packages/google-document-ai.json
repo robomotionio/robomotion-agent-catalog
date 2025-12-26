@@ -1,0 +1,58 @@
+{
+  "package": "GoogleDocumentAi",
+  "summary": "Google Document AI is a cloud-based service that uses advanced machine learning to extract structured data from documents, enabling automated document processing and intelligent data extraction.",
+  "description": "```mdx-code-block import DocCardList from '@theme/DocCardList';",
+  "nodes": {
+    "extract_key_values": {
+      "namespace": "Core.GoogleDocumentAi.Extract_key_values",
+      "name": "Extract_key_values",
+      "summary": "Extracts key-value pairs from forms and structured documents using Google Document AI's form parsing capabilities, automatically identifying field labels and their corresponding values for intelligent data extraction.",
+      "howItWorks": "The Extract Key Values node integrates with Google Document AI to extract form fields from documents. When executed, the node: 1. Validates the provided file path and checks file accessibility 2. Detects MIME type automatically if not specified 3. Authenticates with Google Document AI using the provided Service Account credentials 4. Reads the document file content from the local file system 5. Sends the document to the specified Document AI processor 6. Processes the document using form parsing machine learning models 7. Identifies form fields, labels, and their spatial relationships 8. Extracts key-value pairs by matching field labels to their values 9. Handles checkboxes, text fields, and various form elements 10. Organizes results by page with structured key-value pairs 11. Returns extracted data ready for processing or database storage",
+      "usage": [
+        "**Google Cloud Setup**:",
+        "Active Google Cloud project with billing enabled",
+        "Document AI API enabled in the project",
+        "Form Parser processor created and deployed in Document AI",
+        "Service Account with Document AI User role",
+        "**Robomotion Setup**:",
+        "Service Account JSON key stored in Robomotion vault",
+        "Document file accessible on the local file system",
+        "File size under 20MB limit"
+      ]
+    },
+    "extract_tables": {
+      "namespace": "Core.GoogleDocumentAi.Extract_tables",
+      "name": "Extract_tables",
+      "summary": "Extracts table data from documents using Google Document AI with intelligent structure detection, preserving column headers and row values for automated data processing and analysis.",
+      "howItWorks": "The Extract Tables node integrates with Google Document AI to extract tables from documents. When executed, the node: 1. Validates the provided file path and checks file accessibility 2. Detects MIME type automatically if not specified 3. Authenticates with Google Document AI using the provided Service Account credentials 4. Reads the document file content from the local file system 5. Sends the document to the specified Document AI processor 6. Processes the document using table detection machine learning models 7. Identifies table boundaries, header rows, and body rows 8. Extracts column headers and maps them to cell values 9. Organizes results by page with structured table data 10. Returns tables with columns array and rows array for easy processing",
+      "usage": [
+        "**Google Cloud Setup**:",
+        "Active Google Cloud project with billing enabled",
+        "Document AI API enabled in the project",
+        "OCR or Form Parser processor created and deployed in Document AI",
+        "Service Account with Document AI User role",
+        "**Robomotion Setup**:",
+        "Service Account JSON key stored in Robomotion vault",
+        "Document file accessible on the local file system",
+        "File size under 20MB limit"
+      ]
+    },
+    "extract_text": {
+      "namespace": "Core.GoogleDocumentAi.Extract_text",
+      "name": "Extract_text",
+      "summary": "Extracts text content from documents using Google Document AI's OCR and text recognition capabilities, converting PDFs, images, and scanned documents into searchable, machine-readable text.",
+      "howItWorks": "The Extract Text node integrates with Google Document AI to extract text from documents. When executed, the node: 1. Validates the provided file path and checks file accessibility 2. Detects MIME type automatically if not specified 3. Authenticates with Google Document AI using the provided Service Account credentials 4. Reads the document file content from the local file system 5. Sends the document to the specified Document AI processor 6. Processes the document using OCR and machine learning models 7. Extracts text while preserving the reading order and layout structure 8. Organizes results by page and returns both full text and page-level text 9. Sets output variables for use in subsequent flow nodes",
+      "usage": [
+        "**Google Cloud Setup**:",
+        "Active Google Cloud project with billing enabled",
+        "Document AI API enabled in the project",
+        "OCR processor created and deployed in Document AI",
+        "Service Account with Document AI User role",
+        "**Robomotion Setup**:",
+        "Service Account JSON key stored in Robomotion vault",
+        "Document file accessible on the local file system",
+        "File size under 20MB limit"
+      ]
+    }
+  }
+}

@@ -1,0 +1,461 @@
+{
+  "package": "WindowsAutomation",
+  "summary": "Automate Windows desktop applications using UI Automation - click elements, read values, and control native Windows apps.",
+  "description": "## Overview The Windows Automation package provides native Windows application automation using Microsoft UI Automation. Use it when you need to automate Windows desktop applications, interact with UI elements, read control values, or control windows.",
+  "nodes": {
+    "click_coordinate": {
+      "namespace": "Core.WindowsAutomation.Click_coordinate",
+      "name": "Click_coordinate",
+      "summary": "Clicks at a specific coordinate on the screen or within an element.",
+      "howItWorks": "The Click Coordinate node performs mouse clicks at specified coordinates. When executed, the node: 1. Retrieves the X and Y coordinates from the inputs 2. If Coordinate Type is set to \"Relative\", it finds the specified element and adjusts the coordinates relative to that element's position 3. If Focus is enabled and an element was specified, it focuses that element 4. Performs the specified mouse click action at the calculated coordinates",
+      "bestPractices": [
+        "When using relative coordinates, both Window Selector and Element Selector must be provided",
+        "For absolute coordinates, only X and Y values are needed",
+        "The Focus option only applies when using relative coordinates",
+        "Double-click timing is automatically adjusted based on the system's double-click speed setting",
+        "Coordinate values are treated as integers"
+      ]
+    },
+    "click_element": {
+      "namespace": "Core.WindowsAutomation.Click_element",
+      "name": "Click_element",
+      "summary": "Clicks on a specific UI element identified by selectors.",
+      "howItWorks": "The Click Element node performs clicks on UI elements identified by selectors. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target element 2. If Focus is enabled, focuses the element 3. Performs the specified mouse click action on the element 4. If Invoke Pattern is enabled for left clicks, it first tries to use the element's invoke pattern before falling back to direct click",
+      "bestPractices": [
+        "Both Window Selector and Element Selector are required to identify the target element",
+        "The Invoke Pattern option is particularly useful for elements like buttons that have a specific invoke pattern",
+        "When Simulate Move is enabled, the mouse cursor will move to the element's position before clicking",
+        "If Invoke Pattern fails, the node will automatically fall back to direct clicking"
+      ]
+    },
+    "close_window": {
+      "namespace": "Core.WindowsAutomation.Close_window",
+      "name": "Close_window",
+      "summary": "Closes a window identified by a selector by terminating its process.",
+      "howItWorks": "The Close Window node terminates the process of a window identified by a selector. When executed, the node: 1. Uses the Window Selector to locate the target window 2. Finds the process associated with the window 3. Terminates the process, effectively closing the window",
+      "usage": [
+        "The window must be identifiable by the provided Window Selector",
+        "The application must allow its process to be terminated"
+      ],
+      "bestPractices": [
+        "This node closes the window by terminating its entire process, not by sending a close message",
+        "All windows associated with the same process will be closed",
+        "Use with caution as unsaved data in the application may be lost",
+        "For a more graceful close, consider using application-specific methods if available"
+      ]
+    },
+    "get_checkbox": {
+      "namespace": "Core.WindowsAutomation.Get_checkbox",
+      "name": "Get_checkbox",
+      "summary": "Retrieves the checked state of a checkbox element.",
+      "howItWorks": "The Get Checkbox node retrieves the checked state of a checkbox element. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target checkbox element 2. Retrieves the TogglePattern of the element to determine its state 3. Sets the output variable \"Checked\" to true if the checkbox is checked, false otherwise",
+      "usage": [
+        "The target element must be a checkbox that supports the TogglePattern",
+        "Both Window Selector and Element Selector are required to identify the target element"
+      ],
+      "bestPractices": [
+        "The output value can be used in conditional logic or stored for later use",
+        "This node only works with elements that implement the TogglePattern interface",
+        "The checked state is returned as a boolean value (true/false)"
+      ]
+    },
+    "get_combobox": {
+      "namespace": "Core.WindowsAutomation.Get_combobox",
+      "name": "Get_combobox",
+      "summary": "Retrieves the selected values from a combobox element.",
+      "howItWorks": "The Get Combobox node retrieves the selected values from a combobox element. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target combobox element 2. Retrieves the SelectionPattern of the element to determine its selected items 3. Extracts the names of all selected items and returns them as an array",
+      "usage": [
+        "The target element must be a combobox that supports the SelectionPattern",
+        "Both Window Selector and Element Selector are required to identify the target element"
+      ],
+      "bestPractices": [
+        "The output is an array of strings, even if only one item is selected",
+        "For single-selection comboboxes, the array will contain only one element",
+        "For multi-selection comboboxes, the array will contain all selected items",
+        "The values returned are the display names of the selected items, not their internal values"
+      ]
+    },
+    "get_properties": {
+      "namespace": "Core.WindowsAutomation.Get_properties",
+      "name": "Get_properties",
+      "summary": "Retrieves all accessible properties of a UI element and returns them as a JSON string.",
+      "howItWorks": "The Get Properties node retrieves all accessible properties of a UI element and returns them as a JSON string. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target element 2. Iterates through all properties of the element object 3. Filters out private properties (those starting with underscore) and methods 4. Serializes the remaining properties to a JSON string 5. Sets the JSON string as the output value",
+      "usage": [
+        "Both Window Selector and Element Selector are required to identify the target element",
+        "The target element must be accessible through UI Automation"
+      ],
+      "bestPractices": [
+        "The output is a JSON-formatted string that can be parsed for specific property values",
+        "Properties that cannot be accessed or serialized are silently skipped",
+        "The JSON output is formatted with indentation for readability",
+        "This node is primarily useful for debugging and inspection of UI elements",
+        "Complex property values are converted to strings in the output"
+      ]
+    },
+    "get_session": {
+      "namespace": "Core.WindowsAutomation.Get_session",
+      "name": "Get_session",
+      "summary": "Retrieves the current Windows Automation session object.",
+      "howItWorks": "The Get Session node retrieves the current Windows Automation session object. When executed, the node: 1. Gets the current session from the Windows Automation context 2. Verifies that an interactive desktop session exists 3. Returns the session object as an output",
+      "usage": [
+        "An active Windows Automation session must exist",
+        "An interactive desktop session is required"
+      ],
+      "bestPractices": [
+        "This node is typically used to pass session information between different parts of a workflow",
+        "The session object contains information about the current automation context",
+        "This node is often used in conjunction with other Windows Automation nodes that require session information"
+      ]
+    },
+    "get_slider": {
+      "namespace": "Core.WindowsAutomation.Get_slider",
+      "name": "Get_slider",
+      "summary": "Retrieves the current value of a slider element.",
+      "howItWorks": "The Get Slider node retrieves the current value of a slider element. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target slider element 2. Retrieves the RangeValuePattern of the element to determine its current value 3. Sets the output variable \"Value\" to the slider's current numeric value",
+      "usage": [
+        "The target element must be a slider that supports the RangeValuePattern",
+        "Both Window Selector and Element Selector are required to identify the target element"
+      ],
+      "bestPractices": [
+        "The output value is a numeric value representing the slider's current position",
+        "The value range depends on the specific slider implementation",
+        "This node only works with elements that implement the RangeValuePattern interface"
+      ]
+    },
+    "get_text": {
+      "namespace": "Core.WindowsAutomation.Get_text",
+      "name": "Get_text",
+      "summary": "Retrieves the text content from a text element.",
+      "howItWorks": "The Get Text node retrieves the text content from a text element. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target text element 2. Attempts to retrieve the text using multiple TextPattern implementations: - TextPattern - TextPattern2 - TextEditPattern - TextControl().GetTextPattern() (fallback) 3. Extracts the text content from the document range 4. Sets the output variable \"Text\" to the retrieved content",
+      "usage": [
+        "The target element must support at least one text pattern interface",
+        "Both Window Selector and Element Selector are required to identify the target element"
+      ],
+      "bestPractices": [
+        "This node works with various text elements including text boxes, labels, and rich text controls",
+        "The node tries multiple text pattern implementations to maximize compatibility",
+        "The output text preserves formatting as plain text",
+        "For rich text elements, only the plain text content is returned"
+      ]
+    },
+    "get_value": {
+      "namespace": "Core.WindowsAutomation.Get_value",
+      "name": "Get_value",
+      "summary": "Retrieves the value property of a UI element.",
+      "howItWorks": "The Get Value node retrieves the value property of a UI element. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target element 2. Retrieves the ValuePattern of the element 3. Extracts the Value property from the pattern 4. Sets the output variable \"Value\" to the element's value",
+      "usage": [
+        "The target element must support the ValuePattern interface",
+        "Both Window Selector and Element Selector are required to identify the target element"
+      ],
+      "bestPractices": [
+        "This node works with elements that have a value property, such as text boxes, combo boxes, and sliders",
+        "The returned value is always a string, regardless of the element's actual value type",
+        "For elements with editable text, this returns the current text content",
+        "For elements like sliders, this returns the current numeric value as a string"
+      ]
+    },
+    "is_enabled": {
+      "namespace": "Core.WindowsAutomation.Is_enabled",
+      "name": "Is_enabled",
+      "summary": "Checks whether a UI element is enabled or disabled.",
+      "howItWorks": "The Is Enabled node checks whether a UI element is enabled or disabled. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target element 2. Checks the IsEnabled property of the element 3. Sets the output variable \"Enabled\" to true if the element is enabled, false otherwise",
+      "usage": [
+        "Both Window Selector and Element Selector are required to identify the target element"
+      ],
+      "bestPractices": [
+        "This node is useful for conditional logic based on the enabled state of UI elements",
+        "Disabled elements typically cannot be interacted with (clicked, typed into, etc.)",
+        "The output value can be used in decision nodes or stored for later use",
+        "An element may be disabled due to application logic, user permissions, or other factors"
+      ]
+    },
+    "is_selected": {
+      "namespace": "Core.WindowsAutomation.Is_selected",
+      "name": "Is_selected",
+      "summary": "Checks whether a UI element is currently selected.",
+      "howItWorks": "The Is Selected node checks whether a UI element is currently selected. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target element 2. Retrieves the SelectionItemPattern of the element 3. Checks the IsSelected property of the pattern 4. Sets the output variable \"Selected\" to true if the element is selected, false otherwise",
+      "usage": [
+        "The target element must support the SelectionItemPattern interface",
+        "Both Window Selector and Element Selector are required to identify the target element"
+      ],
+      "bestPractices": [
+        "This node is useful for checking the state of selectable elements like list items, tree items, or radio buttons",
+        "The output value can be used in conditional logic or stored for later use",
+        "For elements that can be part of a selection group, this indicates if the specific element is selected",
+        "This is different from \"enabled\" state - an element can be enabled but not selected"
+      ]
+    },
+    "move_window": {
+      "namespace": "Core.WindowsAutomation.Move_window",
+      "name": "Move_window",
+      "summary": "Moves a window to a specified position on the screen.",
+      "howItWorks": "The Move Window node moves a window to a specified position on the screen. When executed, the node: 1. Uses the Window Selector to locate the target window 2. Retrieves the current size of the window 3. Moves the window to the specified X, Y coordinates while maintaining its current size 4. Ensures the window is visible by showing it",
+      "usage": [
+        "The window must be identifiable by the provided Window Selector",
+        "Valid X and Y coordinates must be provided"
+      ],
+      "bestPractices": [
+        "The X and Y coordinates specify the top-left corner of the window",
+        "Coordinates are relative to the screen, not to other windows",
+        "The window's size remains unchanged - only its position is modified",
+        "If the specified coordinates would place the window partially off-screen, the system may adjust the position",
+        "This node is useful for organizing windows or ensuring they are visible in screenshots"
+      ]
+    },
+    "screenshot": {
+      "namespace": "Core.WindowsAutomation.Screenshot",
+      "name": "Screenshot",
+      "summary": "Takes a screenshot of a specified UI element and saves it to a file.",
+      "howItWorks": "The Screenshot node captures an image of a specified UI element and saves it to a file. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target element 2. Determines the bounding rectangle (position and size) of the element 3. Captures a screenshot of the element's area 4. Saves the screenshot to the specified file path",
+      "usage": [
+        "Both Window Selector and Element Selector are required to identify the target element",
+        "A valid file path must be provided",
+        "The target element must be visible on screen"
+      ],
+      "bestPractices": [
+        "The file path should include the full directory path and filename with extension",
+        "Supported image formats depend on the system implementation",
+        "The screenshot captures the visual appearance of the element at the time of execution",
+        "If the element is partially obscured, the screenshot will show the obscured portions as well",
+        "This node is useful for documentation, debugging, or visual verification of UI states"
+      ]
+    },
+    "send_key": {
+      "namespace": "Core.WindowsAutomation.Send_key",
+      "name": "Send_key",
+      "summary": "Sends keystrokes to a UI element, simulating keyboard input.",
+      "howItWorks": "The Send Key node simulates keyboard input by sending keystrokes to a UI element. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target element 2. Constructs a keystroke sequence by combining up to three modifier keys with the specified text 3. Sends the complete keystroke sequence to the element 4. Verifies that the element still exists after sending the keys",
+      "usage": [
+        "Both Window Selector and Element Selector are required to identify the target element",
+        "At least one of the key options (modifier keys or text) must be specified"
+      ],
+      "bestPractices": [
+        "Modifier keys include Ctrl, Shift, Alt, Windows key, and function keys (F1-F12)",
+        "Special keys like Enter, Esc, Tab, and arrow keys can be sent as modifiers or text",
+        "Text input is sent as literal characters",
+        "Multiple modifier keys can be combined (e.g., Ctrl+Shift+V)",
+        "This node is useful for filling forms, triggering keyboard shortcuts, or navigating applications",
+        "The element must be able to receive keyboard input (e.g., text boxes, buttons, etc.)"
+      ]
+    },
+    "set_checkbox": {
+      "namespace": "Core.WindowsAutomation.Set_checkbox",
+      "name": "Set_checkbox",
+      "summary": "Sets the state of a checkbox element (check, uncheck, or toggle).",
+      "howItWorks": "The Set Checkbox node changes the state of a checkbox element. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target checkbox element 2. Retrieves the TogglePattern of the element to determine its current state 3. Based on the selected State option: - Check: Toggles the checkbox if it's currently unchecked - Uncheck: Toggles the checkbox if it's currently checked - Toggle: Always toggles the checkbox to the opposite state 4. If no State is selected, an error is raised",
+      "usage": [
+        "The target element must be a checkbox that supports the TogglePattern",
+        "Both Window Selector and Element Selector are required to identify the target element"
+      ],
+      "bestPractices": [
+        "The node only performs an action if the current state differs from the desired state (except for Toggle)",
+        "This node is useful for configuring settings or filling out forms with checkbox options",
+        "The Toggle option is particularly useful when the current state is unknown",
+        "The checkbox element must be enabled and visible to be interacted with"
+      ]
+    },
+    "set_combobox": {
+      "namespace": "Core.WindowsAutomation.Set_combobox",
+      "name": "Set_combobox",
+      "summary": "Selects a specific value in a combobox element.",
+      "howItWorks": "The Set Combobox node selects a specific value in a combobox element. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target combobox element 2. Selects the specified value in the combobox by its item name 3. Optionally simulates mouse movement to the element before selection",
+      "usage": [
+        "The target element must be a combobox that supports selection",
+        "Both Window Selector and Element Selector are required to identify the target element",
+        "The specified Value must exist in the combobox"
+      ],
+      "bestPractices": [
+        "The Value input should match the exact display text of the item to select",
+        "For editable comboboxes, this will select an existing item or set the text value",
+        "The Simulate Move option can help with elements that require mouse interaction",
+        "This node is useful for configuring settings or filling out forms with combobox options",
+        "The combobox element must be enabled and visible to be interacted with"
+      ]
+    },
+    "set_focus": {
+      "namespace": "Core.WindowsAutomation.Set_focus",
+      "name": "Set_focus",
+      "summary": "Sets keyboard focus to a specific UI element.",
+      "howItWorks": "The Set Focus node sets keyboard focus to a specific UI element. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target element 2. Calls the SetFocus method on the element to give it keyboard focus",
+      "usage": [
+        "Both Window Selector and Element Selector are required to identify the target element",
+        "The target element must be able to receive focus"
+      ],
+      "bestPractices": [
+        "Setting focus is often a prerequisite for sending keystrokes to an element",
+        "Focused elements typically have a visual indicator (like a border or highlight)",
+        "This node is useful when you need to ensure an element is ready to receive input",
+        "Some elements automatically receive focus when clicked, but others may require explicit focus",
+        "Focus can only be set on elements that are currently visible and enabled"
+      ]
+    },
+    "set_selected": {
+      "namespace": "Core.WindowsAutomation.Set_selected",
+      "name": "Set_selected",
+      "summary": "Selects or deselects a UI element that supports selection.",
+      "howItWorks": "The Set Selected node selects or deselects a UI element that supports selection. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target element 2. Retrieves the SelectionItemPattern of the element 3. Based on the Selected option: - If true: Calls Select() method to select the element - If false: Calls RemoveFromSelection() method to deselect the element",
+      "usage": [
+        "The target element must support the SelectionItemPattern interface",
+        "Both Window Selector and Element Selector are required to identify the target element"
+      ],
+      "bestPractices": [
+        "This node is useful for working with list items, tree items, or other selectable elements",
+        "For elements in a single-selection container, selecting one element will deselect others",
+        "For elements in a multi-selection container, multiple elements can be selected",
+        "The element must be visible and enabled to be selected or deselected",
+        "This is different from setting focus - an element can be selected without having focus"
+      ]
+    },
+    "set_slider": {
+      "namespace": "Core.WindowsAutomation.Set_slider",
+      "name": "Set_slider",
+      "summary": "Sets the value of a slider element to a specific numeric value.",
+      "howItWorks": "The Set Slider node sets the value of a slider element to a specific numeric value. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target slider element 2. Retrieves the RangeValuePattern of the element 3. Sets the slider's value to the specified numeric value",
+      "usage": [
+        "The target element must be a slider that supports the RangeValuePattern",
+        "Both Window Selector and Element Selector are required to identify the target element",
+        "The specified Value must be within the slider's valid range"
+      ],
+      "bestPractices": [
+        "The Value input should be a number within the slider's minimum and maximum range",
+        "Slider ranges vary by implementation - some may range from 0-100, others may have different ranges",
+        "This node is useful for configuring settings or adjusting values in applications with slider controls",
+        "The slider element must be enabled and visible to be interacted with",
+        "Setting a slider value may trigger associated events in the application"
+      ]
+    },
+    "set_text": {
+      "namespace": "Core.WindowsAutomation.Set_text",
+      "name": "Set_text",
+      "summary": "Sets the text content of a UI element by sending keystrokes.",
+      "howItWorks": "The Set Text node sets the text content of a UI element by sending keystrokes. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target element 2. Sends the specified text as keystrokes to the element with no delay between characters",
+      "usage": [
+        "Both Window Selector and Element Selector are required to identify the target element",
+        "The target element must be able to receive text input (e.g., text boxes, input fields)"
+      ],
+      "bestPractices": [
+        "This node sends text as literal keystrokes to the element",
+        "The element must have focus to receive the text input",
+        "Consider using Set Focus node before this node if focus is not already set",
+        "This approach works with most text input elements including text boxes, password fields, and rich text editors",
+        "The text is sent character by character with no interval delay",
+        "This node replaces the current content of the element with the new text",
+        "For appending text rather than replacing, consider using Send Key node instead"
+      ]
+    },
+    "set_value": {
+      "namespace": "Core.WindowsAutomation.Set_value",
+      "name": "Set_value",
+      "summary": "Sets the value property of a UI element using the ValuePattern interface.",
+      "howItWorks": "The Set Value node sets the value property of a UI element using the ValuePattern interface. When executed, the node: 1. Uses the Window Selector and Element Selector to locate the target element 2. Retrieves the ValuePattern of the element 3. Sets the element's value property to the specified value",
+      "usage": [
+        "The target element must support the ValuePattern interface",
+        "Both Window Selector and Element Selector are required to identify the target element"
+      ],
+      "bestPractices": [
+        "This node directly sets the value property of an element, which is different from sending keystrokes",
+        "It works with elements that have a value property, such as text boxes, combo boxes, and sliders",
+        "This approach is often more reliable than sending keystrokes as it bypasses keyboard input processing",
+        "The element must be enabled and visible to have its value set",
+        "This node replaces the current value of the element with the new value",
+        "For text input elements, this is typically equivalent to setting the text content"
+      ]
+    },
+    "start_session": {
+      "namespace": "Core.WindowsAutomation.Start_session",
+      "name": "Start_session",
+      "summary": "Starts a new Windows Remote Desktop Protocol (RDP) session to a remote computer.",
+      "howItWorks": "The Start Session node establishes a new Windows Remote Desktop Protocol (RDP) session to a remote computer. When executed, the node: 1. Validates the provided credentials (username and password) 2. Stores the credentials securely using Windows cmdkey 3. Launches an RDP connection using mstsc with full-screen mode 4. Waits for the session to be established and identifies the new session 5. Cleans up the stored credentials 6. Returns the session information as an output",
+      "usage": [
+        "Valid login credentials for the remote computer",
+        "Network connectivity to the remote computer",
+        "Windows Remote Desktop services enabled on the remote computer",
+        "Appropriate permissions to establish RDP connections"
+      ],
+      "bestPractices": [
+        "This node is typically used at the beginning of automation workflows that need to interact with remote Windows systems",
+        "The session object can be passed to other Windows Automation nodes that require a session",
+        "Credentials are stored temporarily and cleaned up after the session is established",
+        "The connection is launched in full-screen mode for optimal interaction",
+        "For localhost connections, ensure that Remote Desktop is enabled on the local machine",
+        "The node waits up to 60 seconds for the session to be established"
+      ]
+    },
+    "stop_session": {
+      "namespace": "Core.WindowsAutomation.Stop_session",
+      "name": "Stop_session",
+      "summary": "Stops a Windows Remote Desktop Protocol (RDP) session by either disconnecting or logging off.",
+      "howItWorks": "The Stop Session node terminates a Windows Remote Desktop Protocol (RDP) session. When executed, the node: 1. Validates the provided session object 2. Based on the selected Action option: - Disconnect: Uses tscon command to disconnect from the session while keeping it active on the remote computer - Log Off: Uses logoff command to completely terminate the session on the remote computer",
+      "usage": [
+        "A valid session object from a previously established RDP connection",
+        "Appropriate permissions to disconnect or log off sessions"
+      ],
+      "bestPractices": [
+        "Disconnect is less disruptive as it preserves the session state on the remote computer",
+        "Log Off completely terminates the session, which may result in loss of unsaved work",
+        "After stopping a session, the session object is no longer valid for other operations",
+        "This node is typically used at the end of automation workflows to clean up RDP connections",
+        "The choice between Disconnect and Log Off depends on whether you want to preserve the session state"
+      ]
+    },
+    "transfer_session": {
+      "namespace": "Core.WindowsAutomation.Transfer_session",
+      "name": "Transfer_session",
+      "summary": "Transfers a Windows session to the console and optionally adjusts the display resolution.",
+      "howItWorks": "The Transfer Session node transfers a Windows session to the console and optionally adjusts the display resolution. When executed, the node: 1. Validates that the robot is running with administrator privileges 2. Validates the provided session object 3. Based on the Resolution Mode option: - No Change: Proceeds directly to session transfer - Current Resolution: Saves the current resolution, transfers the session, then restores the resolution - Custom Resolution: Transfers the session, then sets the specified custom resolution 4. Uses tscon command to transfer the session to the console 5. Applies any requested resolution changes after the transfer",
+      "usage": [
+        "Administrator privileges - The robot must be run with administrator rights",
+        "A valid session object from a previously established connection",
+        "Windows system with console access"
+      ],
+      "bestPractices": [
+        "This node requires elevated privileges to function properly",
+        "Transferring to console gives direct access to the physical display",
+        "Resolution changes may require a brief delay to take effect",
+        "The \"Current Resolution\" option is useful for preserving the display settings",
+        "Custom resolution values should be within the supported range for the display",
+        "After transferring a session, the display may temporarily change",
+        "This node is typically used when direct console access is needed for automation"
+      ],
+      "errorCodes": [
+        "Error"
+      ]
+    },
+    "wait_element": {
+      "namespace": "Core.WindowsAutomation.Wait_element",
+      "name": "Wait_element",
+      "summary": "Waits for a UI element to appear or disappear within a specified timeout period.",
+      "howItWorks": "The Wait Element node pauses execution until a specified UI element either appears or disappears. When executed, the node: 1. Uses the Window Selector and Element Selector to identify the target element 2. Based on the Condition option: - To Appear: Continuously checks for the element's existence until it appears or timeout - To Disappear: Continuously checks for the element's existence until it disappears or timeout 3. Checks for the element every 0.5 seconds during the wait period 4. Raises a TimeoutError if the condition is not met within the specified timeout",
+      "usage": [
+        "Both Window Selector and Element Selector are required to identify the target element",
+        "Valid timeout value (positive integer)"
+      ],
+      "bestPractices": [
+        "This node is useful for synchronizing automation with dynamic UI changes",
+        "Use \"To Appear\" when waiting for elements that are created or shown after some operation",
+        "Use \"To Disappear\" when waiting for elements that are removed or hidden after some operation",
+        "The timeout value should be set appropriately based on expected UI response times",
+        "This node helps prevent race conditions in automation workflows",
+        "For elements that may temporarily disappear and reappear, consider using appropriate timeout values"
+      ]
+    },
+    "wait_window": {
+      "namespace": "Core.WindowsAutomation.Wait_window",
+      "name": "Wait_window",
+      "summary": "Waits for a window to appear or disappear within a specified timeout period.",
+      "howItWorks": "The Wait Window node pauses execution until a specified window either appears or disappears. When executed, the node: 1. Uses the Window Selector to identify the target window 2. Based on the Condition option: - To Appear: Continuously checks for the window's existence until it appears or timeout - To Disappear: Continuously checks for the window's existence until it disappears or timeout 3. Checks for the window every 0.5 seconds during the wait period 4. Raises a TimeoutError if the condition is not met within the specified timeout",
+      "usage": [
+        "A valid Window Selector is required to identify the target window",
+        "Valid timeout value (positive integer)"
+      ],
+      "bestPractices": [
+        "This node is useful for synchronizing automation with window-based operations",
+        "Use \"To Appear\" when waiting for windows that are created or shown after some operation",
+        "Use \"To Disappear\" when waiting for windows that are closed or hidden after some operation",
+        "The timeout value should be set appropriately based on expected window response times",
+        "This node helps prevent race conditions in automation workflows",
+        "For windows that may temporarily disappear and reappear, consider using appropriate timeout values"
+      ]
+    }
+  }
+}

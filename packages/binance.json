@@ -1,0 +1,496 @@
+{
+  "package": "Binance",
+  "summary": "The Binance package provides comprehensive integration with the Binance cryptocurrency exchange, enabling automated trading, portfolio management, and market data retrieval for RPA workflows.",
+  "description": "## Overview The Binance package allows you to:",
+  "nodes": {
+    "buy-order": {
+      "namespace": "Core.Binance.BuyOrder",
+      "name": "BuyOrder",
+      "summary": "Places a limit buy order on Binance, allowing you to specify the exact price at which you want to purchase a cryptocurrency.",
+      "howItWorks": "The Buy Order node creates a limit buy order that will only execute at your specified price or better. When executed, the node: 1. Retrieves the Binance client (from Client Id or creates one from credentials) 2. Validates all required inputs 3. Creates a limit buy order with Time In Force = GTC (Good Till Canceled) 4. Submits the order to Binance 5. Returns the order details including the unique order ID",
+      "usage": [
+        "Either a Client Id from Connect node OR API credentials in options",
+        "Sufficient quote asset balance (e.g., USDT) to cover the order",
+        "Valid trading pair that exists on Binance",
+        "Order quantity and price that meet Binance's minimum requirements",
+        "Appropriate API permissions (spot trading enabled)"
+      ],
+      "bestPractices": [
+        "Limit orders only execute at the specified price or better",
+        "Orders remain open until filled, canceled, or expired",
+        "The order uses GTC (Good Till Canceled) time in force - it stays active until filled or manually canceled",
+        "Minimum order sizes vary by trading pair - check Binance trading rules",
+        "Some pairs have price and quantity filters (minimum, maximum, step size)",
+        "The result includes the order ID which can be used to track or cancel the order"
+      ],
+      "errorCodes": [
+        "ErrInternal",
+        "ErrInvalidArg",
+        "ErrCreateBuyOrder"
+      ]
+    },
+    "cancel-order": {
+      "namespace": "Core.Binance.CancelOrder",
+      "name": "CancelOrder",
+      "summary": "Cancels an existing open order on Binance, removing it from the order book.",
+      "howItWorks": "The Cancel Order node removes an open order from the Binance order book. When executed, the node: 1. Retrieves the Binance client (from Client Id or creates one from credentials) 2. Validates the Order ID and Currency Pair inputs 3. Sends a cancel request to Binance for the specified order 4. Returns true if cancellation is successful",
+      "usage": [
+        "Either a Client Id from Connect node OR API credentials in options",
+        "Valid Order ID from a previously created order",
+        "Correct Currency Pair matching the order",
+        "Order must still be open (not already filled or canceled)",
+        "Appropriate API permissions (spot trading enabled)"
+      ],
+      "bestPractices": [
+        "You can only cancel orders that are still open (not filled or already canceled)",
+        "Provide the exact Order ID received when the order was created",
+        "The Currency Pair must match the original order",
+        "Partially filled orders can be canceled (unfilled portion is canceled)",
+        "You cannot cancel orders from other accounts",
+        "Cancellation is immediate when successful"
+      ],
+      "errorCodes": [
+        "ErrInternal",
+        "ErrInvalidArg",
+        "ErrCancelOrder"
+      ]
+    },
+    "connect": {
+      "namespace": "Core.Binance.Connect",
+      "name": "Connect",
+      "summary": "Establishes a connection to the Binance cryptocurrency exchange using API credentials, creating a reusable client session for subsequent trading and data operations.",
+      "howItWorks": "The Connect node is the first step in any Binance automation workflow. It establishes a secure connection to Binance and creates a client session. When executed, the node: 1. Retrieves the API Key and Secret Key from the provided credentials 2. Validates that both credentials are not empty 3. Creates a new Binance client instance with the provided credentials 4. Generates a unique client ID for the session 5. Stores the client in memory for use by other nodes 6. Returns the client ID for subsequent operations",
+      "usage": [
+        "A valid Binance account",
+        "Binance API Key and Secret Key (created from Binance Account Settings \u003e API Management)",
+        "Both credentials stored in Robomotion Vault",
+        "Appropriate API permissions enabled (e.g., spot trading, reading)"
+      ],
+      "bestPractices": [
+        "The Connect node should be executed before any other Binance operations",
+        "The returned Client Id must be passed to all subsequent Binance nodes",
+        "Each Connect node creates a new client session",
+        "Always pair Connect with Disconnect to properly clean up resources",
+        "The client session is stored in memory and automatically removed when the flow stops"
+      ],
+      "errorCodes": [
+        "ErrCredentials",
+        "ErrInvalidArg"
+      ]
+    },
+    "disconnect": {
+      "namespace": "Core.Binance.Disconnect",
+      "name": "Disconnect",
+      "summary": "Closes the connection to Binance exchange and cleans up the client session, freeing system resources.",
+      "howItWorks": "The Disconnect node closes the Binance client session and removes it from memory. When executed, the node: 1. Validates that the Client Id is not empty 2. Removes the client session from the internal client manager 3. Frees up system resources associated with the connection",
+      "usage": [
+        "A valid Client Id from a previously executed Connect node"
+      ],
+      "bestPractices": [
+        "The Disconnect node should be the last Binance operation in your flow",
+        "Always pair Disconnect with Connect to prevent resource leaks",
+        "Once disconnected, the Client Id cannot be reused",
+        "If you need to perform more operations, create a new connection with Connect",
+        "Client sessions are automatically cleaned when the flow stops, but explicit disconnection is recommended"
+      ],
+      "errorCodes": [
+        "ErrInternal",
+        "ErrInvalidArg"
+      ]
+    },
+    "get-balance": {
+      "namespace": "Core.Binance.GetBalance",
+      "name": "GetBalance",
+      "summary": "Retrieves account balance information for a specific cryptocurrency or all cryptocurrencies in your Binance spot wallet.",
+      "howItWorks": "The Get Balance node queries your Binance account for current holdings. When executed, the node: 1. Retrieves the Binance client (from Client Id or creates one from credentials) 2. Validates the Currency input 3. Queries Binance account information 4. Returns either a single currency balance or all balances based on the GetAllCurrencies option",
+      "usage": [
+        "Either a Client Id from Connect node OR API credentials in options",
+        "Valid currency symbol (must exist on Binance)",
+        "Appropriate API permissions (account reading enabled)",
+        "Spot wallet access"
+      ],
+      "bestPractices": [
+        "Currently only supports Spot wallet balances",
+        "Balance includes both `free` (available) and `locked` (in orders) amounts",
+        "GetAllCurrencies = false requires exact currency symbol match",
+        "All balances are returned when GetAllCurrencies = true, even zero balances",
+        "Currency symbols are case-sensitive (use uppercase: BTC, not btc)"
+      ],
+      "errorCodes": [
+        "ErrInternal",
+        "ErrInvalidArg",
+        "ErrGetAccount",
+        "ErrInvalidCurrency"
+      ]
+    },
+    "get-coin-detail": {
+      "namespace": "Core.Binance.GetCoinDetail",
+      "name": "GetCoinDetail",
+      "summary": "Retrieves detailed information about a cryptocurrency, including supported networks, withdrawal settings, and deposit configurations.",
+      "howItWorks": "The Get Coin Detail node queries Binance for comprehensive cryptocurrency information. When executed, the node: 1. Retrieves the Binance client (from Client Id or creates one from credentials) 2. Validates the Currency input 3. Queries Binance's asset detail service 4. Returns detailed coin information including network configurations",
+      "usage": [
+        "Either a Client Id from Connect node OR API credentials in options",
+        "Valid cryptocurrency symbol",
+        "Appropriate API permissions (account reading enabled)"
+      ],
+      "bestPractices": [
+        "Currency symbol must be exact (case-sensitive, usually uppercase)",
+        "Returns information for all supported networks for the coin",
+        "Includes withdrawal fees, minimum withdrawal amounts, and network status",
+        "Network availability can change based on Binance operations",
+        "Some coins support multiple networks (e.g., USDT on ETH, BSC, TRX)"
+      ],
+      "errorCodes": [
+        "ErrInternal",
+        "ErrInvalidArg",
+        "ErrGetAssetDetail",
+        "ErrSetResult"
+      ]
+    },
+    "get-deposit-address": {
+      "namespace": "Core.Binance.GetDepositAddress",
+      "name": "GetDepositAddress",
+      "summary": "Retrieves the deposit address for a specific cryptocurrency on a chosen blockchain network.",
+      "howItWorks": "The Get Deposit Address node retrieves your Binance deposit address for a specific coin and network. When executed, the node: 1. Retrieves the Binance client (from Client Id or creates one from credentials) 2. Validates Currency and Network inputs 3. Queries Binance for the deposit address on the specified network 4. Returns the address and any required tag/memo information",
+      "usage": [
+        "Either a Client Id from Connect node OR API credentials in options",
+        "Valid cryptocurrency symbol",
+        "Valid network identifier that supports the cryptocurrency",
+        "Appropriate API permissions (account reading enabled)",
+        "The coin/network combination must be supported by Binance"
+      ],
+      "bestPractices": [
+        "The deposit address is unique to your Binance account",
+        "Some coins require a tag/memo in addition to the address",
+        "Network must match the sending wallet's network",
+        "Deposits to wrong network addresses may result in permanent loss",
+        "Some networks may have deposits temporarily disabled"
+      ],
+      "errorCodes": [
+        "ErrInternal",
+        "ErrInvalidArg",
+        "ErrGetDepositAddress",
+        "ErrSetResult"
+      ]
+    },
+    "get-order": {
+      "namespace": "Core.Binance.GetOrder",
+      "name": "GetOrder",
+      "summary": "Retrieves detailed information about a specific order on Binance, including its status, filled quantity, and execution details.",
+      "howItWorks": "The Get Order node queries Binance for detailed information about a specific order. When executed, the node: 1. Retrieves the Binance client (from Client Id or creates one from credentials) 2. Validates the Order Id and Currency Pair inputs 3. Queries Binance for the order details 4. Returns comprehensive order information",
+      "usage": [
+        "Either a Client Id from Connect node OR API credentials in options",
+        "Valid Order ID from a previously created order",
+        "Correct Currency Pair matching the order",
+        "Appropriate API permissions (reading enabled)"
+      ],
+      "bestPractices": [
+        "The Order Id must match an existing order on your account",
+        "The Currency Pair must match the original order",
+        "You can query both open and historical (filled/canceled) orders",
+        "Order information includes execution details and timestamps",
+        "Use this node to monitor order status in automation workflows"
+      ],
+      "errorCodes": [
+        "ErrInternal",
+        "ErrInvalidArg",
+        "ErrGetOrderService",
+        "ErrSetOrder"
+      ]
+    },
+    "get-price": {
+      "namespace": "Core.Binance.GetPrice",
+      "name": "GetPrice",
+      "summary": "Retrieves the current average price for a trading pair on Binance.",
+      "howItWorks": "The Get Price node queries Binance for the current average price of a trading pair. When executed, the node: 1. Retrieves the Binance client (from Client Id or creates one from credentials) 2. Validates the Currency (trading pair) input 3. Queries Binance's average price endpoint 4. Returns the average price as a string",
+      "usage": [
+        "Either a Client Id from Connect node OR API credentials in options",
+        "Valid trading pair symbol that exists on Binance",
+        "Appropriate API permissions (reading enabled)"
+      ],
+      "bestPractices": [
+        "Returns the average price, not the last trade price",
+        "The price is returned as a string - parse to number for calculations",
+        "Average price is calculated over the last 5 minutes",
+        "Price updates in real-time based on market trades",
+        "Trading pair must be in format: BASEQUOTE (e.g., BTCUSDT)"
+      ],
+      "errorCodes": [
+        "ErrInternal",
+        "ErrInvalidArg",
+        "ErrNewAveragePriceService",
+        "ErrSetPrice"
+      ]
+    },
+    "get-price-change-info": {
+      "namespace": "Core.Binance.GetPriceChangeInfo",
+      "name": "GetPriceChangeInfo",
+      "summary": "Retrieves 24-hour price change statistics for a trading pair, including price movements, volume, and trading activity.",
+      "howItWorks": "The Get Price Change Info node queries Binance for 24-hour trading statistics of a specific pair. When executed, the node: 1. Retrieves the Binance client (from Client Id or creates one from credentials) 2. Validates the Currency (trading pair) input 3. Queries Binance's 24-hour ticker statistics endpoint 4. Returns detailed price change and volume information",
+      "usage": [
+        "Either a Client Id from Connect node OR API credentials in options",
+        "Valid trading pair symbol that exists on Binance",
+        "Appropriate API permissions (reading enabled)"
+      ],
+      "bestPractices": [
+        "All statistics cover the previous 24 hours (rolling window)",
+        "Price data is updated in real-time",
+        "Volume is calculated in both base and quote assets",
+        "Includes high/low prices and price change percentages",
+        "Useful for market analysis and trend identification"
+      ],
+      "errorCodes": [
+        "ErrInternal",
+        "ErrInvalidArg",
+        "ErrListPriceChange",
+        "ErrSetResult"
+      ]
+    },
+    "get-price-history": {
+      "namespace": "Core.Binance.GetPriceHistory",
+      "name": "GetPriceHistory",
+      "summary": "Retrieves historical price data (candlestick/kline data) for a trading pair and saves it to a CSV file for technical analysis and backtesting.",
+      "howItWorks": "The Get Price History node retrieves historical candlestick data from Binance and exports it to CSV format. When executed, the node: 1. Validates all required inputs 2. Retrieves the Binance client 3. Calculates the required number of API requests (Binance returns max 1000 candles per request) 4. Fetches candlestick data in batches with delays between requests 5. Creates a CSV file with columns: openTime, closeTime, open, close, high, low, volume, tradeNum, quoteAssetVolume, takerBuyBaseAssetVolume, takerBuyQuoteAssetVolume 6. Writes all candlestick data to the file",
+      "usage": [
+        "Either a Client Id from Connect node OR API credentials in options",
+        "Valid trading pair symbol",
+        "Either Limit OR both Start Date and End Date must be provided",
+        "Write permissions for the Save Path location",
+        "Sufficient disk space for the CSV file"
+      ],
+      "bestPractices": [
+        "Binance returns maximum 1000 candlesticks per request",
+        "For larger datasets, the node automatically makes multiple requests with delays",
+        "Date timestamps must be in milliseconds (Unix timestamp * 1000)",
+        "Custom Interval overrides the Interval option if provided",
+        "Delay Between Request prevents API rate limiting (default 0.5 seconds recommended)",
+        "Data is retrieved backwards from End Date or current time"
+      ],
+      "errorCodes": [
+        "ErrInternal",
+        "ErrInvalidArg",
+        "ErrGetHistory",
+        "ErrCreateFile",
+        "ErrStrToInt"
+      ]
+    },
+    "list-all-pairs": {
+      "namespace": "Core.Binance.ListAllPairs",
+      "name": "ListAllPairs",
+      "summary": "Retrieves a list of all available trading pairs on Binance exchange.",
+      "howItWorks": "The List All Pairs node queries Binance's exchange information to retrieve all available trading pairs. When executed, the node: 1. Retrieves the Binance client (from Client Id or creates one from credentials) 2. Queries Binance exchange information 3. Extracts all trading pair symbols 4. Returns an array of pair symbols",
+      "usage": [
+        "Either a Client Id from Connect node OR API credentials in options",
+        "Appropriate API permissions (reading enabled)"
+      ],
+      "bestPractices": [
+        "Returns all spot trading pairs available on Binance",
+        "The list includes thousands of pairs",
+        "Pairs are returned as symbol strings (e.g., \"BTCUSDT\")",
+        "The list may change as Binance adds or removes pairs",
+        "Useful for validating pair existence before trading"
+      ],
+      "errorCodes": [
+        "ErrListAllPairs",
+        "ErrSetResult"
+      ]
+    },
+    "list-deposits": {
+      "namespace": "Core.Binance.ListDeposits",
+      "name": "ListDeposits",
+      "summary": "Retrieves recent deposit history for your Binance account, showing incoming cryptocurrency transfers.",
+      "howItWorks": "The List Deposits node queries Binance for your recent deposit transactions. When executed, the node: 1. Retrieves the Binance client (from Client Id or creates one from credentials) 2. Validates the Limit input 3. Queries Binance's deposit history service (hardcoded to limit 5 in current implementation) 4. Returns an array of deposit records",
+      "usage": [
+        "Either a Client Id from Connect node OR API credentials in options",
+        "Appropriate API permissions (account reading and wallet enabled)"
+      ],
+      "bestPractices": [
+        "Returns recent deposit transactions",
+        "Includes deposits from all cryptocurrencies",
+        "Shows deposit status (pending, completed, failed)",
+        "Note: Current implementation uses hardcoded limit of 5",
+        "Deposits require blockchain confirmations before being credited",
+        "Failed or rejected deposits are also included"
+      ],
+      "errorCodes": [
+        "ErrInternal",
+        "ErrSetResult"
+      ]
+    },
+    "list-my-orders": {
+      "namespace": "Core.Binance.ListMyOrders",
+      "name": "ListMyOrders",
+      "summary": "Retrieves all currently open orders for your Binance account across all trading pairs.",
+      "howItWorks": "The List My Orders node queries Binance for all active (open) orders on your account. When executed, the node: 1. Retrieves the Binance client (from Client Id or creates one from credentials) 2. Queries Binance for all open orders 3. Returns an array of order objects",
+      "usage": [
+        "Either a Client Id from Connect node OR API credentials in options",
+        "Appropriate API permissions (reading and spot trading enabled)"
+      ],
+      "bestPractices": [
+        "Returns only open (unfilled) orders",
+        "Includes limit, market, and stop orders",
+        "Orders from all trading pairs are included",
+        "Partially filled orders are included",
+        "Completed or canceled orders are not included",
+        "Useful for order management and portfolio monitoring"
+      ],
+      "errorCodes": [
+        "ErrListOrders"
+      ]
+    },
+    "list-orders": {
+      "namespace": "Core.Binance.ListOrders",
+      "name": "ListOrders",
+      "summary": "Retrieves the current order book (bids or asks) for a trading pair, showing the best available buy and sell orders.",
+      "howItWorks": "The List Orders node retrieves the current order book depth for a trading pair. When executed, the node: 1. Retrieves the Binance client (from Client Id or creates one from credentials) 2. Validates Currency Pair and Limit inputs 3. Queries Binance's order book depth 4. Filters for either bids (buy orders) or asks (sell orders) based on Order Type 5. Returns the requested number of price levels",
+      "usage": [
+        "Either a Client Id from Connect node OR API credentials in options",
+        "Valid trading pair symbol",
+        "Appropriate API permissions (reading enabled)",
+        "Order Type option must be selected"
+      ],
+      "bestPractices": [
+        "Returns real-time order book data",
+        "Bids are sorted highest to lowest (best bid first)",
+        "Asks are sorted lowest to highest (best ask first)",
+        "Limit defaults to 10 if not provided or ≤ 0",
+        "Order book updates frequently as orders are placed/canceled",
+        "Useful for analyzing liquidity and market depth"
+      ],
+      "errorCodes": [
+        "ErrInternal",
+        "ErrInvalidArg",
+        "ErrNEwDepthService",
+        "ErrInvalidOrderType"
+      ]
+    },
+    "list-recent-trades": {
+      "namespace": "Core.Binance.ListRecentTrades",
+      "name": "ListRecentTrades",
+      "summary": "Retrieves the most recent trades executed on Binance for a specific trading pair.",
+      "howItWorks": "The List Recent Trades node retrieves the latest executed trades from the Binance order book. When executed, the node: 1. Retrieves the Binance client (from Client Id or creates one from credentials) 2. Validates Currency Pair and Limit inputs 3. Queries Binance's recent trades endpoint 4. Returns an array of trade records",
+      "usage": [
+        "Either a Client Id from Connect node OR API credentials in options",
+        "Valid trading pair symbol",
+        "Appropriate API permissions (reading enabled)"
+      ],
+      "bestPractices": [
+        "Returns actual executed trades (market fills)",
+        "Trades are sorted from most recent to oldest",
+        "Includes both buyer and seller initiated trades",
+        "Limit defaults to 5 if not provided or ≤ 0",
+        "Maximum limit is typically 1000",
+        "Useful for analyzing recent price action and volume"
+      ],
+      "errorCodes": [
+        "ErrInternal",
+        "ErrInvalidArg",
+        "ErrListRecentTrades",
+        "ErrSetResult"
+      ]
+    },
+    "list-withdraws": {
+      "namespace": "Core.Binance.ListWithdraws",
+      "name": "ListWithdraws",
+      "summary": "Retrieves recent withdrawal history for your Binance account, showing outgoing cryptocurrency transfers.",
+      "howItWorks": "The List Withdraws node queries Binance for your recent withdrawal transactions. When executed, the node: 1. Retrieves the Binance client (from Client Id or creates one from credentials) 2. Validates the Limit input 3. Queries Binance's withdrawal history service 4. Returns an array of withdrawal records",
+      "usage": [
+        "Either a Client Id from Connect node OR API credentials in options",
+        "Appropriate API permissions (account reading and wallet enabled)"
+      ],
+      "bestPractices": [
+        "Returns recent withdrawal transactions",
+        "Includes withdrawals of all cryptocurrencies",
+        "Shows withdrawal status (processing, completed, failed, rejected)",
+        "Includes both manual and API-initiated withdrawals",
+        "Withdrawal fees are shown separately",
+        "Failed or rejected withdrawals are also included"
+      ],
+      "errorCodes": [
+        "ErrInternal",
+        "ErrListWithdraws",
+        "ErrSetResult"
+      ]
+    },
+    "market-order": {
+      "namespace": "Core.Binance.MarketOrder",
+      "name": "MarketOrder",
+      "summary": "Executes an immediate buy or sell order at the current market price, guaranteeing execution but not the exact price.",
+      "howItWorks": "The Market Order node executes an order immediately at the best available market price. When executed, the node: 1. Retrieves the Binance client (from Client Id or creates one from credentials) 2. Validates all required inputs 3. Determines the order side (Buy or Sell) and unit type (Amount or Total) 4. Creates a market order with the appropriate parameters 5. Executes the order immediately 6. Returns the order details including fill price and quantity",
+      "usage": [
+        "Either a Client Id from Connect node OR API credentials in options",
+        "Sufficient balance (quote asset for buys, base asset for sells)",
+        "Valid trading pair that exists on Binance",
+        "Order amount that meets Binance's minimum requirements",
+        "Appropriate API permissions (spot trading enabled)"
+      ],
+      "bestPractices": [
+        "Market orders execute immediately at the best available price",
+        "You don't specify a price - the order fills at current market rates",
+        "Market orders can experience slippage, especially for large amounts",
+        "Use `Amount` when you want to buy/sell a specific quantity of the base asset",
+        "Use `Total` when you want to spend/receive a specific amount of the quote asset",
+        "Market orders are useful when speed of execution is more important than price precision"
+      ],
+      "errorCodes": [
+        "ErrInternal",
+        "ErrInvalidArg",
+        "ErrCreateMarketOrder"
+      ]
+    },
+    "sell-order": {
+      "namespace": "Core.Binance.SellOrder",
+      "name": "SellOrder",
+      "summary": "Places a limit sell order on Binance, allowing you to specify the exact price at which you want to sell a cryptocurrency.",
+      "howItWorks": "The Sell Order node creates a limit sell order that will only execute at your specified price or better. When executed, the node: 1. Retrieves the Binance client (from Client Id or creates one from credentials) 2. Validates all required inputs (currency pair, quantity, and price) 3. Creates a limit sell order with Time In Force = GTC (Good Till Canceled) 4. Submits the order to Binance 5. Returns the order details including the unique order ID",
+      "usage": [
+        "Either a Client Id from Connect node OR API credentials in options",
+        "Sufficient base asset balance (e.g., BTC) to cover the order",
+        "Valid trading pair that exists on Binance",
+        "Order quantity and price that meet Binance's minimum requirements",
+        "Appropriate API permissions (spot trading enabled)"
+      ],
+      "bestPractices": [
+        "Limit orders only execute at the specified price or better (higher for sells)",
+        "Orders remain open until filled, canceled, or expired",
+        "The order uses GTC (Good Till Canceled) time in force - it stays active until filled or manually canceled",
+        "You must own the base asset to place a sell order",
+        "Minimum order sizes vary by trading pair - check Binance trading rules",
+        "The result includes the order ID which can be used to track or cancel the order"
+      ],
+      "errorCodes": [
+        "ErrInternal",
+        "ErrInvalidArg",
+        "ErrCreateSellOrder"
+      ]
+    },
+    "stop-order": {
+      "namespace": "Core.Binance.StopOrder",
+      "name": "StopOrder",
+      "summary": "Places a stop-loss limit order on Binance to automatically sell when the price falls to a specified level, helping protect profits or limit losses.",
+      "howItWorks": "The Stop Order node creates a stop-loss limit order that automatically triggers when the market price reaches your stop price. When executed, the node: 1. Retrieves the Binance client (from Client Id or creates one from credentials) 2. Validates all required inputs 3. Creates a STOP_LOSS_LIMIT order with Time In Force = GTC (Good Till Canceled) 4. The order side is automatically set to SELL 5. Submits the order to Binance 6. Returns the order details including the unique order ID **Order Lifecycle:** 1. Order is created in status \"NEW\" 2. When market price hits the Stop Price, the order activates 3. A limit sell order is placed at the specified Price 4. The order fills when market price reaches the limit Price",
+      "usage": [
+        "Either a Client Id from Connect node OR API credentials in options",
+        "Sufficient base asset balance (e.g., BTC) to cover the order",
+        "Valid trading pair that exists on Binance",
+        "Stop Price below current market price (for stop-loss)",
+        "Limit Price typically set below Stop Price",
+        "Appropriate API permissions (spot trading enabled)"
+      ],
+      "bestPractices": [
+        "Stop orders are primarily used for risk management and protecting profits",
+        "The Stop Price triggers the order activation",
+        "The limit Price determines the actual sell price",
+        "Both prices must be specified",
+        "Orders remain active until triggered, canceled, or expired",
+        "This node creates SELL orders only (stop-loss protection)",
+        "Set limit Price slightly below Stop Price to increase fill probability after trigger"
+      ],
+      "errorCodes": [
+        "ErrInternal",
+        "ErrInvalidArg",
+        "ErrCreateStopOrder"
+      ]
+    }
+  }
+}
