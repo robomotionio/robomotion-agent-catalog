@@ -48,6 +48,35 @@
         "For better performance with large datasets, ensure the Excel files are on local storage",
         "Remember to save the destination file after appending to persist the changes",
         "Close files when done to free system resources"
+      ],
+      "credentials": [
+        {
+          "name": "file_password",
+          "title": "Excel File Password",
+          "description": "Password for opening password-protected Excel files (.xlsx, .xlsm, .xls). The password is used to decrypt the file when opening.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "File Password",
+              "type": "password",
+              "required": true,
+              "description": "The password used to protect the Excel file"
+            }
+          ],
+          "help": [
+            "Enter the password that was set when the Excel file was protected",
+            "This password is used to open the file, not to protect worksheets",
+            "If the file has both file-level and sheet-level protection, this is for file-level",
+            "For sheet protection passwords, those are handled separately in Excel operations"
+          ],
+          "resources": [
+            {
+              "label": "Excel File Protection",
+              "url": "https://support.microsoft.com/en-us/office/protect-an-excel-file-7359d4ae-7213-4ac2-b058-f75e9311b599"
+            }
+          ]
+        }
       ]
     },
     "close-excel": {
@@ -86,6 +115,35 @@
         "Use error handling (try-catch) to ensure files are closed even if errors occur",
         "Consider using a Finally block to guarantee files are closed",
         "Don't reuse file descriptors after closing - open/create a new file instead"
+      ],
+      "credentials": [
+        {
+          "name": "file_password",
+          "title": "Excel File Password",
+          "description": "Password for opening password-protected Excel files (.xlsx, .xlsm, .xls). The password is used to decrypt the file when opening.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "File Password",
+              "type": "password",
+              "required": true,
+              "description": "The password used to protect the Excel file"
+            }
+          ],
+          "help": [
+            "Enter the password that was set when the Excel file was protected",
+            "This password is used to open the file, not to protect worksheets",
+            "If the file has both file-level and sheet-level protection, this is for file-level",
+            "For sheet protection passwords, those are handled separately in Excel operations"
+          ],
+          "resources": [
+            {
+              "label": "Excel File Protection",
+              "url": "https://support.microsoft.com/en-us/office/protect-an-excel-file-7359d4ae-7213-4ac2-b058-f75e9311b599"
+            }
+          ]
+        }
       ]
     },
     "copy-sheet": {
@@ -131,6 +189,35 @@
         "Consider copying a template sheet at the start of your automation workflow",
         "Always verify the source sheet exists before attempting to copy (use Get Sheets)",
         "Save the file after copying to ensure the new sheet persists"
+      ],
+      "credentials": [
+        {
+          "name": "file_password",
+          "title": "Excel File Password",
+          "description": "Password for opening password-protected Excel files (.xlsx, .xlsm, .xls). The password is used to decrypt the file when opening.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "File Password",
+              "type": "password",
+              "required": true,
+              "description": "The password used to protect the Excel file"
+            }
+          ],
+          "help": [
+            "Enter the password that was set when the Excel file was protected",
+            "This password is used to open the file, not to protect worksheets",
+            "If the file has both file-level and sheet-level protection, this is for file-level",
+            "For sheet protection passwords, those are handled separately in Excel operations"
+          ],
+          "resources": [
+            {
+              "label": "Excel File Protection",
+              "url": "https://support.microsoft.com/en-us/office/protect-an-excel-file-7359d4ae-7213-4ac2-b058-f75e9311b599"
+            }
+          ]
+        }
       ]
     },
     "create-excel": {
@@ -174,6 +261,35 @@
         "Always close the file when done to prevent resource leaks",
         "Consider using relative paths for portability across environments",
         "Create files in a temporary directory first, then move them to final location if needed"
+      ],
+      "credentials": [
+        {
+          "name": "file_password",
+          "title": "Excel File Password",
+          "description": "Password for opening password-protected Excel files (.xlsx, .xlsm, .xls). The password is used to decrypt the file when opening.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "File Password",
+              "type": "password",
+              "required": true,
+              "description": "The password used to protect the Excel file"
+            }
+          ],
+          "help": [
+            "Enter the password that was set when the Excel file was protected",
+            "This password is used to open the file, not to protect worksheets",
+            "If the file has both file-level and sheet-level protection, this is for file-level",
+            "For sheet protection passwords, those are handled separately in Excel operations"
+          ],
+          "resources": [
+            {
+              "label": "Excel File Protection",
+              "url": "https://support.microsoft.com/en-us/office/protect-an-excel-file-7359d4ae-7213-4ac2-b058-f75e9311b599"
+            }
+          ]
+        }
       ]
     },
     "create-sheet": {
@@ -220,6 +336,35 @@
         "Use Get Sheets before creating to verify the sheet doesn't already exist",
         "Consider a naming convention for sheets in automated processes (e.g., \"Report_2025_01\")",
         "Keep sheet names under 31 characters to comply with Excel's limits"
+      ],
+      "credentials": [
+        {
+          "name": "file_password",
+          "title": "Excel File Password",
+          "description": "Password for opening password-protected Excel files (.xlsx, .xlsm, .xls). The password is used to decrypt the file when opening.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "File Password",
+              "type": "password",
+              "required": true,
+              "description": "The password used to protect the Excel file"
+            }
+          ],
+          "help": [
+            "Enter the password that was set when the Excel file was protected",
+            "This password is used to open the file, not to protect worksheets",
+            "If the file has both file-level and sheet-level protection, this is for file-level",
+            "For sheet protection passwords, those are handled separately in Excel operations"
+          ],
+          "resources": [
+            {
+              "label": "Excel File Protection",
+              "url": "https://support.microsoft.com/en-us/office/protect-an-excel-file-7359d4ae-7213-4ac2-b058-f75e9311b599"
+            }
+          ]
+        }
       ]
     },
     "delete-cell": {
@@ -268,6 +413,35 @@
         "Use Get Cell Value before deletion if you need to backup the data first",
         "Remember that deleted (cleared) cells will show as empty in formulas",
         "Save the file after deletion to make changes permanent"
+      ],
+      "credentials": [
+        {
+          "name": "file_password",
+          "title": "Excel File Password",
+          "description": "Password for opening password-protected Excel files (.xlsx, .xlsm, .xls). The password is used to decrypt the file when opening.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "File Password",
+              "type": "password",
+              "required": true,
+              "description": "The password used to protect the Excel file"
+            }
+          ],
+          "help": [
+            "Enter the password that was set when the Excel file was protected",
+            "This password is used to open the file, not to protect worksheets",
+            "If the file has both file-level and sheet-level protection, this is for file-level",
+            "For sheet protection passwords, those are handled separately in Excel operations"
+          ],
+          "resources": [
+            {
+              "label": "Excel File Protection",
+              "url": "https://support.microsoft.com/en-us/office/protect-an-excel-file-7359d4ae-7213-4ac2-b058-f75e9311b599"
+            }
+          ]
+        }
       ]
     },
     "delete-column": {
@@ -317,6 +491,35 @@
         "Verify column letter before deletion to avoid removing wrong data",
         "Use Get Column to inspect column contents before deletion",
         "Test on a copy of the file first when automating column deletions"
+      ],
+      "credentials": [
+        {
+          "name": "file_password",
+          "title": "Excel File Password",
+          "description": "Password for opening password-protected Excel files (.xlsx, .xlsm, .xls). The password is used to decrypt the file when opening.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "File Password",
+              "type": "password",
+              "required": true,
+              "description": "The password used to protect the Excel file"
+            }
+          ],
+          "help": [
+            "Enter the password that was set when the Excel file was protected",
+            "This password is used to open the file, not to protect worksheets",
+            "If the file has both file-level and sheet-level protection, this is for file-level",
+            "For sheet protection passwords, those are handled separately in Excel operations"
+          ],
+          "resources": [
+            {
+              "label": "Excel File Protection",
+              "url": "https://support.microsoft.com/en-us/office/protect-an-excel-file-7359d4ae-7213-4ac2-b058-f75e9311b599"
+            }
+          ]
+        }
       ]
     },
     "delete-row": {
@@ -370,17 +573,104 @@
         "Test on a copy of the file first when automating row deletions",
         "Use first-row target to remove headers quickly",
         "Use last-row target to remove totals or summary rows"
+      ],
+      "credentials": [
+        {
+          "name": "file_password",
+          "title": "Excel File Password",
+          "description": "Password for opening password-protected Excel files (.xlsx, .xlsm, .xls). The password is used to decrypt the file when opening.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "File Password",
+              "type": "password",
+              "required": true,
+              "description": "The password used to protect the Excel file"
+            }
+          ],
+          "help": [
+            "Enter the password that was set when the Excel file was protected",
+            "This password is used to open the file, not to protect worksheets",
+            "If the file has both file-level and sheet-level protection, this is for file-level",
+            "For sheet protection passwords, those are handled separately in Excel operations"
+          ],
+          "resources": [
+            {
+              "label": "Excel File Protection",
+              "url": "https://support.microsoft.com/en-us/office/protect-an-excel-file-7359d4ae-7213-4ac2-b058-f75e9311b599"
+            }
+          ]
+        }
       ]
     },
     "excel-to-csv": {
       "namespace": "Core.Excel.ExcelToCsv",
       "name": "ExcelToCsv",
-      "summary": "Converts an Excel file's Sheets into CSV files"
+      "summary": "Converts an Excel file's Sheets into CSV files",
+      "credentials": [
+        {
+          "name": "file_password",
+          "title": "Excel File Password",
+          "description": "Password for opening password-protected Excel files (.xlsx, .xlsm, .xls). The password is used to decrypt the file when opening.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "File Password",
+              "type": "password",
+              "required": true,
+              "description": "The password used to protect the Excel file"
+            }
+          ],
+          "help": [
+            "Enter the password that was set when the Excel file was protected",
+            "This password is used to open the file, not to protect worksheets",
+            "If the file has both file-level and sheet-level protection, this is for file-level",
+            "For sheet protection passwords, those are handled separately in Excel operations"
+          ],
+          "resources": [
+            {
+              "label": "Excel File Protection",
+              "url": "https://support.microsoft.com/en-us/office/protect-an-excel-file-7359d4ae-7213-4ac2-b058-f75e9311b599"
+            }
+          ]
+        }
+      ]
     },
     "find-and-replace": {
       "namespace": "Core.Excel.FindReplace",
       "name": "FindAndReplace",
-      "summary": "Finds and replaces a specific value in an excel file."
+      "summary": "Finds and replaces a specific value in an excel file.",
+      "credentials": [
+        {
+          "name": "file_password",
+          "title": "Excel File Password",
+          "description": "Password for opening password-protected Excel files (.xlsx, .xlsm, .xls). The password is used to decrypt the file when opening.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "File Password",
+              "type": "password",
+              "required": true,
+              "description": "The password used to protect the Excel file"
+            }
+          ],
+          "help": [
+            "Enter the password that was set when the Excel file was protected",
+            "This password is used to open the file, not to protect worksheets",
+            "If the file has both file-level and sheet-level protection, this is for file-level",
+            "For sheet protection passwords, those are handled separately in Excel operations"
+          ],
+          "resources": [
+            {
+              "label": "Excel File Protection",
+              "url": "https://support.microsoft.com/en-us/office/protect-an-excel-file-7359d4ae-7213-4ac2-b058-f75e9311b599"
+            }
+          ]
+        }
+      ]
     },
     "get-cell-value": {
       "namespace": "Core.Excel.GetCellValue",
@@ -430,12 +720,70 @@
         "Combine with conditional logic to process cell values",
         "For reading multiple values, consider using Get Row or Get Column",
         "Use Set Active Cell before Get Cell Value for dynamic cell reading"
+      ],
+      "credentials": [
+        {
+          "name": "file_password",
+          "title": "Excel File Password",
+          "description": "Password for opening password-protected Excel files (.xlsx, .xlsm, .xls). The password is used to decrypt the file when opening.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "File Password",
+              "type": "password",
+              "required": true,
+              "description": "The password used to protect the Excel file"
+            }
+          ],
+          "help": [
+            "Enter the password that was set when the Excel file was protected",
+            "This password is used to open the file, not to protect worksheets",
+            "If the file has both file-level and sheet-level protection, this is for file-level",
+            "For sheet protection passwords, those are handled separately in Excel operations"
+          ],
+          "resources": [
+            {
+              "label": "Excel File Protection",
+              "url": "https://support.microsoft.com/en-us/office/protect-an-excel-file-7359d4ae-7213-4ac2-b058-f75e9311b599"
+            }
+          ]
+        }
       ]
     },
     "get-column": {
       "namespace": "Core.Excel.GetColumn",
       "name": "GetColumn",
-      "summary": "Retrieves data from a specific column of an Excel file."
+      "summary": "Retrieves data from a specific column of an Excel file.",
+      "credentials": [
+        {
+          "name": "file_password",
+          "title": "Excel File Password",
+          "description": "Password for opening password-protected Excel files (.xlsx, .xlsm, .xls). The password is used to decrypt the file when opening.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "File Password",
+              "type": "password",
+              "required": true,
+              "description": "The password used to protect the Excel file"
+            }
+          ],
+          "help": [
+            "Enter the password that was set when the Excel file was protected",
+            "This password is used to open the file, not to protect worksheets",
+            "If the file has both file-level and sheet-level protection, this is for file-level",
+            "For sheet protection passwords, those are handled separately in Excel operations"
+          ],
+          "resources": [
+            {
+              "label": "Excel File Protection",
+              "url": "https://support.microsoft.com/en-us/office/protect-an-excel-file-7359d4ae-7213-4ac2-b058-f75e9311b599"
+            }
+          ]
+        }
+      ]
     },
     "get-range": {
       "namespace": "Core.Excel.GetRange",
@@ -483,32 +831,206 @@
         "The data table format integrates seamlessly with For Each loops",
         "Use all-range for dynamic sheets where the data size varies",
         "Combine with Set Range to copy data between files or sheets"
+      ],
+      "credentials": [
+        {
+          "name": "file_password",
+          "title": "Excel File Password",
+          "description": "Password for opening password-protected Excel files (.xlsx, .xlsm, .xls). The password is used to decrypt the file when opening.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "File Password",
+              "type": "password",
+              "required": true,
+              "description": "The password used to protect the Excel file"
+            }
+          ],
+          "help": [
+            "Enter the password that was set when the Excel file was protected",
+            "This password is used to open the file, not to protect worksheets",
+            "If the file has both file-level and sheet-level protection, this is for file-level",
+            "For sheet protection passwords, those are handled separately in Excel operations"
+          ],
+          "resources": [
+            {
+              "label": "Excel File Protection",
+              "url": "https://support.microsoft.com/en-us/office/protect-an-excel-file-7359d4ae-7213-4ac2-b058-f75e9311b599"
+            }
+          ]
+        }
       ]
     },
     "get-row": {
       "namespace": "Core.Excel.GetRow",
       "name": "GetRow",
-      "summary": "Gets a row from an Excel file"
+      "summary": "Gets a row from an Excel file",
+      "credentials": [
+        {
+          "name": "file_password",
+          "title": "Excel File Password",
+          "description": "Password for opening password-protected Excel files (.xlsx, .xlsm, .xls). The password is used to decrypt the file when opening.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "File Password",
+              "type": "password",
+              "required": true,
+              "description": "The password used to protect the Excel file"
+            }
+          ],
+          "help": [
+            "Enter the password that was set when the Excel file was protected",
+            "This password is used to open the file, not to protect worksheets",
+            "If the file has both file-level and sheet-level protection, this is for file-level",
+            "For sheet protection passwords, those are handled separately in Excel operations"
+          ],
+          "resources": [
+            {
+              "label": "Excel File Protection",
+              "url": "https://support.microsoft.com/en-us/office/protect-an-excel-file-7359d4ae-7213-4ac2-b058-f75e9311b599"
+            }
+          ]
+        }
+      ]
     },
     "get-sheets": {
       "namespace": "Core.Excel.GetSheets",
       "name": "GetSheets",
-      "summary": "Retrieves all the sheets of an excel file"
+      "summary": "Retrieves all the sheets of an excel file",
+      "credentials": [
+        {
+          "name": "file_password",
+          "title": "Excel File Password",
+          "description": "Password for opening password-protected Excel files (.xlsx, .xlsm, .xls). The password is used to decrypt the file when opening.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "File Password",
+              "type": "password",
+              "required": true,
+              "description": "The password used to protect the Excel file"
+            }
+          ],
+          "help": [
+            "Enter the password that was set when the Excel file was protected",
+            "This password is used to open the file, not to protect worksheets",
+            "If the file has both file-level and sheet-level protection, this is for file-level",
+            "For sheet protection passwords, those are handled separately in Excel operations"
+          ],
+          "resources": [
+            {
+              "label": "Excel File Protection",
+              "url": "https://support.microsoft.com/en-us/office/protect-an-excel-file-7359d4ae-7213-4ac2-b058-f75e9311b599"
+            }
+          ]
+        }
+      ]
     },
     "insert-column": {
       "namespace": "Core.Excel.InsertColumn",
       "name": "InsertColumn",
-      "summary": "Inserts a new column in a specified location in an Excel sheet."
+      "summary": "Inserts a new column in a specified location in an Excel sheet.",
+      "credentials": [
+        {
+          "name": "file_password",
+          "title": "Excel File Password",
+          "description": "Password for opening password-protected Excel files (.xlsx, .xlsm, .xls). The password is used to decrypt the file when opening.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "File Password",
+              "type": "password",
+              "required": true,
+              "description": "The password used to protect the Excel file"
+            }
+          ],
+          "help": [
+            "Enter the password that was set when the Excel file was protected",
+            "This password is used to open the file, not to protect worksheets",
+            "If the file has both file-level and sheet-level protection, this is for file-level",
+            "For sheet protection passwords, those are handled separately in Excel operations"
+          ],
+          "resources": [
+            {
+              "label": "Excel File Protection",
+              "url": "https://support.microsoft.com/en-us/office/protect-an-excel-file-7359d4ae-7213-4ac2-b058-f75e9311b599"
+            }
+          ]
+        }
+      ]
     },
     "insert-row": {
       "namespace": "Core.Excel.InsertRow",
       "name": "InsertRow",
-      "summary": "Inserts a row into an excel file."
+      "summary": "Inserts a row into an excel file.",
+      "credentials": [
+        {
+          "name": "file_password",
+          "title": "Excel File Password",
+          "description": "Password for opening password-protected Excel files (.xlsx, .xlsm, .xls). The password is used to decrypt the file when opening.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "File Password",
+              "type": "password",
+              "required": true,
+              "description": "The password used to protect the Excel file"
+            }
+          ],
+          "help": [
+            "Enter the password that was set when the Excel file was protected",
+            "This password is used to open the file, not to protect worksheets",
+            "If the file has both file-level and sheet-level protection, this is for file-level",
+            "For sheet protection passwords, those are handled separately in Excel operations"
+          ],
+          "resources": [
+            {
+              "label": "Excel File Protection",
+              "url": "https://support.microsoft.com/en-us/office/protect-an-excel-file-7359d4ae-7213-4ac2-b058-f75e9311b599"
+            }
+          ]
+        }
+      ]
     },
     "merge-excel": {
       "namespace": "Core.Excel.Merge",
       "name": "MergeExcel",
-      "summary": "Merges contents of two excel sheets side by side. If the first Excel has Name, Location, Age columns and the second Excel has Surname and Company columns the final Excel will have all the columns."
+      "summary": "Merges contents of two excel sheets side by side. If the first Excel has Name, Location, Age columns and the second Excel has Surname and Company columns the final Excel will have all the columns.",
+      "credentials": [
+        {
+          "name": "file_password",
+          "title": "Excel File Password",
+          "description": "Password for opening password-protected Excel files (.xlsx, .xlsm, .xls). The password is used to decrypt the file when opening.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "File Password",
+              "type": "password",
+              "required": true,
+              "description": "The password used to protect the Excel file"
+            }
+          ],
+          "help": [
+            "Enter the password that was set when the Excel file was protected",
+            "This password is used to open the file, not to protect worksheets",
+            "If the file has both file-level and sheet-level protection, this is for file-level",
+            "For sheet protection passwords, those are handled separately in Excel operations"
+          ],
+          "resources": [
+            {
+              "label": "Excel File Protection",
+              "url": "https://support.microsoft.com/en-us/office/protect-an-excel-file-7359d4ae-7213-4ac2-b058-f75e9311b599"
+            }
+          ]
+        }
+      ]
     },
     "open-excel": {
       "namespace": "Core.Excel.Open",
@@ -556,6 +1078,35 @@
         "Check file exists before opening if Create If Not Exists is false to handle errors gracefully",
         "Use absolute paths for reliability, or relative paths for portability",
         "Remember that opening doesn't lock the file - other processes can still modify it"
+      ],
+      "credentials": [
+        {
+          "name": "file_password",
+          "title": "Excel File Password",
+          "description": "Password for opening password-protected Excel files (.xlsx, .xlsm, .xls). The password is used to decrypt the file when opening.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "File Password",
+              "type": "password",
+              "required": true,
+              "description": "The password used to protect the Excel file"
+            }
+          ],
+          "help": [
+            "Enter the password that was set when the Excel file was protected",
+            "This password is used to open the file, not to protect worksheets",
+            "If the file has both file-level and sheet-level protection, this is for file-level",
+            "For sheet protection passwords, those are handled separately in Excel operations"
+          ],
+          "resources": [
+            {
+              "label": "Excel File Protection",
+              "url": "https://support.microsoft.com/en-us/office/protect-an-excel-file-7359d4ae-7213-4ac2-b058-f75e9311b599"
+            }
+          ]
+        }
       ]
     },
     "save-excel": {
@@ -603,12 +1154,70 @@
         "Verify the target directory exists before saving to a new location",
         "Consider saving to a temporary location first, then moving to final destination",
         "Use Save As to preserve the original file while creating modified versions"
+      ],
+      "credentials": [
+        {
+          "name": "file_password",
+          "title": "Excel File Password",
+          "description": "Password for opening password-protected Excel files (.xlsx, .xlsm, .xls). The password is used to decrypt the file when opening.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "File Password",
+              "type": "password",
+              "required": true,
+              "description": "The password used to protect the Excel file"
+            }
+          ],
+          "help": [
+            "Enter the password that was set when the Excel file was protected",
+            "This password is used to open the file, not to protect worksheets",
+            "If the file has both file-level and sheet-level protection, this is for file-level",
+            "For sheet protection passwords, those are handled separately in Excel operations"
+          ],
+          "resources": [
+            {
+              "label": "Excel File Protection",
+              "url": "https://support.microsoft.com/en-us/office/protect-an-excel-file-7359d4ae-7213-4ac2-b058-f75e9311b599"
+            }
+          ]
+        }
       ]
     },
     "set-active-cell": {
       "namespace": "Core.Excel.SetActiveCell",
       "name": "SetActiveCell",
-      "summary": "Sets the active cell in an Excel file."
+      "summary": "Sets the active cell in an Excel file.",
+      "credentials": [
+        {
+          "name": "file_password",
+          "title": "Excel File Password",
+          "description": "Password for opening password-protected Excel files (.xlsx, .xlsm, .xls). The password is used to decrypt the file when opening.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "File Password",
+              "type": "password",
+              "required": true,
+              "description": "The password used to protect the Excel file"
+            }
+          ],
+          "help": [
+            "Enter the password that was set when the Excel file was protected",
+            "This password is used to open the file, not to protect worksheets",
+            "If the file has both file-level and sheet-level protection, this is for file-level",
+            "For sheet protection passwords, those are handled separately in Excel operations"
+          ],
+          "resources": [
+            {
+              "label": "Excel File Protection",
+              "url": "https://support.microsoft.com/en-us/office/protect-an-excel-file-7359d4ae-7213-4ac2-b058-f75e9311b599"
+            }
+          ]
+        }
+      ]
     },
     "set-cell-value": {
       "namespace": "Core.Excel.SetCellValue",
@@ -658,27 +1267,172 @@
         "Validate data types before setting to avoid format errors",
         "Remember to save the file to persist your changes",
         "Use active-cell target when iterating through cells sequentially"
+      ],
+      "credentials": [
+        {
+          "name": "file_password",
+          "title": "Excel File Password",
+          "description": "Password for opening password-protected Excel files (.xlsx, .xlsm, .xls). The password is used to decrypt the file when opening.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "File Password",
+              "type": "password",
+              "required": true,
+              "description": "The password used to protect the Excel file"
+            }
+          ],
+          "help": [
+            "Enter the password that was set when the Excel file was protected",
+            "This password is used to open the file, not to protect worksheets",
+            "If the file has both file-level and sheet-level protection, this is for file-level",
+            "For sheet protection passwords, those are handled separately in Excel operations"
+          ],
+          "resources": [
+            {
+              "label": "Excel File Protection",
+              "url": "https://support.microsoft.com/en-us/office/protect-an-excel-file-7359d4ae-7213-4ac2-b058-f75e9311b599"
+            }
+          ]
+        }
       ]
     },
     "set-formula": {
       "namespace": "Core.Excel.SetFormula",
       "name": "SetFormula",
-      "summary": "Sets a formula in a designated cell of an already opened excel file."
+      "summary": "Sets a formula in a designated cell of an already opened excel file.",
+      "credentials": [
+        {
+          "name": "file_password",
+          "title": "Excel File Password",
+          "description": "Password for opening password-protected Excel files (.xlsx, .xlsm, .xls). The password is used to decrypt the file when opening.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "File Password",
+              "type": "password",
+              "required": true,
+              "description": "The password used to protect the Excel file"
+            }
+          ],
+          "help": [
+            "Enter the password that was set when the Excel file was protected",
+            "This password is used to open the file, not to protect worksheets",
+            "If the file has both file-level and sheet-level protection, this is for file-level",
+            "For sheet protection passwords, those are handled separately in Excel operations"
+          ],
+          "resources": [
+            {
+              "label": "Excel File Protection",
+              "url": "https://support.microsoft.com/en-us/office/protect-an-excel-file-7359d4ae-7213-4ac2-b058-f75e9311b599"
+            }
+          ]
+        }
+      ]
     },
     "set-range": {
       "namespace": "Core.Excel.SetRange",
       "name": "SetRange",
-      "summary": "Sets a range of cells in excel with a [data table](/concepts/core/data-table/) input."
+      "summary": "Sets a range of cells in excel with a [data table](/concepts/core/data-table/) input.",
+      "credentials": [
+        {
+          "name": "file_password",
+          "title": "Excel File Password",
+          "description": "Password for opening password-protected Excel files (.xlsx, .xlsm, .xls). The password is used to decrypt the file when opening.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "File Password",
+              "type": "password",
+              "required": true,
+              "description": "The password used to protect the Excel file"
+            }
+          ],
+          "help": [
+            "Enter the password that was set when the Excel file was protected",
+            "This password is used to open the file, not to protect worksheets",
+            "If the file has both file-level and sheet-level protection, this is for file-level",
+            "For sheet protection passwords, those are handled separately in Excel operations"
+          ],
+          "resources": [
+            {
+              "label": "Excel File Protection",
+              "url": "https://support.microsoft.com/en-us/office/protect-an-excel-file-7359d4ae-7213-4ac2-b058-f75e9311b599"
+            }
+          ]
+        }
+      ]
     },
     "set-style": {
       "namespace": "Core.Excel.SetStyle",
       "name": "SetStyle",
-      "summary": "Sets the style of a cell or range of cells in an Excel file."
+      "summary": "Sets the style of a cell or range of cells in an Excel file.",
+      "credentials": [
+        {
+          "name": "file_password",
+          "title": "Excel File Password",
+          "description": "Password for opening password-protected Excel files (.xlsx, .xlsm, .xls). The password is used to decrypt the file when opening.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "File Password",
+              "type": "password",
+              "required": true,
+              "description": "The password used to protect the Excel file"
+            }
+          ],
+          "help": [
+            "Enter the password that was set when the Excel file was protected",
+            "This password is used to open the file, not to protect worksheets",
+            "If the file has both file-level and sheet-level protection, this is for file-level",
+            "For sheet protection passwords, those are handled separately in Excel operations"
+          ],
+          "resources": [
+            {
+              "label": "Excel File Protection",
+              "url": "https://support.microsoft.com/en-us/office/protect-an-excel-file-7359d4ae-7213-4ac2-b058-f75e9311b599"
+            }
+          ]
+        }
+      ]
     },
     "switch-to-sheet": {
       "namespace": "Core.Excel.SwitchSheet",
       "name": "SwitchToSheet",
-      "summary": "Switches to a specific sheet in an Excel file."
+      "summary": "Switches to a specific sheet in an Excel file.",
+      "credentials": [
+        {
+          "name": "file_password",
+          "title": "Excel File Password",
+          "description": "Password for opening password-protected Excel files (.xlsx, .xlsm, .xls). The password is used to decrypt the file when opening.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "File Password",
+              "type": "password",
+              "required": true,
+              "description": "The password used to protect the Excel file"
+            }
+          ],
+          "help": [
+            "Enter the password that was set when the Excel file was protected",
+            "This password is used to open the file, not to protect worksheets",
+            "If the file has both file-level and sheet-level protection, this is for file-level",
+            "For sheet protection passwords, those are handled separately in Excel operations"
+          ],
+          "resources": [
+            {
+              "label": "Excel File Protection",
+              "url": "https://support.microsoft.com/en-us/office/protect-an-excel-file-7359d4ae-7213-4ac2-b058-f75e9311b599"
+            }
+          ]
+        }
+      ]
     }
   }
 }

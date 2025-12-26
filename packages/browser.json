@@ -43,6 +43,38 @@
         "Consider using Try-Catch blocks to handle cases where alerts may or may not appear",
         "Test your automation with different browser speeds to ensure alerts are handled correctly",
         "For debugging, use Get Text to log alert messages to understand application behavior"
+      ],
+      "credentials": [
+        {
+          "name": "proxy_auth",
+          "title": "Proxy Authentication",
+          "description": "Username and password for authenticating with HTTP/HTTPS proxy servers. Required when your proxy requires basic authentication.",
+          "default": true,
+          "fields": [
+            {
+              "name": "username",
+              "title": "Proxy Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "proxyuser",
+              "description": "Username for proxy authentication"
+            },
+            {
+              "name": "password",
+              "title": "Proxy Password",
+              "type": "password",
+              "required": true,
+              "description": "Password for proxy authentication"
+            }
+          ],
+          "help": [
+            "Use these credentials when your proxy server requires authentication",
+            "The proxy address is configured separately in the Browser node",
+            "Proxy format in node: http://proxy-server:port or socks5://proxy-server:port",
+            "These credentials are used for Basic HTTP authentication",
+            "For proxies without authentication, leave this empty in the node"
+          ]
+        }
       ]
     },
     "click-element": {
@@ -97,6 +129,38 @@
         "If clicks are not registering, try adding a small Delay Before to allow page stabilization",
         "Consider using Wait Element node before Click Element for better control over element readiness",
         "For debugging, enable Continue On Error temporarily and check element visibility manually"
+      ],
+      "credentials": [
+        {
+          "name": "proxy_auth",
+          "title": "Proxy Authentication",
+          "description": "Username and password for authenticating with HTTP/HTTPS proxy servers. Required when your proxy requires basic authentication.",
+          "default": true,
+          "fields": [
+            {
+              "name": "username",
+              "title": "Proxy Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "proxyuser",
+              "description": "Username for proxy authentication"
+            },
+            {
+              "name": "password",
+              "title": "Proxy Password",
+              "type": "password",
+              "required": true,
+              "description": "Password for proxy authentication"
+            }
+          ],
+          "help": [
+            "Use these credentials when your proxy server requires authentication",
+            "The proxy address is configured separately in the Browser node",
+            "Proxy format in node: http://proxy-server:port or socks5://proxy-server:port",
+            "These credentials are used for Basic HTTP authentication",
+            "For proxies without authentication, leave this empty in the node"
+          ]
+        }
       ]
     },
     "close-browser": {
@@ -137,6 +201,38 @@
         "Monitor system resources if running multiple browser sessions",
         "Close browsers before robot termination to avoid orphaned browser processes",
         "Consider using Continue On Error = false to catch closure failures"
+      ],
+      "credentials": [
+        {
+          "name": "proxy_auth",
+          "title": "Proxy Authentication",
+          "description": "Username and password for authenticating with HTTP/HTTPS proxy servers. Required when your proxy requires basic authentication.",
+          "default": true,
+          "fields": [
+            {
+              "name": "username",
+              "title": "Proxy Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "proxyuser",
+              "description": "Username for proxy authentication"
+            },
+            {
+              "name": "password",
+              "title": "Proxy Password",
+              "type": "password",
+              "required": true,
+              "description": "Password for proxy authentication"
+            }
+          ],
+          "help": [
+            "Use these credentials when your proxy server requires authentication",
+            "The proxy address is configured separately in the Browser node",
+            "Proxy format in node: http://proxy-server:port or socks5://proxy-server:port",
+            "These credentials are used for Basic HTTP authentication",
+            "For proxies without authentication, leave this empty in the node"
+          ]
+        }
       ]
     },
     "close-window": {
@@ -178,6 +274,38 @@
         "Switch to a specific window before closing it to ensure you're closing the right one",
         "For cleanup operations, close windows in a loop starting from the most recently opened",
         "Use Close Browser instead of Close Window when you want to terminate the entire session"
+      ],
+      "credentials": [
+        {
+          "name": "proxy_auth",
+          "title": "Proxy Authentication",
+          "description": "Username and password for authenticating with HTTP/HTTPS proxy servers. Required when your proxy requires basic authentication.",
+          "default": true,
+          "fields": [
+            {
+              "name": "username",
+              "title": "Proxy Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "proxyuser",
+              "description": "Username for proxy authentication"
+            },
+            {
+              "name": "password",
+              "title": "Proxy Password",
+              "type": "password",
+              "required": true,
+              "description": "Password for proxy authentication"
+            }
+          ],
+          "help": [
+            "Use these credentials when your proxy server requires authentication",
+            "The proxy address is configured separately in the Browser node",
+            "Proxy format in node: http://proxy-server:port or socks5://proxy-server:port",
+            "These credentials are used for Basic HTTP authentication",
+            "For proxies without authentication, leave this empty in the node"
+          ]
+        }
       ]
     },
     "get-cookies": {
@@ -220,6 +348,38 @@
         "Combine with Set Cookies node for session management across browser instances",
         "Use vaults to securely store authentication cookies between robot runs",
         "Be aware of cookie scope (domain and path) when working with multiple sites"
+      ],
+      "credentials": [
+        {
+          "name": "proxy_auth",
+          "title": "Proxy Authentication",
+          "description": "Username and password for authenticating with HTTP/HTTPS proxy servers. Required when your proxy requires basic authentication.",
+          "default": true,
+          "fields": [
+            {
+              "name": "username",
+              "title": "Proxy Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "proxyuser",
+              "description": "Username for proxy authentication"
+            },
+            {
+              "name": "password",
+              "title": "Proxy Password",
+              "type": "password",
+              "required": true,
+              "description": "Password for proxy authentication"
+            }
+          ],
+          "help": [
+            "Use these credentials when your proxy server requires authentication",
+            "The proxy address is configured separately in the Browser node",
+            "Proxy format in node: http://proxy-server:port or socks5://proxy-server:port",
+            "These credentials are used for Basic HTTP authentication",
+            "For proxies without authentication, leave this empty in the node"
+          ]
+        }
       ]
     },
     "get-value": {
@@ -273,6 +433,38 @@
         "For multiple elements, the node returns value from the first matching element",
         "Consider using Wait Element before Get Value for better control over timing",
         "Validate that extracted values are not empty before using them in logic"
+      ],
+      "credentials": [
+        {
+          "name": "proxy_auth",
+          "title": "Proxy Authentication",
+          "description": "Username and password for authenticating with HTTP/HTTPS proxy servers. Required when your proxy requires basic authentication.",
+          "default": true,
+          "fields": [
+            {
+              "name": "username",
+              "title": "Proxy Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "proxyuser",
+              "description": "Username for proxy authentication"
+            },
+            {
+              "name": "password",
+              "title": "Proxy Password",
+              "type": "password",
+              "required": true,
+              "description": "Password for proxy authentication"
+            }
+          ],
+          "help": [
+            "Use these credentials when your proxy server requires authentication",
+            "The proxy address is configured separately in the Browser node",
+            "Proxy format in node: http://proxy-server:port or socks5://proxy-server:port",
+            "These credentials are used for Basic HTTP authentication",
+            "For proxies without authentication, leave this empty in the node"
+          ]
+        }
       ]
     },
     "go-back": {
@@ -318,6 +510,38 @@
         "Combine with URL validation to confirm you're on the expected page after going back",
         "For complex workflows, track navigation history to determine appropriate Times value",
         "Use Go Back sparingly in production automations as it depends on navigation order"
+      ],
+      "credentials": [
+        {
+          "name": "proxy_auth",
+          "title": "Proxy Authentication",
+          "description": "Username and password for authenticating with HTTP/HTTPS proxy servers. Required when your proxy requires basic authentication.",
+          "default": true,
+          "fields": [
+            {
+              "name": "username",
+              "title": "Proxy Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "proxyuser",
+              "description": "Username for proxy authentication"
+            },
+            {
+              "name": "password",
+              "title": "Proxy Password",
+              "type": "password",
+              "required": true,
+              "description": "Password for proxy authentication"
+            }
+          ],
+          "help": [
+            "Use these credentials when your proxy server requires authentication",
+            "The proxy address is configured separately in the Browser node",
+            "Proxy format in node: http://proxy-server:port or socks5://proxy-server:port",
+            "These credentials are used for Basic HTTP authentication",
+            "For proxies without authentication, leave this empty in the node"
+          ]
+        }
       ]
     },
     "go-forward": {
@@ -364,6 +588,38 @@
         "Track your navigation flow to understand when forward history is available",
         "Test navigation patterns thoroughly as forward history can be cleared unexpectedly",
         "Use URL validation to confirm you're on the expected page after going forward"
+      ],
+      "credentials": [
+        {
+          "name": "proxy_auth",
+          "title": "Proxy Authentication",
+          "description": "Username and password for authenticating with HTTP/HTTPS proxy servers. Required when your proxy requires basic authentication.",
+          "default": true,
+          "fields": [
+            {
+              "name": "username",
+              "title": "Proxy Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "proxyuser",
+              "description": "Username for proxy authentication"
+            },
+            {
+              "name": "password",
+              "title": "Proxy Password",
+              "type": "password",
+              "required": true,
+              "description": "Password for proxy authentication"
+            }
+          ],
+          "help": [
+            "Use these credentials when your proxy server requires authentication",
+            "The proxy address is configured separately in the Browser node",
+            "Proxy format in node: http://proxy-server:port or socks5://proxy-server:port",
+            "These credentials are used for Basic HTTP authentication",
+            "For proxies without authentication, leave this empty in the node"
+          ]
+        }
       ]
     },
     "move-to-element": {
@@ -412,12 +668,76 @@
         "Increase Wait Timeout for elements that load slowly or require AJAX calls",
         "Use CSS selectors for better performance when possible",
         "For elements with hover-triggered JavaScript, ensure adequate delay for execution"
+      ],
+      "credentials": [
+        {
+          "name": "proxy_auth",
+          "title": "Proxy Authentication",
+          "description": "Username and password for authenticating with HTTP/HTTPS proxy servers. Required when your proxy requires basic authentication.",
+          "default": true,
+          "fields": [
+            {
+              "name": "username",
+              "title": "Proxy Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "proxyuser",
+              "description": "Username for proxy authentication"
+            },
+            {
+              "name": "password",
+              "title": "Proxy Password",
+              "type": "password",
+              "required": true,
+              "description": "Password for proxy authentication"
+            }
+          ],
+          "help": [
+            "Use these credentials when your proxy server requires authentication",
+            "The proxy address is configured separately in the Browser node",
+            "Proxy format in node: http://proxy-server:port or socks5://proxy-server:port",
+            "These credentials are used for Basic HTTP authentication",
+            "For proxies without authentication, leave this empty in the node"
+          ]
+        }
       ]
     },
     "open-browser": {
       "namespace": "Core.Browser.Open",
       "name": "OpenBrowser",
-      "summary": "Starts a new browser process."
+      "summary": "Starts a new browser process.",
+      "credentials": [
+        {
+          "name": "proxy_auth",
+          "title": "Proxy Authentication",
+          "description": "Username and password for authenticating with HTTP/HTTPS proxy servers. Required when your proxy requires basic authentication.",
+          "default": true,
+          "fields": [
+            {
+              "name": "username",
+              "title": "Proxy Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "proxyuser",
+              "description": "Username for proxy authentication"
+            },
+            {
+              "name": "password",
+              "title": "Proxy Password",
+              "type": "password",
+              "required": true,
+              "description": "Password for proxy authentication"
+            }
+          ],
+          "help": [
+            "Use these credentials when your proxy server requires authentication",
+            "The proxy address is configured separately in the Browser node",
+            "Proxy format in node: http://proxy-server:port or socks5://proxy-server:port",
+            "These credentials are used for Basic HTTP authentication",
+            "For proxies without authentication, leave this empty in the node"
+          ]
+        }
+      ]
     },
     "open-link": {
       "namespace": "Core.Browser.OpenLink",
@@ -458,6 +778,38 @@
         "**Save Page Ids:** Store each Page Id in a variable if you need to interact with multiple tabs",
         "**Handle Timeouts Gracefully:** Use Try-Catch blocks to handle timeout errors and retry if needed",
         "**Same Tab for Sequences:** When navigating through a website (login → dashboard → reports), use \"Open in the Same Tab\" to keep everything in one tab"
+      ],
+      "credentials": [
+        {
+          "name": "proxy_auth",
+          "title": "Proxy Authentication",
+          "description": "Username and password for authenticating with HTTP/HTTPS proxy servers. Required when your proxy requires basic authentication.",
+          "default": true,
+          "fields": [
+            {
+              "name": "username",
+              "title": "Proxy Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "proxyuser",
+              "description": "Username for proxy authentication"
+            },
+            {
+              "name": "password",
+              "title": "Proxy Password",
+              "type": "password",
+              "required": true,
+              "description": "Password for proxy authentication"
+            }
+          ],
+          "help": [
+            "Use these credentials when your proxy server requires authentication",
+            "The proxy address is configured separately in the Browser node",
+            "Proxy format in node: http://proxy-server:port or socks5://proxy-server:port",
+            "These credentials are used for Basic HTTP authentication",
+            "For proxies without authentication, leave this empty in the node"
+          ]
+        }
       ]
     },
     "refresh": {
@@ -502,17 +854,113 @@
         "For pages with auto-refresh, check if manual refresh is needed",
         "Test refresh behavior as some SPAs may not respond well to full page refresh",
         "Combine with Try-Catch to handle refresh failures gracefully"
+      ],
+      "credentials": [
+        {
+          "name": "proxy_auth",
+          "title": "Proxy Authentication",
+          "description": "Username and password for authenticating with HTTP/HTTPS proxy servers. Required when your proxy requires basic authentication.",
+          "default": true,
+          "fields": [
+            {
+              "name": "username",
+              "title": "Proxy Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "proxyuser",
+              "description": "Username for proxy authentication"
+            },
+            {
+              "name": "password",
+              "title": "Proxy Password",
+              "type": "password",
+              "required": true,
+              "description": "Password for proxy authentication"
+            }
+          ],
+          "help": [
+            "Use these credentials when your proxy server requires authentication",
+            "The proxy address is configured separately in the Browser node",
+            "Proxy format in node: http://proxy-server:port or socks5://proxy-server:port",
+            "These credentials are used for Basic HTTP authentication",
+            "For proxies without authentication, leave this empty in the node"
+          ]
+        }
       ]
     },
     "run-script": {
       "namespace": "Core.Browser.RunScript",
       "name": "RunScript",
-      "summary": "Runs a script on a web page."
+      "summary": "Runs a script on a web page.",
+      "credentials": [
+        {
+          "name": "proxy_auth",
+          "title": "Proxy Authentication",
+          "description": "Username and password for authenticating with HTTP/HTTPS proxy servers. Required when your proxy requires basic authentication.",
+          "default": true,
+          "fields": [
+            {
+              "name": "username",
+              "title": "Proxy Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "proxyuser",
+              "description": "Username for proxy authentication"
+            },
+            {
+              "name": "password",
+              "title": "Proxy Password",
+              "type": "password",
+              "required": true,
+              "description": "Password for proxy authentication"
+            }
+          ],
+          "help": [
+            "Use these credentials when your proxy server requires authentication",
+            "The proxy address is configured separately in the Browser node",
+            "Proxy format in node: http://proxy-server:port or socks5://proxy-server:port",
+            "These credentials are used for Basic HTTP authentication",
+            "For proxies without authentication, leave this empty in the node"
+          ]
+        }
+      ]
     },
     "save-image": {
       "namespace": "Core.Browser.SaveImage",
       "name": "SaveImage",
-      "summary": "Saves the specified image of an element on the current web page to the specified location."
+      "summary": "Saves the specified image of an element on the current web page to the specified location.",
+      "credentials": [
+        {
+          "name": "proxy_auth",
+          "title": "Proxy Authentication",
+          "description": "Username and password for authenticating with HTTP/HTTPS proxy servers. Required when your proxy requires basic authentication.",
+          "default": true,
+          "fields": [
+            {
+              "name": "username",
+              "title": "Proxy Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "proxyuser",
+              "description": "Username for proxy authentication"
+            },
+            {
+              "name": "password",
+              "title": "Proxy Password",
+              "type": "password",
+              "required": true,
+              "description": "Password for proxy authentication"
+            }
+          ],
+          "help": [
+            "Use these credentials when your proxy server requires authentication",
+            "The proxy address is configured separately in the Browser node",
+            "Proxy format in node: http://proxy-server:port or socks5://proxy-server:port",
+            "These credentials are used for Basic HTTP authentication",
+            "For proxies without authentication, leave this empty in the node"
+          ]
+        }
+      ]
     },
     "screenshot": {
       "namespace": "Core.Browser.Screenshot",
@@ -562,6 +1010,38 @@
         "For comparing screenshots, use consistent browser window sizes",
         "Consider file size when taking many screenshots (can grow quickly)",
         "Use Delay Before if page has animations that need to complete"
+      ],
+      "credentials": [
+        {
+          "name": "proxy_auth",
+          "title": "Proxy Authentication",
+          "description": "Username and password for authenticating with HTTP/HTTPS proxy servers. Required when your proxy requires basic authentication.",
+          "default": true,
+          "fields": [
+            {
+              "name": "username",
+              "title": "Proxy Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "proxyuser",
+              "description": "Username for proxy authentication"
+            },
+            {
+              "name": "password",
+              "title": "Proxy Password",
+              "type": "password",
+              "required": true,
+              "description": "Password for proxy authentication"
+            }
+          ],
+          "help": [
+            "Use these credentials when your proxy server requires authentication",
+            "The proxy address is configured separately in the Browser node",
+            "Proxy format in node: http://proxy-server:port or socks5://proxy-server:port",
+            "These credentials are used for Basic HTTP authentication",
+            "For proxies without authentication, leave this empty in the node"
+          ]
+        }
       ]
     },
     "select": {
@@ -614,6 +1094,38 @@
         "If selection fails, check for typos in the value text",
         "Consider using XPath with option text for more flexible selection",
         "For multi-select elements, call Select node multiple times with different values"
+      ],
+      "credentials": [
+        {
+          "name": "proxy_auth",
+          "title": "Proxy Authentication",
+          "description": "Username and password for authenticating with HTTP/HTTPS proxy servers. Required when your proxy requires basic authentication.",
+          "default": true,
+          "fields": [
+            {
+              "name": "username",
+              "title": "Proxy Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "proxyuser",
+              "description": "Username for proxy authentication"
+            },
+            {
+              "name": "password",
+              "title": "Proxy Password",
+              "type": "password",
+              "required": true,
+              "description": "Password for proxy authentication"
+            }
+          ],
+          "help": [
+            "Use these credentials when your proxy server requires authentication",
+            "The proxy address is configured separately in the Browser node",
+            "Proxy format in node: http://proxy-server:port or socks5://proxy-server:port",
+            "These credentials are used for Basic HTTP authentication",
+            "For proxies without authentication, leave this empty in the node"
+          ]
+        }
       ]
     },
     "send-keys": {
@@ -664,27 +1176,187 @@
         "For keyboard navigation, verify element is focusable",
         "Some web applications may not respond to all key combinations",
         "Debug using browser console to verify key events are being received"
+      ],
+      "credentials": [
+        {
+          "name": "proxy_auth",
+          "title": "Proxy Authentication",
+          "description": "Username and password for authenticating with HTTP/HTTPS proxy servers. Required when your proxy requires basic authentication.",
+          "default": true,
+          "fields": [
+            {
+              "name": "username",
+              "title": "Proxy Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "proxyuser",
+              "description": "Username for proxy authentication"
+            },
+            {
+              "name": "password",
+              "title": "Proxy Password",
+              "type": "password",
+              "required": true,
+              "description": "Password for proxy authentication"
+            }
+          ],
+          "help": [
+            "Use these credentials when your proxy server requires authentication",
+            "The proxy address is configured separately in the Browser node",
+            "Proxy format in node: http://proxy-server:port or socks5://proxy-server:port",
+            "These credentials are used for Basic HTTP authentication",
+            "For proxies without authentication, leave this empty in the node"
+          ]
+        }
       ]
     },
     "set-value": {
       "namespace": "Core.Browser.SetValue",
       "name": "SetValue",
-      "summary": "Sets the value of a specified element in a web page."
+      "summary": "Sets the value of a specified element in a web page.",
+      "credentials": [
+        {
+          "name": "proxy_auth",
+          "title": "Proxy Authentication",
+          "description": "Username and password for authenticating with HTTP/HTTPS proxy servers. Required when your proxy requires basic authentication.",
+          "default": true,
+          "fields": [
+            {
+              "name": "username",
+              "title": "Proxy Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "proxyuser",
+              "description": "Username for proxy authentication"
+            },
+            {
+              "name": "password",
+              "title": "Proxy Password",
+              "type": "password",
+              "required": true,
+              "description": "Password for proxy authentication"
+            }
+          ],
+          "help": [
+            "Use these credentials when your proxy server requires authentication",
+            "The proxy address is configured separately in the Browser node",
+            "Proxy format in node: http://proxy-server:port or socks5://proxy-server:port",
+            "These credentials are used for Basic HTTP authentication",
+            "For proxies without authentication, leave this empty in the node"
+          ]
+        }
+      ]
     },
     "switch-frame": {
       "namespace": "Core.Browser.SwitchFrame",
       "name": "SwitchFrame",
-      "summary": "This node switches the active context to an iframe within the web page. After executing this node, all subsequent browser nodes will operate within this iframe. To return to the main page, use the \"Switch Frame\" node and select the **Switch to Root** option."
+      "summary": "This node switches the active context to an iframe within the web page. After executing this node, all subsequent browser nodes will operate within this iframe. To return to the main page, use the \"Switch Frame\" node and select the **Switch to Root** option.",
+      "credentials": [
+        {
+          "name": "proxy_auth",
+          "title": "Proxy Authentication",
+          "description": "Username and password for authenticating with HTTP/HTTPS proxy servers. Required when your proxy requires basic authentication.",
+          "default": true,
+          "fields": [
+            {
+              "name": "username",
+              "title": "Proxy Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "proxyuser",
+              "description": "Username for proxy authentication"
+            },
+            {
+              "name": "password",
+              "title": "Proxy Password",
+              "type": "password",
+              "required": true,
+              "description": "Password for proxy authentication"
+            }
+          ],
+          "help": [
+            "Use these credentials when your proxy server requires authentication",
+            "The proxy address is configured separately in the Browser node",
+            "Proxy format in node: http://proxy-server:port or socks5://proxy-server:port",
+            "These credentials are used for Basic HTTP authentication",
+            "For proxies without authentication, leave this empty in the node"
+          ]
+        }
+      ]
     },
     "switch-window": {
       "namespace": "Core.Browser.SwitchWindow",
       "name": "SwitchWindow",
-      "summary": "Switches to a specific browser window based on the given Window Name or Page Id."
+      "summary": "Switches to a specific browser window based on the given Window Name or Page Id.",
+      "credentials": [
+        {
+          "name": "proxy_auth",
+          "title": "Proxy Authentication",
+          "description": "Username and password for authenticating with HTTP/HTTPS proxy servers. Required when your proxy requires basic authentication.",
+          "default": true,
+          "fields": [
+            {
+              "name": "username",
+              "title": "Proxy Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "proxyuser",
+              "description": "Username for proxy authentication"
+            },
+            {
+              "name": "password",
+              "title": "Proxy Password",
+              "type": "password",
+              "required": true,
+              "description": "Password for proxy authentication"
+            }
+          ],
+          "help": [
+            "Use these credentials when your proxy server requires authentication",
+            "The proxy address is configured separately in the Browser node",
+            "Proxy format in node: http://proxy-server:port or socks5://proxy-server:port",
+            "These credentials are used for Basic HTTP authentication",
+            "For proxies without authentication, leave this empty in the node"
+          ]
+        }
+      ]
     },
     "type-text": {
       "namespace": "Core.Browser.TypeText",
       "name": "TypeText",
-      "summary": "Enters text into the chosen element on the web page. While this node resembles the [Set Value](/reference/packages/browser/set-value) node, it differs in approach. Instead of directly setting the value, this node mimics actual keyboard keystrokes to input the text."
+      "summary": "Enters text into the chosen element on the web page. While this node resembles the [Set Value](/reference/packages/browser/set-value) node, it differs in approach. Instead of directly setting the value, this node mimics actual keyboard keystrokes to input the text.",
+      "credentials": [
+        {
+          "name": "proxy_auth",
+          "title": "Proxy Authentication",
+          "description": "Username and password for authenticating with HTTP/HTTPS proxy servers. Required when your proxy requires basic authentication.",
+          "default": true,
+          "fields": [
+            {
+              "name": "username",
+              "title": "Proxy Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "proxyuser",
+              "description": "Username for proxy authentication"
+            },
+            {
+              "name": "password",
+              "title": "Proxy Password",
+              "type": "password",
+              "required": true,
+              "description": "Password for proxy authentication"
+            }
+          ],
+          "help": [
+            "Use these credentials when your proxy server requires authentication",
+            "The proxy address is configured separately in the Browser node",
+            "Proxy format in node: http://proxy-server:port or socks5://proxy-server:port",
+            "These credentials are used for Basic HTTP authentication",
+            "For proxies without authentication, leave this empty in the node"
+          ]
+        }
+      ]
     },
     "upload-file": {
       "namespace": "Core.Browser.UploadFile",
@@ -739,6 +1411,38 @@
         "Consider using Continue On Error for optional file uploads",
         "Store file paths in variables for dynamic file selection",
         "Verify upload success by checking for confirmation messages"
+      ],
+      "credentials": [
+        {
+          "name": "proxy_auth",
+          "title": "Proxy Authentication",
+          "description": "Username and password for authenticating with HTTP/HTTPS proxy servers. Required when your proxy requires basic authentication.",
+          "default": true,
+          "fields": [
+            {
+              "name": "username",
+              "title": "Proxy Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "proxyuser",
+              "description": "Username for proxy authentication"
+            },
+            {
+              "name": "password",
+              "title": "Proxy Password",
+              "type": "password",
+              "required": true,
+              "description": "Password for proxy authentication"
+            }
+          ],
+          "help": [
+            "Use these credentials when your proxy server requires authentication",
+            "The proxy address is configured separately in the Browser node",
+            "Proxy format in node: http://proxy-server:port or socks5://proxy-server:port",
+            "These credentials are used for Basic HTTP authentication",
+            "For proxies without authentication, leave this empty in the node"
+          ]
+        }
       ]
     },
     "wait-element": {
@@ -792,6 +1496,38 @@
         "Test with slow network conditions to determine appropriate timeouts",
         "Consider using Continue On Error if the element's presence is optional",
         "Use Wait Element after navigation, clicking, or form submission when content changes"
+      ],
+      "credentials": [
+        {
+          "name": "proxy_auth",
+          "title": "Proxy Authentication",
+          "description": "Username and password for authenticating with HTTP/HTTPS proxy servers. Required when your proxy requires basic authentication.",
+          "default": true,
+          "fields": [
+            {
+              "name": "username",
+              "title": "Proxy Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "proxyuser",
+              "description": "Username for proxy authentication"
+            },
+            {
+              "name": "password",
+              "title": "Proxy Password",
+              "type": "password",
+              "required": true,
+              "description": "Password for proxy authentication"
+            }
+          ],
+          "help": [
+            "Use these credentials when your proxy server requires authentication",
+            "The proxy address is configured separately in the Browser node",
+            "Proxy format in node: http://proxy-server:port or socks5://proxy-server:port",
+            "These credentials are used for Basic HTTP authentication",
+            "For proxies without authentication, leave this empty in the node"
+          ]
+        }
       ]
     }
   }

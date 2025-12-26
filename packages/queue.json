@@ -51,6 +51,61 @@
         "Consider using separate queues for different priority levels instead of mixing priorities",
         "Test with small batches before adding thousands of items",
         "Use AES encryption for faster performance, RSA for higher security requirements"
+      ],
+      "credentials": [
+        {
+          "name": "aes_key",
+          "title": "AES Encryption Key",
+          "description": "AES encryption key for encrypting and decrypting queue item data. Use symmetric encryption for faster performance with large data.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "AES Key",
+              "type": "password",
+              "required": true,
+              "placeholder": "32-character key for AES-256",
+              "description": "AES encryption key (16, 24, or 32 characters for AES-128, AES-192, or AES-256)"
+            }
+          ],
+          "help": [
+            "AES (Advanced Encryption Standard) is a symmetric encryption algorithm",
+            "Use the same key for encryption and decryption",
+            "Key lengths: 16 chars (AES-128), 24 chars (AES-192), 32 chars (AES-256)",
+            "Generate a secure random key - do not use predictable passwords",
+            "Example key generation: openssl rand -base64 32 | head -c 32"
+          ]
+        },
+        {
+          "name": "rsa_keypair",
+          "title": "RSA Key Pair",
+          "description": "RSA key pair for asymmetric encryption of queue items. Use when you need separate encryption and decryption capabilities.",
+          "fields": [
+            {
+              "name": "publicKey",
+              "title": "Public Key",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "-----BEGIN PUBLIC KEY-----\n...\n-----END PUBLIC KEY-----",
+              "description": "RSA public key in PEM format (for encryption)"
+            },
+            {
+              "name": "privateKey",
+              "title": "Private Key",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----",
+              "description": "RSA private key in PEM format (for decryption)"
+            }
+          ],
+          "help": [
+            "RSA is an asymmetric encryption algorithm",
+            "Public key encrypts, private key decrypts",
+            "More secure for scenarios where encryption and decryption happen on different systems",
+            "Generate keys: openssl genrsa -out private.pem 2048",
+            "Extract public key: openssl rsa -in private.pem -pubout -out public.pem"
+          ]
+        }
       ]
     },
     "delete-item": {
@@ -91,6 +146,61 @@
         "Don't delete items during processing - wait until completion",
         "Consider archiving important data before deletion",
         "Monitor deletion failures as they may indicate permission or connectivity issues"
+      ],
+      "credentials": [
+        {
+          "name": "aes_key",
+          "title": "AES Encryption Key",
+          "description": "AES encryption key for encrypting and decrypting queue item data. Use symmetric encryption for faster performance with large data.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "AES Key",
+              "type": "password",
+              "required": true,
+              "placeholder": "32-character key for AES-256",
+              "description": "AES encryption key (16, 24, or 32 characters for AES-128, AES-192, or AES-256)"
+            }
+          ],
+          "help": [
+            "AES (Advanced Encryption Standard) is a symmetric encryption algorithm",
+            "Use the same key for encryption and decryption",
+            "Key lengths: 16 chars (AES-128), 24 chars (AES-192), 32 chars (AES-256)",
+            "Generate a secure random key - do not use predictable passwords",
+            "Example key generation: openssl rand -base64 32 | head -c 32"
+          ]
+        },
+        {
+          "name": "rsa_keypair",
+          "title": "RSA Key Pair",
+          "description": "RSA key pair for asymmetric encryption of queue items. Use when you need separate encryption and decryption capabilities.",
+          "fields": [
+            {
+              "name": "publicKey",
+              "title": "Public Key",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "-----BEGIN PUBLIC KEY-----\n...\n-----END PUBLIC KEY-----",
+              "description": "RSA public key in PEM format (for encryption)"
+            },
+            {
+              "name": "privateKey",
+              "title": "Private Key",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----",
+              "description": "RSA private key in PEM format (for decryption)"
+            }
+          ],
+          "help": [
+            "RSA is an asymmetric encryption algorithm",
+            "Public key encrypts, private key decrypts",
+            "More secure for scenarios where encryption and decryption happen on different systems",
+            "Generate keys: openssl genrsa -out private.pem 2048",
+            "Extract public key: openssl rsa -in private.pem -pubout -out public.pem"
+          ]
+        }
       ]
     },
     "get-items": {
@@ -136,6 +246,61 @@
         "Cache credentials to avoid repeated vault lookups",
         "Use for bulk cleanup operations combined with Delete Item",
         "Monitor item counts to detect queue backlogs"
+      ],
+      "credentials": [
+        {
+          "name": "aes_key",
+          "title": "AES Encryption Key",
+          "description": "AES encryption key for encrypting and decrypting queue item data. Use symmetric encryption for faster performance with large data.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "AES Key",
+              "type": "password",
+              "required": true,
+              "placeholder": "32-character key for AES-256",
+              "description": "AES encryption key (16, 24, or 32 characters for AES-128, AES-192, or AES-256)"
+            }
+          ],
+          "help": [
+            "AES (Advanced Encryption Standard) is a symmetric encryption algorithm",
+            "Use the same key for encryption and decryption",
+            "Key lengths: 16 chars (AES-128), 24 chars (AES-192), 32 chars (AES-256)",
+            "Generate a secure random key - do not use predictable passwords",
+            "Example key generation: openssl rand -base64 32 | head -c 32"
+          ]
+        },
+        {
+          "name": "rsa_keypair",
+          "title": "RSA Key Pair",
+          "description": "RSA key pair for asymmetric encryption of queue items. Use when you need separate encryption and decryption capabilities.",
+          "fields": [
+            {
+              "name": "publicKey",
+              "title": "Public Key",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "-----BEGIN PUBLIC KEY-----\n...\n-----END PUBLIC KEY-----",
+              "description": "RSA public key in PEM format (for encryption)"
+            },
+            {
+              "name": "privateKey",
+              "title": "Private Key",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----",
+              "description": "RSA private key in PEM format (for decryption)"
+            }
+          ],
+          "help": [
+            "RSA is an asymmetric encryption algorithm",
+            "Public key encrypts, private key decrypts",
+            "More secure for scenarios where encryption and decryption happen on different systems",
+            "Generate keys: openssl genrsa -out private.pem 2048",
+            "Extract public key: openssl rsa -in private.pem -pubout -out public.pem"
+          ]
+        }
       ]
     },
     "get-next-item": {
@@ -231,6 +396,61 @@
         "Track Progress for long-running processes to show intermediate states",
         "Combine with Log node to record state changes",
         "Use reference field to store error details or processing notes"
+      ],
+      "credentials": [
+        {
+          "name": "aes_key",
+          "title": "AES Encryption Key",
+          "description": "AES encryption key for encrypting and decrypting queue item data. Use symmetric encryption for faster performance with large data.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "AES Key",
+              "type": "password",
+              "required": true,
+              "placeholder": "32-character key for AES-256",
+              "description": "AES encryption key (16, 24, or 32 characters for AES-128, AES-192, or AES-256)"
+            }
+          ],
+          "help": [
+            "AES (Advanced Encryption Standard) is a symmetric encryption algorithm",
+            "Use the same key for encryption and decryption",
+            "Key lengths: 16 chars (AES-128), 24 chars (AES-192), 32 chars (AES-256)",
+            "Generate a secure random key - do not use predictable passwords",
+            "Example key generation: openssl rand -base64 32 | head -c 32"
+          ]
+        },
+        {
+          "name": "rsa_keypair",
+          "title": "RSA Key Pair",
+          "description": "RSA key pair for asymmetric encryption of queue items. Use when you need separate encryption and decryption capabilities.",
+          "fields": [
+            {
+              "name": "publicKey",
+              "title": "Public Key",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "-----BEGIN PUBLIC KEY-----\n...\n-----END PUBLIC KEY-----",
+              "description": "RSA public key in PEM format (for encryption)"
+            },
+            {
+              "name": "privateKey",
+              "title": "Private Key",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----",
+              "description": "RSA private key in PEM format (for decryption)"
+            }
+          ],
+          "help": [
+            "RSA is an asymmetric encryption algorithm",
+            "Public key encrypts, private key decrypts",
+            "More secure for scenarios where encryption and decryption happen on different systems",
+            "Generate keys: openssl genrsa -out private.pem 2048",
+            "Extract public key: openssl rsa -in private.pem -pubout -out public.pem"
+          ]
+        }
       ]
     },
     "wait-item": {
@@ -281,6 +501,61 @@
         "Always use Start Transaction: true for processing workflows",
         "Catch timeout errors if empty queue is a valid state",
         "Monitor polling frequency to avoid overloading the Orchestrator"
+      ],
+      "credentials": [
+        {
+          "name": "aes_key",
+          "title": "AES Encryption Key",
+          "description": "AES encryption key for encrypting and decrypting queue item data. Use symmetric encryption for faster performance with large data.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "AES Key",
+              "type": "password",
+              "required": true,
+              "placeholder": "32-character key for AES-256",
+              "description": "AES encryption key (16, 24, or 32 characters for AES-128, AES-192, or AES-256)"
+            }
+          ],
+          "help": [
+            "AES (Advanced Encryption Standard) is a symmetric encryption algorithm",
+            "Use the same key for encryption and decryption",
+            "Key lengths: 16 chars (AES-128), 24 chars (AES-192), 32 chars (AES-256)",
+            "Generate a secure random key - do not use predictable passwords",
+            "Example key generation: openssl rand -base64 32 | head -c 32"
+          ]
+        },
+        {
+          "name": "rsa_keypair",
+          "title": "RSA Key Pair",
+          "description": "RSA key pair for asymmetric encryption of queue items. Use when you need separate encryption and decryption capabilities.",
+          "fields": [
+            {
+              "name": "publicKey",
+              "title": "Public Key",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "-----BEGIN PUBLIC KEY-----\n...\n-----END PUBLIC KEY-----",
+              "description": "RSA public key in PEM format (for encryption)"
+            },
+            {
+              "name": "privateKey",
+              "title": "Private Key",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----",
+              "description": "RSA private key in PEM format (for decryption)"
+            }
+          ],
+          "help": [
+            "RSA is an asymmetric encryption algorithm",
+            "Public key encrypts, private key decrypts",
+            "More secure for scenarios where encryption and decryption happen on different systems",
+            "Generate keys: openssl genrsa -out private.pem 2048",
+            "Extract public key: openssl rsa -in private.pem -pubout -out public.pem"
+          ]
+        }
       ]
     }
   }

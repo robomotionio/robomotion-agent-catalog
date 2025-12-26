@@ -50,6 +50,75 @@
         "Avoid storing sensitive data in item names (names may be logged)",
         "Use Set Item node to update existing items instead of adding duplicates",
         "Consider vault naming conventions for multi-environment setups"
+      ],
+      "credentials": [
+        {
+          "name": "generic_data",
+          "title": "Document",
+          "description": "Store any text data securely in the vault. Use this for notes, JSON data, or any text that doesn't fit predefined categories.",
+          "default": true,
+          "fields": [
+            {
+              "name": "content",
+              "title": "Content",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "Your document content here...",
+              "description": "The content to store (can be text, JSON, or any string value)"
+            }
+          ],
+          "help": [
+            "Use this for storing arbitrary text data in the vault",
+            "For structured data, store as JSON string",
+            "All vault data is encrypted at rest"
+          ]
+        },
+        {
+          "name": "password_only",
+          "title": "API Key / Token",
+          "description": "Store a single API key, token, or secret value. Ideal for API tokens, service keys, or any single secret string.",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key / Token",
+              "type": "password",
+              "required": true,
+              "description": "The API key, token, or secret to store securely"
+            }
+          ],
+          "help": [
+            "Use for storing a single secret value",
+            "Common uses: API tokens, service keys, authentication tokens",
+            "The value is encrypted and only accessible at runtime"
+          ]
+        },
+        {
+          "name": "key_value_pair",
+          "title": "Login Credentials",
+          "description": "Store a username and password pair. Useful for login credentials, database connections, or service accounts.",
+          "fields": [
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "user@example.com",
+              "description": "Username or identifier"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "Password or secret key"
+            }
+          ],
+          "help": [
+            "Use for storing login credentials",
+            "Both username and password are stored securely",
+            "Access individual fields using vault item properties"
+          ]
+        }
       ]
     },
     "delete-item": {
@@ -91,6 +160,75 @@
         "Consider using Set Item to mark items as inactive instead of deleting",
         "Test deletion logic thoroughly before deploying to production",
         "Keep logs of deleted items for compliance and troubleshooting"
+      ],
+      "credentials": [
+        {
+          "name": "generic_data",
+          "title": "Document",
+          "description": "Store any text data securely in the vault. Use this for notes, JSON data, or any text that doesn't fit predefined categories.",
+          "default": true,
+          "fields": [
+            {
+              "name": "content",
+              "title": "Content",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "Your document content here...",
+              "description": "The content to store (can be text, JSON, or any string value)"
+            }
+          ],
+          "help": [
+            "Use this for storing arbitrary text data in the vault",
+            "For structured data, store as JSON string",
+            "All vault data is encrypted at rest"
+          ]
+        },
+        {
+          "name": "password_only",
+          "title": "API Key / Token",
+          "description": "Store a single API key, token, or secret value. Ideal for API tokens, service keys, or any single secret string.",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key / Token",
+              "type": "password",
+              "required": true,
+              "description": "The API key, token, or secret to store securely"
+            }
+          ],
+          "help": [
+            "Use for storing a single secret value",
+            "Common uses: API tokens, service keys, authentication tokens",
+            "The value is encrypted and only accessible at runtime"
+          ]
+        },
+        {
+          "name": "key_value_pair",
+          "title": "Login Credentials",
+          "description": "Store a username and password pair. Useful for login credentials, database connections, or service accounts.",
+          "fields": [
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "user@example.com",
+              "description": "Username or identifier"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "Password or secret key"
+            }
+          ],
+          "help": [
+            "Use for storing login credentials",
+            "Both username and password are stored securely",
+            "Access individual fields using vault item properties"
+          ]
+        }
       ]
     },
     "get-item": {
@@ -131,6 +269,75 @@
         "Consider caching credentials in memory rather than repeated vault calls",
         "Use different vaults for different environments (dev, staging, production)",
         "Regularly rotate vault items and update flows accordingly"
+      ],
+      "credentials": [
+        {
+          "name": "generic_data",
+          "title": "Document",
+          "description": "Store any text data securely in the vault. Use this for notes, JSON data, or any text that doesn't fit predefined categories.",
+          "default": true,
+          "fields": [
+            {
+              "name": "content",
+              "title": "Content",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "Your document content here...",
+              "description": "The content to store (can be text, JSON, or any string value)"
+            }
+          ],
+          "help": [
+            "Use this for storing arbitrary text data in the vault",
+            "For structured data, store as JSON string",
+            "All vault data is encrypted at rest"
+          ]
+        },
+        {
+          "name": "password_only",
+          "title": "API Key / Token",
+          "description": "Store a single API key, token, or secret value. Ideal for API tokens, service keys, or any single secret string.",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key / Token",
+              "type": "password",
+              "required": true,
+              "description": "The API key, token, or secret to store securely"
+            }
+          ],
+          "help": [
+            "Use for storing a single secret value",
+            "Common uses: API tokens, service keys, authentication tokens",
+            "The value is encrypted and only accessible at runtime"
+          ]
+        },
+        {
+          "name": "key_value_pair",
+          "title": "Login Credentials",
+          "description": "Store a username and password pair. Useful for login credentials, database connections, or service accounts.",
+          "fields": [
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "user@example.com",
+              "description": "Username or identifier"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "Password or secret key"
+            }
+          ],
+          "help": [
+            "Use for storing login credentials",
+            "Both username and password are stored securely",
+            "Access individual fields using vault item properties"
+          ]
+        }
       ]
     },
     "list-items": {
@@ -163,6 +370,75 @@
         "Filter results to find items by name patterns",
         "Cache list results to reduce API calls",
         "Use for vault auditing and inventory management"
+      ],
+      "credentials": [
+        {
+          "name": "generic_data",
+          "title": "Document",
+          "description": "Store any text data securely in the vault. Use this for notes, JSON data, or any text that doesn't fit predefined categories.",
+          "default": true,
+          "fields": [
+            {
+              "name": "content",
+              "title": "Content",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "Your document content here...",
+              "description": "The content to store (can be text, JSON, or any string value)"
+            }
+          ],
+          "help": [
+            "Use this for storing arbitrary text data in the vault",
+            "For structured data, store as JSON string",
+            "All vault data is encrypted at rest"
+          ]
+        },
+        {
+          "name": "password_only",
+          "title": "API Key / Token",
+          "description": "Store a single API key, token, or secret value. Ideal for API tokens, service keys, or any single secret string.",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key / Token",
+              "type": "password",
+              "required": true,
+              "description": "The API key, token, or secret to store securely"
+            }
+          ],
+          "help": [
+            "Use for storing a single secret value",
+            "Common uses: API tokens, service keys, authentication tokens",
+            "The value is encrypted and only accessible at runtime"
+          ]
+        },
+        {
+          "name": "key_value_pair",
+          "title": "Login Credentials",
+          "description": "Store a username and password pair. Useful for login credentials, database connections, or service accounts.",
+          "fields": [
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "user@example.com",
+              "description": "Username or identifier"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "Password or secret key"
+            }
+          ],
+          "help": [
+            "Use for storing login credentials",
+            "Both username and password are stored securely",
+            "Access individual fields using vault item properties"
+          ]
+        }
       ]
     },
     "list-vaults": {
@@ -192,6 +468,75 @@
         "Cache results to reduce API calls",
         "Validate vault availability before processing",
         "Use for vault discovery and administration tasks"
+      ],
+      "credentials": [
+        {
+          "name": "generic_data",
+          "title": "Document",
+          "description": "Store any text data securely in the vault. Use this for notes, JSON data, or any text that doesn't fit predefined categories.",
+          "default": true,
+          "fields": [
+            {
+              "name": "content",
+              "title": "Content",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "Your document content here...",
+              "description": "The content to store (can be text, JSON, or any string value)"
+            }
+          ],
+          "help": [
+            "Use this for storing arbitrary text data in the vault",
+            "For structured data, store as JSON string",
+            "All vault data is encrypted at rest"
+          ]
+        },
+        {
+          "name": "password_only",
+          "title": "API Key / Token",
+          "description": "Store a single API key, token, or secret value. Ideal for API tokens, service keys, or any single secret string.",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key / Token",
+              "type": "password",
+              "required": true,
+              "description": "The API key, token, or secret to store securely"
+            }
+          ],
+          "help": [
+            "Use for storing a single secret value",
+            "Common uses: API tokens, service keys, authentication tokens",
+            "The value is encrypted and only accessible at runtime"
+          ]
+        },
+        {
+          "name": "key_value_pair",
+          "title": "Login Credentials",
+          "description": "Store a username and password pair. Useful for login credentials, database connections, or service accounts.",
+          "fields": [
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "user@example.com",
+              "description": "Username or identifier"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "Password or secret key"
+            }
+          ],
+          "help": [
+            "Use for storing login credentials",
+            "Both username and password are stored securely",
+            "Access individual fields using vault item properties"
+          ]
+        }
       ]
     },
     "set-item": {
@@ -236,6 +581,75 @@
         "Avoid frequent updates to reduce vault API load",
         "Use Set Item for rotation of credentials and tokens",
         "Coordinate updates across teams to avoid conflicts"
+      ],
+      "credentials": [
+        {
+          "name": "generic_data",
+          "title": "Document",
+          "description": "Store any text data securely in the vault. Use this for notes, JSON data, or any text that doesn't fit predefined categories.",
+          "default": true,
+          "fields": [
+            {
+              "name": "content",
+              "title": "Content",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "Your document content here...",
+              "description": "The content to store (can be text, JSON, or any string value)"
+            }
+          ],
+          "help": [
+            "Use this for storing arbitrary text data in the vault",
+            "For structured data, store as JSON string",
+            "All vault data is encrypted at rest"
+          ]
+        },
+        {
+          "name": "password_only",
+          "title": "API Key / Token",
+          "description": "Store a single API key, token, or secret value. Ideal for API tokens, service keys, or any single secret string.",
+          "fields": [
+            {
+              "name": "value",
+              "title": "API Key / Token",
+              "type": "password",
+              "required": true,
+              "description": "The API key, token, or secret to store securely"
+            }
+          ],
+          "help": [
+            "Use for storing a single secret value",
+            "Common uses: API tokens, service keys, authentication tokens",
+            "The value is encrypted and only accessible at runtime"
+          ]
+        },
+        {
+          "name": "key_value_pair",
+          "title": "Login Credentials",
+          "description": "Store a username and password pair. Useful for login credentials, database connections, or service accounts.",
+          "fields": [
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "user@example.com",
+              "description": "Username or identifier"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "Password or secret key"
+            }
+          ],
+          "help": [
+            "Use for storing login credentials",
+            "Both username and password are stored securely",
+            "Access individual fields using vault item properties"
+          ]
+        }
       ]
     }
   }

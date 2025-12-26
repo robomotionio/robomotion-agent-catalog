@@ -54,6 +54,58 @@
         "Use the Disconnect node in a Try-Catch-Finally pattern to ensure sessions are always closed",
         "For FTPS with self-signed certificates, enable \"Skip TLS Verification\" or add the certificate to your trusted store",
         "Monitor connection timeouts in high-latency networks and adjust retry logic accordingly"
+      ],
+      "credentials": [
+        {
+          "name": "ftp_login",
+          "title": "FTP/SFTP Login",
+          "description": "Username and password credentials for FTP, FTPS, or SFTP server authentication. Used for standard password-based login.",
+          "default": true,
+          "fields": [
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "ftpuser",
+              "description": "FTP/SFTP username for authentication"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "FTP/SFTP password"
+            }
+          ],
+          "help": [
+            "Use these credentials to authenticate with your FTP/SFTP server",
+            "For FTP: Standard unencrypted connection (port 21)",
+            "For FTPS: FTP over TLS/SSL (port 990 or 21 with explicit TLS)",
+            "For SFTP: SSH File Transfer Protocol (port 22)",
+            "For SFTP with key-based auth, use the Private Key field in the node"
+          ]
+        },
+        {
+          "name": "ssh_passphrase",
+          "title": "SSH Key Passphrase",
+          "description": "Passphrase for password-protected SSH private keys. Use this when your SFTP private key is encrypted with a passphrase.",
+          "fields": [
+            {
+              "name": "password",
+              "title": "Passphrase",
+              "type": "password",
+              "required": true,
+              "description": "The passphrase that protects your SSH private key"
+            }
+          ],
+          "help": [
+            "Only needed if your SSH private key is password-protected",
+            "Leave the Login Credentials empty if using key-based authentication",
+            "The private key file path is specified in the node's Private Key field",
+            "Common key formats: OpenSSH, PEM, PPK (PuTTY)"
+          ]
+        }
       ]
     },
     "create-directory": {
@@ -98,6 +150,58 @@
         "For nested directory structures, create each level separately in sequence",
         "Store the output path for later cleanup operations",
         "Consider server permissions when choosing directory locations"
+      ],
+      "credentials": [
+        {
+          "name": "ftp_login",
+          "title": "FTP/SFTP Login",
+          "description": "Username and password credentials for FTP, FTPS, or SFTP server authentication. Used for standard password-based login.",
+          "default": true,
+          "fields": [
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "ftpuser",
+              "description": "FTP/SFTP username for authentication"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "FTP/SFTP password"
+            }
+          ],
+          "help": [
+            "Use these credentials to authenticate with your FTP/SFTP server",
+            "For FTP: Standard unencrypted connection (port 21)",
+            "For FTPS: FTP over TLS/SSL (port 990 or 21 with explicit TLS)",
+            "For SFTP: SSH File Transfer Protocol (port 22)",
+            "For SFTP with key-based auth, use the Private Key field in the node"
+          ]
+        },
+        {
+          "name": "ssh_passphrase",
+          "title": "SSH Key Passphrase",
+          "description": "Passphrase for password-protected SSH private keys. Use this when your SFTP private key is encrypted with a passphrase.",
+          "fields": [
+            {
+              "name": "password",
+              "title": "Passphrase",
+              "type": "password",
+              "required": true,
+              "description": "The passphrase that protects your SSH private key"
+            }
+          ],
+          "help": [
+            "Only needed if your SSH private key is password-protected",
+            "Leave the Login Credentials empty if using key-based authentication",
+            "The private key file path is specified in the node's Private Key field",
+            "Common key formats: OpenSSH, PEM, PPK (PuTTY)"
+          ]
+        }
       ]
     },
     "delete-directory": {
@@ -145,6 +249,58 @@
         "Keep logs of deleted directories for audit purposes",
         "Test deletion operations with non-critical directories first",
         "Be aware of FTP server quota calculations after deletion"
+      ],
+      "credentials": [
+        {
+          "name": "ftp_login",
+          "title": "FTP/SFTP Login",
+          "description": "Username and password credentials for FTP, FTPS, or SFTP server authentication. Used for standard password-based login.",
+          "default": true,
+          "fields": [
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "ftpuser",
+              "description": "FTP/SFTP username for authentication"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "FTP/SFTP password"
+            }
+          ],
+          "help": [
+            "Use these credentials to authenticate with your FTP/SFTP server",
+            "For FTP: Standard unencrypted connection (port 21)",
+            "For FTPS: FTP over TLS/SSL (port 990 or 21 with explicit TLS)",
+            "For SFTP: SSH File Transfer Protocol (port 22)",
+            "For SFTP with key-based auth, use the Private Key field in the node"
+          ]
+        },
+        {
+          "name": "ssh_passphrase",
+          "title": "SSH Key Passphrase",
+          "description": "Passphrase for password-protected SSH private keys. Use this when your SFTP private key is encrypted with a passphrase.",
+          "fields": [
+            {
+              "name": "password",
+              "title": "Passphrase",
+              "type": "password",
+              "required": true,
+              "description": "The passphrase that protects your SSH private key"
+            }
+          ],
+          "help": [
+            "Only needed if your SSH private key is password-protected",
+            "Leave the Login Credentials empty if using key-based authentication",
+            "The private key file path is specified in the node's Private Key field",
+            "Common key formats: OpenSSH, PEM, PPK (PuTTY)"
+          ]
+        }
       ]
     },
     "delete-file": {
@@ -190,6 +346,58 @@
         "Test deletion logic with non-critical files first",
         "Consider archiving important files before deletion",
         "Use conditional logic to implement retention policies"
+      ],
+      "credentials": [
+        {
+          "name": "ftp_login",
+          "title": "FTP/SFTP Login",
+          "description": "Username and password credentials for FTP, FTPS, or SFTP server authentication. Used for standard password-based login.",
+          "default": true,
+          "fields": [
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "ftpuser",
+              "description": "FTP/SFTP username for authentication"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "FTP/SFTP password"
+            }
+          ],
+          "help": [
+            "Use these credentials to authenticate with your FTP/SFTP server",
+            "For FTP: Standard unencrypted connection (port 21)",
+            "For FTPS: FTP over TLS/SSL (port 990 or 21 with explicit TLS)",
+            "For SFTP: SSH File Transfer Protocol (port 22)",
+            "For SFTP with key-based auth, use the Private Key field in the node"
+          ]
+        },
+        {
+          "name": "ssh_passphrase",
+          "title": "SSH Key Passphrase",
+          "description": "Passphrase for password-protected SSH private keys. Use this when your SFTP private key is encrypted with a passphrase.",
+          "fields": [
+            {
+              "name": "password",
+              "title": "Passphrase",
+              "type": "password",
+              "required": true,
+              "description": "The passphrase that protects your SSH private key"
+            }
+          ],
+          "help": [
+            "Only needed if your SSH private key is password-protected",
+            "Leave the Login Credentials empty if using key-based authentication",
+            "The private key file path is specified in the node's Private Key field",
+            "Common key formats: OpenSSH, PEM, PPK (PuTTY)"
+          ]
+        }
       ]
     },
     "disconnect": {
@@ -231,6 +439,58 @@
         "Set reasonable timeouts for FTP operations to avoid hanging sessions",
         "Consider connection pooling for high-frequency FTP operations",
         "Log successful disconnections for debugging and monitoring"
+      ],
+      "credentials": [
+        {
+          "name": "ftp_login",
+          "title": "FTP/SFTP Login",
+          "description": "Username and password credentials for FTP, FTPS, or SFTP server authentication. Used for standard password-based login.",
+          "default": true,
+          "fields": [
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "ftpuser",
+              "description": "FTP/SFTP username for authentication"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "FTP/SFTP password"
+            }
+          ],
+          "help": [
+            "Use these credentials to authenticate with your FTP/SFTP server",
+            "For FTP: Standard unencrypted connection (port 21)",
+            "For FTPS: FTP over TLS/SSL (port 990 or 21 with explicit TLS)",
+            "For SFTP: SSH File Transfer Protocol (port 22)",
+            "For SFTP with key-based auth, use the Private Key field in the node"
+          ]
+        },
+        {
+          "name": "ssh_passphrase",
+          "title": "SSH Key Passphrase",
+          "description": "Passphrase for password-protected SSH private keys. Use this when your SFTP private key is encrypted with a passphrase.",
+          "fields": [
+            {
+              "name": "password",
+              "title": "Passphrase",
+              "type": "password",
+              "required": true,
+              "description": "The passphrase that protects your SSH private key"
+            }
+          ],
+          "help": [
+            "Only needed if your SSH private key is password-protected",
+            "Leave the Login Credentials empty if using key-based authentication",
+            "The private key file path is specified in the node's Private Key field",
+            "Common key formats: OpenSSH, PEM, PPK (PuTTY)"
+          ]
+        }
       ]
     },
     "download": {
@@ -281,6 +541,58 @@
         "Consider download timeouts for very large files",
         "Use temporary directories for downloads, then move files after validation",
         "Verify file integrity after download (size, checksum) for critical files"
+      ],
+      "credentials": [
+        {
+          "name": "ftp_login",
+          "title": "FTP/SFTP Login",
+          "description": "Username and password credentials for FTP, FTPS, or SFTP server authentication. Used for standard password-based login.",
+          "default": true,
+          "fields": [
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "ftpuser",
+              "description": "FTP/SFTP username for authentication"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "FTP/SFTP password"
+            }
+          ],
+          "help": [
+            "Use these credentials to authenticate with your FTP/SFTP server",
+            "For FTP: Standard unencrypted connection (port 21)",
+            "For FTPS: FTP over TLS/SSL (port 990 or 21 with explicit TLS)",
+            "For SFTP: SSH File Transfer Protocol (port 22)",
+            "For SFTP with key-based auth, use the Private Key field in the node"
+          ]
+        },
+        {
+          "name": "ssh_passphrase",
+          "title": "SSH Key Passphrase",
+          "description": "Passphrase for password-protected SSH private keys. Use this when your SFTP private key is encrypted with a passphrase.",
+          "fields": [
+            {
+              "name": "password",
+              "title": "Passphrase",
+              "type": "password",
+              "required": true,
+              "description": "The passphrase that protects your SSH private key"
+            }
+          ],
+          "help": [
+            "Only needed if your SSH private key is password-protected",
+            "Leave the Login Credentials empty if using key-based authentication",
+            "The private key file path is specified in the node's Private Key field",
+            "Common key formats: OpenSSH, PEM, PPK (PuTTY)"
+          ]
+        }
       ]
     },
     "file-exists": {
@@ -326,6 +638,58 @@
         "Consider timing in workflows where files are created by other processes",
         "Cache results temporarily if checking the same file multiple times",
         "Use for implementing idempotent file operations"
+      ],
+      "credentials": [
+        {
+          "name": "ftp_login",
+          "title": "FTP/SFTP Login",
+          "description": "Username and password credentials for FTP, FTPS, or SFTP server authentication. Used for standard password-based login.",
+          "default": true,
+          "fields": [
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "ftpuser",
+              "description": "FTP/SFTP username for authentication"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "FTP/SFTP password"
+            }
+          ],
+          "help": [
+            "Use these credentials to authenticate with your FTP/SFTP server",
+            "For FTP: Standard unencrypted connection (port 21)",
+            "For FTPS: FTP over TLS/SSL (port 990 or 21 with explicit TLS)",
+            "For SFTP: SSH File Transfer Protocol (port 22)",
+            "For SFTP with key-based auth, use the Private Key field in the node"
+          ]
+        },
+        {
+          "name": "ssh_passphrase",
+          "title": "SSH Key Passphrase",
+          "description": "Passphrase for password-protected SSH private keys. Use this when your SFTP private key is encrypted with a passphrase.",
+          "fields": [
+            {
+              "name": "password",
+              "title": "Passphrase",
+              "type": "password",
+              "required": true,
+              "description": "The passphrase that protects your SSH private key"
+            }
+          ],
+          "help": [
+            "Only needed if your SSH private key is password-protected",
+            "Leave the Login Credentials empty if using key-based authentication",
+            "The private key file path is specified in the node's Private Key field",
+            "Common key formats: OpenSSH, PEM, PPK (PuTTY)"
+          ]
+        }
       ]
     },
     "list-directory": {
@@ -376,6 +740,58 @@
         "Check Size property to avoid processing empty files",
         "Consider pagination for directories with thousands of files",
         "Cache directory listings if checking multiple times in a workflow"
+      ],
+      "credentials": [
+        {
+          "name": "ftp_login",
+          "title": "FTP/SFTP Login",
+          "description": "Username and password credentials for FTP, FTPS, or SFTP server authentication. Used for standard password-based login.",
+          "default": true,
+          "fields": [
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "ftpuser",
+              "description": "FTP/SFTP username for authentication"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "FTP/SFTP password"
+            }
+          ],
+          "help": [
+            "Use these credentials to authenticate with your FTP/SFTP server",
+            "For FTP: Standard unencrypted connection (port 21)",
+            "For FTPS: FTP over TLS/SSL (port 990 or 21 with explicit TLS)",
+            "For SFTP: SSH File Transfer Protocol (port 22)",
+            "For SFTP with key-based auth, use the Private Key field in the node"
+          ]
+        },
+        {
+          "name": "ssh_passphrase",
+          "title": "SSH Key Passphrase",
+          "description": "Passphrase for password-protected SSH private keys. Use this when your SFTP private key is encrypted with a passphrase.",
+          "fields": [
+            {
+              "name": "password",
+              "title": "Passphrase",
+              "type": "password",
+              "required": true,
+              "description": "The passphrase that protects your SSH private key"
+            }
+          ],
+          "help": [
+            "Only needed if your SSH private key is password-protected",
+            "Leave the Login Credentials empty if using key-based authentication",
+            "The private key file path is specified in the node's Private Key field",
+            "Common key formats: OpenSSH, PEM, PPK (PuTTY)"
+          ]
+        }
       ]
     },
     "move-file": {
@@ -426,6 +842,58 @@
         "Use consistent naming conventions for archived files",
         "Test move operations with non-critical files first",
         "Implement retry logic for transient network failures"
+      ],
+      "credentials": [
+        {
+          "name": "ftp_login",
+          "title": "FTP/SFTP Login",
+          "description": "Username and password credentials for FTP, FTPS, or SFTP server authentication. Used for standard password-based login.",
+          "default": true,
+          "fields": [
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "ftpuser",
+              "description": "FTP/SFTP username for authentication"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "FTP/SFTP password"
+            }
+          ],
+          "help": [
+            "Use these credentials to authenticate with your FTP/SFTP server",
+            "For FTP: Standard unencrypted connection (port 21)",
+            "For FTPS: FTP over TLS/SSL (port 990 or 21 with explicit TLS)",
+            "For SFTP: SSH File Transfer Protocol (port 22)",
+            "For SFTP with key-based auth, use the Private Key field in the node"
+          ]
+        },
+        {
+          "name": "ssh_passphrase",
+          "title": "SSH Key Passphrase",
+          "description": "Passphrase for password-protected SSH private keys. Use this when your SFTP private key is encrypted with a passphrase.",
+          "fields": [
+            {
+              "name": "password",
+              "title": "Passphrase",
+              "type": "password",
+              "required": true,
+              "description": "The passphrase that protects your SSH private key"
+            }
+          ],
+          "help": [
+            "Only needed if your SSH private key is password-protected",
+            "Leave the Login Credentials empty if using key-based authentication",
+            "The private key file path is specified in the node's Private Key field",
+            "Common key formats: OpenSSH, PEM, PPK (PuTTY)"
+          ]
+        }
       ]
     },
     "upload": {
@@ -480,6 +948,58 @@
         "Use temporary upload directories, then move files to final location",
         "Delete local files only after confirming successful upload",
         "For FTPS, the chunked upload with retry provides better reliability for large files"
+      ],
+      "credentials": [
+        {
+          "name": "ftp_login",
+          "title": "FTP/SFTP Login",
+          "description": "Username and password credentials for FTP, FTPS, or SFTP server authentication. Used for standard password-based login.",
+          "default": true,
+          "fields": [
+            {
+              "name": "username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "ftpuser",
+              "description": "FTP/SFTP username for authentication"
+            },
+            {
+              "name": "password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "FTP/SFTP password"
+            }
+          ],
+          "help": [
+            "Use these credentials to authenticate with your FTP/SFTP server",
+            "For FTP: Standard unencrypted connection (port 21)",
+            "For FTPS: FTP over TLS/SSL (port 990 or 21 with explicit TLS)",
+            "For SFTP: SSH File Transfer Protocol (port 22)",
+            "For SFTP with key-based auth, use the Private Key field in the node"
+          ]
+        },
+        {
+          "name": "ssh_passphrase",
+          "title": "SSH Key Passphrase",
+          "description": "Passphrase for password-protected SSH private keys. Use this when your SFTP private key is encrypted with a passphrase.",
+          "fields": [
+            {
+              "name": "password",
+              "title": "Passphrase",
+              "type": "password",
+              "required": true,
+              "description": "The passphrase that protects your SSH private key"
+            }
+          ],
+          "help": [
+            "Only needed if your SSH private key is password-protected",
+            "Leave the Login Credentials empty if using key-based authentication",
+            "The private key file path is specified in the node's Private Key field",
+            "Common key formats: OpenSSH, PEM, PPK (PuTTY)"
+          ]
+        }
       ]
     }
   }

@@ -34,6 +34,31 @@
         "App Upload",
         "App In",
         "App Out"
+      ],
+      "credentials": [
+        {
+          "name": "aes_encryption_key",
+          "title": "AES Encryption Key",
+          "description": "AES encryption key for encrypting and decrypting files during upload and download operations. Uses AES-256 for strong encryption.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "AES Key",
+              "type": "password",
+              "required": true,
+              "placeholder": "32-character key for AES-256",
+              "description": "AES encryption key (32 characters for AES-256 encryption)"
+            }
+          ],
+          "help": [
+            "Used to encrypt files before upload and decrypt after download",
+            "The same key must be used for both encryption and decryption",
+            "Key must be exactly 32 characters for AES-256 encryption",
+            "Generate a secure key: openssl rand -base64 32 | head -c 32",
+            "Keep this key secure - files cannot be decrypted without it"
+          ]
+        }
       ]
     },
     "app-in": {
@@ -67,6 +92,31 @@
         "App Upload",
         "App Log",
         "App Push"
+      ],
+      "credentials": [
+        {
+          "name": "aes_encryption_key",
+          "title": "AES Encryption Key",
+          "description": "AES encryption key for encrypting and decrypting files during upload and download operations. Uses AES-256 for strong encryption.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "AES Key",
+              "type": "password",
+              "required": true,
+              "placeholder": "32-character key for AES-256",
+              "description": "AES encryption key (32 characters for AES-256 encryption)"
+            }
+          ],
+          "help": [
+            "Used to encrypt files before upload and decrypt after download",
+            "The same key must be used for both encryption and decryption",
+            "Key must be exactly 32 characters for AES-256 encryption",
+            "Generate a secure key: openssl rand -base64 32 | head -c 32",
+            "Keep this key secure - files cannot be decrypted without it"
+          ]
+        }
       ]
     },
     "app-log": {
@@ -98,6 +148,31 @@
         "App In",
         "App Out",
         "App Push"
+      ],
+      "credentials": [
+        {
+          "name": "aes_encryption_key",
+          "title": "AES Encryption Key",
+          "description": "AES encryption key for encrypting and decrypting files during upload and download operations. Uses AES-256 for strong encryption.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "AES Key",
+              "type": "password",
+              "required": true,
+              "placeholder": "32-character key for AES-256",
+              "description": "AES encryption key (32 characters for AES-256 encryption)"
+            }
+          ],
+          "help": [
+            "Used to encrypt files before upload and decrypt after download",
+            "The same key must be used for both encryption and decryption",
+            "Key must be exactly 32 characters for AES-256 encryption",
+            "Generate a secure key: openssl rand -base64 32 | head -c 32",
+            "Keep this key secure - files cannot be decrypted without it"
+          ]
+        }
       ]
     },
     "app-out": {
@@ -129,6 +204,31 @@
         "App In",
         "App Log",
         "App Push"
+      ],
+      "credentials": [
+        {
+          "name": "aes_encryption_key",
+          "title": "AES Encryption Key",
+          "description": "AES encryption key for encrypting and decrypting files during upload and download operations. Uses AES-256 for strong encryption.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "AES Key",
+              "type": "password",
+              "required": true,
+              "placeholder": "32-character key for AES-256",
+              "description": "AES encryption key (32 characters for AES-256 encryption)"
+            }
+          ],
+          "help": [
+            "Used to encrypt files before upload and decrypt after download",
+            "The same key must be used for both encryption and decryption",
+            "Key must be exactly 32 characters for AES-256 encryption",
+            "Generate a secure key: openssl rand -base64 32 | head -c 32",
+            "Keep this key secure - files cannot be decrypted without it"
+          ]
+        }
       ]
     },
     "app-push": {
@@ -163,6 +263,31 @@
         "App Log",
         "App In",
         "App Request"
+      ],
+      "credentials": [
+        {
+          "name": "aes_encryption_key",
+          "title": "AES Encryption Key",
+          "description": "AES encryption key for encrypting and decrypting files during upload and download operations. Uses AES-256 for strong encryption.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "AES Key",
+              "type": "password",
+              "required": true,
+              "placeholder": "32-character key for AES-256",
+              "description": "AES encryption key (32 characters for AES-256 encryption)"
+            }
+          ],
+          "help": [
+            "Used to encrypt files before upload and decrypt after download",
+            "The same key must be used for both encryption and decryption",
+            "Key must be exactly 32 characters for AES-256 encryption",
+            "Generate a secure key: openssl rand -base64 32 | head -c 32",
+            "Keep this key secure - files cannot be decrypted without it"
+          ]
+        }
       ]
     },
     "app-request": {
@@ -198,6 +323,31 @@
         "App Out",
         "App Push",
         "App Log"
+      ],
+      "credentials": [
+        {
+          "name": "aes_encryption_key",
+          "title": "AES Encryption Key",
+          "description": "AES encryption key for encrypting and decrypting files during upload and download operations. Uses AES-256 for strong encryption.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "AES Key",
+              "type": "password",
+              "required": true,
+              "placeholder": "32-character key for AES-256",
+              "description": "AES encryption key (32 characters for AES-256 encryption)"
+            }
+          ],
+          "help": [
+            "Used to encrypt files before upload and decrypt after download",
+            "The same key must be used for both encryption and decryption",
+            "Key must be exactly 32 characters for AES-256 encryption",
+            "Generate a secure key: openssl rand -base64 32 | head -c 32",
+            "Keep this key secure - files cannot be decrypted without it"
+          ]
+        }
       ]
     },
     "app-upload": {
@@ -234,6 +384,31 @@
         "App Download",
         "App In",
         "App Out"
+      ],
+      "credentials": [
+        {
+          "name": "aes_encryption_key",
+          "title": "AES Encryption Key",
+          "description": "AES encryption key for encrypting and decrypting files during upload and download operations. Uses AES-256 for strong encryption.",
+          "default": true,
+          "fields": [
+            {
+              "name": "value",
+              "title": "AES Key",
+              "type": "password",
+              "required": true,
+              "placeholder": "32-character key for AES-256",
+              "description": "AES encryption key (32 characters for AES-256 encryption)"
+            }
+          ],
+          "help": [
+            "Used to encrypt files before upload and decrypt after download",
+            "The same key must be used for both encryption and decryption",
+            "Key must be exactly 32 characters for AES-256 encryption",
+            "Generate a secure key: openssl rand -base64 32 | head -c 32",
+            "Keep this key secure - files cannot be decrypted without it"
+          ]
+        }
       ]
     }
   }

@@ -49,6 +49,46 @@
         "Set meaningful descriptions - they help users understand the form's purpose",
         "Add branding with Color and Logo URL options to match your organization's identity",
         "Test form creation in development before deploying to production"
+      ],
+      "credentials": [
+        {
+          "name": "rsa_keypair",
+          "title": "RSA Key Pair",
+          "description": "RSA key pair for Robomotion Forms security and encryption. Used for secure form creation, updates, and data encryption.",
+          "default": true,
+          "fields": [
+            {
+              "name": "publicKey",
+              "title": "Public Key",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A...\n-----END PUBLIC KEY-----",
+              "description": "RSA public key in PEM format"
+            },
+            {
+              "name": "privateKey",
+              "title": "Private Key",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASC...\n-----END PRIVATE KEY-----",
+              "description": "RSA private key in PEM format"
+            }
+          ],
+          "help": [
+            "RSA keys are used to encrypt and sign form data",
+            "Generate a new RSA key pair using OpenSSL or similar tools:",
+            "  openssl genrsa -out private.pem 2048",
+            "  openssl rsa -in private.pem -pubout -out public.pem",
+            "Keep the private key secure - it's used for decryption",
+            "The public key is shared with the form service"
+          ],
+          "resources": [
+            {
+              "label": "RSA Key Generation",
+              "url": "https://www.openssl.org/docs/man1.1.1/man1/genrsa.html"
+            }
+          ]
+        }
       ]
     },
     "create-form-instance": {
@@ -89,6 +129,46 @@
         "Monitor form submissions using the Get Form Instance node with the Instance ID",
         "For multi-step processes, create multiple disposable instances in sequence",
         "Test form URLs immediately after creation to ensure proper configuration"
+      ],
+      "credentials": [
+        {
+          "name": "rsa_keypair",
+          "title": "RSA Key Pair",
+          "description": "RSA key pair for Robomotion Forms security and encryption. Used for secure form creation, updates, and data encryption.",
+          "default": true,
+          "fields": [
+            {
+              "name": "publicKey",
+              "title": "Public Key",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A...\n-----END PUBLIC KEY-----",
+              "description": "RSA public key in PEM format"
+            },
+            {
+              "name": "privateKey",
+              "title": "Private Key",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASC...\n-----END PRIVATE KEY-----",
+              "description": "RSA private key in PEM format"
+            }
+          ],
+          "help": [
+            "RSA keys are used to encrypt and sign form data",
+            "Generate a new RSA key pair using OpenSSL or similar tools:",
+            "  openssl genrsa -out private.pem 2048",
+            "  openssl rsa -in private.pem -pubout -out public.pem",
+            "Keep the private key secure - it's used for decryption",
+            "The public key is shared with the form service"
+          ],
+          "resources": [
+            {
+              "label": "RSA Key Generation",
+              "url": "https://www.openssl.org/docs/man1.1.1/man1/genrsa.html"
+            }
+          ]
+        }
       ]
     },
     "delete-form": {
@@ -127,6 +207,46 @@
         "Set \"Continue On Error\" to true if deletion failures should not stop the workflow",
         "For temporary/test forms, delete them promptly to keep the workspace clean",
         "Consider implementing a \"soft delete\" pattern by marking forms as inactive instead"
+      ],
+      "credentials": [
+        {
+          "name": "rsa_keypair",
+          "title": "RSA Key Pair",
+          "description": "RSA key pair for Robomotion Forms security and encryption. Used for secure form creation, updates, and data encryption.",
+          "default": true,
+          "fields": [
+            {
+              "name": "publicKey",
+              "title": "Public Key",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A...\n-----END PUBLIC KEY-----",
+              "description": "RSA public key in PEM format"
+            },
+            {
+              "name": "privateKey",
+              "title": "Private Key",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASC...\n-----END PRIVATE KEY-----",
+              "description": "RSA private key in PEM format"
+            }
+          ],
+          "help": [
+            "RSA keys are used to encrypt and sign form data",
+            "Generate a new RSA key pair using OpenSSL or similar tools:",
+            "  openssl genrsa -out private.pem 2048",
+            "  openssl rsa -in private.pem -pubout -out public.pem",
+            "Keep the private key secure - it's used for decryption",
+            "The public key is shared with the form service"
+          ],
+          "resources": [
+            {
+              "label": "RSA Key Generation",
+              "url": "https://www.openssl.org/docs/man1.1.1/man1/genrsa.html"
+            }
+          ]
+        }
       ]
     },
     "delete-form-instance": {
@@ -164,6 +284,46 @@
         "Set \"Continue On Error\" to true when batch deleting to avoid stopping on missing instances",
         "Consider implementing data retention policies that auto-delete old instances",
         "Use Get Form Instance before deletion to verify the instance exists and check its status"
+      ],
+      "credentials": [
+        {
+          "name": "rsa_keypair",
+          "title": "RSA Key Pair",
+          "description": "RSA key pair for Robomotion Forms security and encryption. Used for secure form creation, updates, and data encryption.",
+          "default": true,
+          "fields": [
+            {
+              "name": "publicKey",
+              "title": "Public Key",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A...\n-----END PUBLIC KEY-----",
+              "description": "RSA public key in PEM format"
+            },
+            {
+              "name": "privateKey",
+              "title": "Private Key",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASC...\n-----END PRIVATE KEY-----",
+              "description": "RSA private key in PEM format"
+            }
+          ],
+          "help": [
+            "RSA keys are used to encrypt and sign form data",
+            "Generate a new RSA key pair using OpenSSL or similar tools:",
+            "  openssl genrsa -out private.pem 2048",
+            "  openssl rsa -in private.pem -pubout -out public.pem",
+            "Keep the private key secure - it's used for decryption",
+            "The public key is shared with the form service"
+          ],
+          "resources": [
+            {
+              "label": "RSA Key Generation",
+              "url": "https://www.openssl.org/docs/man1.1.1/man1/genrsa.html"
+            }
+          ]
+        }
       ]
     },
     "get-form-instance": {
@@ -203,6 +363,46 @@
         "Store the retrieved form data in a database for record-keeping",
         "Use with Create Form Instance to build complete form submission workflows",
         "Combine with Delete Form Instance to clean up after retrieving data"
+      ],
+      "credentials": [
+        {
+          "name": "rsa_keypair",
+          "title": "RSA Key Pair",
+          "description": "RSA key pair for Robomotion Forms security and encryption. Used for secure form creation, updates, and data encryption.",
+          "default": true,
+          "fields": [
+            {
+              "name": "publicKey",
+              "title": "Public Key",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A...\n-----END PUBLIC KEY-----",
+              "description": "RSA public key in PEM format"
+            },
+            {
+              "name": "privateKey",
+              "title": "Private Key",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASC...\n-----END PRIVATE KEY-----",
+              "description": "RSA private key in PEM format"
+            }
+          ],
+          "help": [
+            "RSA keys are used to encrypt and sign form data",
+            "Generate a new RSA key pair using OpenSSL or similar tools:",
+            "  openssl genrsa -out private.pem 2048",
+            "  openssl rsa -in private.pem -pubout -out public.pem",
+            "Keep the private key secure - it's used for decryption",
+            "The public key is shared with the form service"
+          ],
+          "resources": [
+            {
+              "label": "RSA Key Generation",
+              "url": "https://www.openssl.org/docs/man1.1.1/man1/genrsa.html"
+            }
+          ]
+        }
       ]
     },
     "list-forms": {
@@ -240,6 +440,46 @@
         "Store frequently-used Form IDs in variables or databases to avoid listing",
         "Use the form metadata to implement form management dashboards",
         "Filter by queue name to find forms associated with specific workflows"
+      ],
+      "credentials": [
+        {
+          "name": "rsa_keypair",
+          "title": "RSA Key Pair",
+          "description": "RSA key pair for Robomotion Forms security and encryption. Used for secure form creation, updates, and data encryption.",
+          "default": true,
+          "fields": [
+            {
+              "name": "publicKey",
+              "title": "Public Key",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A...\n-----END PUBLIC KEY-----",
+              "description": "RSA public key in PEM format"
+            },
+            {
+              "name": "privateKey",
+              "title": "Private Key",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASC...\n-----END PRIVATE KEY-----",
+              "description": "RSA private key in PEM format"
+            }
+          ],
+          "help": [
+            "RSA keys are used to encrypt and sign form data",
+            "Generate a new RSA key pair using OpenSSL or similar tools:",
+            "  openssl genrsa -out private.pem 2048",
+            "  openssl rsa -in private.pem -pubout -out public.pem",
+            "Keep the private key secure - it's used for decryption",
+            "The public key is shared with the form service"
+          ],
+          "resources": [
+            {
+              "label": "RSA Key Generation",
+              "url": "https://www.openssl.org/docs/man1.1.1/man1/genrsa.html"
+            }
+          ]
+        }
       ]
     },
     "update-form": {
@@ -282,6 +522,46 @@
         "Consider version control for form schemas - store UI configurations before updating",
         "Update form descriptions to include version numbers or change logs",
         "Schedule periodic form updates to refresh branding or add new fields"
+      ],
+      "credentials": [
+        {
+          "name": "rsa_keypair",
+          "title": "RSA Key Pair",
+          "description": "RSA key pair for Robomotion Forms security and encryption. Used for secure form creation, updates, and data encryption.",
+          "default": true,
+          "fields": [
+            {
+              "name": "publicKey",
+              "title": "Public Key",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A...\n-----END PUBLIC KEY-----",
+              "description": "RSA public key in PEM format"
+            },
+            {
+              "name": "privateKey",
+              "title": "Private Key",
+              "type": "textarea",
+              "required": true,
+              "placeholder": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASC...\n-----END PRIVATE KEY-----",
+              "description": "RSA private key in PEM format"
+            }
+          ],
+          "help": [
+            "RSA keys are used to encrypt and sign form data",
+            "Generate a new RSA key pair using OpenSSL or similar tools:",
+            "  openssl genrsa -out private.pem 2048",
+            "  openssl rsa -in private.pem -pubout -out public.pem",
+            "Keep the private key secure - it's used for decryption",
+            "The public key is shared with the form service"
+          ],
+          "resources": [
+            {
+              "label": "RSA Key Generation",
+              "url": "https://www.openssl.org/docs/man1.1.1/man1/genrsa.html"
+            }
+          ]
+        }
       ]
     }
   }
