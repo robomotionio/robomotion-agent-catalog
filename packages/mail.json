@@ -51,6 +51,176 @@
         "**Handle First OAuth2 Run**: In headless environments, ensure the first OAuth2 authentication can open a browser",
         "**Connection Reuse**: Store the Client ID in a variable and reuse it across multiple mail operations in the same flow",
         "**Proper Cleanup**: Always use the Disconnect node at the end of your flow to close the connection properly"
+      ],
+      "credentials": [
+        {
+          "name": "mail_basic",
+          "title": "Basic Authentication",
+          "description": "Email credentials with username and password. Configure SMTP for sending and/or IMAP for receiving emails.",
+          "default": true,
+          "fields": [
+            {
+              "name": "smtp.server",
+              "title": "SMTP Server",
+              "type": "text",
+              "placeholder": "smtp.gmail.com",
+              "description": "SMTP server for sending emails (optional if only receiving)"
+            },
+            {
+              "name": "smtp.port",
+              "title": "SMTP Port",
+              "type": "number",
+              "placeholder": "587",
+              "description": "SMTP port (587 for TLS, 465 for SSL)"
+            },
+            {
+              "name": "smtp.username",
+              "title": "SMTP Username",
+              "type": "text",
+              "placeholder": "your.email@gmail.com",
+              "description": "Username for SMTP authentication"
+            },
+            {
+              "name": "smtp.password",
+              "title": "SMTP Password",
+              "type": "password",
+              "description": "SMTP password or App Password"
+            },
+            {
+              "name": "inbox.server",
+              "title": "IMAP Server",
+              "type": "text",
+              "placeholder": "imap.gmail.com",
+              "description": "IMAP server for receiving emails (optional if only sending)"
+            },
+            {
+              "name": "inbox.port",
+              "title": "IMAP Port",
+              "type": "number",
+              "placeholder": "993",
+              "description": "IMAP port (usually 993 for SSL)"
+            },
+            {
+              "name": "inbox.username",
+              "title": "IMAP Username",
+              "type": "text",
+              "placeholder": "your.email@gmail.com",
+              "description": "Username for IMAP authentication"
+            },
+            {
+              "name": "inbox.password",
+              "title": "IMAP Password",
+              "type": "password",
+              "description": "IMAP password or App Password"
+            }
+          ],
+          "help": [
+            "Configure SMTP settings for sending emails via Send Mail node",
+            "Configure IMAP settings for receiving emails via Get Mail, Search, etc.",
+            "Gmail: smtp.gmail.com:587, imap.gmail.com:993",
+            "Outlook: smtp.office365.com:587, outlook.office365.com:993",
+            "For Gmail/Google Workspace, use an App Password"
+          ],
+          "resources": [
+            {
+              "label": "Gmail App Passwords",
+              "url": "https://support.google.com/accounts/answer/185833"
+            },
+            {
+              "label": "Gmail Settings",
+              "url": "https://support.google.com/a/answer/176600"
+            }
+          ]
+        },
+        {
+          "name": "mail_oauth2",
+          "title": "OAuth2 Authentication",
+          "description": "OAuth2 authentication for Google Workspace or Microsoft 365. Configure SMTP for sending and/or IMAP for receiving.",
+          "fields": [
+            {
+              "name": "email",
+              "title": "Email Address",
+              "type": "text",
+              "required": true,
+              "placeholder": "your.email@gmail.com",
+              "description": "Your email address for OAuth2 authentication"
+            },
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Add this URL to your OAuth2 app's redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "your-client-id.apps.googleusercontent.com",
+              "description": "OAuth2 Client ID"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth2 Client Secret"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID (Microsoft only)",
+              "type": "text",
+              "placeholder": "common",
+              "description": "Azure AD Tenant ID. Leave empty for Google."
+            },
+            {
+              "name": "smtp.server",
+              "title": "SMTP Server",
+              "type": "text",
+              "placeholder": "smtp.gmail.com",
+              "description": "SMTP server for sending (optional if only receiving)"
+            },
+            {
+              "name": "smtp.port",
+              "title": "SMTP Port",
+              "type": "number",
+              "placeholder": "587",
+              "description": "SMTP port (usually 587)"
+            },
+            {
+              "name": "inbox.server",
+              "title": "IMAP Server",
+              "type": "text",
+              "placeholder": "imap.gmail.com",
+              "description": "IMAP server for receiving (optional if only sending)"
+            },
+            {
+              "name": "inbox.port",
+              "title": "IMAP Port",
+              "type": "number",
+              "placeholder": "993",
+              "description": "IMAP port (usually 993)"
+            }
+          ],
+          "help": [
+            "1. Create a Desktop/Native OAuth2 app in Google Cloud Console or Azure Portal",
+            "2. Add http://localhost:9876/oauth2/callback as a redirect URI",
+            "3. Configure SMTP for sending, IMAP for receiving, or both",
+            "4. Google: smtp.gmail.com:587, imap.gmail.com:993",
+            "5. Microsoft: smtp.office365.com:587, outlook.office365.com:993",
+            "6. On first run, a browser window opens for authorization"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            },
+            {
+              "label": "Azure App Registration",
+              "url": "https://portal.azure.com/#blade/Microsoft_AAD_RegisteredApps"
+            }
+          ]
+        }
       ]
     },
     "create-folder": {
@@ -87,6 +257,144 @@
         "**Create Parents First**: Create parent folders before subfolders",
         "**Naming Convention**: Use consistent naming for automation",
         "**Error Handling**: Use Try-Catch to handle duplicate folder creation attempts"
+      ],
+      "credentials": [
+        {
+          "name": "imap_basic",
+          "title": "IMAP Basic Authentication",
+          "description": "IMAP credentials with username and password for receiving emails.",
+          "fields": [
+            {
+              "name": "inbox.type",
+              "title": "Protocol",
+              "type": "hidden"
+            },
+            {
+              "name": "inbox.server",
+              "title": "IMAP Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "imap.gmail.com",
+              "description": "The IMAP server hostname"
+            },
+            {
+              "name": "inbox.port",
+              "title": "IMAP Port",
+              "type": "number",
+              "required": true,
+              "placeholder": "993",
+              "description": "IMAP port (usually 993 for SSL)"
+            },
+            {
+              "name": "inbox.username",
+              "title": "Email Address",
+              "type": "text",
+              "required": true,
+              "placeholder": "your.email@gmail.com",
+              "description": "Your email address for authentication"
+            },
+            {
+              "name": "inbox.password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "Email password or App Password"
+            }
+          ],
+          "help": [
+            "Gmail: imap.gmail.com, port 993",
+            "Outlook/Office365: outlook.office365.com, port 993",
+            "Yahoo: imap.mail.yahoo.com, port 993",
+            "For Gmail/Google Workspace, use an App Password",
+            "Enable IMAP access in your email settings if not already enabled"
+          ],
+          "resources": [
+            {
+              "label": "Gmail App Passwords",
+              "url": "https://support.google.com/accounts/answer/185833"
+            },
+            {
+              "label": "Outlook IMAP Settings",
+              "url": "https://support.microsoft.com/en-us/office/pop-imap-and-smtp-settings-8361e398-8af4-4e97-b147-6c6c4ac95353"
+            }
+          ]
+        },
+        {
+          "name": "imap_oauth2",
+          "title": "IMAP OAuth2 (Google/Microsoft)",
+          "description": "IMAP with OAuth2 authentication for Google Workspace or Microsoft 365. No password required - uses OAuth2 tokens.",
+          "fields": [
+            {
+              "name": "inbox.server",
+              "title": "IMAP Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "imap.gmail.com",
+              "description": "IMAP server hostname"
+            },
+            {
+              "name": "inbox.port",
+              "title": "IMAP Port",
+              "type": "number",
+              "required": true,
+              "placeholder": "993",
+              "description": "IMAP port (usually 993)"
+            },
+            {
+              "name": "email",
+              "title": "Email Address",
+              "type": "text",
+              "required": true,
+              "placeholder": "your.email@gmail.com",
+              "description": "Your email address for OAuth2 authentication"
+            },
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Copy this URL and add it to your OAuth2 app's redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "your-client-id.apps.googleusercontent.com",
+              "description": "OAuth2 Client ID from Google Cloud Console or Azure Portal"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth2 Client Secret"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID (Microsoft only)",
+              "type": "text",
+              "placeholder": "common",
+              "description": "Azure AD Tenant ID. Leave empty for Google."
+            }
+          ],
+          "help": [
+            "1. Create a Desktop/Native OAuth2 app in Google Cloud Console or Azure Portal",
+            "2. Add http://localhost:9876/oauth2/callback as a redirect URI",
+            "3. Google: imap.gmail.com:993 | Microsoft: outlook.office365.com:993",
+            "4. On first run, a browser window opens for authorization",
+            "5. Tokens are auto-saved after first OAuth login"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            },
+            {
+              "label": "Azure App Registration",
+              "url": "https://portal.azure.com/#blade/Microsoft_AAD_RegisteredApps"
+            }
+          ]
+        }
       ]
     },
     "delete-folder": {
@@ -126,6 +434,144 @@
         "**Backup Important Data**: Archive emails before deleting folders",
         "**Use with Caution**: Always confirm folder name before deletion",
         "**Test in Development**: Test deletion logic with non-critical folders first"
+      ],
+      "credentials": [
+        {
+          "name": "imap_basic",
+          "title": "IMAP Basic Authentication",
+          "description": "IMAP credentials with username and password for receiving emails.",
+          "fields": [
+            {
+              "name": "inbox.type",
+              "title": "Protocol",
+              "type": "hidden"
+            },
+            {
+              "name": "inbox.server",
+              "title": "IMAP Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "imap.gmail.com",
+              "description": "The IMAP server hostname"
+            },
+            {
+              "name": "inbox.port",
+              "title": "IMAP Port",
+              "type": "number",
+              "required": true,
+              "placeholder": "993",
+              "description": "IMAP port (usually 993 for SSL)"
+            },
+            {
+              "name": "inbox.username",
+              "title": "Email Address",
+              "type": "text",
+              "required": true,
+              "placeholder": "your.email@gmail.com",
+              "description": "Your email address for authentication"
+            },
+            {
+              "name": "inbox.password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "Email password or App Password"
+            }
+          ],
+          "help": [
+            "Gmail: imap.gmail.com, port 993",
+            "Outlook/Office365: outlook.office365.com, port 993",
+            "Yahoo: imap.mail.yahoo.com, port 993",
+            "For Gmail/Google Workspace, use an App Password",
+            "Enable IMAP access in your email settings if not already enabled"
+          ],
+          "resources": [
+            {
+              "label": "Gmail App Passwords",
+              "url": "https://support.google.com/accounts/answer/185833"
+            },
+            {
+              "label": "Outlook IMAP Settings",
+              "url": "https://support.microsoft.com/en-us/office/pop-imap-and-smtp-settings-8361e398-8af4-4e97-b147-6c6c4ac95353"
+            }
+          ]
+        },
+        {
+          "name": "imap_oauth2",
+          "title": "IMAP OAuth2 (Google/Microsoft)",
+          "description": "IMAP with OAuth2 authentication for Google Workspace or Microsoft 365. No password required - uses OAuth2 tokens.",
+          "fields": [
+            {
+              "name": "inbox.server",
+              "title": "IMAP Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "imap.gmail.com",
+              "description": "IMAP server hostname"
+            },
+            {
+              "name": "inbox.port",
+              "title": "IMAP Port",
+              "type": "number",
+              "required": true,
+              "placeholder": "993",
+              "description": "IMAP port (usually 993)"
+            },
+            {
+              "name": "email",
+              "title": "Email Address",
+              "type": "text",
+              "required": true,
+              "placeholder": "your.email@gmail.com",
+              "description": "Your email address for OAuth2 authentication"
+            },
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Copy this URL and add it to your OAuth2 app's redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "your-client-id.apps.googleusercontent.com",
+              "description": "OAuth2 Client ID from Google Cloud Console or Azure Portal"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth2 Client Secret"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID (Microsoft only)",
+              "type": "text",
+              "placeholder": "common",
+              "description": "Azure AD Tenant ID. Leave empty for Google."
+            }
+          ],
+          "help": [
+            "1. Create a Desktop/Native OAuth2 app in Google Cloud Console or Azure Portal",
+            "2. Add http://localhost:9876/oauth2/callback as a redirect URI",
+            "3. Google: imap.gmail.com:993 | Microsoft: outlook.office365.com:993",
+            "4. On first run, a browser window opens for authorization",
+            "5. Tokens are auto-saved after first OAuth login"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            },
+            {
+              "label": "Azure App Registration",
+              "url": "https://portal.azure.com/#blade/Microsoft_AAD_RegisteredApps"
+            }
+          ]
+        }
       ]
     },
     "delete-mail": {
@@ -166,6 +612,144 @@
         "**Test First**: Use Move Mail to test before deleting",
         "**Batch Operations**: Delete in batches for large cleanup tasks",
         "**Verify UIDs**: Confirm UID matches intended email before deletion"
+      ],
+      "credentials": [
+        {
+          "name": "imap_basic",
+          "title": "IMAP Basic Authentication",
+          "description": "IMAP credentials with username and password for receiving emails.",
+          "fields": [
+            {
+              "name": "inbox.type",
+              "title": "Protocol",
+              "type": "hidden"
+            },
+            {
+              "name": "inbox.server",
+              "title": "IMAP Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "imap.gmail.com",
+              "description": "The IMAP server hostname"
+            },
+            {
+              "name": "inbox.port",
+              "title": "IMAP Port",
+              "type": "number",
+              "required": true,
+              "placeholder": "993",
+              "description": "IMAP port (usually 993 for SSL)"
+            },
+            {
+              "name": "inbox.username",
+              "title": "Email Address",
+              "type": "text",
+              "required": true,
+              "placeholder": "your.email@gmail.com",
+              "description": "Your email address for authentication"
+            },
+            {
+              "name": "inbox.password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "Email password or App Password"
+            }
+          ],
+          "help": [
+            "Gmail: imap.gmail.com, port 993",
+            "Outlook/Office365: outlook.office365.com, port 993",
+            "Yahoo: imap.mail.yahoo.com, port 993",
+            "For Gmail/Google Workspace, use an App Password",
+            "Enable IMAP access in your email settings if not already enabled"
+          ],
+          "resources": [
+            {
+              "label": "Gmail App Passwords",
+              "url": "https://support.google.com/accounts/answer/185833"
+            },
+            {
+              "label": "Outlook IMAP Settings",
+              "url": "https://support.microsoft.com/en-us/office/pop-imap-and-smtp-settings-8361e398-8af4-4e97-b147-6c6c4ac95353"
+            }
+          ]
+        },
+        {
+          "name": "imap_oauth2",
+          "title": "IMAP OAuth2 (Google/Microsoft)",
+          "description": "IMAP with OAuth2 authentication for Google Workspace or Microsoft 365. No password required - uses OAuth2 tokens.",
+          "fields": [
+            {
+              "name": "inbox.server",
+              "title": "IMAP Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "imap.gmail.com",
+              "description": "IMAP server hostname"
+            },
+            {
+              "name": "inbox.port",
+              "title": "IMAP Port",
+              "type": "number",
+              "required": true,
+              "placeholder": "993",
+              "description": "IMAP port (usually 993)"
+            },
+            {
+              "name": "email",
+              "title": "Email Address",
+              "type": "text",
+              "required": true,
+              "placeholder": "your.email@gmail.com",
+              "description": "Your email address for OAuth2 authentication"
+            },
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Copy this URL and add it to your OAuth2 app's redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "your-client-id.apps.googleusercontent.com",
+              "description": "OAuth2 Client ID from Google Cloud Console or Azure Portal"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth2 Client Secret"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID (Microsoft only)",
+              "type": "text",
+              "placeholder": "common",
+              "description": "Azure AD Tenant ID. Leave empty for Google."
+            }
+          ],
+          "help": [
+            "1. Create a Desktop/Native OAuth2 app in Google Cloud Console or Azure Portal",
+            "2. Add http://localhost:9876/oauth2/callback as a redirect URI",
+            "3. Google: imap.gmail.com:993 | Microsoft: outlook.office365.com:993",
+            "4. On first run, a browser window opens for authorization",
+            "5. Tokens are auto-saved after first OAuth login"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            },
+            {
+              "label": "Azure App Registration",
+              "url": "https://portal.azure.com/#blade/Microsoft_AAD_RegisteredApps"
+            }
+          ]
+        }
       ]
     },
     "disconnect": {
@@ -256,6 +840,204 @@
         "**Attachment Preview**: Check `attachments` array to see what files are attached before downloading",
         "**Threading**: Use `message_id` for email threading and conversation tracking",
         "**Date Filtering**: For date-based retrieval, use Search Mail node instead"
+      ],
+      "credentials": [
+        {
+          "name": "imap_basic",
+          "title": "IMAP Basic Authentication",
+          "description": "IMAP credentials with username and password for receiving emails.",
+          "fields": [
+            {
+              "name": "inbox.type",
+              "title": "Protocol",
+              "type": "hidden"
+            },
+            {
+              "name": "inbox.server",
+              "title": "IMAP Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "imap.gmail.com",
+              "description": "The IMAP server hostname"
+            },
+            {
+              "name": "inbox.port",
+              "title": "IMAP Port",
+              "type": "number",
+              "required": true,
+              "placeholder": "993",
+              "description": "IMAP port (usually 993 for SSL)"
+            },
+            {
+              "name": "inbox.username",
+              "title": "Email Address",
+              "type": "text",
+              "required": true,
+              "placeholder": "your.email@gmail.com",
+              "description": "Your email address for authentication"
+            },
+            {
+              "name": "inbox.password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "Email password or App Password"
+            }
+          ],
+          "help": [
+            "Gmail: imap.gmail.com, port 993",
+            "Outlook/Office365: outlook.office365.com, port 993",
+            "Yahoo: imap.mail.yahoo.com, port 993",
+            "For Gmail/Google Workspace, use an App Password",
+            "Enable IMAP access in your email settings if not already enabled"
+          ],
+          "resources": [
+            {
+              "label": "Gmail App Passwords",
+              "url": "https://support.google.com/accounts/answer/185833"
+            },
+            {
+              "label": "Outlook IMAP Settings",
+              "url": "https://support.microsoft.com/en-us/office/pop-imap-and-smtp-settings-8361e398-8af4-4e97-b147-6c6c4ac95353"
+            }
+          ]
+        },
+        {
+          "name": "pop3_basic",
+          "title": "POP3 Basic Authentication",
+          "description": "POP3 credentials with username and password for receiving emails. Downloads emails to local storage.",
+          "fields": [
+            {
+              "name": "inbox.type",
+              "title": "Protocol",
+              "type": "hidden"
+            },
+            {
+              "name": "inbox.server",
+              "title": "POP3 Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "pop.gmail.com",
+              "description": "The POP3 server hostname"
+            },
+            {
+              "name": "inbox.port",
+              "title": "POP3 Port",
+              "type": "number",
+              "required": true,
+              "placeholder": "995",
+              "description": "POP3 port (usually 995 for SSL)"
+            },
+            {
+              "name": "inbox.username",
+              "title": "Email Address",
+              "type": "text",
+              "required": true,
+              "placeholder": "your.email@gmail.com",
+              "description": "Your email address for authentication"
+            },
+            {
+              "name": "inbox.password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "Email password or App Password"
+            }
+          ],
+          "help": [
+            "Gmail: pop.gmail.com, port 995",
+            "Outlook/Office365: outlook.office365.com, port 995",
+            "Yahoo: pop.mail.yahoo.com, port 995",
+            "POP3 downloads emails - they may be removed from server",
+            "Enable POP3 access in your email settings"
+          ],
+          "resources": [
+            {
+              "label": "Gmail POP Settings",
+              "url": "https://support.google.com/mail/answer/7104828"
+            },
+            {
+              "label": "Outlook POP Settings",
+              "url": "https://support.microsoft.com/en-us/office/pop-imap-and-smtp-settings-8361e398-8af4-4e97-b147-6c6c4ac95353"
+            }
+          ]
+        },
+        {
+          "name": "imap_oauth2",
+          "title": "IMAP OAuth2 (Google/Microsoft)",
+          "description": "IMAP with OAuth2 authentication for Google Workspace or Microsoft 365. No password required - uses OAuth2 tokens.",
+          "fields": [
+            {
+              "name": "inbox.server",
+              "title": "IMAP Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "imap.gmail.com",
+              "description": "IMAP server hostname"
+            },
+            {
+              "name": "inbox.port",
+              "title": "IMAP Port",
+              "type": "number",
+              "required": true,
+              "placeholder": "993",
+              "description": "IMAP port (usually 993)"
+            },
+            {
+              "name": "email",
+              "title": "Email Address",
+              "type": "text",
+              "required": true,
+              "placeholder": "your.email@gmail.com",
+              "description": "Your email address for OAuth2 authentication"
+            },
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Copy this URL and add it to your OAuth2 app's redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "your-client-id.apps.googleusercontent.com",
+              "description": "OAuth2 Client ID from Google Cloud Console or Azure Portal"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth2 Client Secret"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID (Microsoft only)",
+              "type": "text",
+              "placeholder": "common",
+              "description": "Azure AD Tenant ID. Leave empty for Google."
+            }
+          ],
+          "help": [
+            "1. Create a Desktop/Native OAuth2 app in Google Cloud Console or Azure Portal",
+            "2. Add http://localhost:9876/oauth2/callback as a redirect URI",
+            "3. Google: imap.gmail.com:993 | Microsoft: outlook.office365.com:993",
+            "4. On first run, a browser window opens for authorization",
+            "5. Tokens are auto-saved after first OAuth login"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            },
+            {
+              "label": "Azure App Registration",
+              "url": "https://portal.azure.com/#blade/Microsoft_AAD_RegisteredApps"
+            }
+          ]
+        }
       ]
     },
     "list-folders": {
@@ -292,6 +1074,144 @@
         "**Cache Results**: Store folder list in variable to avoid repeated queries",
         "**Folder Organization**: Plan folder structure before automating email organization",
         "**Check Provider Limits**: Some providers limit folder depth or total folders"
+      ],
+      "credentials": [
+        {
+          "name": "imap_basic",
+          "title": "IMAP Basic Authentication",
+          "description": "IMAP credentials with username and password for receiving emails.",
+          "fields": [
+            {
+              "name": "inbox.type",
+              "title": "Protocol",
+              "type": "hidden"
+            },
+            {
+              "name": "inbox.server",
+              "title": "IMAP Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "imap.gmail.com",
+              "description": "The IMAP server hostname"
+            },
+            {
+              "name": "inbox.port",
+              "title": "IMAP Port",
+              "type": "number",
+              "required": true,
+              "placeholder": "993",
+              "description": "IMAP port (usually 993 for SSL)"
+            },
+            {
+              "name": "inbox.username",
+              "title": "Email Address",
+              "type": "text",
+              "required": true,
+              "placeholder": "your.email@gmail.com",
+              "description": "Your email address for authentication"
+            },
+            {
+              "name": "inbox.password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "Email password or App Password"
+            }
+          ],
+          "help": [
+            "Gmail: imap.gmail.com, port 993",
+            "Outlook/Office365: outlook.office365.com, port 993",
+            "Yahoo: imap.mail.yahoo.com, port 993",
+            "For Gmail/Google Workspace, use an App Password",
+            "Enable IMAP access in your email settings if not already enabled"
+          ],
+          "resources": [
+            {
+              "label": "Gmail App Passwords",
+              "url": "https://support.google.com/accounts/answer/185833"
+            },
+            {
+              "label": "Outlook IMAP Settings",
+              "url": "https://support.microsoft.com/en-us/office/pop-imap-and-smtp-settings-8361e398-8af4-4e97-b147-6c6c4ac95353"
+            }
+          ]
+        },
+        {
+          "name": "imap_oauth2",
+          "title": "IMAP OAuth2 (Google/Microsoft)",
+          "description": "IMAP with OAuth2 authentication for Google Workspace or Microsoft 365. No password required - uses OAuth2 tokens.",
+          "fields": [
+            {
+              "name": "inbox.server",
+              "title": "IMAP Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "imap.gmail.com",
+              "description": "IMAP server hostname"
+            },
+            {
+              "name": "inbox.port",
+              "title": "IMAP Port",
+              "type": "number",
+              "required": true,
+              "placeholder": "993",
+              "description": "IMAP port (usually 993)"
+            },
+            {
+              "name": "email",
+              "title": "Email Address",
+              "type": "text",
+              "required": true,
+              "placeholder": "your.email@gmail.com",
+              "description": "Your email address for OAuth2 authentication"
+            },
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Copy this URL and add it to your OAuth2 app's redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "your-client-id.apps.googleusercontent.com",
+              "description": "OAuth2 Client ID from Google Cloud Console or Azure Portal"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth2 Client Secret"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID (Microsoft only)",
+              "type": "text",
+              "placeholder": "common",
+              "description": "Azure AD Tenant ID. Leave empty for Google."
+            }
+          ],
+          "help": [
+            "1. Create a Desktop/Native OAuth2 app in Google Cloud Console or Azure Portal",
+            "2. Add http://localhost:9876/oauth2/callback as a redirect URI",
+            "3. Google: imap.gmail.com:993 | Microsoft: outlook.office365.com:993",
+            "4. On first run, a browser window opens for authorization",
+            "5. Tokens are auto-saved after first OAuth login"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            },
+            {
+              "label": "Azure App Registration",
+              "url": "https://portal.azure.com/#blade/Microsoft_AAD_RegisteredApps"
+            }
+          ]
+        }
       ]
     },
     "move-mail": {
@@ -334,6 +1254,144 @@
         "**Archive Strategy**: Move old emails to Archive for better performance",
         "**Workflow Organization**: Move emails through folders as workflow progresses",
         "**Error Recovery**: Use Try-Catch to handle move failures"
+      ],
+      "credentials": [
+        {
+          "name": "imap_basic",
+          "title": "IMAP Basic Authentication",
+          "description": "IMAP credentials with username and password for receiving emails.",
+          "fields": [
+            {
+              "name": "inbox.type",
+              "title": "Protocol",
+              "type": "hidden"
+            },
+            {
+              "name": "inbox.server",
+              "title": "IMAP Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "imap.gmail.com",
+              "description": "The IMAP server hostname"
+            },
+            {
+              "name": "inbox.port",
+              "title": "IMAP Port",
+              "type": "number",
+              "required": true,
+              "placeholder": "993",
+              "description": "IMAP port (usually 993 for SSL)"
+            },
+            {
+              "name": "inbox.username",
+              "title": "Email Address",
+              "type": "text",
+              "required": true,
+              "placeholder": "your.email@gmail.com",
+              "description": "Your email address for authentication"
+            },
+            {
+              "name": "inbox.password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "Email password or App Password"
+            }
+          ],
+          "help": [
+            "Gmail: imap.gmail.com, port 993",
+            "Outlook/Office365: outlook.office365.com, port 993",
+            "Yahoo: imap.mail.yahoo.com, port 993",
+            "For Gmail/Google Workspace, use an App Password",
+            "Enable IMAP access in your email settings if not already enabled"
+          ],
+          "resources": [
+            {
+              "label": "Gmail App Passwords",
+              "url": "https://support.google.com/accounts/answer/185833"
+            },
+            {
+              "label": "Outlook IMAP Settings",
+              "url": "https://support.microsoft.com/en-us/office/pop-imap-and-smtp-settings-8361e398-8af4-4e97-b147-6c6c4ac95353"
+            }
+          ]
+        },
+        {
+          "name": "imap_oauth2",
+          "title": "IMAP OAuth2 (Google/Microsoft)",
+          "description": "IMAP with OAuth2 authentication for Google Workspace or Microsoft 365. No password required - uses OAuth2 tokens.",
+          "fields": [
+            {
+              "name": "inbox.server",
+              "title": "IMAP Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "imap.gmail.com",
+              "description": "IMAP server hostname"
+            },
+            {
+              "name": "inbox.port",
+              "title": "IMAP Port",
+              "type": "number",
+              "required": true,
+              "placeholder": "993",
+              "description": "IMAP port (usually 993)"
+            },
+            {
+              "name": "email",
+              "title": "Email Address",
+              "type": "text",
+              "required": true,
+              "placeholder": "your.email@gmail.com",
+              "description": "Your email address for OAuth2 authentication"
+            },
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Copy this URL and add it to your OAuth2 app's redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "your-client-id.apps.googleusercontent.com",
+              "description": "OAuth2 Client ID from Google Cloud Console or Azure Portal"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth2 Client Secret"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID (Microsoft only)",
+              "type": "text",
+              "placeholder": "common",
+              "description": "Azure AD Tenant ID. Leave empty for Google."
+            }
+          ],
+          "help": [
+            "1. Create a Desktop/Native OAuth2 app in Google Cloud Console or Azure Portal",
+            "2. Add http://localhost:9876/oauth2/callback as a redirect URI",
+            "3. Google: imap.gmail.com:993 | Microsoft: outlook.office365.com:993",
+            "4. On first run, a browser window opens for authorization",
+            "5. Tokens are auto-saved after first OAuth login"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            },
+            {
+              "label": "Azure App Registration",
+              "url": "https://portal.azure.com/#blade/Microsoft_AAD_RegisteredApps"
+            }
+          ]
+        }
       ]
     },
     "save-attachments": {
@@ -381,6 +1439,144 @@
         "**Batch Processing**: Process emails in batches to manage disk space",
         "**File Validation**: Verify downloaded files exist and have expected size",
         "**Cleanup**: Delete old attachments after processing to save space"
+      ],
+      "credentials": [
+        {
+          "name": "imap_basic",
+          "title": "IMAP Basic Authentication",
+          "description": "IMAP credentials with username and password for receiving emails.",
+          "fields": [
+            {
+              "name": "inbox.type",
+              "title": "Protocol",
+              "type": "hidden"
+            },
+            {
+              "name": "inbox.server",
+              "title": "IMAP Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "imap.gmail.com",
+              "description": "The IMAP server hostname"
+            },
+            {
+              "name": "inbox.port",
+              "title": "IMAP Port",
+              "type": "number",
+              "required": true,
+              "placeholder": "993",
+              "description": "IMAP port (usually 993 for SSL)"
+            },
+            {
+              "name": "inbox.username",
+              "title": "Email Address",
+              "type": "text",
+              "required": true,
+              "placeholder": "your.email@gmail.com",
+              "description": "Your email address for authentication"
+            },
+            {
+              "name": "inbox.password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "Email password or App Password"
+            }
+          ],
+          "help": [
+            "Gmail: imap.gmail.com, port 993",
+            "Outlook/Office365: outlook.office365.com, port 993",
+            "Yahoo: imap.mail.yahoo.com, port 993",
+            "For Gmail/Google Workspace, use an App Password",
+            "Enable IMAP access in your email settings if not already enabled"
+          ],
+          "resources": [
+            {
+              "label": "Gmail App Passwords",
+              "url": "https://support.google.com/accounts/answer/185833"
+            },
+            {
+              "label": "Outlook IMAP Settings",
+              "url": "https://support.microsoft.com/en-us/office/pop-imap-and-smtp-settings-8361e398-8af4-4e97-b147-6c6c4ac95353"
+            }
+          ]
+        },
+        {
+          "name": "imap_oauth2",
+          "title": "IMAP OAuth2 (Google/Microsoft)",
+          "description": "IMAP with OAuth2 authentication for Google Workspace or Microsoft 365. No password required - uses OAuth2 tokens.",
+          "fields": [
+            {
+              "name": "inbox.server",
+              "title": "IMAP Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "imap.gmail.com",
+              "description": "IMAP server hostname"
+            },
+            {
+              "name": "inbox.port",
+              "title": "IMAP Port",
+              "type": "number",
+              "required": true,
+              "placeholder": "993",
+              "description": "IMAP port (usually 993)"
+            },
+            {
+              "name": "email",
+              "title": "Email Address",
+              "type": "text",
+              "required": true,
+              "placeholder": "your.email@gmail.com",
+              "description": "Your email address for OAuth2 authentication"
+            },
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Copy this URL and add it to your OAuth2 app's redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "your-client-id.apps.googleusercontent.com",
+              "description": "OAuth2 Client ID from Google Cloud Console or Azure Portal"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth2 Client Secret"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID (Microsoft only)",
+              "type": "text",
+              "placeholder": "common",
+              "description": "Azure AD Tenant ID. Leave empty for Google."
+            }
+          ],
+          "help": [
+            "1. Create a Desktop/Native OAuth2 app in Google Cloud Console or Azure Portal",
+            "2. Add http://localhost:9876/oauth2/callback as a redirect URI",
+            "3. Google: imap.gmail.com:993 | Microsoft: outlook.office365.com:993",
+            "4. On first run, a browser window opens for authorization",
+            "5. Tokens are auto-saved after first OAuth login"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            },
+            {
+              "label": "Azure App Registration",
+              "url": "https://portal.azure.com/#blade/Microsoft_AAD_RegisteredApps"
+            }
+          ]
+        }
       ]
     },
     "search-mail": {
@@ -428,6 +1624,144 @@
         "**Performance**: Searching by Mail ID is fastest",
         "**Folder-Specific**: Search only searches the specified folder (except Mail ID search)",
         "**Body Search Caution**: Body searches can be slow on large mailboxes"
+      ],
+      "credentials": [
+        {
+          "name": "imap_basic",
+          "title": "IMAP Basic Authentication",
+          "description": "IMAP credentials with username and password for receiving emails.",
+          "fields": [
+            {
+              "name": "inbox.type",
+              "title": "Protocol",
+              "type": "hidden"
+            },
+            {
+              "name": "inbox.server",
+              "title": "IMAP Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "imap.gmail.com",
+              "description": "The IMAP server hostname"
+            },
+            {
+              "name": "inbox.port",
+              "title": "IMAP Port",
+              "type": "number",
+              "required": true,
+              "placeholder": "993",
+              "description": "IMAP port (usually 993 for SSL)"
+            },
+            {
+              "name": "inbox.username",
+              "title": "Email Address",
+              "type": "text",
+              "required": true,
+              "placeholder": "your.email@gmail.com",
+              "description": "Your email address for authentication"
+            },
+            {
+              "name": "inbox.password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "Email password or App Password"
+            }
+          ],
+          "help": [
+            "Gmail: imap.gmail.com, port 993",
+            "Outlook/Office365: outlook.office365.com, port 993",
+            "Yahoo: imap.mail.yahoo.com, port 993",
+            "For Gmail/Google Workspace, use an App Password",
+            "Enable IMAP access in your email settings if not already enabled"
+          ],
+          "resources": [
+            {
+              "label": "Gmail App Passwords",
+              "url": "https://support.google.com/accounts/answer/185833"
+            },
+            {
+              "label": "Outlook IMAP Settings",
+              "url": "https://support.microsoft.com/en-us/office/pop-imap-and-smtp-settings-8361e398-8af4-4e97-b147-6c6c4ac95353"
+            }
+          ]
+        },
+        {
+          "name": "imap_oauth2",
+          "title": "IMAP OAuth2 (Google/Microsoft)",
+          "description": "IMAP with OAuth2 authentication for Google Workspace or Microsoft 365. No password required - uses OAuth2 tokens.",
+          "fields": [
+            {
+              "name": "inbox.server",
+              "title": "IMAP Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "imap.gmail.com",
+              "description": "IMAP server hostname"
+            },
+            {
+              "name": "inbox.port",
+              "title": "IMAP Port",
+              "type": "number",
+              "required": true,
+              "placeholder": "993",
+              "description": "IMAP port (usually 993)"
+            },
+            {
+              "name": "email",
+              "title": "Email Address",
+              "type": "text",
+              "required": true,
+              "placeholder": "your.email@gmail.com",
+              "description": "Your email address for OAuth2 authentication"
+            },
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Copy this URL and add it to your OAuth2 app's redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "your-client-id.apps.googleusercontent.com",
+              "description": "OAuth2 Client ID from Google Cloud Console or Azure Portal"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth2 Client Secret"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID (Microsoft only)",
+              "type": "text",
+              "placeholder": "common",
+              "description": "Azure AD Tenant ID. Leave empty for Google."
+            }
+          ],
+          "help": [
+            "1. Create a Desktop/Native OAuth2 app in Google Cloud Console or Azure Portal",
+            "2. Add http://localhost:9876/oauth2/callback as a redirect URI",
+            "3. Google: imap.gmail.com:993 | Microsoft: outlook.office365.com:993",
+            "4. On first run, a browser window opens for authorization",
+            "5. Tokens are auto-saved after first OAuth login"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            },
+            {
+              "label": "Azure App Registration",
+              "url": "https://portal.azure.com/#blade/Microsoft_AAD_RegisteredApps"
+            }
+          ]
+        }
       ]
     },
     "send-mail": {
@@ -492,6 +1826,138 @@
         "**Batch Sending**: For mass emails, add delays between sends to avoid rate limiting",
         "**Template Emails**: Use variable substitution in subject and body for personalized emails",
         "**Delivery Tracking**: Check sent folder or use email tracking services for delivery confirmation"
+      ],
+      "credentials": [
+        {
+          "name": "smtp_basic",
+          "title": "SMTP Basic Authentication",
+          "description": "SMTP credentials with username and password for sending emails.",
+          "fields": [
+            {
+              "name": "smtp.server",
+              "title": "SMTP Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "smtp.gmail.com",
+              "description": "The SMTP server hostname"
+            },
+            {
+              "name": "smtp.port",
+              "title": "SMTP Port",
+              "type": "number",
+              "required": true,
+              "placeholder": "587",
+              "description": "SMTP port (usually 587 for TLS, 465 for SSL)"
+            },
+            {
+              "name": "smtp.username",
+              "title": "Username",
+              "type": "text",
+              "required": true,
+              "placeholder": "your.email@gmail.com",
+              "description": "Username for SMTP authentication (usually your email)"
+            },
+            {
+              "name": "smtp.password",
+              "title": "Password",
+              "type": "password",
+              "required": true,
+              "description": "SMTP password or App Password"
+            }
+          ],
+          "help": [
+            "Gmail: smtp.gmail.com, port 587 (TLS) or 465 (SSL)",
+            "Outlook/Office365: smtp.office365.com, port 587",
+            "Yahoo: smtp.mail.yahoo.com, port 587",
+            "For Gmail/Google Workspace, use an App Password"
+          ],
+          "resources": [
+            {
+              "label": "Gmail App Passwords",
+              "url": "https://support.google.com/accounts/answer/185833"
+            },
+            {
+              "label": "Gmail SMTP Settings",
+              "url": "https://support.google.com/a/answer/176600"
+            }
+          ]
+        },
+        {
+          "name": "smtp_oauth2",
+          "title": "SMTP OAuth2 (Google/Microsoft)",
+          "description": "SMTP with OAuth2 authentication for Google Workspace or Microsoft 365. No password required - uses OAuth2 tokens.",
+          "fields": [
+            {
+              "name": "smtp.server",
+              "title": "SMTP Server",
+              "type": "text",
+              "required": true,
+              "placeholder": "smtp.gmail.com",
+              "description": "SMTP server hostname"
+            },
+            {
+              "name": "smtp.port",
+              "title": "SMTP Port",
+              "type": "number",
+              "required": true,
+              "placeholder": "587",
+              "description": "SMTP port (usually 587)"
+            },
+            {
+              "name": "email",
+              "title": "Email Address",
+              "type": "text",
+              "required": true,
+              "placeholder": "your.email@gmail.com",
+              "description": "Your email address for OAuth2 authentication"
+            },
+            {
+              "name": "_redirect_url",
+              "title": "Redirect URL",
+              "type": "readonly",
+              "description": "Copy this URL and add it to your OAuth2 app's redirect URIs"
+            },
+            {
+              "name": "client_id",
+              "title": "Client ID",
+              "type": "text",
+              "required": true,
+              "placeholder": "your-client-id.apps.googleusercontent.com",
+              "description": "OAuth2 Client ID from Google Cloud Console or Azure Portal"
+            },
+            {
+              "name": "client_secret",
+              "title": "Client Secret",
+              "type": "password",
+              "required": true,
+              "description": "OAuth2 Client Secret"
+            },
+            {
+              "name": "tenant_id",
+              "title": "Tenant ID (Microsoft only)",
+              "type": "text",
+              "placeholder": "common",
+              "description": "Azure AD Tenant ID. Leave empty for Google."
+            }
+          ],
+          "help": [
+            "1. Create a Desktop/Native OAuth2 app in Google Cloud Console or Azure Portal",
+            "2. Add http://localhost:9876/oauth2/callback as a redirect URI",
+            "3. Google: smtp.gmail.com:587 | Microsoft: smtp.office365.com:587",
+            "4. On first run, a browser window opens for authorization",
+            "5. Tokens are auto-saved after first OAuth login"
+          ],
+          "resources": [
+            {
+              "label": "Google Cloud Console",
+              "url": "https://console.cloud.google.com/apis/credentials"
+            },
+            {
+              "label": "Azure App Registration",
+              "url": "https://portal.azure.com/#blade/Microsoft_AAD_RegisteredApps"
+            }
+          ]
+        }
       ]
     }
   }
