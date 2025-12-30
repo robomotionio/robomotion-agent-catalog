@@ -1,0 +1,3741 @@
+{
+  "name": "Excel",
+  "color": "#4CAF50",
+  "icon": "file-spreadsheet",
+  "nodes": [
+    {
+      "name": "Open Excel",
+      "description": "Opens an Excel file (.xlsx, .xlsm, .xls) for manipulation. Supports password-protected files through the credential system.",
+      "color": "#4CAF50",
+      "icon": "file-spreadsheet",
+      "id": "Core.Excel.Open",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inPath": {
+                "type": "object",
+                "title": "Excel File Path",
+                "description": "The path to the Excel file to open. Supports .xlsx, .xlsm, .xls, .xlam, .xltm, and .xltx formats. If the file doesn't exist and 'Create If Not Exists' is enabled, a new file will be created.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inPath": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inPath": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outFileDescriptor": {
+                "type": "object",
+                "title": "Excel File Descriptor",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outFileDescriptor": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outFileDescriptor": {
+              "scope": "Message",
+              "name": "excel_fd"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optCreate": {
+                "title": "Create If Not Exists",
+                "description": "If true, creates a new Excel file if the specified path doesn't exist. If false, returns an error when the file is not found.",
+                "type": "boolean"
+              },
+              "optCredentials": {
+                "type": "object",
+                "title": "Password",
+                "subtitle": "Password",
+                "description": "Credentials for password-protected Excel files. Select a vault item containing the file password to open encrypted files.",
+                "category": 4,
+                "messageScope": true,
+                "customScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "object",
+                    "properties": {
+                      "vaultId": {
+                        "type": "string"
+                      },
+                      "itemId": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optCredentials": {
+              "ui:field": "vault"
+            },
+            "ui:order": [
+              "optCreate",
+              "optCredentials"
+            ]
+          },
+          "formData": {
+            "optCreate": false,
+            "optCredentials": {
+              "scope": "Custom",
+              "name": {
+                "vaultId": "_",
+                "itemId": "_"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Close Excel",
+      "description": "Closes an opened Excel file and releases its file handle from memory. This should be called when you're done working with a file.",
+      "color": "#4CAF50",
+      "icon": "file-spreadsheet",
+      "id": "Core.Excel.Close",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFileDescriptor": {
+                "type": "object",
+                "title": "Excel File Descriptor",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFileDescriptor": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inFileDescriptor": {
+              "scope": "Message",
+              "name": "excel_fd"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Create Excel",
+      "description": "Creates a new Excel file at the specified path. Can optionally overwrite existing files if the Overwrite option is enabled.",
+      "color": "#4CAF50",
+      "icon": "file-spreadsheet",
+      "id": "Core.Excel.Create",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inPath": {
+                "type": "object",
+                "title": "Excel File Path",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inPath": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inPath"
+            ]
+          },
+          "formData": {
+            "inPath": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outFileDescriptor": {
+                "type": "object",
+                "title": "Excel File Descriptor",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outFileDescriptor": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outFileDescriptor": {
+              "scope": "Message",
+              "name": "excel_fd"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optOverwrite": {
+                "title": "Overwrite If Exists",
+                "description": "If true, overwrites an existing file at the specified path. If false, returns an error when a file already exists at the target location.",
+                "type": "boolean"
+              }
+            }
+          },
+          "uiSchema": {},
+          "formData": {
+            "optOverwrite": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "Save Excel",
+      "description": "Saves an Excel file to disk. Can save to the original path or to a new location specified by the Save File Path parameter.",
+      "color": "#4CAF50",
+      "icon": "file-spreadsheet",
+      "id": "Core.Excel.Save",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFileDescriptor": {
+                "type": "object",
+                "title": "Excel File Descriptor",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inSaveFilePath": {
+                "type": "object",
+                "title": "Save File Path",
+                "description": "Optional path to save the file to a different location. If empty, saves to the original file path.",
+                "variableType": "String",
+                "customScope": true,
+                "jsScope": true,
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFileDescriptor": {
+              "ui:field": "variable"
+            },
+            "inSaveFilePath": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inFileDescriptor": {
+              "scope": "Message",
+              "name": "excel_fd"
+            },
+            "inSaveFilePath": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Switch To Sheet",
+      "description": "Switches the active worksheet in an Excel file to the specified sheet name. The active sheet determines which sheet other operations will target.",
+      "color": "#4CAF50",
+      "icon": "file-spreadsheet",
+      "id": "Core.Excel.SwitchSheet",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFileDescriptor": {
+                "type": "object",
+                "title": "Excel File Descriptor",
+                "description": "The Excel file handle returned from Open Excel or Create Excel node.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inSheet": {
+                "type": "object",
+                "title": "Sheet",
+                "description": "The name of the worksheet to switch to. This sheet must exist in the Excel file.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFileDescriptor": {
+              "ui:field": "variable"
+            },
+            "inSheet": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inFileDescriptor",
+              "inSheet"
+            ]
+          },
+          "formData": {
+            "inFileDescriptor": {
+              "scope": "Message",
+              "name": "excel_fd"
+            },
+            "inSheet": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Create Sheet",
+      "description": "Creates a new worksheet in an Excel file with the specified name. Optionally switches to the new sheet after creation.",
+      "color": "#4CAF50",
+      "icon": "file-spreadsheet",
+      "id": "Core.Excel.CreateSheet",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFileDescriptor": {
+                "type": "object",
+                "title": "Excel File Descriptor",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inSheet": {
+                "type": "object",
+                "title": "Sheet",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFileDescriptor": {
+              "ui:field": "variable"
+            },
+            "inSheet": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inFileDescriptor",
+              "inSheet"
+            ]
+          },
+          "formData": {
+            "inFileDescriptor": {
+              "scope": "Message",
+              "name": "excel_fd"
+            },
+            "inSheet": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optSwitch": {
+                "title": "Switch To Sheet",
+                "type": "boolean"
+              }
+            }
+          },
+          "uiSchema": {},
+          "formData": {
+            "optSwitch": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "Copy Sheet",
+      "description": "Creates a copy of an existing worksheet within the same Excel file. The copied sheet includes all data, formatting, and formulas from the source sheet.",
+      "color": "#4CAF50",
+      "icon": "file-spreadsheet",
+      "id": "Core.Excel.CopySheet",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFileDescriptor": {
+                "type": "object",
+                "title": "Excel File Descriptor",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inSheet": {
+                "type": "object",
+                "title": "Sheet Name",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inCopiedSheetName": {
+                "type": "object",
+                "title": "Copied Sheet Name",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFileDescriptor": {
+              "ui:field": "variable"
+            },
+            "inSheet": {
+              "ui:field": "variable"
+            },
+            "inCopiedSheetName": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inFileDescriptor",
+              "inSheet",
+              "inCopiedSheetName"
+            ]
+          },
+          "formData": {
+            "inFileDescriptor": {
+              "scope": "Message",
+              "name": "excel_fd"
+            },
+            "inSheet": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inCopiedSheetName": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optSwitch": {
+                "title": "Switch To Sheet",
+                "type": "boolean"
+              }
+            }
+          },
+          "uiSchema": {
+            "ui:order": [
+              "optSwitch"
+            ]
+          },
+          "formData": {
+            "optSwitch": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "Set Style",
+      "description": "Applies formatting styles to a range of cells in the active worksheet. Supports font family, size, formatting options like bold/italic/underline, and custom number formats.",
+      "color": "#4CAF50",
+      "icon": "file-spreadsheet",
+      "id": "Core.Excel.SetStyle",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFileDescriptor": {
+                "type": "object",
+                "title": "Excel File Descriptor",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inFromCell": {
+                "type": "object",
+                "title": "From Cell",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inToCell": {
+                "type": "object",
+                "title": "To Cell",
+                "variableType": "String",
+                "customScope": true,
+                "jsScope": true,
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFileDescriptor": {
+              "ui:field": "variable"
+            },
+            "inFromCell": {
+              "ui:field": "variable"
+            },
+            "inToCell": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inFileDescriptor",
+              "inFromCell",
+              "inToCell"
+            ]
+          },
+          "formData": {
+            "inFont": "None",
+            "inFromCell": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inToCell": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inFileDescriptor": {
+              "scope": "Message",
+              "name": "excel_fd"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optFont": {
+                "type": "string",
+                "title": "Font Family",
+                "multiple": true,
+                "enumNames": [
+                  "Arial",
+                  "Calibri",
+                  "DejaVu Sans",
+                  "Times New Roman",
+                  "Verdana"
+                ],
+                "enum": [
+                  "Arial",
+                  "Calibri",
+                  "DejaVu Sans",
+                  "Times New Roman",
+                  "Verdana"
+                ]
+              },
+              "optDateFormat": {
+                "type": "string",
+                "title": "Format",
+                "multiple": true,
+                "enumNames": [
+                  "General",
+                  "0",
+                  "0.00",
+                  "#,##0",
+                  "#,##0.00",
+                  "($#,##0_);($#,##0)",
+                  "($#,##0_);[Red]($#,##0)",
+                  "($#,##0.00_);($#,##0.00)",
+                  "($#,##0.00_);[Red]($#,##0.00)",
+                  "0%",
+                  "0.00%",
+                  "0.00E+00",
+                  "# ?/?",
+                  "# ??/??",
+                  "dd.mm.yyyy",
+                  "m/d/yy",
+                  "d-mmm-yy",
+                  "d-mmm",
+                  "mmm-yy",
+                  "m/d/yy h:mm",
+                  "h:mm",
+                  "h:mm AM/PM",
+                  "h:mm:ss",
+                  "h:mm:ss AM/PM",
+                  "(#,##0_);(#,##0)",
+                  "(#,##0_);[Red](#,##0)",
+                  "(#,##0.00_);(#,##0.00)",
+                  "(#,##0.00_);[Red](#,##0.00)",
+                  "_(* #,##0_);_(* (#,##0);_(* \"-\"_);_(@_)",
+                  "_($* #,##0_);_($* (#,##0);_($* \"-\"_);_(@_)",
+                  "_(* #,##0.00_);_(* (#,##0.00);_(* \"-\"??_);_(@_)",
+                  "_($* #,##0.00_);_($* (#,##0.00);_($* \"-\"??_);_(@_)",
+                  "#.##0,00 [$₺-tr-TR]",
+                  "₺#,#0.00",
+                  "mm:ss",
+                  "[h]:mm:ss",
+                  "mm:ss.0",
+                  "##0.0E+0",
+                  "@"
+                ],
+                "enum": [
+                  "General",
+                  "0",
+                  "0.00",
+                  "#,##0",
+                  "#,##0.00",
+                  "($#,##0_);($#,##0)",
+                  "($#,##0_);[Red]($#,##0)",
+                  "($#,##0.00_);($#,##0.00)",
+                  "($#,##0.00_);[Red]($#,##0.00)",
+                  "0%",
+                  "0.00%",
+                  "0.00E+00",
+                  "# ?/?",
+                  "# ??/??",
+                  "dd.mm.yyyy",
+                  "m/d/yy",
+                  "d-mmm-yy",
+                  "d-mmm",
+                  "mmm-yy",
+                  "m/d/yy h:mm",
+                  "h:mm",
+                  "h:mm AM/PM",
+                  "h:mm:ss",
+                  "h:mm:ss AM/PM",
+                  "(#,##0_);(#,##0)",
+                  "(#,##0_);[Red](#,##0)",
+                  "(#,##0.00_);(#,##0.00)",
+                  "(#,##0.00_);[Red](#,##0.00)",
+                  "_(* #,##0_);_(* (#,##0);_(* \"-\"_);_(@_)",
+                  "_($* #,##0_);_($* (#,##0);_($* \"-\"_);_(@_)",
+                  "_(* #,##0.00_);_(* (#,##0.00);_(* \"-\"??_);_(@_)",
+                  "_($* #,##0.00_);_($* (#,##0.00);_($* \"-\"??_);_(@_)",
+                  "#.##0,00 [$₺-tr-TR]",
+                  "₺#,#0.00",
+                  "mm:ss",
+                  "[h]:mm:ss",
+                  "mm:ss.0",
+                  "##0.0E+0",
+                  "@"
+                ]
+              },
+              "optSize": {
+                "type": "object",
+                "title": "Size",
+                "variableType": "String",
+                "customScope": true,
+                "jsScope": true,
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "optWidth": {
+                "type": "object",
+                "title": "Column Width",
+                "variableType": "String",
+                "customScope": true,
+                "jsScope": true,
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "optBold": {
+                "type": "boolean",
+                "title": "Bold"
+              },
+              "optUnderline": {
+                "type": "boolean",
+                "title": "Underline"
+              },
+              "optItalic": {
+                "type": "boolean",
+                "title": "Italic"
+              }
+            }
+          },
+          "uiSchema": {
+            "optSize": {
+              "ui:field": "variable"
+            },
+            "optWidth": {
+              "ui:field": "variable"
+            },
+            "optFromCell": {
+              "ui:field": "variable"
+            },
+            "optToCell": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "optBold",
+              "optItalic",
+              "optUnderline",
+              "optFont",
+              "optDateFormat",
+              "optSize",
+              "optWidth"
+            ]
+          },
+          "formData": {
+            "optFont": "_",
+            "optDateFormat": "_",
+            "optSize": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "optWidth": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Set Active Cell",
+      "description": "Sets the active cell position in the worksheet. Can move to a specific cell or navigate relative to the current position (up, down, next, previous, etc.).",
+      "color": "#4CAF50",
+      "icon": "file-spreadsheet",
+      "id": "Core.Excel.SetActiveCell",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFileDescriptor": {
+                "type": "object",
+                "title": "Excel File Descriptor",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inCell": {
+                "type": "object",
+                "title": "Cell",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFileDescriptor": {
+              "ui:field": "variable"
+            },
+            "inCell": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inFileDescriptor",
+              "inCell"
+            ]
+          },
+          "formData": {
+            "inFileDescriptor": {
+              "scope": "Message",
+              "name": "excel_fd"
+            },
+            "inCell": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optTarget": {
+                "type": "string",
+                "title": "Target",
+                "multiple": true,
+                "enum": [
+                  "specific",
+                  "up",
+                  "down",
+                  "next",
+                  "previous",
+                  "rowEnd",
+                  "rowBegin",
+                  "nextRow"
+                ],
+                "enumNames": [
+                  "Specific Cell",
+                  "Above Cell",
+                  "Below Cell",
+                  "Next Cell",
+                  "Previous Cell",
+                  "End of the Row",
+                  "Begin of the Row",
+                  "Next Row"
+                ]
+              }
+            }
+          },
+          "uiSchema": {},
+          "formData": {
+            "optTarget": "next"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Set Cell Value",
+      "description": "Sets the value of a specific cell in the active worksheet. Supports different data formats including text, numbers, dates, and boolean values.",
+      "color": "#4CAF50",
+      "icon": "file-spreadsheet",
+      "id": "Core.Excel.SetCellValue",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFileDescriptor": {
+                "type": "object",
+                "title": "Excel File Descriptor",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inCell": {
+                "type": "object",
+                "title": "Cell",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inValue": {
+                "type": "object",
+                "title": "Value",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFileDescriptor": {
+              "ui:field": "variable"
+            },
+            "inCell": {
+              "ui:field": "variable"
+            },
+            "inValue": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inFileDescriptor",
+              "inCell",
+              "inValue"
+            ]
+          },
+          "formData": {
+            "inFileDescriptor": {
+              "scope": "Message",
+              "name": "excel_fd"
+            },
+            "inCell": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inValue": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optTarget": {
+                "type": "string",
+                "title": "Target",
+                "multiple": true,
+                "enum": [
+                  "active-cell",
+                  "specific-cell"
+                ],
+                "enumNames": [
+                  "Active Cell",
+                  "Specific Cell"
+                ]
+              },
+              "optFormat": {
+                "type": "string",
+                "title": "Format",
+                "enum": [
+                  "string",
+                  "number",
+                  "datetime",
+                  "bool"
+                ],
+                "enumNames": [
+                  "String",
+                  "Number",
+                  "DateTime",
+                  "Boolean"
+                ]
+              }
+            }
+          },
+          "uiSchema": {},
+          "formData": {
+            "optTarget": "specific-cell",
+            "optFormat": "string"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get Cell Value",
+      "description": "Retrieves the value from a specific cell in the active worksheet. Can return formatted or raw cell values, and supports formula evaluation.",
+      "color": "#4CAF50",
+      "icon": "file-spreadsheet",
+      "id": "Core.Excel.GetCellValue",
+      "version": "24.2.0",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFileDescriptor": {
+                "type": "object",
+                "title": "Excel File Descriptor",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inCell": {
+                "type": "object",
+                "title": "Cell",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFileDescriptor": {
+              "ui:field": "variable"
+            },
+            "inCell": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inFileDescriptor",
+              "inCell"
+            ]
+          },
+          "formData": {
+            "inFileDescriptor": {
+              "scope": "Message",
+              "name": "excel_fd"
+            },
+            "inCell": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outValue": {
+                "type": "object",
+                "title": "Cell Value",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outValue": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "outValue"
+            ]
+          },
+          "formData": {
+            "outValue": {
+              "scope": "Message",
+              "name": "value"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optTarget": {
+                "type": "string",
+                "title": "Target",
+                "multiple": true,
+                "enum": [
+                  "active-cell",
+                  "specific-cell"
+                ],
+                "enumNames": [
+                  "Active Cell",
+                  "Specific Cell"
+                ]
+              },
+              "optRawValue": {
+                "title": "Raw Value",
+                "type": "boolean",
+                "description": "Enable this option if you wish to retrieve the unformatted raw cell value. For example, it will return the float value 1234.50 instead of the formatted string '$1,234.50'. For date cells, it will return the raw numeric value 45167 (the number of days passed since 01-01-1900) instead of the Date Time formatted '2023-08-30' string value."
+              },
+              "optIsFormula": {
+                "title": "Is Formula",
+                "type": "boolean"
+              }
+            }
+          },
+          "uiSchema": {
+            "ui:order": [
+              "optTarget",
+              "optRawValue",
+              "optIsFormula"
+            ]
+          },
+          "formData": {
+            "optTarget": "specific-cell"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Set Formula",
+      "description": "Sets an Excel formula in a specific cell. Supports all Excel formula syntax including functions, cell references, and mathematical operations.",
+      "color": "#4CAF50",
+      "icon": "file-spreadsheet",
+      "id": "Core.Excel.SetFormula",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFileDescriptor": {
+                "type": "object",
+                "title": "Excel File Descriptor",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inTargetCell": {
+                "type": "object",
+                "title": "Target Cell",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inFormula": {
+                "type": "object",
+                "title": "Formula",
+                "variableType": "String",
+                "customScope": true,
+                "jsScope": true,
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFileDescriptor": {
+              "ui:field": "variable"
+            },
+            "inTargetCell": {
+              "ui:field": "variable"
+            },
+            "inFormula": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inFileDescriptor",
+              "inTargetCell",
+              "inFormula"
+            ]
+          },
+          "formData": {
+            "inTargetCell": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inFormula": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inFileDescriptor": {
+              "scope": "Message",
+              "name": "excel_fd"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Delete Cell",
+      "description": "Clears the content of a specific cell in the active worksheet. Can target the active cell or a specific cell reference.",
+      "color": "#4CAF50",
+      "icon": "file-spreadsheet",
+      "id": "Core.Excel.DeleteCell",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFileDescriptor": {
+                "type": "object",
+                "title": "Excel File Descriptor",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inCell": {
+                "type": "object",
+                "title": "Cell",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFileDescriptor": {
+              "ui:field": "variable"
+            },
+            "inCell": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inFileDescriptor",
+              "inCell"
+            ]
+          },
+          "formData": {
+            "inFileDescriptor": {
+              "scope": "Message",
+              "name": "excel_fd"
+            },
+            "inCell": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optTarget": {
+                "type": "string",
+                "title": "Target",
+                "multiple": true,
+                "enum": [
+                  "active-cell",
+                  "specific-cell"
+                ],
+                "enumNames": [
+                  "Active Cell",
+                  "Specific Cell"
+                ]
+              }
+            }
+          },
+          "uiSchema": {},
+          "formData": {
+            "optTarget": "specific-cell"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Insert Column",
+      "description": "Inserts a new column with data into the worksheet. Can insert at the active column position or at a specific column location.",
+      "color": "#4CAF50",
+      "icon": "file-spreadsheet",
+      "id": "Core.Excel.InsertColumn",
+      "version": "23.4.2",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFileDescriptor": {
+                "type": "object",
+                "title": "Excel File Descriptor",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inColumnName": {
+                "type": "object",
+                "title": "Column Name",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inColumn": {
+                "type": "object",
+                "title": "Column Data",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFileDescriptor": {
+              "ui:field": "variable"
+            },
+            "inColumn": {
+              "ui:field": "variable"
+            },
+            "inColumnName": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inFileDescriptor",
+              "inColumnName",
+              "inColumn"
+            ]
+          },
+          "formData": {
+            "inFileDescriptor": {
+              "scope": "Message",
+              "name": "excel_fd"
+            },
+            "inColumnName": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inColumn": {
+              "scope": "Message",
+              "name": "column"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optTarget": {
+                "type": "string",
+                "title": "Target",
+                "multiple": true,
+                "enum": [
+                  "active-column",
+                  "specific-column"
+                ],
+                "enumNames": [
+                  "Active Column",
+                  "Specific Column"
+                ]
+              }
+            }
+          },
+          "uiSchema": {
+            "ui:order": [
+              "optTarget"
+            ]
+          },
+          "formData": {
+            "optTarget": "specific-column"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Insert Row",
+      "description": "Inserts a new row with data into the worksheet. Can insert at the active row position or at a specific row number.",
+      "color": "#4CAF50",
+      "icon": "file-spreadsheet",
+      "id": "Core.Excel.InsertRow",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFileDescriptor": {
+                "type": "object",
+                "title": "Excel File Descriptor",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inRowNumber": {
+                "type": "object",
+                "title": "Row Number",
+                "variableType": "Integer",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inRow": {
+                "type": "object",
+                "title": "Row Data",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFileDescriptor": {
+              "ui:field": "variable"
+            },
+            "inRow": {
+              "ui:field": "variable"
+            },
+            "inRowNumber": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inFileDescriptor",
+              "inRowNumber",
+              "inRow"
+            ]
+          },
+          "formData": {
+            "inFileDescriptor": {
+              "scope": "Message",
+              "name": "excel_fd"
+            },
+            "inRowNumber": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inRow": {
+              "scope": "Message",
+              "name": "row"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optTarget": {
+                "type": "string",
+                "title": "Target",
+                "multiple": true,
+                "enum": [
+                  "active-row",
+                  "specific-row"
+                ],
+                "enumNames": [
+                  "Active Row",
+                  "Specific Row"
+                ]
+              },
+              "optHeader": {
+                "title": "Header",
+                "type": "boolean"
+              }
+            }
+          },
+          "uiSchema": {
+            "ui:order": [
+              "optTarget",
+              "optHeader"
+            ]
+          },
+          "formData": {
+            "optTarget": "specific-row"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Delete Row",
+      "description": "Deletes an entire row from the worksheet. Can delete the active row or a specific row by number.",
+      "color": "#4CAF50",
+      "icon": "file-spreadsheet",
+      "id": "Core.Excel.DeleteRow",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFileDescriptor": {
+                "type": "object",
+                "title": "Excel File Descriptor",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inRowNumber": {
+                "type": "object",
+                "title": "Row Number",
+                "variableType": "Integer",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFileDescriptor": {
+              "ui:field": "variable"
+            },
+            "inRowNumber": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inFileDescriptor",
+              "inRowNumber"
+            ]
+          },
+          "formData": {
+            "inFileDescriptor": {
+              "scope": "Message",
+              "name": "excel_fd"
+            },
+            "inRowNumber": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optTarget": {
+                "type": "string",
+                "title": "Target",
+                "multiple": true,
+                "enum": [
+                  "active-row",
+                  "specific-row"
+                ],
+                "enumNames": [
+                  "Active Row",
+                  "Specific Row"
+                ]
+              }
+            }
+          },
+          "uiSchema": {
+            "ui:order": [
+              "optTarget"
+            ]
+          },
+          "formData": {
+            "optTarget": "specific-row"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get Range",
+      "description": "Retrieves data from a specified cell range in the active worksheet. Can return data in table format with optional headers and JSON conversion.",
+      "color": "#4CAF50",
+      "icon": "file-spreadsheet",
+      "id": "Core.Excel.GetRange",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFileDescriptor": {
+                "type": "object",
+                "title": "Excel File Descriptor",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inFromCell": {
+                "type": "object",
+                "title": "From Cell",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inToCell": {
+                "type": "object",
+                "title": "To Cell",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFileDescriptor": {
+              "ui:field": "variable"
+            },
+            "inFromCell": {
+              "ui:field": "variable"
+            },
+            "inToCell": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inFileDescriptor",
+              "inFromCell",
+              "inToCell"
+            ]
+          },
+          "formData": {
+            "inFileDescriptor": {
+              "scope": "Message",
+              "name": "excel_fd"
+            },
+            "inFromCell": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inToCell": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outRange": {
+                "type": "object",
+                "title": "Range",
+                "variableType": "Object",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outRange": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "outRange"
+            ]
+          },
+          "formData": {
+            "outRange": {
+              "scope": "Message",
+              "name": "table"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optTarget": {
+                "type": "string",
+                "title": "Target",
+                "multiple": true,
+                "enum": [
+                  "specific-range",
+                  "all-range"
+                ],
+                "enumNames": [
+                  "Specific Range",
+                  "All Range"
+                ]
+              },
+              "optHeaders": {
+                "title": "Headers",
+                "type": "boolean"
+              },
+              "optJsonify": {
+                "title": "Jsonify",
+                "type": "boolean"
+              },
+              "optRawValue": {
+                "title": "Raw Value",
+                "type": "boolean",
+                "description": "Enable this option if you wish to sort columns by their raw cell values. When selected, 'Get Range' will return unformatted values. For example, it will return the float value 1234.50 instead of the formatted string '$1,234.50', or the raw numeric value 45167 (the number of days passed since 01-01-1900) instead of the Date Time formatted '2023-08-30' string value."
+              }
+            }
+          },
+          "uiSchema": {
+            "ui:order": [
+              "optTarget",
+              "optHeaders",
+              "optJsonify",
+              "optRawValue"
+            ]
+          },
+          "formData": {
+            "optTarget": "all-range"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Delete Column",
+      "description": "Deletes an entire column from the worksheet. Can delete the active column or a specific column by name/letter.",
+      "color": "#4CAF50",
+      "icon": "file-spreadsheet",
+      "id": "Core.Excel.DeleteColumn",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFileDescriptor": {
+                "type": "object",
+                "title": "Excel File Descriptor",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inColumn": {
+                "type": "object",
+                "title": "Column",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFileDescriptor": {
+              "ui:field": "variable"
+            },
+            "inColumn": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inFileDescriptor",
+              "inColumn"
+            ]
+          },
+          "formData": {
+            "inFileDescriptor": {
+              "scope": "Message",
+              "name": "excel_fd"
+            },
+            "inColumn": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optTarget": {
+                "type": "string",
+                "title": "Target",
+                "multiple": true,
+                "enum": [
+                  "active-column",
+                  "specific-column"
+                ],
+                "enumNames": [
+                  "Active Column",
+                  "Specific Column"
+                ]
+              }
+            }
+          },
+          "uiSchema": {
+            "ui:order": [
+              "optTarget"
+            ]
+          },
+          "formData": {
+            "optTarget": "specific-column"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get Row",
+      "description": "Retrieves data from a specific row in the worksheet. Supports navigation options like first row, next row, previous row, or specific row number.",
+      "color": "#4CAF50",
+      "icon": "file-spreadsheet",
+      "id": "Core.Excel.GetRow",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFileDescriptor": {
+                "type": "object",
+                "title": "Excel File Descriptor",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inRowNumber": {
+                "type": "object",
+                "title": "Row Number",
+                "variableType": "Integer",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFileDescriptor": {
+              "ui:field": "variable"
+            },
+            "inRowNumber": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inFileDescriptor",
+              "inRowNumber"
+            ]
+          },
+          "formData": {
+            "inFileDescriptor": {
+              "scope": "Message",
+              "name": "excel_fd"
+            },
+            "inRowNumber": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outRow": {
+                "type": "object",
+                "title": "Row",
+                "variableType": "Object",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "outRowNumber": {
+                "type": "object",
+                "title": "Row Number",
+                "variableType": "Integer",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outRow": {
+              "ui:field": "variable"
+            },
+            "outRowNumber": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "outRow",
+              "outRowNumber"
+            ]
+          },
+          "formData": {
+            "outRow": {
+              "scope": "Message",
+              "name": "row"
+            },
+            "outRowNumber": {
+              "scope": "Message",
+              "name": "rowNumber"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optTarget": {
+                "type": "string",
+                "title": "Target",
+                "multiple": true,
+                "enum": [
+                  "first-row",
+                  "next-row",
+                  "previous-row",
+                  "specific-row",
+                  "last-row"
+                ],
+                "enumNames": [
+                  "First Row",
+                  "Next Row",
+                  "Previous Row",
+                  "Specific Row",
+                  "Last Row"
+                ]
+              },
+              "optHeader": {
+                "title": "Header",
+                "type": "boolean"
+              },
+              "optJsonify": {
+                "title": "Jsonify",
+                "type": "boolean"
+              }
+            }
+          },
+          "uiSchema": {
+            "ui:order": [
+              "optTarget",
+              "optHeader",
+              "optJsonify"
+            ]
+          },
+          "formData": {
+            "optTarget": "next-row"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get Column",
+      "description": "Retrieves all data from a specific column in the worksheet. Returns the column values as an array.",
+      "color": "#4CAF50",
+      "icon": "file-spreadsheet",
+      "id": "Core.Excel.GetColumn",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFileDescriptor": {
+                "type": "object",
+                "title": "Excel File Descriptor",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inColumn": {
+                "type": "object",
+                "title": "Column Name",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFileDescriptor": {
+              "ui:field": "variable"
+            },
+            "inColumn": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inFileDescriptor",
+              "inColumn"
+            ]
+          },
+          "formData": {
+            "inFileDescriptor": {
+              "scope": "Message",
+              "name": "excel_fd"
+            },
+            "inColumn": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outColumn": {
+                "type": "object",
+                "title": "Column Data",
+                "variableType": "Array",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outColumn": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "outColumn"
+            ]
+          },
+          "formData": {
+            "outColumn": {
+              "scope": "Message",
+              "name": "column"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optTarget": {
+                "type": "string",
+                "title": "Target",
+                "multiple": true,
+                "enum": [
+                  "active-column",
+                  "specific-column"
+                ],
+                "enumNames": [
+                  "Active Column",
+                  "Specific Column"
+                ]
+              }
+            }
+          },
+          "uiSchema": {},
+          "formData": {
+            "optTarget": "specific-column"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Set Range",
+      "description": "Writes table data to a specified cell range in the worksheet. Can start from the active cell or a specific starting cell position.",
+      "color": "#4CAF50",
+      "icon": "file-spreadsheet",
+      "id": "Core.Excel.SetRange",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFileDescriptor": {
+                "type": "object",
+                "title": "Excel File Descriptor",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inStartCell": {
+                "type": "object",
+                "title": "Start Cell",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inTable": {
+                "type": "object",
+                "title": "Table",
+                "variableType": "Object",
+                "messageScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFileDescriptor": {
+              "ui:field": "variable"
+            },
+            "inStartCell": {
+              "ui:field": "variable"
+            },
+            "inTable": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inFileDescriptor",
+              "inStartCell",
+              "inTable"
+            ]
+          },
+          "formData": {
+            "inFileDescriptor": {
+              "scope": "Message",
+              "name": "excel_fd"
+            },
+            "inStartCell": {
+              "scope": "Custom",
+              "name": "A1"
+            },
+            "inTable": {
+              "scope": "Message",
+              "name": "table"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optTarget": {
+                "type": "string",
+                "title": "Target",
+                "multiple": true,
+                "enum": [
+                  "active-cell",
+                  "specific-cell"
+                ],
+                "enumNames": [
+                  "Active Cell",
+                  "Specific Cell"
+                ]
+              },
+              "optHeader": {
+                "title": "Headers",
+                "type": "boolean"
+              }
+            }
+          },
+          "uiSchema": {
+            "ui:order": [
+              "optTarget",
+              "optHeader"
+            ]
+          },
+          "formData": {
+            "optTarget": "specific-cell"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Excel to CSV",
+      "description": "Converts an Excel file to CSV format. Each worksheet is converted to a separate CSV file with configurable field separators.",
+      "color": "#4CAF50",
+      "icon": "file-spreadsheet",
+      "id": "Core.Excel.ExcelToCsv",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFilePath": {
+                "type": "object",
+                "title": "Excel Path",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inOutCsvPath": {
+                "type": "object",
+                "title": "Out CSV Path",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFilePath": {
+              "ui:field": "variable"
+            },
+            "inOutCsvPath": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inFilePath",
+              "inOutCsvPath"
+            ]
+          },
+          "formData": {
+            "inFilePath": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inOutCsvPath": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outFilesPath": {
+                "type": "object",
+                "title": "Files Path",
+                "variableType": "Array",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outFilesPath": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "outFilesPath"
+            ]
+          },
+          "formData": {
+            "outFilesPath": {
+              "scope": "Message",
+              "name": "files_path"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optSeparator": {
+                "type": "string",
+                "title": "Separator",
+                "enum": [
+                  "comma",
+                  "semicolon",
+                  "tab",
+                  "space"
+                ],
+                "enumNames": [
+                  "Comma (,)",
+                  "Semicolon (;)",
+                  "TAB",
+                  "Space"
+                ]
+              }
+            }
+          },
+          "uiSchema": {
+            "ui:order": [
+              "optSeparator"
+            ]
+          },
+          "formData": {
+            "optSeparator": "semicolon"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get Sheets",
+      "description": "Retrieves a list of all worksheet names in the Excel file. Optionally includes metadata information about each sheet.",
+      "color": "#4CAF50",
+      "icon": "file-spreadsheet",
+      "id": "Core.Excel.GetSheets",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFileDescriptor": {
+                "type": "object",
+                "title": "Excel File Descriptor",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFileDescriptor": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inFileDescriptor"
+            ]
+          },
+          "formData": {
+            "inFileDescriptor": {
+              "scope": "Message",
+              "name": "excel_fd"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outSheets": {
+                "type": "object",
+                "title": "Sheets",
+                "variableType": "Array",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outSheets": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "outSheets"
+            ]
+          },
+          "formData": {
+            "outSheets": {
+              "scope": "Message",
+              "name": "sheets"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optMetadata": {
+                "title": "Show Metadata",
+                "type": "boolean"
+              }
+            }
+          },
+          "uiSchema": {
+            "ui:order": [
+              "optMetadata"
+            ]
+          },
+          "formData": {
+            "optMetadata": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "Append Excel",
+      "description": "Appends data from one Excel worksheet to another Excel worksheet. Combines data from two different sheets or files.",
+      "color": "#4CAF50",
+      "icon": "file-spreadsheet",
+      "id": "Core.Excel.Append",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFirstFileDescriptor": {
+                "type": "object",
+                "title": "First File Descriptor",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inFirstSheetName": {
+                "type": "object",
+                "title": "First Sheet Name",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inSecondFileDescriptor": {
+                "type": "object",
+                "title": "Second File Descriptor",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inSecondSheetName": {
+                "type": "object",
+                "title": "Second Sheet Name",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFirstFileDescriptor": {
+              "ui:field": "variable"
+            },
+            "inFirstSheetName": {
+              "ui:field": "variable"
+            },
+            "inSecondFileDescriptor": {
+              "ui:field": "variable"
+            },
+            "inSecondSheetName": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inFirstFileDescriptor": {
+              "scope": "Message",
+              "name": "excel_fd1"
+            },
+            "inFirstSheetName": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inSecondFileDescriptor": {
+              "scope": "Message",
+              "name": "excel_fd2"
+            },
+            "inSecondSheetName": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Merge Excel",
+      "description": "Merges data from two Excel worksheets into a single dataset. Combines data from two different sheets or files side by side.",
+      "color": "#4CAF50",
+      "icon": "file-spreadsheet",
+      "id": "Core.Excel.Merge",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFirstFileDescriptor": {
+                "type": "object",
+                "title": "First File Descriptor",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inFirstSheetName": {
+                "type": "object",
+                "title": "First Sheet Name",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inSecondFileDescriptor": {
+                "type": "object",
+                "title": "Second File Descriptor",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inSecondSheetName": {
+                "type": "object",
+                "title": "Second Sheet Name",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFirstFileDescriptor": {
+              "ui:field": "variable"
+            },
+            "inFirstSheetName": {
+              "ui:field": "variable"
+            },
+            "inSecondFileDescriptor": {
+              "ui:field": "variable"
+            },
+            "inSecondSheetName": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inFirstFileDescriptor": {
+              "scope": "Message",
+              "name": "excel_fd1"
+            },
+            "inFirstSheetName": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inSecondFileDescriptor": {
+              "scope": "Message",
+              "name": "excel_fd2"
+            },
+            "inSecondSheetName": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Find and Replace",
+      "description": "Searches for specific text or values in the worksheet and replaces them with new content. Supports regex patterns and different data formats.",
+      "color": "#4CAF50",
+      "version": "23.4.0",
+      "icon": "file-spreadsheet",
+      "id": "Core.Excel.FindReplace",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFileDescriptor": {
+                "type": "object",
+                "title": "Excel File Descriptor",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inFind": {
+                "type": "object",
+                "title": "Find",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inReplacement": {
+                "type": "object",
+                "title": "Replacement",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFileDescriptor": {
+              "ui:field": "variable"
+            },
+            "inFind": {
+              "ui:field": "variable"
+            },
+            "inReplacement": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inFileDescriptor": {
+              "scope": "Message",
+              "name": "excel_fd"
+            },
+            "inFind": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inReplacement": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optFormat": {
+                "type": "string",
+                "title": "Format",
+                "enum": [
+                  "string",
+                  "number",
+                  "datetime",
+                  "bool"
+                ],
+                "enumNames": [
+                  "String",
+                  "Number",
+                  "DateTime",
+                  "Boolean"
+                ]
+              },
+              "optSearchByRegex": {
+                "title": "Search By Regex",
+                "type": "boolean"
+              }
+            }
+          },
+          "uiSchema": {},
+          "formData": {
+            "optFormat": "string",
+            "optSearchByRegex": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "Search Sheet",
+      "description": "Searches for specific text or patterns in the worksheet and returns the cell locations where matches are found. Supports regex pattern matching.",
+      "color": "#4CAF50",
+      "version": "23.11.0",
+      "icon": "file-spreadsheet",
+      "id": "Core.Excel.SearchSheet",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFileDescriptor": {
+                "type": "object",
+                "title": "Excel File Descriptor",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inSearchTerm": {
+                "type": "object",
+                "title": "Search Term",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFileDescriptor": {
+              "ui:field": "variable"
+            },
+            "inSearchTerm": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inFileDescriptor": {
+              "scope": "Message",
+              "name": "excel_fd"
+            },
+            "inSearchTerm": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outCells": {
+                "type": "object",
+                "title": "Cells",
+                "variableType": "Array",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outCells": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "outCells"
+            ]
+          },
+          "formData": {
+            "outCells": {
+              "scope": "Message",
+              "name": "cells"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optSearchByRegex": {
+                "title": "Search By Regex",
+                "type": "boolean"
+              }
+            }
+          },
+          "uiSchema": {},
+          "formData": {
+            "optSearchByRegex": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "Clear Range",
+      "description": "Clears content from a specified cell range in the worksheet. Removes all data while preserving cell formatting.",
+      "color": "#4CAF50",
+      "icon": "file-spreadsheet",
+      "id": "Core.Excel.ClearRange",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFileDescriptor": {
+                "type": "object",
+                "title": "Excel File Descriptor",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inStartCell": {
+                "type": "object",
+                "title": "Start Cell",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inEndCell": {
+                "type": "object",
+                "title": "End Cell",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFileDescriptor": {
+              "ui:field": "variable"
+            },
+            "inStartCell": {
+              "ui:field": "variable"
+            },
+            "inEndCell": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inFileDescriptor": {
+              "scope": "Message",
+              "name": "excel_fd"
+            },
+            "inStartCell": {
+              "scope": "Custom",
+              "name": "A1"
+            },
+            "inEndCell": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Create Pivot Table",
+      "description": "Creates a pivot table from source data to summarize and analyze information. Supports rows, columns, filters, and data aggregation options.",
+      "color": "#4CAF50",
+      "icon": "file-spreadsheet",
+      "id": "Core.Excel.CreatePivotTable",
+      "version": "23.12.0",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFileDescriptor": {
+                "type": "object",
+                "title": "Excel File Descriptor",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inPivotTableSheetName": {
+                "type": "object",
+                "title": "Pivot Table SheetName",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inPivotTableRange": {
+                "type": "object",
+                "title": "Pivot Table Range",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inDataSheetName": {
+                "type": "object",
+                "title": "Data Sheet Name",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inDataRange": {
+                "type": "object",
+                "title": "Data Range",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inRows": {
+                "type": "object",
+                "title": "Rows",
+                "variableType": "String",
+                "messageScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inColumns": {
+                "type": "object",
+                "title": "Columns",
+                "variableType": "String",
+                "messageScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inFilter": {
+                "type": "object",
+                "title": "Filter",
+                "variableType": "String",
+                "messageScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inData": {
+                "type": "object",
+                "title": "Data",
+                "variableType": "String",
+                "messageScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFileDescriptor": {
+              "ui:field": "variable"
+            },
+            "inPivotTableSheetName": {
+              "ui:field": "variable"
+            },
+            "inPivotTableRange": {
+              "ui:field": "variable"
+            },
+            "inDataSheetName": {
+              "ui:field": "variable"
+            },
+            "inDataRange": {
+              "ui:field": "variable"
+            },
+            "inRows": {
+              "ui:field": "variable"
+            },
+            "inColumns": {
+              "ui:field": "variable"
+            },
+            "inFilter": {
+              "ui:field": "variable"
+            },
+            "inData": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inFileDescriptor": {
+              "scope": "Message",
+              "name": "excel_fd"
+            },
+            "inPivotTableSheetName": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inPivotTableRange": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inDataSheetName": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inDataRange": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inRows": {
+              "scope": "Message",
+              "name": "rows"
+            },
+            "inColumns": {
+              "scope": "Message",
+              "name": "columns"
+            },
+            "inFilter": {
+              "scope": "Message",
+              "name": "filter"
+            },
+            "inData": {
+              "scope": "Message",
+              "name": "data"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optRowGrandTotals": {
+                "title": "Row Grand Totals",
+                "type": "boolean"
+              },
+              "optColGrandTotals": {
+                "title": "Col Grand Totals",
+                "type": "boolean"
+              },
+              "optShowDrill": {
+                "title": "Show Drill",
+                "type": "boolean"
+              },
+              "optShowRowHeaders": {
+                "title": "Show Row Headers",
+                "type": "boolean"
+              },
+              "optShowColHeaders": {
+                "title": "Show Col Headers",
+                "type": "boolean"
+              },
+              "optShowLastColumn": {
+                "title": "Show Last Column",
+                "type": "boolean"
+              }
+            }
+          },
+          "uiSchema": {},
+          "formData": {
+            "optRowGrandTotals": true,
+            "optColGrandTotals": true,
+            "optShowDrill": true,
+            "optShowRowHeaders": true,
+            "optShowColHeaders": true,
+            "optShowLastColumn": true
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get Formula",
+      "description": "Retrieves the formula from a specific cell in the worksheet. Returns the actual formula text rather than the calculated result.",
+      "color": "#4CAF50",
+      "version": "24.2.0",
+      "icon": "file-spreadsheet",
+      "id": "Core.Excel.GetFormula",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFileDescriptor": {
+                "type": "object",
+                "title": "Excel File Descriptor",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inTargetCell": {
+                "type": "object",
+                "title": "Target Cell",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFileDescriptor": {
+              "ui:field": "variable"
+            },
+            "inTargetCell": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inFileDescriptor": {
+              "scope": "Message",
+              "name": "excel_fd"
+            },
+            "inTargetCell": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outFormula": {
+                "type": "object",
+                "title": "Formula",
+                "variableType": "string",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outFormula": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "outFormula"
+            ]
+          },
+          "formData": {
+            "outFormula": {
+              "scope": "Message",
+              "name": "formula"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

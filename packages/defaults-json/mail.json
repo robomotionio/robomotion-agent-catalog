@@ -1,0 +1,2025 @@
+{
+  "name": "Mail",
+  "color": "#F5F5F5",
+  "icon": "mail",
+  "nodes": [
+    {
+      "description": "Establishes a connection to a mail server using basic authentication or OAuth2. Creates a client session for accessing mail operations like reading, sending, and managing emails.",
+      "name": "Connect",
+      "color": "#bfbfbf",
+      "icon": "mail",
+      "id": "Core.Mail.Connect",
+      "version": "1.18.10",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outClientId": {
+                "type": "object",
+                "title": "Client Id",
+                "description": "Unique identifier for the mail server connection. Used to reference this specific connection in other mail operations.",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outClientId": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "outClientId"
+            ]
+          },
+          "formData": {
+            "outClientId": {
+              "scope": "Message",
+              "name": "client_id"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optAuthenticationType": {
+                "type": "string",
+                "title": "Authentication Type",
+                "description": "Method of authentication: Basic (username/password) or OAuth2 (token-based). OAuth2 is required for modern providers like Gmail and Outlook.",
+                "enum": [
+                  "basic",
+                  "oauth2"
+                ],
+                "enumNames": [
+                  "Basic Authentication",
+                  "OAuth2 Authentication"
+                ]
+              },
+              "optEmailCredentials": {
+                "type": "object",
+                "title": "Mail Server Credentials",
+                "description": "Email credentials from vault containing server settings (host, port, username, password) for IMAP and SMTP connections. Required for basic authentication.",
+                "subtitle": "Credentials",
+                "category": 2,
+                "properties": {
+                  "vaultId": {
+                    "type": "string"
+                  },
+                  "itemId": {
+                    "type": "string"
+                  }
+                }
+              },
+              "optTokenCredentials": {
+                "type": "object",
+                "title": "OAuth2 Token Credentials ",
+                "description": "Required only if OAuth2 Authentication Type is selected. Needs a Document Category Type credential created inside a vault that contains {'client_id':'<your_client_id>', 'client_secret':'<your_client_secret>'}. OAuth2 Client ID and Client Secret values should be obtained from your mail provider.",
+                "subtitle": "Credentials",
+                "category": 6,
+                "properties": {
+                  "vaultId": {
+                    "type": "string"
+                  },
+                  "itemId": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optEmailCredentials": {
+              "ui:field": "credentials"
+            },
+            "optTokenCredentials": {
+              "ui:field": "credentials"
+            },
+            "ui:order": [
+              "optAuthenticationType",
+              "optEmailCredentials",
+              "optTokenCredentials"
+            ]
+          },
+          "formData": {
+            "optAuthenticationType": "basic",
+            "optEmailCredentials": {
+              "vaultId": "_",
+              "itemId": "_"
+            },
+            "optTokenCredentials": {
+              "vaultId": "_",
+              "itemId": "_"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Disconnect",
+      "description": "Closes an active mail server connection and cleans up associated resources. Should be called when mail operations are complete.",
+      "color": "#bfbfbf",
+      "version": "1.18.10",
+      "icon": "mail",
+      "id": "Core.Mail.Disconnect",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inClientId": {
+                "type": "object",
+                "title": "Client Id",
+                "description": "The client connection identifier to disconnect. Must match a client ID from a previous Connect node operation.",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inClientId": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inClientId"
+            ]
+          },
+          "formData": {
+            "inClientId": {
+              "scope": "Message",
+              "name": "client_id"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Send Mail",
+      "description": "Sends email messages with support for attachments, HTML/plain text body, multiple recipients (To, CC, BCC), and Reply All functionality. Works with basic authentication or OAuth2 connections. Reply All mode automatically populates recipients from original emails.",
+      "version": "23.2.0",
+      "color": "#bfbfbf",
+      "icon": "send",
+      "id": "Core.Mail.Send",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inClientId": {
+                "type": "object",
+                "title": "Client Id",
+                "description": "Connection identifier for OAuth2 authentication. If using basic authentication, this is not required as credentials are provided in Options.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inFrom": {
+                "type": "object",
+                "title": "From",
+                "description": "Sender's email address. Must be a valid email format (e.g., 'sender@example.com'). Required field.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inTo": {
+                "type": "object",
+                "title": "To",
+                "description": "Primary recipient email addresses. Multiple addresses can be separated by commas (e.g., 'user1@example.com,user2@example.com').",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inCc": {
+                "type": "object",
+                "title": "Cc",
+                "description": "Carbon copy recipients who will receive a copy of the email. Multiple addresses can be separated by commas. Optional field.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inBcc": {
+                "type": "object",
+                "title": "Bcc",
+                "description": "Blind carbon copy recipients who will receive the email without other recipients knowing. Multiple addresses separated by commas. Optional field.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inReplyTo": {
+                "type": "object",
+                "title": "Reply To",
+                "description": "Email address where replies should be sent. If specified, recipients can reply to this address instead of the From address.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inSubject": {
+                "type": "object",
+                "title": "Subject",
+                "description": "Email subject line. This will appear in the recipient's inbox as the email title.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inBody": {
+                "type": "object",
+                "title": "Body",
+                "description": "Main content of the email. Can be plain text or HTML depending on the 'HTML Body' option setting.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inReplyToMailID": {
+                "type": "object",
+                "title": "Reply To Mail ID",
+                "description": "Mailbox and UID of the original email to reply to (format: INBOX/12345). This field is required when Reply All Mode is enabled. Use the 'MailboxUID' field from GetMail or SearchMail output.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inClientId": {
+              "ui:field": "variable"
+            },
+            "inFrom": {
+              "ui:field": "variable"
+            },
+            "inTo": {
+              "ui:field": "variable"
+            },
+            "inCc": {
+              "ui:field": "variable"
+            },
+            "inBcc": {
+              "ui:field": "variable"
+            },
+            "inReplyTo": {
+              "ui:field": "variable"
+            },
+            "inSubject": {
+              "ui:field": "variable"
+            },
+            "inBody": {
+              "ui:field": "variable"
+            },
+            "inReplyToMailID": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inClientId",
+              "inFrom",
+              "inTo",
+              "inCc",
+              "inBcc",
+              "inReplyTo",
+              "inSubject",
+              "inBody",
+              "inReplyToMailID"
+            ]
+          },
+          "formData": {
+            "inClientId": {
+              "scope": "Message",
+              "name": "client_id"
+            },
+            "inFrom": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inTo": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inReplyTo": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inCc": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inBcc": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inSubject": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inBody": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inReplyToMailID": {
+              "scope": "Message",
+              "name": "mailbox_uid"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optCredentials": {
+                "type": "object",
+                "title": "Credentials",
+                "subtitle": "Credentials",
+                "category": 2,
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "object",
+                    "properties": {
+                      "vaultId": {
+                        "type": "string"
+                      },
+                      "itemId": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "optHtmlBody": {
+                "title": "HTML Body",
+                "description": "If true, treats the body content as HTML and renders it in the email client. If false, sends as plain text.",
+                "type": "boolean"
+              },
+              "optMessageMode": {
+                "title": "Message Mode",
+                "type": "string",
+                "enum": [
+                  "new",
+                  "reply",
+                  "replyall",
+                  "forward"
+                ],
+                "enumNames": [
+                  "New Email",
+                  "Reply",
+                  "Reply All",
+                  "Forward"
+                ],
+                "description": "Select the type of email to send: New Email (default), Reply (to sender only), Reply All (to sender and all recipients), or Forward (to new recipients). Reply/Reply All/Forward require Reply To Mail ID to be provided."
+              },
+              "optIncludeOriginalMessage": {
+                "title": "Include Original Message",
+                "type": "boolean",
+                "description": "When enabled with Reply/Reply All/Forward modes, includes the original email content with proper quote formatting in the body. The formatting style is controlled by Quote Style option."
+              },
+              "optQuoteStyle": {
+                "title": "Quote Style",
+                "type": "string",
+                "enum": [
+                  "gmail",
+                  "outlook",
+                  "simple"
+                ],
+                "enumNames": [
+                  "Gmail Style",
+                  "Outlook Style",
+                  "Simple Style"
+                ],
+                "description": "Choose the formatting style for quoted original message: Gmail (modern blockquote), Outlook (traditional headers with separator), or Simple (basic > prefix). Only applies when Include Original Message is enabled."
+              },
+              "optIncludeOriginalAttachments": {
+                "title": "Include Original Attachments",
+                "type": "boolean",
+                "description": "When enabled with Reply/Reply All/Forward modes, includes all attachments (including embedded images with preserved Content-IDs) from the original email. Typically used with Forward mode to match Gmail/Outlook behavior."
+              },
+              "optUseAttachmentIndexAsCID": {
+                "title": "Attachment Index As CID",
+                "type": "boolean",
+                "description": "Use this option to embed images in an email with <img src='cid:0'> in your HTML body. HTML Body option has to be selected, too. The '0' here represents the index of the attachments array, which will be used as the Content-ID for the attachment."
+              },
+              "optAttachments": {
+                "type": "object",
+                "title": "Attachments",
+                "description": "Array of file paths to attach to the email. Files will be attached as email attachments that recipients can download.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "optCustomAttachments": {
+                "title": "Custom Attachments",
+                "description": "Static list of file paths to attach to the email. Each entry should be a valid file path. Files will be attached as email attachments.",
+                "type": "array",
+                "placeholder": "Attachment path",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optCredentials": {
+              "ui:field": "vault"
+            },
+            "optAttachments": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "optCredentials",
+              "optMessageMode",
+              "optIncludeOriginalMessage",
+              "optQuoteStyle",
+              "optIncludeOriginalAttachments",
+              "optAttachments",
+              "optCustomAttachments",
+              "optHtmlBody",
+              "optUseAttachmentIndexAsCID"
+            ],
+            "optCustomAttachments": {
+              "ui:field": "array"
+            }
+          },
+          "formData": {
+            "optCredentials": {
+              "scope": "Custom",
+              "name": {
+                "vaultId": "_",
+                "itemId": "_"
+              }
+            },
+            "optAttachments": {
+              "scope": "Message",
+              "name": "attachments"
+            },
+            "optMessageMode": "new",
+            "optIncludeOriginalMessage": false,
+            "optQuoteStyle": "gmail",
+            "optIncludeOriginalAttachments": false,
+            "optHtmlBody": false,
+            "optUseAttachmentIndexAsCID": false,
+            "optCustomAttachments": []
+          }
+        }
+      ]
+    },
+    {
+      "name": "Delete Mail",
+      "description": "Deletes specific email messages by UID or deletes all messages from a mail folder. Messages are marked for deletion and permanently removed from the server.",
+      "version": "1.18.10",
+      "color": "#bfbfbf",
+      "icon": "mail-x",
+      "id": "Core.Mail.Delete",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inClientId": {
+                "type": "object",
+                "title": "Client Id",
+                "description": "Connection identifier from a Connect node. Required for mail server authentication and access.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inMailFolder": {
+                "type": "object",
+                "title": "Mail Folder",
+                "description": "Name of the mail folder containing the messages to delete (e.g., 'INBOX', 'Sent', 'Drafts'). Folder must exist on the server.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inUid": {
+                "type": "object",
+                "title": "Messages Id",
+                "description": "Unique identifier (UID) of the specific message to delete. If 'Delete All' option is enabled, this parameter is ignored and all messages in the folder are deleted.",
+                "variableType": "Integer",
+                "customScope": true,
+                "jsScope": true,
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inClientId": {
+              "ui:field": "variable"
+            },
+            "inMailFolder": {
+              "ui:field": "variable"
+            },
+            "inUid": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inClientId",
+              "inMailFolder",
+              "inUid"
+            ]
+          },
+          "formData": {
+            "inClientId": {
+              "scope": "Message",
+              "name": "client_id"
+            },
+            "inMailFolder": {
+              "scope": "Custom",
+              "name": "INBOX"
+            },
+            "inUid": {
+              "scope": "Message",
+              "name": "Id"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optCredentials": {
+                "type": "object",
+                "title": "Credentials",
+                "subtitle": "Credentials",
+                "category": 2,
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "object",
+                    "properties": {
+                      "vaultId": {
+                        "type": "string"
+                      },
+                      "itemId": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "optDeleteAll": {
+                "type": "boolean",
+                "title": "Delete All",
+                "description": "If true, deletes all messages in the specified folder. If false, deletes only the message with the specified Messages Id (UID)."
+              }
+            }
+          },
+          "uiSchema": {
+            "ui:order": [
+              "optCredentials",
+              "optDeleteAll"
+            ],
+            "optCredentials": {
+              "ui:field": "vault"
+            }
+          },
+          "formData": {
+            "optCredentials": {
+              "scope": "Custom",
+              "name": {
+                "vaultId": "_",
+                "itemId": "_"
+              }
+            },
+            "optDeleteAll": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get Mail",
+      "description": "Retrieves email messages from a specified mail folder. Can fetch a limited number of messages, filter for unread messages, and optionally mark messages as read.",
+      "version": "1.18.10",
+      "color": "#bfbfbf",
+      "icon": "mail-check",
+      "id": "Core.Mail.Get",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inClientId": {
+                "type": "object",
+                "title": "Client Id",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inMailFolder": {
+                "type": "object",
+                "title": "Mail Folder",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inTop": {
+                "type": "object",
+                "title": "Number of Messages",
+                "variableType": "Integer",
+                "customScope": true,
+                "jsScope": true,
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inClientId": {
+              "ui:field": "variable"
+            },
+            "inMailFolder": {
+              "ui:field": "variable"
+            },
+            "inTop": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inClientId",
+              "inMailFolder",
+              "inTop"
+            ]
+          },
+          "formData": {
+            "inClientId": {
+              "scope": "Message",
+              "name": "client_id"
+            },
+            "inMailFolder": {
+              "scope": "Custom",
+              "name": "INBOX"
+            },
+            "inTop": {
+              "scope": "Custom",
+              "name": "10"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outMessages": {
+                "type": "object",
+                "title": "Messages",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outMessages": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outMessages": {
+              "scope": "Message",
+              "name": "messages"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optCredentials": {
+                "type": "object",
+                "title": "Credentials",
+                "subtitle": "Credentials",
+                "category": 2,
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "object",
+                    "properties": {
+                      "vaultId": {
+                        "type": "string"
+                      },
+                      "itemId": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "optMarkRead": {
+                "title": "Mark as Read",
+                "type": "boolean"
+              },
+              "optOnlyUnread": {
+                "title": "Only Unread",
+                "type": "boolean"
+              }
+            }
+          },
+          "uiSchema": {
+            "ui:order": [
+              "optCredentials",
+              "optMarkRead",
+              "optOnlyUnread"
+            ],
+            "optCredentials": {
+              "ui:field": "vault"
+            }
+          },
+          "formData": {
+            "optCredentials": {
+              "scope": "Custom",
+              "name": {
+                "vaultId": "_",
+                "itemId": "_"
+              }
+            },
+            "optMarkRead": false,
+            "optOnlyUnread": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "Search Mail",
+      "description": "Searches for email messages based on various criteria including sender, recipient, subject, body content, date range, and message ID. Returns matching messages or just their IDs.",
+      "version": "22.12.1",
+      "color": "#bfbfbf",
+      "icon": "mail-search",
+      "id": "Core.Mail.Search",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inClientId": {
+                "type": "object",
+                "title": "Client Id",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inMailFolder": {
+                "type": "object",
+                "title": "Mail Folder",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inFrom": {
+                "type": "object",
+                "title": "From",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inTo": {
+                "type": "object",
+                "title": "To",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inCc": {
+                "type": "object",
+                "title": "Cc",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inBcc": {
+                "type": "object",
+                "title": "Bcc",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inSubject": {
+                "type": "object",
+                "title": "Subject",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inBody": {
+                "type": "object",
+                "title": "Body",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inMailID": {
+                "type": "object",
+                "title": "Mail ID",
+                "variableType": "number",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inClientId": {
+              "ui:field": "variable"
+            },
+            "inMailFolder": {
+              "ui:field": "variable"
+            },
+            "inFrom": {
+              "ui:field": "variable"
+            },
+            "inTo": {
+              "ui:field": "variable"
+            },
+            "inCc": {
+              "ui:field": "variable"
+            },
+            "inBcc": {
+              "ui:field": "variable"
+            },
+            "inSubject": {
+              "ui:field": "variable"
+            },
+            "inBody": {
+              "ui:field": "variable"
+            },
+            "inMailID": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inClientId",
+              "inMailFolder",
+              "inFrom",
+              "inTo",
+              "inCc",
+              "inBcc",
+              "inSubject",
+              "inBody",
+              "inMailID"
+            ]
+          },
+          "formData": {
+            "inClientId": {
+              "scope": "Message",
+              "name": "client_id"
+            },
+            "inMailFolder": {
+              "scope": "Custom",
+              "name": "INBOX"
+            },
+            "inFrom": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inTo": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inCc": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inBcc": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inSubject": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inBody": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inMailID": {
+              "scope": "Message",
+              "name": "mail_id"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outMessages": {
+                "type": "object",
+                "title": "Messages",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outMessages": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outMessages": {
+              "scope": "Message",
+              "name": "messages"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optCredentials": {
+                "type": "object",
+                "title": "Credentials",
+                "subtitle": "Credentials",
+                "category": 2,
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "object",
+                    "properties": {
+                      "vaultId": {
+                        "type": "string"
+                      },
+                      "itemId": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "optReadOnly": {
+                "title": "Read Only",
+                "type": "boolean"
+              },
+              "optOnlyIDs": {
+                "title": "Only IDs",
+                "type": "boolean"
+              },
+              "optStartDate": {
+                "title": "Start Date",
+                "type": "object",
+                "format": "date",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "optEndDate": {
+                "title": "End Date",
+                "type": "object",
+                "format": "date",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optCredentials": {
+              "ui:field": "vault"
+            },
+            "optStartDate": {
+              "ui:field": "date"
+            },
+            "optEndDate": {
+              "ui:field": "date"
+            },
+            "ui:order": [
+              "optCredentials",
+              "optStartDate",
+              "optEndDate",
+              "optReadOnly",
+              "optOnlyIDs"
+            ]
+          },
+          "formData": {
+            "optCredentials": {
+              "scope": "Custom",
+              "name": {
+                "vaultId": "_",
+                "itemId": "_"
+              }
+            },
+            "optStartDate": {
+              "scope": "Custom",
+              "name": "2025-12-19"
+            },
+            "optEndDate": {
+              "scope": "Custom",
+              "name": "2025-12-22"
+            },
+            "optReadOnly": false,
+            "optOnlyIDs": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "Save Attachments",
+      "description": "Downloads and saves email attachments from a specific message to a local directory. Returns the full paths of downloaded files.",
+      "version": "1.18.10",
+      "color": "#bfbfbf",
+      "icon": "paperclip",
+      "id": "Core.Mail.SaveAttachments",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inClientId": {
+                "type": "object",
+                "title": "Client Id",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inMailFolder": {
+                "type": "object",
+                "title": "Mail Folder",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inDownloadPath": {
+                "type": "object",
+                "title": "Download Path",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inUid": {
+                "type": "object",
+                "title": "Email Unique ID (Uid)",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inClientId": {
+              "ui:field": "variable"
+            },
+            "inMailFolder": {
+              "ui:field": "variable"
+            },
+            "inDownloadPath": {
+              "ui:field": "variable"
+            },
+            "inUid": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inClientId",
+              "inMailFolder",
+              "inUid",
+              "inDownloadPath"
+            ]
+          },
+          "formData": {
+            "inClientId": {
+              "scope": "Message",
+              "name": "client_id"
+            },
+            "inMailFolder": {
+              "scope": "Custom",
+              "name": "INBOX"
+            },
+            "inDownloadPath": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inUid": {
+              "scope": "Message",
+              "name": "uid"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outAttachments": {
+                "type": "object",
+                "title": "Messages",
+                "variableType": "Array",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outAttachments": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outAttachments": {
+              "scope": "Message",
+              "name": "attachments"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optCredentials": {
+                "type": "object",
+                "title": "Credentials",
+                "subtitle": "Credentials",
+                "category": 2,
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "object",
+                    "properties": {
+                      "vaultId": {
+                        "type": "string"
+                      },
+                      "itemId": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optCredentials": {
+              "ui:field": "vault"
+            },
+            "ui:order": [
+              "optCredentials"
+            ]
+          },
+          "formData": {
+            "optCredentials": {
+              "scope": "Custom",
+              "name": {
+                "vaultId": "_",
+                "itemId": "_"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Move Mail",
+      "description": "Moves a specific email message from one mail folder to another using the message's unique identifier (UID).",
+      "color": "#bfbfbf",
+      "version": "1.18.10",
+      "icon": "mails",
+      "id": "Core.Mail.Move",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inClientId": {
+                "type": "object",
+                "title": "Client Id",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inMailFolder": {
+                "type": "object",
+                "title": "From Folder",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inUid": {
+                "type": "object",
+                "title": "Email Unique ID (Uid)",
+                "variableType": "Integer",
+                "customScope": true,
+                "jsScope": true,
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inToFolder": {
+                "type": "object",
+                "title": "To Folder",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inClientId": {
+              "ui:field": "variable"
+            },
+            "inToFolder": {
+              "ui:field": "variable"
+            },
+            "inMailFolder": {
+              "ui:field": "variable"
+            },
+            "inUid": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inClientId",
+              "inUid",
+              "inMailFolder",
+              "inToFolder"
+            ]
+          },
+          "formData": {
+            "inClientId": {
+              "scope": "Message",
+              "name": "client_id"
+            },
+            "inMailFolder": {
+              "scope": "Custom",
+              "name": "INBOX"
+            },
+            "inToFolder": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inUid": {
+              "scope": "Message",
+              "name": "uid"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optCredentials": {
+                "type": "object",
+                "title": "Credentials",
+                "subtitle": "Credentials",
+                "category": 2,
+                "properties": {
+                  "vaultId": {
+                    "type": "string"
+                  },
+                  "itemId": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "ui:order": [
+              "optCredentials"
+            ],
+            "optCredentials": {
+              "ui:field": "vault"
+            }
+          },
+          "formData": {
+            "optCredentials": {
+              "vaultId": "_",
+              "itemId": "_"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Create Folder",
+      "description": "Creates a new mail folder on the server with the specified name. The folder can then be used to organize and store email messages.",
+      "color": "#bfbfbf",
+      "version": "1.18.10",
+      "icon": "folder-plus",
+      "id": "Core.Mail.CreateFolder",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inClientId": {
+                "type": "object",
+                "title": "Client Id",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inFolder": {
+                "type": "object",
+                "title": "Folder Name",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inClientId": {
+              "ui:field": "variable"
+            },
+            "inFolder": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inClientId",
+              "inFolder"
+            ]
+          },
+          "formData": {
+            "inClientId": {
+              "scope": "Message",
+              "name": "client_id"
+            },
+            "inFolder": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optCredentials": {
+                "type": "object",
+                "title": "Credentials",
+                "subtitle": "Credentials",
+                "category": 2,
+                "properties": {
+                  "vaultId": {
+                    "type": "string"
+                  },
+                  "itemId": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "ui:order": [
+              "optCredentials"
+            ],
+            "optCredentials": {
+              "ui:field": "vault"
+            }
+          },
+          "formData": {
+            "optCredentials": {
+              "vaultId": "_",
+              "itemId": "_"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Delete Folder",
+      "description": "Permanently deletes a mail folder from the server. The folder must be empty or the operation may fail depending on server configuration.",
+      "color": "#bfbfbf",
+      "version": "1.18.10",
+      "icon": "folder-minus",
+      "id": "Core.Mail.DeleteFolder",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inClientId": {
+                "type": "object",
+                "title": "Client Id",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inFolder": {
+                "type": "object",
+                "title": "Folder Name",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inClientId": {
+              "ui:field": "variable"
+            },
+            "inFolder": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inClientId",
+              "inFolder"
+            ]
+          },
+          "formData": {
+            "inClientId": {
+              "scope": "Message",
+              "name": "client_id"
+            },
+            "inFolder": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optCredentials": {
+                "type": "object",
+                "title": "Credentials",
+                "subtitle": "Credentials",
+                "category": 2,
+                "properties": {
+                  "vaultId": {
+                    "type": "string"
+                  },
+                  "itemId": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "ui:order": [
+              "optCredentials"
+            ],
+            "optCredentials": {
+              "ui:field": "vault"
+            }
+          },
+          "formData": {
+            "optCredentials": {
+              "vaultId": "_",
+              "itemId": "_"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "List Folders",
+      "description": "Retrieves a list of all available mail folders from the server. Returns an array of folder names that can be used in other mail operations.",
+      "color": "#bfbfbf",
+      "version": "1.18.10",
+      "icon": "list",
+      "id": "Core.Mail.Folders",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inClientId": {
+                "type": "object",
+                "title": "Client Id",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inClientId": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inClientId"
+            ]
+          },
+          "formData": {
+            "inClientId": {
+              "scope": "Message",
+              "name": "client_id"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outFolders": {
+                "type": "object",
+                "title": "Folders",
+                "variableType": "Array",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outFolders": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "outFolders"
+            ]
+          },
+          "formData": {
+            "outFolders": {
+              "scope": "Message",
+              "name": "folders"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optCredentials": {
+                "type": "object",
+                "title": "Credentials",
+                "subtitle": "Credentials",
+                "category": 2,
+                "properties": {
+                  "vaultId": {
+                    "type": "string"
+                  },
+                  "itemId": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "ui:order": [
+              "optCredentials"
+            ],
+            "optCredentials": {
+              "ui:field": "vault"
+            }
+          },
+          "formData": {
+            "optCredentials": {
+              "vaultId": "_",
+              "itemId": "_"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

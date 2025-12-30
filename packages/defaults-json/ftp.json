@@ -1,0 +1,1121 @@
+{
+  "name": "FTP",
+  "color": "#CDDC39",
+  "icon": "network",
+  "nodes": [
+    {
+      "name": "Connect",
+      "version": "24.1.5",
+      "description": "Establishes a connection to an FTP, SFTP, or FTPS server using the specified credentials and returns a session ID for subsequent operations.",
+      "color": "#CDDC39",
+      "icon": "network",
+      "id": "Core.FTP.Connect",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inHost": {
+                "type": "object",
+                "title": "Host",
+                "description": "The hostname or IP address of the FTP server to connect to. Cannot be empty. Example: 'ftp.example.com' or '192.168.1.100'.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inPort": {
+                "type": "object",
+                "title": "Port",
+                "description": "The port number to connect to on the FTP server. Cannot be zero. Standard ports: FTP (21), SFTP (22), FTPS (990). Example: 21.",
+                "variableType": "Integer",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inHost": {
+              "ui:field": "variable"
+            },
+            "inPort": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inHost": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inPort": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outSessionId": {
+                "type": "object",
+                "title": "Session Id",
+                "description": "A unique identifier for the established FTP session. Use this session ID in subsequent FTP operations to perform file transfers and directory operations.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outSessionId": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outSessionId": {
+              "scope": "Message",
+              "name": "session_id"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optFtpType": {
+                "title": "FTP Type",
+                "description": "The protocol type to use for the connection. FTP (unencrypted), SFTP (SSH File Transfer Protocol - secure), or FTPS (FTP over SSL/TLS - secure).",
+                "type": "string",
+                "enum": [
+                  "ftp",
+                  "sftp",
+                  "ftps"
+                ],
+                "enumNames": [
+                  "FTP",
+                  "sFTP",
+                  "FTPS"
+                ]
+              },
+              "optSkipTLSVerification": {
+                "title": "Skip TLS Verification",
+                "description": "When enabled, skips SSL/TLS certificate verification for secure connections (FTPS/SFTP). Use with caution as this reduces security by not verifying server identity.",
+                "type": "boolean"
+              },
+              "optCredentials": {
+                "type": "object",
+                "title": "Login Credentials",
+                "description": "Username and password credentials stored in the vault for authenticating with the FTP server. Both vault and item must be selected.",
+                "subtitle": "Login Credentials",
+                "category": 1,
+                "messageScope": true,
+                "customScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "object",
+                    "properties": {
+                      "vaultId": {
+                        "type": "string"
+                      },
+                      "itemId": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "optPrivateKey": {
+                "type": "object",
+                "title": "Private Key Path",
+                "description": "Optional for SFTP and FTPS, required when connecting with a private key file.",
+                "variableType": "String",
+                "customScope": true,
+                "jsScope": true,
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "optPassphrase": {
+                "type": "object",
+                "title": "Private Key Passphrase",
+                "description": "Optional passphrase for the private key, if the key is password-protected.",
+                "subtitle": "Private Key Passphrase",
+                "category": 1,
+                "messageScope": true,
+                "customScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "object",
+                    "properties": {
+                      "vaultId": {
+                        "type": "string"
+                      },
+                      "itemId": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "optCertificate": {
+                "type": "object",
+                "title": "Certificate Path",
+                "description": "Optional for FTPS, required when connecting with a private key file.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optCredentials": {
+              "ui:field": "vault"
+            },
+            "optPrivateKey": {
+              "ui:field": "variable"
+            },
+            "optPassphrase": {
+              "ui:field": "vault"
+            },
+            "optCertificate": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "optFtpType",
+              "optCredentials",
+              "optPrivateKey",
+              "optPassphrase",
+              "optCertificate",
+              "optSkipTLSVerification"
+            ]
+          },
+          "formData": {
+            "optFtpType": "ftp",
+            "optSkipTLSVerification": false,
+            "optCredentials": {
+              "scope": "Custom",
+              "name": {
+                "vaultId": "_",
+                "itemId": "_"
+              }
+            },
+            "optPrivateKey": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "optPassphrase": {
+              "scope": "Custom",
+              "name": {
+                "vaultId": "_",
+                "itemId": "_"
+              }
+            },
+            "optCertificate": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Disconnect",
+      "description": "Closes an active FTP connection using the provided session ID and performs cleanup operations.",
+      "color": "#CDDC39",
+      "icon": "network",
+      "id": "Core.FTP.Disconnect",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inSessionId": {
+                "type": "object",
+                "title": "Session Id",
+                "description": "The session ID of the active FTP connection to be closed. This should be the session ID returned from a successful FTP Connect operation.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inSessionId": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inSessionId": {
+              "scope": "Message",
+              "name": "session_id"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Download",
+      "description": "Downloads a file from the FTP server to the local file system using the specified session ID and file paths.",
+      "color": "#CDDC39",
+      "icon": "network",
+      "id": "Core.FTP.Download",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inSessionId": {
+                "type": "object",
+                "title": "Session Id",
+                "description": "The session ID of an active FTP connection. This should be the session ID returned from a successful FTP Connect operation.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inFtpPath": {
+                "type": "object",
+                "title": "FTP File Path",
+                "description": "The path to the file on the FTP server that will be downloaded. Must be a valid file path on the remote server. Example: '/remote/directory/file.txt'.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inLocalPath": {
+                "type": "object",
+                "title": "Local File Path",
+                "description": "The destination path where the file will be saved on the local file system. Include the filename in the path. Example: 'C:\\downloads\\file.txt'.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFtpPath": {
+              "ui:field": "variable"
+            },
+            "inLocalPath": {
+              "ui:field": "variable"
+            },
+            "inSessionId": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inSessionId",
+              "inFtpPath",
+              "inLocalPath"
+            ]
+          },
+          "formData": {
+            "inSessionId": {
+              "scope": "Message",
+              "name": "session_id"
+            },
+            "inFtpPath": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inLocalPath": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Upload",
+      "description": "Uploads a file from the local file system to the FTP server using the specified session ID and file paths.",
+      "color": "#CDDC39",
+      "icon": "network",
+      "id": "Core.FTP.Upload",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inSessionId": {
+                "type": "object",
+                "title": "Session Id",
+                "description": "The session ID of an active FTP connection. This should be the session ID returned from a successful FTP Connect operation.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inFtpPath": {
+                "type": "object",
+                "title": "FTP File Path",
+                "description": "The destination path on the FTP server where the file will be uploaded. Include the filename in the path. Example: '/remote/directory/file.txt'.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inLocalPath": {
+                "type": "object",
+                "title": "Local File Path",
+                "description": "The path to the file on the local file system that will be uploaded. Must be a valid existing file. Example: 'C:\\local\\file.txt'.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFtpPath": {
+              "ui:field": "variable"
+            },
+            "inLocalPath": {
+              "ui:field": "variable"
+            },
+            "inSessionId": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inSessionId",
+              "inLocalPath",
+              "inFtpPath"
+            ]
+          },
+          "formData": {
+            "inSessionId": {
+              "scope": "Message",
+              "name": "session_id"
+            },
+            "inFtpPath": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inLocalPath": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "File Exists",
+      "description": "Checks if a file or directory exists on the FTP server at the specified path and returns a boolean result.",
+      "color": "#CDDC39",
+      "icon": "network",
+      "id": "Core.FTP.FileExists",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inSessionId": {
+                "type": "object",
+                "title": "Session Id",
+                "description": "The session ID of an active FTP connection. This should be the session ID returned from a successful FTP Connect operation.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inFtpPath": {
+                "type": "object",
+                "title": "FTP File Path",
+                "description": "The path to the file or directory on the FTP server to check for existence. Example: '/remote/directory/file.txt' or '/remote/directory/'.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFtpPath": {
+              "ui:field": "variable"
+            },
+            "inSessionId": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inSessionId",
+              "inFtpPath"
+            ]
+          },
+          "formData": {
+            "inSessionId": {
+              "scope": "Message",
+              "name": "session_id"
+            },
+            "inFtpPath": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outResult": {
+                "type": "object",
+                "title": "Result",
+                "description": "Boolean value indicating whether the specified file or directory exists (true) or not (false) on the FTP server.",
+                "variableType": "Boolean",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outResult": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outResult": {
+              "scope": "Message",
+              "name": "exists"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Create Directory",
+      "description": "Creates a new directory on the FTP server at the specified path using the active session.",
+      "color": "#CDDC39",
+      "icon": "network",
+      "id": "Core.FTP.CreateDirectory",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inSessionId": {
+                "type": "object",
+                "title": "Session Id",
+                "description": "The session ID of an active FTP connection. This should be the session ID returned from a successful FTP Connect operation.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inFtpDirPath": {
+                "type": "object",
+                "title": "Ftp Directory Path",
+                "description": "The path where the new directory will be created on the FTP server. Parent directory must exist. Example: '/remote/path/new-directory'.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFtpDirPath": {
+              "ui:field": "variable"
+            },
+            "inSessionId": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inSessionId",
+              "inFtpDirPath"
+            ]
+          },
+          "formData": {
+            "inSessionId": {
+              "scope": "Message",
+              "name": "session_id"
+            },
+            "inFtpDirPath": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outPath": {
+                "type": "object",
+                "title": "Path",
+                "description": "The path of the created directory, returned as output for use in subsequent nodes. This will be the same as the input path if successful.",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outPath": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outPath": {
+              "scope": "Message",
+              "name": "path"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "List Directory",
+      "description": "Lists files and directories in the specified path on the FTP server with sorting and filtering options.",
+      "color": "#CDDC39",
+      "icon": "network",
+      "id": "Core.FTP.ListDirectory",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inSessionId": {
+                "type": "object",
+                "title": "Session Id",
+                "description": "The session ID of an active FTP connection. This should be the session ID returned from a successful FTP Connect operation.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inFtpDirPath": {
+                "type": "object",
+                "title": "Ftp Directory Path",
+                "description": "The path to the directory on the FTP server to list. Must be a valid directory path. Example: '/remote/directory/' or '/' for root.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFtpDirPath": {
+              "ui:field": "variable"
+            },
+            "inSessionId": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inSessionId",
+              "inFtpDirPath"
+            ]
+          },
+          "formData": {
+            "inFtpDirPath": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inSessionId": {
+              "scope": "Message",
+              "name": "session_id"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outFiles": {
+                "type": "object",
+                "title": "Files",
+                "description": "Array of file and directory information including names, sizes, dates, and other properties from the specified FTP directory.",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outFiles": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outFiles": {
+              "scope": "Message",
+              "name": "files"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optSort": {
+                "type": "string",
+                "title": "Sort",
+                "description": "Sorting method for the directory listing. Files and directories can be sorted by name or modification date in ascending or descending order.",
+                "enum": [
+                  "ascend",
+                  "descend",
+                  "modifiedlatest",
+                  "modifiedearlier"
+                ],
+                "enumNames": [
+                  "Name - Ascending",
+                  "Name - Descending",
+                  "Date - Last Modified",
+                  "Date - Earliest Modified"
+                ]
+              },
+              "optTop": {
+                "title": "Top",
+                "description": "Maximum number of items to return in the result. Set to 0 to return all items without limitation. Items are returned after sorting is applied.",
+                "type": "number",
+                "minimum": 0
+              }
+            }
+          },
+          "uiSchema": {
+            "ui:order": [
+              "optSort",
+              "optTop"
+            ]
+          },
+          "formData": {
+            "optSort": "ascend",
+            "optTop": 10
+          }
+        }
+      ]
+    },
+    {
+      "name": "Delete Directory",
+      "description": "Removes a directory from the FTP server at the specified path using the active session.",
+      "color": "#CDDC39",
+      "icon": "network",
+      "id": "Core.FTP.RemoveDirectory",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inSessionId": {
+                "type": "object",
+                "title": "Session Id",
+                "description": "The session ID of an active FTP connection. This should be the session ID returned from a successful FTP Connect operation.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inFtpDirPath": {
+                "type": "object",
+                "title": "Ftp Directory Path",
+                "description": "The path to the directory on the FTP server that will be deleted. The directory must be empty before it can be removed. Example: '/remote/directory/'.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFtpDirPath": {
+              "ui:field": "variable"
+            },
+            "inSessionId": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inSessionId",
+              "inFtpDirPath"
+            ]
+          },
+          "formData": {
+            "inFtpDirPath": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inSessionId": {
+              "scope": "Message",
+              "name": "session_id"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Delete File",
+      "description": "Removes a file from the FTP server at the specified path. The file must exist before it can be deleted.",
+      "color": "#CDDC39",
+      "icon": "network",
+      "id": "Core.FTP.RemoveFile",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inSessionId": {
+                "type": "object",
+                "title": "Session Id",
+                "description": "The session ID of an active FTP connection. This should be the session ID returned from a successful FTP Connect operation.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inFtpFilePath": {
+                "type": "object",
+                "title": "Ftp File Path",
+                "description": "The path to the file on the FTP server that will be deleted. The file must exist before deletion. Example: '/remote/directory/file.txt'.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFtpFilePath": {
+              "ui:field": "variable"
+            },
+            "inSessionId": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inSessionId",
+              "inFtpFilePath"
+            ]
+          },
+          "formData": {
+            "inFtpFilePath": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inSessionId": {
+              "scope": "Message",
+              "name": "session_id"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Move File",
+      "description": "Moves or renames a file on the FTP server from a source path to a destination path. The source file must exist and be a file (not a directory).",
+      "color": "#CDDC39",
+      "version": "22.12.0",
+      "icon": "network",
+      "id": "Core.FTP.MoveFile",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inSessionId": {
+                "type": "object",
+                "title": "Session Id",
+                "description": "The session ID of an active FTP connection. This should be the session ID returned from a successful FTP Connect operation.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inFtpSrcPath": {
+                "type": "object",
+                "title": "Ftp Source File Path",
+                "description": "The path to the existing file on the FTP server that will be moved. Must be a valid file path (not a directory). Example: '/remote/old-location/file.txt'.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inFtpDstPath": {
+                "type": "object",
+                "title": "Ftp Destination File Path",
+                "description": "The destination path where the file will be moved on the FTP server. Can be used to rename the file. Example: '/remote/new-location/file.txt'.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFtpSrcPath": {
+              "ui:field": "variable"
+            },
+            "inFtpDstPath": {
+              "ui:field": "variable"
+            },
+            "inSessionId": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inSessionId",
+              "inFtpSrcPath",
+              "inFtpDstPath"
+            ]
+          },
+          "formData": {
+            "inFtpSrcPath": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inFtpDstPath": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inSessionId": {
+              "scope": "Message",
+              "name": "session_id"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

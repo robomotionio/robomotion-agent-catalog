@@ -1,0 +1,1348 @@
+{
+  "name": "Net",
+  "color": "#4da5fb",
+  "icon": "network",
+  "nodes": [
+    {
+      "name": "Http In",
+      "version": "24.3.0",
+      "color": "#c9d9ff",
+      "icon": "braces",
+      "id": "Core.Net.HttpIn",
+      "description": "Creates an HTTP server that listens for incoming requests on the specified IP, port, and endpoint. Supports GET, POST, PUT, DELETE, and PATCH methods.",
+      "inputs": 0,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outBody": {
+                "type": "object",
+                "title": "Body",
+                "description": "The request body content extracted from the incoming HTTP request. Returns the JSON object if the body is valid JSON, otherwise returns the raw body as a string.",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "outHeaders": {
+                "type": "object",
+                "title": "Headers",
+                "description": "HTTP headers from the incoming request as key-value pairs. Header names are converted to lowercase.",
+                "variableType": "Object",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "outCookies": {
+                "type": "object",
+                "title": "Cookies",
+                "description": "HTTP cookies from the incoming request as key-value pairs with lowercase cookie names.",
+                "variableType": "Object",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "outQueryParams": {
+                "type": "object",
+                "title": "Query Params",
+                "description": "URL query parameters extracted from the request URL as key-value pairs.",
+                "variableType": "Object",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "outPathParams": {
+                "type": "object",
+                "title": "Path Params",
+                "description": "Path parameters extracted from the URL pattern (e.g., /users/:id) as key-value pairs.",
+                "variableType": "Object",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outBody": {
+              "ui:field": "variable"
+            },
+            "outHeaders": {
+              "ui:field": "variable"
+            },
+            "outCookies": {
+              "ui:field": "variable"
+            },
+            "outQueryParams": {
+              "ui:field": "variable"
+            },
+            "outPathParams": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "outBody",
+              "outHeaders",
+              "outCookies",
+              "outQueryParams",
+              "outPathParams"
+            ]
+          },
+          "formData": {
+            "outBody": {
+              "scope": "Message",
+              "name": "body"
+            },
+            "outHeaders": {
+              "scope": "Message",
+              "name": "headers"
+            },
+            "outCookies": {
+              "scope": "Message",
+              "name": "cookies"
+            },
+            "outQueryParams": {
+              "scope": "Message",
+              "name": "queryParams"
+            },
+            "outPathParams": {
+              "scope": "Message",
+              "name": "pathParams"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optMethod": {
+                "title": "Method",
+                "description": "HTTP method that this endpoint will respond to. Multiple methods can be selected to support different HTTP verbs.",
+                "type": "string",
+                "multiple": true,
+                "enum": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "DELETE",
+                  "PATCH"
+                ]
+              },
+              "optEndpointV2": {
+                "type": "object",
+                "title": "Endpoint",
+                "description": "The URL path where this HTTP server will listen (e.g., /api/users). Must start with '/' for proper routing.",
+                "variableType": "String",
+                "messageScope": false,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "optIPv2": {
+                "type": "object",
+                "title": "IP",
+                "description": "IP address to bind the HTTP server. Defaults to 127.0.0.1 if not specified. Must be a valid IP address format.",
+                "variableType": "String",
+                "messageScope": false,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "optPortv2": {
+                "type": "object",
+                "title": "Port",
+                "description": "Port number for the HTTP server to listen on. Defaults to 9090 if not specified. Must be a valid port number (1-65535).",
+                "variableType": "Integer",
+                "messageScope": false,
+                "customScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optEndpointV2": {
+              "ui:field": "variable"
+            },
+            "optIPv2": {
+              "ui:field": "variable"
+            },
+            "optPortv2": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "optMethod",
+              "optEndpointV2",
+              "optIPv2",
+              "optPortv2"
+            ]
+          },
+          "formData": {
+            "optMethod": "GET",
+            "optEndpointV2": {
+              "scope": "Custom",
+              "name": "/"
+            },
+            "optIPv2": {
+              "scope": "Custom",
+              "name": "127.0.0.1"
+            },
+            "optPortv2": {
+              "scope": "Custom",
+              "name": "9090"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Http Out",
+      "version": "23.1.0",
+      "color": "#c9d9ff",
+      "icon": "braces",
+      "id": "Core.Net.HttpOut",
+      "description": "Sends an HTTP response to a corresponding Http In node. Supports custom headers, cookies, file attachments, and status codes. The response is constructed from incoming message variables and sent back to the waiting HTTP client.",
+      "inputs": 1,
+      "outputs": 0,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inBody": {
+                "type": "object",
+                "title": "Body",
+                "description": "The response body content to send back to the client. Can be a string, JSON object, or any serializable data. If JSON, will be automatically serialized with proper headers.",
+                "variableType": "String",
+                "messageScope": true,
+                "contentScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inHeaders": {
+                "type": "object",
+                "title": "Headers",
+                "description": "HTTP headers to include in the response as key-value pairs. Header names are converted to lowercase. Merged with custom headers before sending.",
+                "variableType": "Array",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inCustomHeaders": {
+                "type": "array",
+                "title": "Custom Headers",
+                "description": "Array of custom HTTP headers to include in the response. Each header has a name-value pair. These headers are merged with the headers from the Headers input parameter.",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "scope": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "title": "Name"
+                        },
+                        "value": {
+                          "type": "string",
+                          "title": "Value"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "inCookies": {
+                "type": "object",
+                "title": "Cookies",
+                "description": "HTTP cookies to include in the response as key-value pairs. Cookie names are converted to lowercase. Merged with custom cookies before sending.",
+                "variableType": "Array",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inCustomCookies": {
+                "type": "array",
+                "title": "Custom Cookies",
+                "description": "Array of custom HTTP cookies to include in the response. Each cookie has a name-value pair. These cookies are merged with the cookies from the Cookies input parameter.",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "scope": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "title": "Name"
+                        },
+                        "value": {
+                          "type": "string",
+                          "title": "Value"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "inAttachment": {
+                "type": "object",
+                "title": "Attachment Path",
+                "description": "Path to a file that will be attached to the response and sent as a file download. If specified, the file content will override the body content. The file must exist and be accessible.",
+                "variableType": "String",
+                "messageScope": true,
+                "contentScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inStatus": {
+                "type": "object",
+                "title": "Status Code",
+                "description": "HTTP status code to send in the response (e.g., 200, 404, 500). Must be a valid HTTP status code between 100-599.",
+                "variableType": "Integer",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inBody": {
+              "ui:field": "variable"
+            },
+            "inHeaders": {
+              "ui:field": "variable"
+            },
+            "inCustomHeaders": {
+              "ui:field": "array",
+              "ui:options": {
+                "orderable": false
+              }
+            },
+            "inCustomCookies": {
+              "ui:field": "array",
+              "ui:options": {
+                "orderable": false
+              }
+            },
+            "inCookies": {
+              "ui:field": "variable"
+            },
+            "inStatus": {
+              "ui:field": "variable"
+            },
+            "inAttachment": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inStatus",
+              "inBody",
+              "inHeaders",
+              "inCustomHeaders",
+              "inCookies",
+              "inCustomCookies",
+              "inAttachment"
+            ]
+          },
+          "formData": {
+            "inStatus": {
+              "scope": "Custom",
+              "name": "200"
+            },
+            "inBody": {
+              "scope": "Message",
+              "name": "body"
+            },
+            "inHeaders": {
+              "scope": "Message",
+              "name": "headers"
+            },
+            "inCustomHeaders": [
+              {
+                "scope": "Custom",
+                "name": {
+                  "name": "Content-Type",
+                  "value": "application/json"
+                }
+              }
+            ],
+            "inAttachment": {
+              "scope": "Message",
+              "name": "attachment"
+            },
+            "inCustomCookies": [],
+            "inCookies": {
+              "scope": "Message",
+              "name": "cookies"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Http Request",
+      "version": "23.1.0",
+      "color": "#c9d9ff",
+      "icon": "braces",
+      "id": "Core.Net.HttpRequest",
+      "description": "Makes HTTP requests to external URLs with support for GET, POST, PUT, DELETE, and PATCH methods. Includes authentication, proxy support, cookie management, and streaming capabilities.",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inBody": {
+                "type": "object",
+                "title": "Request",
+                "description": "The request body/data to send with the HTTP request. For POST/PUT/PATCH, this contains the data that will be sent in the request body. Can be JSON, form data, or raw text.",
+                "variableType": "String",
+                "messageScope": true,
+                "contentScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inHeaders": {
+                "type": "object",
+                "title": "Headers",
+                "description": "HTTP headers to include in the request as key-value pairs. Header names are converted to lowercase and merged with custom headers.",
+                "variableType": "Array",
+                "messageOnly": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inCustomHeaders": {
+                "type": "array",
+                "title": "Custom Headers",
+                "description": "Array of custom HTTP headers to include in the request. Each header has a name-value pair. These headers are merged with the headers from the Headers input parameter.",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "scope": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "title": "Name"
+                        },
+                        "value": {
+                          "type": "string",
+                          "title": "Value"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "inCookies": {
+                "type": "object",
+                "title": "Cookies",
+                "description": "HTTP cookies to include in the request as key-value pairs. Cookie names are converted to lowercase and merged with custom cookies. Format: {'sId':'3874d5700cc248118', '_rM':'random'}",
+                "variableType": "Array",
+                "messageOnly": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inCookieStore": {
+                "type": "object",
+                "title": "Raw Cookies",
+                "description": "Cookie jar containing session cookies that will be automatically managed across requests. Updated with cookies received in the response for maintaining session state. Format: [{'name': 'sessionID', 'value': '3874d5700cc248118', 'path': '/', 'domain': 'example.com', 'expires': '2024-12-31T23:59:59Z', 'maxAge': 3600, 'secure': true, 'httpOnly': true, 'sameSite': 2}]",
+                "variableType": "Array",
+                "messageOnly": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inCustomCookies": {
+                "type": "array",
+                "title": "Custom Cookies",
+                "description": "Array of custom HTTP cookies to include in the request. Each cookie has a name-value pair. These cookies are merged with the cookies from the Cookies input parameter.",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "scope": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "title": "Name"
+                        },
+                        "value": {
+                          "type": "string",
+                          "title": "Value"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inBody": {
+              "ui:field": "variable"
+            },
+            "inHeaders": {
+              "ui:field": "variable"
+            },
+            "inCustomHeaders": {
+              "ui:field": "array"
+            },
+            "inCustomCookies": {
+              "ui:field": "array"
+            },
+            "inCookieStore": {
+              "ui:field": "variable"
+            },
+            "inCookies": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inBody",
+              "inHeaders",
+              "inCustomHeaders",
+              "inCookies",
+              "inCookieStore",
+              "inCustomCookies"
+            ]
+          },
+          "formData": {
+            "inBody": {
+              "scope": "Message",
+              "name": "req"
+            },
+            "inHeaders": {
+              "scope": "Message",
+              "name": "reqHeaders"
+            },
+            "inCustomHeaders": [
+              {
+                "scope": "Custom",
+                "name": {
+                  "name": "Content-Type",
+                  "value": "application/json"
+                }
+              }
+            ],
+            "inCookieStore": {
+              "scope": "Message",
+              "name": "inCookies"
+            },
+            "inCustomCookies": [],
+            "inCookies": {
+              "scope": "Message",
+              "name": "reqCookies"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outBody": {
+                "type": "object",
+                "title": "Response",
+                "description": "The HTTP response body. Returns JSON object if Content-Type is application/json, otherwise returns raw response as string. Base64 encoded if Encode as Base64 option is enabled.",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "outHeaders": {
+                "type": "object",
+                "title": "Headers",
+                "description": "HTTP headers from the response as key-value pairs. Header names are converted to lowercase.",
+                "variableType": "Array",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "outCookies": {
+                "type": "object",
+                "title": "Cookies",
+                "description": "HTTP cookies from the response as key-value pairs. Cookie names are converted to lowercase.",
+                "variableType": "Array",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "outCookieStore": {
+                "type": "object",
+                "title": "Raw Cookies",
+                "description": "Updated cookie jar with all cookies received in the response. Includes session cookies that can be reused in subsequent requests.",
+                "variableType": "Array",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "outStatus": {
+                "type": "object",
+                "title": "Status Code",
+                "description": "HTTP status code from the response (e.g., 200, 404, 500). Indicates the success or failure of the HTTP request.",
+                "variableType": "Integer",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "outStreamIndex": {
+                "type": "object",
+                "title": "Stream Index",
+                "description": "Index number when streaming is enabled. Each streamed response chunk gets a unique index, with the final message having an EOF marker.",
+                "variableType": "Integer",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outBody": {
+              "ui:field": "variable"
+            },
+            "outHeaders": {
+              "ui:field": "variable"
+            },
+            "outCookies": {
+              "ui:field": "variable"
+            },
+            "outCookieStore": {
+              "ui:field": "variable"
+            },
+            "outStatus": {
+              "ui:field": "variable"
+            },
+            "outStreamIndex": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "outBody",
+              "outHeaders",
+              "outCookies",
+              "outStatus",
+              "outCookieStore",
+              "outStreamIndex"
+            ]
+          },
+          "formData": {
+            "outBody": {
+              "scope": "Message",
+              "name": "resp"
+            },
+            "outHeaders": {
+              "scope": "Message",
+              "name": "respHeaders"
+            },
+            "outCookieStore": {
+              "scope": "Message",
+              "name": "outCookies"
+            },
+            "outCookies": {
+              "scope": "Message",
+              "name": "respCookies"
+            },
+            "outStatus": {
+              "scope": "Message",
+              "name": "respStatus"
+            },
+            "outStreamIndex": {
+              "scope": "Message",
+              "name": "stream_index"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optUrl": {
+                "type": "object",
+                "title": "URL",
+                "description": "The target URL for the HTTP request. Can include protocol (http/https), domain, path, and query parameters. Automatically adds http:// if protocol is missing.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "optMethod": {
+                "title": "Method",
+                "description": "HTTP method to use for the request. GET for retrieving data, POST for sending data, PUT for updating resources, DELETE for removing resources, PATCH for partial updates.",
+                "type": "string",
+                "enum": [
+                  "get",
+                  "post",
+                  "put",
+                  "delete",
+                  "patch"
+                ],
+                "enumNames": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "DELETE",
+                  "PATCH"
+                ]
+              },
+              "optAuthentication": {
+                "title": "Authentication",
+                "description": "Authentication method for the HTTP request. 'No Authentication' sends the request without authentication. 'Basic Authentication' adds username/password from vault credentials.",
+                "type": "string",
+                "enum": [
+                  "no-authentication",
+                  "basic-authentication"
+                ],
+                "enumNames": [
+                  "No Authentication",
+                  "Basic Authentication"
+                ]
+              },
+              "optCredentials": {
+                "type": "object",
+                "title": "Credentials",
+                "subtitle": "Username and password for basic authentication",
+                "description": "Vault credentials containing username and password for basic HTTP authentication. Required when 'Basic Authentication' is selected.",
+                "category": 1,
+                "messageScope": true,
+                "customScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "object",
+                    "properties": {
+                      "vaultId": {
+                        "type": "string"
+                      },
+                      "itemId": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "optTimeout": {
+                "title": "Timeout (seconds)",
+                "description": "Maximum time to wait for the HTTP request to complete, in seconds. Defaults to 30 seconds if not specified.",
+                "type": "number"
+              },
+              "optInsecure": {
+                "type": "boolean",
+                "title": "Insecure Skip Verify",
+                "description": "If true, skips SSL certificate verification. Useful for self-signed certificates but reduces security. Only use in trusted environments."
+              },
+              "optBase64": {
+                "type": "boolean",
+                "title": "Encode as Base64",
+                "description": "If true, encodes the response body as Base64. Useful for binary data or when you need to handle the response as binary rather than text."
+              },
+              "optEnableStreaming": {
+                "type": "boolean",
+                "title": "Enable Streaming",
+                "description": "If true, enables response streaming. The response will be processed in chunks, with each chunk emitted as a separate message with a stream index."
+              },
+              "optEnableDebugging": {
+                "type": "boolean",
+                "description": "If true, logs detailed HTTP request and response information to the console in cURL format for debugging purposes.",
+                "title": "Enable Debugging"
+              },
+              "optProxy": {
+                "title": "Proxy Settings",
+                "description": "Proxy configuration for the HTTP request. 'No Proxy' connects directly, 'Manual Proxy' uses specified proxy settings, 'Robomotion Proxy' routes through Robomotion's proxy service.",
+                "type": "string",
+                "enum": [
+                  "no-proxy",
+                  "manual-proxy",
+                  "robomotion-proxy"
+                ],
+                "enumNames": [
+                  "No Proxy",
+                  "Manual Proxy",
+                  "Robomotion Proxy"
+                ]
+              },
+              "optProxyAddr": {
+                "type": "object",
+                "title": "Proxy Address",
+                "description": "Proxy server address including host and port (e.g., proxy.example.com:8080). Required when 'Manual Proxy' is selected.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "optProxyAuth": {
+                "title": "Proxy Authentication",
+                "description": "Authentication method for the proxy server. 'No Authentication' connects without credentials, 'Basic Authentication' uses proxy credentials from vault.",
+                "type": "string",
+                "enum": [
+                  "no-authentication",
+                  "basic-authentication"
+                ],
+                "enumNames": [
+                  "No Authentication",
+                  "Basic Authentication"
+                ]
+              },
+              "optProxyCredentials": {
+                "type": "object",
+                "title": "Proxy Credentials",
+                "subtitle": "Username and password for proxy authentication",
+                "description": "Vault credentials containing username and password for proxy basic authentication. Required when 'Basic Authentication' is selected for proxy.",
+                "category": 1,
+                "messageScope": true,
+                "customScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "object",
+                    "properties": {
+                      "vaultId": {
+                        "type": "string"
+                      },
+                      "itemId": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "optCustomRobomotionParameters": {
+                "title": "Robomotion Proxy Parameters",
+                "type": "array",
+                "variableType": "Any",
+                "customScope": true,
+                "description": "Additional parameters to pass to the Robomotion proxy service. Each parameter is a name-value pair that controls proxy behavior.",
+                "placeholder": "Custom Parameters",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "scope": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "title": "Name"
+                        },
+                        "value": {
+                          "type": "string",
+                          "title": "Value"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optUrl": {
+              "ui:field": "variable"
+            },
+            "optCredentials": {
+              "ui:field": "vault"
+            },
+            "optProxyCredentials": {
+              "ui:field": "vault"
+            },
+            "optProxyAddr": {
+              "ui:field": "variable"
+            },
+            "optCustomRobomotionParameters": {
+              "ui:field": "array"
+            },
+            "ui:order": [
+              "optMethod",
+              "optUrl",
+              "optAuthentication",
+              "optCredentials",
+              "optTimeout",
+              "optInsecure",
+              "optBase64",
+              "optEnableStreaming",
+              "optEnableDebugging",
+              "optProxy",
+              "optProxyAddr",
+              "optProxyAuth",
+              "optProxyCredentials",
+              "optCustomRobomotionParameters"
+            ]
+          },
+          "formData": {
+            "optMethod": "post",
+            "optAuthentication": "no-authentication",
+            "optUrl": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "optCredentials": {
+              "scope": "Custom",
+              "name": {
+                "vaultId": "_",
+                "itemId": "_"
+              }
+            },
+            "optTimeout": 30,
+            "optEnableDebugging": false,
+            "optProxy": "no-proxy",
+            "optProxyAuth": "no-authentication",
+            "optProxyAddr": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "optProxyCredentials": {
+              "scope": "Custom",
+              "name": {
+                "vaultId": "_",
+                "itemId": "_"
+              }
+            },
+            "optCustomRobomotionParameters": []
+          }
+        }
+      ]
+    },
+    {
+      "name": "HTML Template",
+      "version": "23.12.0",
+      "color": "#c9d9ff",
+      "icon": "layout-template",
+      "id": "Core.Net.HTMLTemplate",
+      "description": "Renders HTML templates using Mustache syntax with data from input messages. Supports template variables, loops, and conditional rendering.",
+      "editor": "html",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outRendered": {
+                "type": "object",
+                "title": "Output",
+                "description": "The rendered HTML output after processing the template with input data. Template variables are replaced with corresponding values from the input message.",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "func": {
+                "title": "Function",
+                "description": "HTML template using Mustache syntax. Use {{variable}} syntax for placeholders that will be replaced with values from the input message.",
+                "type": "string"
+              }
+            }
+          },
+          "uiSchema": {
+            "outRendered": {
+              "ui:field": "variable"
+            },
+            "func": {
+              "ui:widget": "hidden"
+            }
+          },
+          "formData": {
+            "outRendered": {
+              "scope": "Message",
+              "name": "rendered"
+            },
+            "func": "<html>\n  <head>\n    <title>Title</title>\n  </head>\n  <body>\n    {{content}}\n  </body>\n</html>\n"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Download File",
+      "version": "1.16.4",
+      "color": "#c9d9ff",
+      "icon": "download",
+      "id": "Core.Net.Download",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inUrl": {
+                "type": "object",
+                "title": "URL",
+                "description": "The URL of the file to download. Can include protocol (http/https), domain, and full path to the file. Must be a valid URL pointing to a downloadable resource.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inPath": {
+                "type": "object",
+                "title": "Download Path",
+                "description": "The local file path where the downloaded file will be saved. Can be an absolute or relative path. The directory must exist or be creatable.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inUrl": {
+              "ui:field": "variable"
+            },
+            "inPath": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inUrl",
+              "inPath"
+            ]
+          },
+          "formData": {
+            "inUrl": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inPath": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outPath": {
+                "type": "object",
+                "title": "Path",
+                "description": "The actual path where the file was downloaded and saved. This can be used for verification or further processing of the downloaded file.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outPath": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outPath": {
+              "scope": "Message",
+              "name": "path"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optCredentials": {
+                "type": "object",
+                "title": "Basic Authentication",
+                "subtitle": "",
+                "description": "Vault credentials containing username and password for basic HTTP authentication when downloading from protected resources.",
+                "category": 1,
+                "messageScope": true,
+                "customScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "object",
+                    "properties": {
+                      "vaultId": {
+                        "type": "string"
+                      },
+                      "itemId": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "optCookieStore": {
+                "type": "object",
+                "title": "Cookies",
+                "description": "Optional JSON array of raw cookie objects for download authentication. Format: [{'name': 'sessionID', 'value': '3874d5700cc248118', 'path': '/', 'domain': 'example.com', 'expires': '2024-12-31T23:59:59Z', 'maxAge': 3600, 'secure': true, 'httpOnly': true, 'sameSite': 2}]",
+                "variableType": "Array",
+                "messageOnly": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "optTimeout": {
+                "title": "Timeout (seconds)",
+                "description": "Maximum time to wait for the download to complete, in seconds. Defaults to 60 seconds if not specified.",
+                "type": "number"
+              },
+              "optPattern": {
+                "type": "object",
+                "title": "TempFile Pattern",
+                "description": "Pattern for temporary file naming during download. If specified, a temporary file with this pattern will be created first, then moved to the final location upon completion.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optPattern": {
+              "ui:field": "variable"
+            },
+            "optCookieStore": {
+              "ui:field": "variable"
+            },
+            "optCredentials": {
+              "ui:field": "vault"
+            },
+            "ui:order": [
+              "optCredentials",
+              "optPattern",
+              "optTimeout",
+              "optCookieStore"
+            ]
+          },
+          "formData": {
+            "optPattern": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "optCookieStore": {
+              "scope": "Message",
+              "name": "cookies"
+            },
+            "optCredentials": {
+              "scope": "Custom",
+              "name": {
+                "vaultId": "_",
+                "itemId": "_"
+              }
+            },
+            "optTimeout": 60
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,288 @@
+{
+  "name": "Dialog",
+  "color": "#4da5fb",
+  "icon": "message-square",
+  "nodes": [
+    {
+      "name": "Message Box",
+      "description": "Displays interactive dialog boxes to users with different types (Info, Error, Yes/No). Supports custom titles and messages for user interaction.",
+      "color": "#4da5fb",
+      "icon": "message-square",
+      "id": "Core.Dialog.MessageBox",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inText": {
+                "type": "object",
+                "title": "Text",
+                "description": "The main message content to display in the dialog box. This is the primary text that users will see.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inTitle": {
+                "type": "object",
+                "title": "Title",
+                "description": "The title text to display in the dialog box header. This appears at the top of the dialog window.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "ui:order": [
+              "inTitle",
+              "inText"
+            ],
+            "inText": {
+              "ui:field": "variable"
+            },
+            "inTitle": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inTitle": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inText": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outConfirmed": {
+                "type": "object",
+                "title": "Confirmed",
+                "description": "Boolean result indicating whether the user confirmed the dialog. True for Yes/OK buttons, false for No/Cancel buttons.",
+                "variableType": "Boolean",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outConfirmed": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outConfirmed": {
+              "scope": "Message",
+              "name": "confirmed"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optType": {
+                "type": "string",
+                "title": "Type",
+                "description": "The type of dialog box to display. Determines the buttons and icon shown in the dialog.",
+                "enum": [
+                  "yesno",
+                  "info",
+                  "error"
+                ],
+                "enumNames": [
+                  "Yes / No",
+                  "Info",
+                  "Error"
+                ]
+              }
+            }
+          },
+          "uiSchema": {},
+          "formData": {
+            "optType": "info"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Input Box",
+      "description": "Displays an input dialog box to collect text input from users. Supports custom titles, prompts, and default values for user data entry.",
+      "color": "#4da5fb",
+      "icon": "message-square-plus",
+      "id": "Core.Dialog.InputBox",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inText": {
+                "type": "object",
+                "title": "Text",
+                "description": "The prompt text to display in the input dialog. This tells the user what information to enter.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inTitle": {
+                "type": "object",
+                "title": "Title",
+                "description": "The title text to display in the input dialog header. This appears at the top of the dialog window.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "ui:order": [
+              "inTitle",
+              "inText"
+            ],
+            "inText": {
+              "ui:field": "variable"
+            },
+            "inTitle": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inTitle": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inText": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outText": {
+                "type": "object",
+                "title": "Text",
+                "description": "The text entered by the user in the input dialog. Contains the user's input response.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outText": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outText": {
+              "scope": "Message",
+              "name": "text"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optDefault": {
+                "type": "object",
+                "title": "Default Value",
+                "description": "The default text to pre-populate in the input field. Users can modify or accept this value.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optDefault": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "optDefault": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

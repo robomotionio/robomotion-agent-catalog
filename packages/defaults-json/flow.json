@@ -1,0 +1,463 @@
+{
+  "name": "Flow",
+  "color": "#4da5fb",
+  "icon": "network",
+  "nodes": [
+    {
+      "name": "Comment",
+      "description": "Adds documentation and notes to workflows with markdown formatting. Provides visual annotations without affecting workflow execution flow.",
+      "color": "#fff740",
+      "icon": "message-circle",
+      "id": "Core.Flow.Comment",
+      "inputs": 0,
+      "outputs": 0,
+      "properties": [
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "comment": {
+                "title": "Comment",
+                "description": "The markdown-formatted text content for documentation and notes within the workflow.",
+                "type": "string"
+              },
+              "optText": {
+                "title": "Text",
+                "description": "Additional text content for extended documentation and workflow annotations.",
+                "type": "string"
+              }
+            }
+          },
+          "uiSchema": {
+            "optText": {
+              "ui:description": "Comment",
+              "ui:widget": "hidden",
+              "ui:options": {
+                "rows": 8
+              }
+            },
+            "comment": {
+              "ui:widget": "hidden",
+              "ui:options": {
+                "rows": 6
+              }
+            }
+          },
+          "formData": {
+            "optText": "#### Empty Comment \n Type here your markdown formatted comment."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Go To",
+      "description": "Redirects workflow execution to specific Label nodes, enabling conditional branching and loop constructs. Supports jumping to single or multiple labels.",
+      "color": "#444",
+      "icon": "arrow-right",
+      "id": "Core.Flow.GoTo",
+      "inputs": 1,
+      "outputs": 0,
+      "properties": [
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "inputs": 1,
+            "outputs": 1,
+            "properties": {
+              "optNodes": {
+                "type": "object",
+                "title": "",
+                "properties": {
+                  "ids": {
+                    "title": "",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "all": {
+                    "title": "All",
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optNodes": {
+              "ui:field": "catch"
+            },
+            "ui:order": [
+              "optNodes"
+            ]
+          },
+          "formData": {
+            "optNodes": {
+              "ids": [],
+              "type": "goto",
+              "all": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Label",
+      "description": "Creates named jump destinations for Go To nodes. Acts as a marker in workflow execution allowing for complex control flow patterns and loops.",
+      "color": "#444",
+      "icon": "arrow-right",
+      "id": "Core.Flow.Label",
+      "inputs": 0,
+      "outputs": 1,
+      "properties": []
+    },
+    {
+      "name": "Fork Branch",
+      "description": "Creates parallel execution branches from a single workflow path. Generates unique wait group and branch IDs for synchronization with Join Branch nodes.",
+      "color": "#ed5c40",
+      "version": "23.2.0",
+      "icon": "split",
+      "id": "Core.Flow.ForkBranch",
+      "inputs": 1,
+      "outputs": 2,
+      "properties": [
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outWaitGroupID": {
+                "type": "object",
+                "title": "Wait Group Id",
+                "description": "Unique identifier for the wait group that synchronizes parallel branches. Used by Join Branch nodes to coordinate execution.",
+                "variableType": "String",
+                "messageScope": true,
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "outBranchID": {
+                "type": "object",
+                "title": "Branch Id",
+                "description": "Unique identifier for this specific branch within the wait group. Tracks individual branch completion status.",
+                "variableType": "String",
+                "messageScope": true,
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outWaitGroupID": {
+              "ui:field": "variable"
+            },
+            "outBranchID": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "outWaitGroupID",
+              "outBranchID"
+            ]
+          },
+          "formData": {
+            "outWaitGroupID": {
+              "scope": "Message",
+              "name": "wg_id"
+            },
+            "outBranchID": {
+              "scope": "Message",
+              "name": "branch_id"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optNofBranches": {
+                "type": "object",
+                "title": "Number of Branches",
+                "description": "The number of parallel execution branches to create. Each branch can execute independently and can be synchronized using Join Branch nodes.",
+                "variableType": "Integer",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optNofBranches": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "optNofBranches": {
+              "scope": "Custom",
+              "name": "2"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Log",
+      "description": "Writes log messages with configurable severity levels (trace, debug, info, warn, error). Essential for debugging and monitoring workflow execution.",
+      "color": "#00c0b3",
+      "icon": "logs",
+      "id": "Core.Flow.Log",
+      "inputs": 1,
+      "outputs": 0,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inText": {
+                "type": "object",
+                "title": "Text",
+                "description": "The message content to write to the log. Can include variable data and formatted text for debugging and monitoring.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "ui:order": [
+              "inText"
+            ],
+            "inText": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inText": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optLevel": {
+                "title": "Log Level",
+                "description": "The severity level of the log message. Higher levels (error, warn) are more likely to be displayed in production environments.",
+                "type": "string",
+                "enum": [
+                  "trace",
+                  "debug",
+                  "info",
+                  "warn",
+                  "error"
+                ],
+                "enumNames": [
+                  "Trace",
+                  "Debug",
+                  "Info",
+                  "Warning",
+                  "Error"
+                ]
+              }
+            }
+          },
+          "uiSchema": {},
+          "formData": {
+            "optLevel": "info"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Stop",
+      "description": "Terminates workflow execution with specified status (success/failed) and optional reason. Provides controlled workflow termination points.",
+      "color": "#fb2727",
+      "icon": "circle-stop",
+      "id": "Core.Flow.Stop",
+      "inputs": 1,
+      "outputs": 0,
+      "properties": [
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optSuccess": {
+                "type": "string",
+                "title": "Status",
+                "description": "The final execution status to report when stopping the workflow. Success indicates normal completion, Failed indicates an error condition.",
+                "enum": [
+                  "success",
+                  "failed"
+                ],
+                "enumNames": [
+                  "Success",
+                  "Failed"
+                ]
+              },
+              "optReason": {
+                "type": "object",
+                "title": "Reason",
+                "description": "Optional text explanation for why the workflow was stopped. Useful for debugging and error reporting.",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optReason": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "optSuccess",
+              "optReason"
+            ]
+          },
+          "formData": {
+            "optSuccess": "success",
+            "optReason": {
+              "scope": "Message",
+              "name": "reason"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sub Flow",
+      "description": "Executes reusable workflow components as embedded sub-processes. Enables modular workflow design with configurable input/output ports.",
+      "color": "#646bf5",
+      "icon": "captions",
+      "id": "Core.Flow.SubFlow",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "outputs": {
+                "title": "Outputs",
+                "description": "The number of output ports for the sub-flow. Determines how many different execution paths can exit from this sub-flow.",
+                "type": "number",
+                "minimum": 1,
+                "maximum": 32
+              },
+              "subflow": {
+                "type": "string",
+                "description": "The identifier or reference to the sub-flow workflow to execute within this node.",
+                "properties": {}
+              }
+            }
+          },
+          "uiSchema": {
+            "subflow": {
+              "ui:widget": "hidden"
+            },
+            "outputs": {
+              "ui:field": "input"
+            },
+            "ui:order": [
+              "outputs",
+              "*"
+            ]
+          },
+          "formData": {
+            "outputs": 1,
+            "subflow": ""
+          }
+        }
+      ]
+    },
+    {
+      "name": "Should Stop",
+      "description": "Checks if workflow execution should be terminated based on system conditions or external requests. Returns boolean result for conditional stopping logic.",
+      "color": "#e7b416",
+      "icon": "circle-stop",
+      "id": "Core.Flow.ShouldStop",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outResult": {
+                "type": "object",
+                "title": "Should Stop",
+                "description": "Boolean result indicating whether the workflow should be terminated. True means stop execution, false means continue.",
+                "variableType": "Boolean",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outResult": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outResult": {
+              "scope": "Message",
+              "name": "should_stop"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
