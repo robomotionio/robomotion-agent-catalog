@@ -1,0 +1,544 @@
+{
+  "total_packages": 133,
+  "processed_packages": 133,
+  "total_nodes": 0,
+  "processed_nodes": 1262,
+  "current_package": "wordpress",
+  "status": "completed",
+  "packages": {
+    "2fa": {
+      "status": "completed",
+      "nodes": 3
+    },
+    "abbyy": {
+      "status": "completed",
+      "nodes": 0
+    },
+    "agent-tools": {
+      "status": "completed",
+      "nodes": 15
+    },
+    "agents": {
+      "status": "completed",
+      "nodes": 18
+    },
+    "airtable": {
+      "status": "completed",
+      "nodes": 7
+    },
+    "amazon-s3": {
+      "status": "completed",
+      "nodes": 12
+    },
+    "anthropic": {
+      "status": "completed",
+      "nodes": 8
+    },
+    "anticaptcha": {
+      "status": "completed",
+      "nodes": 3
+    },
+    "application": {
+      "status": "completed",
+      "nodes": 7
+    },
+    "array": {
+      "status": "completed",
+      "nodes": 12
+    },
+    "audio-processing": {
+      "status": "completed",
+      "nodes": 8
+    },
+    "badgerdb": {
+      "status": "completed",
+      "nodes": 14
+    },
+    "barcode": {
+      "status": "completed",
+      "nodes": 4
+    },
+    "binance": {
+      "status": "completed",
+      "nodes": 20
+    },
+    "boolean": {
+      "status": "completed",
+      "nodes": 3
+    },
+    "browser": {
+      "status": "completed",
+      "nodes": 23
+    },
+    "calendly": {
+      "status": "completed",
+      "nodes": 6
+    },
+    "capmonster": {
+      "status": "completed",
+      "nodes": 8
+    },
+    "clickhouse": {
+      "status": "completed",
+      "nodes": 6
+    },
+    "clipboard": {
+      "status": "completed",
+      "nodes": 2
+    },
+    "compress": {
+      "status": "completed",
+      "nodes": 6
+    },
+    "cookie-store": {
+      "status": "completed",
+      "nodes": 2
+    },
+    "cryptography": {
+      "status": "completed",
+      "nodes": 10
+    },
+    "csv": {
+      "status": "completed",
+      "nodes": 4
+    },
+    "datatable": {
+      "status": "completed",
+      "nodes": 14
+    },
+    "datetime": {
+      "status": "completed",
+      "nodes": 7
+    },
+    "dialog": {
+      "status": "completed",
+      "nodes": 2
+    },
+    "discord": {
+      "status": "completed",
+      "nodes": 22
+    },
+    "document-processor": {
+      "status": "completed",
+      "nodes": 6
+    },
+    "dom-parser": {
+      "status": "completed",
+      "nodes": 10
+    },
+    "dropbox": {
+      "status": "completed",
+      "nodes": 10
+    },
+    "dropcontact": {
+      "status": "completed",
+      "nodes": 3
+    },
+    "elevenlabs-ai": {
+      "status": "completed",
+      "nodes": 20
+    },
+    "email-validator": {
+      "status": "completed",
+      "nodes": 5
+    },
+    "encoding": {
+      "status": "completed",
+      "nodes": 7
+    },
+    "excel": {
+      "status": "completed",
+      "nodes": 26
+    },
+    "ffmpeg": {
+      "status": "completed",
+      "nodes": 7
+    },
+    "file-system": {
+      "status": "completed",
+      "nodes": 11
+    },
+    "flexicapture": {
+      "status": "completed",
+      "nodes": 1
+    },
+    "flow": {
+      "status": "completed",
+      "nodes": 8
+    },
+    "forms": {
+      "status": "completed",
+      "nodes": 7
+    },
+    "ftp": {
+      "status": "completed",
+      "nodes": 10
+    },
+    "gateio": {
+      "status": "completed",
+      "nodes": 13
+    },
+    "giphy": {
+      "status": "completed",
+      "nodes": 14
+    },
+    "google-calendar": {
+      "status": "completed",
+      "nodes": 7
+    },
+    "google-dialogflow": {
+      "status": "completed",
+      "nodes": 2
+    },
+    "google-docs": {
+      "status": "completed",
+      "nodes": 12
+    },
+    "google-document-ai": {
+      "status": "completed",
+      "nodes": 3
+    },
+    "google-drive": {
+      "status": "completed",
+      "nodes": 15
+    },
+    "google-forms": {
+      "status": "completed",
+      "nodes": 7
+    },
+    "google-gemini": {
+      "status": "completed",
+      "nodes": 16
+    },
+    "google-map": {
+      "status": "completed",
+      "nodes": 4
+    },
+    "google-natural-language": {
+      "status": "completed",
+      "nodes": 1
+    },
+    "google-sheets": {
+      "status": "completed",
+      "nodes": 24
+    },
+    "google-slides": {
+      "status": "completed",
+      "nodes": 9
+    },
+    "google-speech": {
+      "status": "completed",
+      "nodes": 2
+    },
+    "google-storage": {
+      "status": "completed",
+      "nodes": 10
+    },
+    "google-translate": {
+      "status": "completed",
+      "nodes": 1
+    },
+    "google-trends": {
+      "status": "completed",
+      "nodes": 9
+    },
+    "google-vertex-ai": {
+      "status": "completed",
+      "nodes": 7
+    },
+    "google-vision": {
+      "status": "completed",
+      "nodes": 5
+    },
+    "google-youtube": {
+      "status": "completed",
+      "nodes": 4
+    },
+    "grule": {
+      "status": "completed",
+      "nodes": 2
+    },
+    "image-automation": {
+      "status": "completed",
+      "nodes": 11
+    },
+    "image-processing": {
+      "status": "completed",
+      "nodes": 12
+    },
+    "img": {
+      "status": "completed",
+      "nodes": 0
+    },
+    "instagram": {
+      "status": "completed",
+      "nodes": 13
+    },
+    "javaautomation": {
+      "status": "completed",
+      "nodes": 13
+    },
+    "json": {
+      "status": "completed",
+      "nodes": 11
+    },
+    "keyboard": {
+      "status": "completed",
+      "nodes": 2
+    },
+    "keyword-analysis": {
+      "status": "completed",
+      "nodes": 6
+    },
+    "lemlist": {
+      "status": "completed",
+      "nodes": 6
+    },
+    "leonardo-ai": {
+      "status": "completed",
+      "nodes": 20
+    },
+    "mail": {
+      "status": "completed",
+      "nodes": 11
+    },
+    "markdown": {
+      "status": "completed",
+      "nodes": 2
+    },
+    "mcp": {
+      "status": "completed",
+      "nodes": 14
+    },
+    "memory-queue": {
+      "status": "completed",
+      "nodes": 6
+    },
+    "microsoft-active-directory": {
+      "status": "completed",
+      "nodes": 14
+    },
+    "microsoft-excel": {
+      "status": "completed",
+      "nodes": 33
+    },
+    "microsoft-exchange": {
+      "status": "completed",
+      "nodes": 3
+    },
+    "microsoft-graph": {
+      "status": "completed",
+      "nodes": 26
+    },
+    "microsoft-outlook": {
+      "status": "completed",
+      "nodes": 5
+    },
+    "microsoft-sql": {
+      "status": "completed",
+      "nodes": 10
+    },
+    "microsoft-teams": {
+      "status": "completed",
+      "nodes": 15
+    },
+    "microsoft-word": {
+      "status": "completed",
+      "nodes": 12
+    },
+    "mime-tools": {
+      "status": "completed",
+      "nodes": 2
+    },
+    "mongo": {
+      "status": "completed",
+      "nodes": 13
+    },
+    "monitoring": {
+      "status": "completed",
+      "nodes": 6
+    },
+    "mouse": {
+      "status": "completed",
+      "nodes": 4
+    },
+    "mysql": {
+      "status": "completed",
+      "nodes": 12
+    },
+    "net": {
+      "status": "completed",
+      "nodes": 5
+    },
+    "number": {
+      "status": "completed",
+      "nodes": 5
+    },
+    "oauth2": {
+      "status": "completed",
+      "nodes": 1
+    },
+    "object": {
+      "status": "completed",
+      "nodes": 6
+    },
+    "ollama": {
+      "status": "completed",
+      "nodes": 9
+    },
+    "openai": {
+      "status": "completed",
+      "nodes": 20
+    },
+    "openrouter": {
+      "status": "completed",
+      "nodes": 15
+    },
+    "oracle": {
+      "status": "completed",
+      "nodes": 8
+    },
+    "pandas": {
+      "status": "completed",
+      "nodes": 18
+    },
+    "pcloud": {
+      "status": "completed",
+      "nodes": 9
+    },
+    "pdf-processor": {
+      "status": "completed",
+      "nodes": 10
+    },
+    "pdfbox": {
+      "status": "completed",
+      "nodes": 8
+    },
+    "pinecone": {
+      "status": "completed",
+      "nodes": 10
+    },
+    "pipedrive": {
+      "status": "completed",
+      "nodes": 7
+    },
+    "postgresql": {
+      "status": "completed",
+      "nodes": 7
+    },
+    "process": {
+      "status": "completed",
+      "nodes": 4
+    },
+    "programming": {
+      "status": "completed",
+      "nodes": 6
+    },
+    "queue": {
+      "status": "completed",
+      "nodes": 6
+    },
+    "replicate-ai": {
+      "status": "completed",
+      "nodes": 9
+    },
+    "robomotion-assistant": {
+      "status": "completed",
+      "nodes": 17
+    },
+    "robomotion-chat-assistant": {
+      "status": "completed",
+      "nodes": 19
+    },
+    "robomotion-serp": {
+      "status": "completed",
+      "nodes": 3
+    },
+    "sentry": {
+      "status": "completed",
+      "nodes": 1
+    },
+    "slack": {
+      "status": "completed",
+      "nodes": 8
+    },
+    "sqlite": {
+      "status": "completed",
+      "nodes": 9
+    },
+    "ssh": {
+      "status": "completed",
+      "nodes": 5
+    },
+    "stability-ai": {
+      "status": "completed",
+      "nodes": 9
+    },
+    "string": {
+      "status": "completed",
+      "nodes": 25
+    },
+    "subtitles": {
+      "status": "completed",
+      "nodes": 2
+    },
+    "technical-analysis": {
+      "status": "completed",
+      "nodes": 13
+    },
+    "telegram": {
+      "status": "completed",
+      "nodes": 12
+    },
+    "telegram-user": {
+      "status": "completed",
+      "nodes": 15
+    },
+    "tesseract": {
+      "status": "completed",
+      "nodes": 1
+    },
+    "trigger": {
+      "status": "completed",
+      "nodes": 3
+    },
+    "twilio": {
+      "status": "completed",
+      "nodes": 7
+    },
+    "vault": {
+      "status": "completed",
+      "nodes": 6
+    },
+    "waitgroup": {
+      "status": "completed",
+      "nodes": 4
+    },
+    "web-automation": {
+      "status": "completed",
+      "nodes": 31
+    },
+    "web3": {
+      "status": "completed",
+      "nodes": 22
+    },
+    "whatsapp": {
+      "status": "completed",
+      "nodes": 14
+    },
+    "windows-automation": {
+      "status": "completed",
+      "nodes": 27
+    },
+    "word": {
+      "status": "completed",
+      "nodes": 9
+    },
+    "wordpress": {
+      "status": "completed",
+      "nodes": 11
+    }
+  },
+  "errors": [],
+  "last_updated": "2025-12-26T12:42:26+03:00"
+}
