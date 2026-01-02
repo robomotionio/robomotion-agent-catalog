@@ -1,0 +1,946 @@
+{
+  "name": "Queue",
+  "color": "#184EA3",
+  "icon": "list-plus",
+  "nodes": [
+    {
+      "name": "Add Item",
+      "version": "23.7.0",
+      "color": "#184EA3",
+      "icon": "list-plus",
+      "id": "Core.Queue.Add",
+      "description": "Adds encrypted items to a queue with configurable priority and retry count. Supports both single items and arrays, with AES or RSA encryption.",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inData": {
+                "type": "object",
+                "title": "Item",
+                "description": "The object data to add to the queue. Can be a single object or an array of objects. Maximum size is 256KB per item.",
+                "variableType": "object",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inReference": {
+                "type": "object",
+                "title": "Reference",
+                "description": "Optional reference identifier for tracking the item. Used for linking related queue operations.",
+                "variableType": "object",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inData": {
+              "ui:field": "variable"
+            },
+            "inReference": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inData": {
+              "scope": "Message",
+              "name": "item"
+            },
+            "inReference": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optQueueName": {
+                "type": "object",
+                "title": "Queue Name",
+                "description": "The name of the queue to add items to. Must be a valid queue identifier.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "optAESKey": {
+                "type": "object",
+                "title": "AES Key / RSA Key Pair",
+                "description": "Encryption key from vault for securing queue items. Supports both AES keys for symmetric encryption and RSA key pairs for hybrid encryption.",
+                "subtitle": "AES Key / RSA Key Pair",
+                "categories": [
+                  7,
+                  8
+                ],
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "object",
+                    "properties": {
+                      "vaultId": {
+                        "type": "string"
+                      },
+                      "itemId": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "optIDKey": {
+                "type": "object",
+                "title": "ID Key",
+                "description": "The field name in the item data to use as unique identifier. Used for deduplication and SHA256 hashing of item IDs.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "optPriority": {
+                "title": "Priority",
+                "description": "Priority level for queue item processing. Higher priority items are processed first.",
+                "type": "number",
+                "multiple": true,
+                "enum": [
+                  1,
+                  2,
+                  3
+                ],
+                "enumNames": [
+                  "Low",
+                  "Normal",
+                  "High"
+                ]
+              },
+              "optMaxTry": {
+                "title": "Maximum Try Count",
+                "description": "Maximum number of processing attempts for the item before it's marked as abandoned. Must be at least 1.",
+                "type": "number",
+                "minimum": 1
+              }
+            }
+          },
+          "uiSchema": {
+            "optQueueName": {
+              "ui:field": "variable"
+            },
+            "optAESKey": {
+              "ui:field": "vault"
+            },
+            "optIDKey": {
+              "ui:field": "variable"
+            },
+            "optMaxTry": {
+              "ui:field": "input"
+            },
+            "ui:order": [
+              "optQueueName",
+              "optIDKey",
+              "optPriority",
+              "optMaxTry",
+              "optAESKey"
+            ]
+          },
+          "formData": {
+            "optQueueName": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "optIDKey": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "optMaxTry": 1,
+            "optPriority": 1,
+            "optAESKey": {
+              "scope": "Custom",
+              "name": {
+                "vaultId": "_",
+                "itemId": "_"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get Items",
+      "version": "1.16.4",
+      "color": "#184EA3",
+      "icon": "list-minus",
+      "id": "Core.Queue.GetAll",
+      "description": "Retrieves multiple items from a queue based on status and priority filters. Returns decrypted item data with metadata.",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inProgress": {
+                "type": "object",
+                "title": "Progress",
+                "description": "Progress identifier to filter items. Used to retrieve items with specific progress states or tracking information.",
+                "variableType": "object",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inPriority": {
+                "type": "number",
+                "title": "Priority",
+                "description": "Filter items by priority level. Select 'All' to retrieve items of any priority, or specific priority levels.",
+                "multiple": true,
+                "enum": [
+                  -1,
+                  1,
+                  2,
+                  3
+                ],
+                "enumNames": [
+                  "All",
+                  "Low",
+                  "Normal",
+                  "High"
+                ]
+              },
+              "inStatus": {
+                "type": "number",
+                "title": "Status",
+                "description": "Filter items by processing status. Select 'All' to retrieve items regardless of status, or specific statuses like 'New', 'In Progress', etc.",
+                "multiple": true,
+                "enum": [
+                  -1,
+                  0,
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+                ],
+                "enumNames": [
+                  "All",
+                  "New",
+                  "In Progress",
+                  "Successful",
+                  "Failed",
+                  "Retried",
+                  "Abandoned"
+                ]
+              }
+            }
+          },
+          "uiSchema": {
+            "inProgress": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inStatus",
+              "inPriority",
+              "inProgress"
+            ]
+          },
+          "formData": {
+            "inProgress": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inPriority": -1,
+            "inStatus": -1
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outItems": {
+                "type": "object",
+                "title": "Items",
+                "description": "Array of queue items matching the filter criteria. Each item contains decrypted data, ID, try count, and timestamps.",
+                "variableType": "object",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outItems": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outItems": {
+              "scope": "Message",
+              "name": "items"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optQueueName": {
+                "type": "object",
+                "title": "Queue Name",
+                "description": "The name of the queue to retrieve items from. Must match an existing queue identifier.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "optAESKey": {
+                "type": "object",
+                "title": "AES Key / RSA Key Pair",
+                "description": "Decryption key from vault for reading encrypted queue items. Must match the encryption method used when items were added.",
+                "subtitle": "AES Key / RSA Key Pair",
+                "categories": [
+                  7,
+                  8
+                ],
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "object",
+                    "properties": {
+                      "vaultId": {
+                        "type": "string"
+                      },
+                      "itemId": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optQueueName": {
+              "ui:field": "variable"
+            },
+            "optAESKey": {
+              "ui:field": "vault"
+            },
+            "ui:order": [
+              "optQueueName",
+              "optAESKey"
+            ]
+          },
+          "formData": {
+            "optQueueName": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "optAESKey": {
+              "scope": "Custom",
+              "name": {
+                "vaultId": "_",
+                "itemId": "_"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get Next Item",
+      "version": "1.16.4",
+      "color": "#184EA3",
+      "icon": "list-minus",
+      "id": "Core.Queue.Get",
+      "description": "Retrieves the next available item from a queue for processing. Optionally starts a transaction and returns the decrypted item with its ID.",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outID": {
+                "type": "object",
+                "title": "Item ID",
+                "description": "Unique identifier of the retrieved queue item. Used for tracking and subsequent operations like updates or deletion.",
+                "variableType": "object",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "outData": {
+                "type": "object",
+                "title": "Item",
+                "description": "The decrypted data content of the queue item. Contains the original object that was added to the queue.",
+                "variableType": "object",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outID": {
+              "ui:field": "variable"
+            },
+            "outData": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "outID",
+              "outData"
+            ]
+          },
+          "formData": {
+            "outID": {
+              "scope": "Message",
+              "name": "item_id"
+            },
+            "outData": {
+              "scope": "Message",
+              "name": "item"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optQueueName": {
+                "type": "object",
+                "title": "Queue Name",
+                "description": "The name of the queue to retrieve the next item from. Must be a valid queue identifier.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "optAESKey": {
+                "type": "object",
+                "title": "AES Key / RSA Key Pair",
+                "description": "Decryption key from vault for reading the encrypted queue item. Must match the encryption method used when the item was added.",
+                "subtitle": "AES Key / RSA Key Pair",
+                "categories": [
+                  7,
+                  8
+                ],
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "object",
+                    "properties": {
+                      "vaultId": {
+                        "type": "string"
+                      },
+                      "itemId": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "optStart": {
+                "title": "Start Transaction",
+                "description": "Whether to mark the retrieved item as 'in progress'. When true, the item status is updated to prevent other processes from retrieving it.",
+                "type": "boolean"
+              }
+            }
+          },
+          "uiSchema": {
+            "optQueueName": {
+              "ui:field": "variable"
+            },
+            "optAESKey": {
+              "ui:field": "vault"
+            },
+            "ui:order": [
+              "optQueueName",
+              "optAESKey",
+              "optStart"
+            ]
+          },
+          "formData": {
+            "optQueueName": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "optStart": true,
+            "optAESKey": {
+              "scope": "Custom",
+              "name": {
+                "vaultId": "_",
+                "itemId": "_"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Delete Item",
+      "color": "#184EA3",
+      "icon": "list-x",
+      "id": "Core.Queue.Delete",
+      "description": "Permanently removes an item from the queue using its unique ID. The item will no longer be available for processing.",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inItemID": {
+                "type": "object",
+                "title": "Item ID",
+                "description": "The unique identifier of the queue item to delete. This ID is typically obtained from Get Next Item or Get Items operations.",
+                "variableType": "object",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inItemID": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inItemID": {
+              "scope": "Message",
+              "name": "item_id"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Update Item State",
+      "color": "#184EA3",
+      "icon": "list-check",
+      "id": "Core.Queue.Update",
+      "version": "23.7.0",
+      "description": "Updates the status, priority, progress, and retry count of a queue item. Used to mark items as successful, failed, or change their processing priority.",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inItemID": {
+                "type": "object",
+                "title": "Item ID",
+                "description": "The unique identifier of the queue item to update. This ID is typically obtained from Get Next Item or Get Items operations.",
+                "variableType": "object",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inProgress": {
+                "type": "object",
+                "title": "Progress",
+                "description": "Progress information or status message to associate with the item. Used for tracking processing state.",
+                "variableType": "object",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inReference": {
+                "type": "object",
+                "title": "Reference",
+                "description": "Updated reference identifier for the item. Used for linking related operations or tracking changes.",
+                "variableType": "object",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inPriority": {
+                "type": "string",
+                "title": "Priority",
+                "description": "New priority level for the queue item. Higher priority items are processed first.",
+                "multiple": true,
+                "enum": [
+                  "low",
+                  "normal",
+                  "high"
+                ],
+                "enumNames": [
+                  "Low",
+                  "Normal",
+                  "High"
+                ]
+              },
+              "inStatus": {
+                "type": "string",
+                "title": "Status",
+                "description": "New processing status for the queue item. Use 'Successful' when processing completed, 'Failed' for errors, or 'Abandoned' to stop retries.",
+                "multiple": true,
+                "enum": [
+                  "successful",
+                  "failed",
+                  "abandoned"
+                ],
+                "enumNames": [
+                  "Successful",
+                  "Failed",
+                  "Abandoned"
+                ]
+              },
+              "inAdditionalTry": {
+                "type": "number",
+                "title": "Additional Try Count",
+                "description": "Number of additional processing attempts to add to the item's retry count. Extends the maximum try limit."
+              }
+            }
+          },
+          "uiSchema": {
+            "inItemID": {
+              "ui:field": "variable"
+            },
+            "inProgress": {
+              "ui:field": "variable"
+            },
+            "inReference": {
+              "ui:field": "variable"
+            },
+            "inAdditionalTry": {
+              "ui:field": "input"
+            }
+          },
+          "formData": {
+            "inItemID": {
+              "scope": "Message",
+              "name": "item_id"
+            },
+            "inProgress": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inReference": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inPriority": "_",
+            "inStatus": "_",
+            "inAdditionalTry": 0
+          }
+        }
+      ]
+    },
+    {
+      "name": "Wait Item",
+      "version": "1.16.4",
+      "color": "#184EA3",
+      "icon": "clock",
+      "id": "Core.Queue.Wait",
+      "description": "Waits for an item to become available in a queue with configurable timeout and polling intervals. Optionally starts a transaction when an item is retrieved.",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inQueueName": {
+                "type": "object",
+                "title": "Queue Name",
+                "description": "The name of the queue to wait for items from. The operation will poll this queue until an item becomes available.",
+                "variableType": "object",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inQueueName": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inQueueName": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outID": {
+                "type": "object",
+                "title": "Item ID",
+                "description": "Unique identifier of the queue item that became available. Used for tracking and subsequent operations like updates or deletion.",
+                "variableType": "object",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "outData": {
+                "type": "object",
+                "title": "Item",
+                "description": "The decrypted data content of the queue item that became available. Contains the original object that was added to the queue.",
+                "variableType": "object",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outID": {
+              "ui:field": "variable"
+            },
+            "outData": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outID": {
+              "scope": "Message",
+              "name": "item_id"
+            },
+            "outData": {
+              "scope": "Message",
+              "name": "item"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optAESKey": {
+                "type": "object",
+                "title": "AES Key / RSA Key Pair",
+                "description": "Decryption key from vault for reading encrypted queue items when they become available. Must match the encryption method used when items were added.",
+                "subtitle": "AES Key / RSA Key Pair",
+                "categories": [
+                  7,
+                  8
+                ],
+                "messageScope": true,
+                "customScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "object",
+                    "properties": {
+                      "vaultId": {
+                        "type": "string"
+                      },
+                      "itemId": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "optTimeout": {
+                "title": "Timeout (s)",
+                "description": "Maximum time to wait for an item to become available, in seconds. If no item appears within this time, the operation will timeout.",
+                "type": "number"
+              },
+              "optPollTime": {
+                "title": "Poll Time (s)",
+                "description": "Interval between queue checks, in seconds. Shorter intervals provide faster response but increase system load. Minimum is 30 seconds.",
+                "type": "number"
+              },
+              "optStart": {
+                "title": "Start Transaction",
+                "description": "Whether to mark the retrieved item as 'in progress' when found. When true, the item status is updated to prevent other processes from retrieving it.",
+                "type": "boolean"
+              }
+            }
+          },
+          "uiSchema": {
+            "optAESKey": {
+              "ui:field": "vault"
+            },
+            "ui:order": [
+              "optTimeout",
+              "optPollTime",
+              "optStart",
+              "optAESKey"
+            ]
+          },
+          "formData": {
+            "optQueueName": {
+              "scope": "Message",
+              "name": "name"
+            },
+            "optTimeout": 300,
+            "optPollTime": 30,
+            "optStart": true,
+            "optAESKey": {
+              "scope": "Custom",
+              "name": {
+                "vaultId": "_",
+                "itemId": "_"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

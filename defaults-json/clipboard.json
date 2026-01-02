@@ -1,0 +1,99 @@
+{
+  "name": "Clipboard",
+  "color": "#00E5FF",
+  "icon": "clipboard",
+  "nodes": [
+    {
+      "name": "Get From Clipboard",
+      "description": "Retrieves the current text content from the system clipboard and stores it in a variable for use in the workflow.",
+      "color": "#00E5FF",
+      "icon": "clipboard",
+      "id": "Core.Clipboard.Get",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outText": {
+                "type": "object",
+                "title": "Clipboard Data",
+                "description": "The text content retrieved from the system clipboard. Contains whatever text is currently copied to the clipboard.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outText": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outText": {
+              "scope": "Message",
+              "name": "text"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Set To Clipboard",
+      "description": "Copies the specified text content to the system clipboard, making it available for pasting in other applications.",
+      "color": "#00E5FF",
+      "icon": "clipboard",
+      "id": "Core.Clipboard.Set",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inText": {
+                "type": "object",
+                "title": "Text Content",
+                "description": "The text content to copy to the system clipboard. Any data type will be converted to string format before copying.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inText": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inText": {
+              "scope": "Message",
+              "name": "text"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,596 @@
+{
+  "name": "Vault",
+  "color": "#3690C5",
+  "icon": "shield",
+  "nodes": [
+    {
+      "name": "Add Item",
+      "version": "1.18.2",
+      "color": "#3690C5",
+      "icon": "shield-plus",
+      "id": "Core.Vault.AddItem",
+      "description": "Adds a new item to a vault with specified name and data, returning metadata about the created item.",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inName": {
+                "type": "object",
+                "title": "Name",
+                "description": "The name for the new vault item. This will be used as the identifier for the stored data.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inItem": {
+                "type": "object",
+                "title": "Item",
+                "description": "The data object to store in the vault. Can contain credentials, tokens, or any structured data based on the selected category.",
+                "variableType": "Object",
+                "messageOnly": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inName": {
+              "ui:field": "variable"
+            },
+            "inItem": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inName": {
+              "scope": "Message",
+              "name": "name"
+            },
+            "inItem": {
+              "scope": "Message",
+              "name": "item"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outItem": {
+                "type": "object",
+                "title": "Item",
+                "description": "Metadata about the created vault item including name, category, item ID, and vault ID.",
+                "variableType": "Object",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outItem": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outItem": {
+              "scope": "Message",
+              "name": "item"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optCategory": {
+                "type": "string",
+                "title": "Category",
+                "description": "The category type for the vault item. This determines how the data will be structured and used within the system.",
+                "enum": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5",
+                  "6",
+                  "7"
+                ],
+                "enumNames": [
+                  "Login",
+                  "Email Account",
+                  "Credit Card",
+                  "API Key / Token",
+                  "Database",
+                  "Document",
+                  "AES Key"
+                ]
+              },
+              "optVault": {
+                "type": "object",
+                "title": "Vault",
+                "description": "The target vault where the item will be stored. Select an existing vault from your vault collection.",
+                "subtitle": "",
+                "category": 0,
+                "messageScope": true,
+                "customScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "object",
+                    "properties": {
+                      "vaultId": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optVault": {
+              "ui:field": "vault",
+              "itemId": "hidden"
+            }
+          },
+          "formData": {
+            "optCategory": "_",
+            "optVault": {
+              "scope": "Custom",
+              "name": {
+                "vaultId": "_"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "List Items",
+      "version": "1.18.9",
+      "color": "#3690C5",
+      "icon": "shield",
+      "id": "Core.Vault.ListItems",
+      "description": "Lists all items stored in a specified vault, returning their names, vault IDs, and item IDs.",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outItem": {
+                "type": "object",
+                "title": "Vault Items",
+                "description": "Array of vault items, each containing name, vault_id, and item_id properties for accessing stored credentials.",
+                "variableType": "Object",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outItem": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outItem": {
+              "scope": "Message",
+              "name": "vault_items"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optVault": {
+                "type": "object",
+                "title": "Vault",
+                "description": "The vault from which to list all stored items. Select an existing vault to view its contents.",
+                "subtitle": "",
+                "category": 0,
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "object",
+                    "properties": {
+                      "vaultId": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optVault": {
+              "ui:field": "vault",
+              "itemId": "hidden"
+            }
+          },
+          "formData": {
+            "optVault": {
+              "scope": "Custom",
+              "name": {
+                "vaultId": "_"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get Item",
+      "version": "1.16.4",
+      "color": "#3690C5",
+      "icon": "shield",
+      "id": "Core.Vault.GetItem",
+      "description": "Retrieves stored credentials or data from a specific vault item, returning the decrypted content with metadata.",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outItem": {
+                "type": "object",
+                "title": "Item",
+                "description": "The retrieved vault item containing the stored credentials or data along with metadata including vault and item IDs.",
+                "variableType": "Boolean",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outItem": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outItem": {
+              "scope": "Message",
+              "name": "credentials"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optCredentials": {
+                "type": "object",
+                "title": "Credentials",
+                "description": "The specific vault item to retrieve. Select both the vault and the item within that vault to access the stored data.",
+                "subtitle": "",
+                "category": 0,
+                "messageScope": true,
+                "customScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "object",
+                    "properties": {
+                      "vaultId": {
+                        "type": "string"
+                      },
+                      "itemId": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optCredentials": {
+              "ui:field": "vault"
+            }
+          },
+          "formData": {
+            "optCredentials": {
+              "scope": "Custom",
+              "name": {
+                "vaultId": "_",
+                "itemId": "_"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Set Item",
+      "version": "1.18.0",
+      "color": "#3690C5",
+      "icon": "shield-check",
+      "id": "Core.Vault.SetItem",
+      "description": "Updates an existing vault item with new data, replacing the current content while preserving the item's identity.",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inItem": {
+                "type": "object",
+                "title": "Item",
+                "description": "The updated data to store in the vault item. This will completely replace the existing content of the selected item.",
+                "messageOnly": true,
+                "variableType": "Object",
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inItem": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inItem": {
+              "scope": "Message",
+              "name": "item"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outItem": {
+                "type": "object",
+                "title": "Item Metadata",
+                "description": "Metadata about the updated vault item including vault and item IDs for confirmation of the operation.",
+                "messageOnly": true,
+                "variableType": "Object",
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outItem": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outItem": {
+              "scope": "Message",
+              "name": "item"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optCredentials": {
+                "type": "object",
+                "title": "Credentials",
+                "description": "The target vault item to update. Select both the vault and the specific item within that vault to modify its stored data.",
+                "subtitle": "",
+                "category": 0,
+                "messageScope": true,
+                "customScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "object",
+                    "properties": {
+                      "vaultId": {
+                        "type": "string"
+                      },
+                      "itemId": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optCredentials": {
+              "ui:field": "vault"
+            }
+          },
+          "formData": {
+            "optCredentials": {
+              "scope": "Custom",
+              "name": {
+                "vaultId": "_",
+                "itemId": "_"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Delete Item",
+      "version": "23.3.0",
+      "color": "#3690C5",
+      "icon": "shield-x",
+      "id": "Core.Vault.DeleteItem",
+      "description": "Permanently deletes a specific item from a vault, removing all stored data associated with that item.",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optCredentials": {
+                "type": "object",
+                "title": "Credentials",
+                "description": "The vault item to delete permanently. Select both the vault and the specific item to be removed from storage.",
+                "subtitle": "",
+                "category": 0,
+                "messageScope": true,
+                "customScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "object",
+                    "properties": {
+                      "vaultId": {
+                        "type": "string"
+                      },
+                      "itemId": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optCredentials": {
+              "ui:field": "vault"
+            }
+          },
+          "formData": {
+            "optCredentials": {
+              "scope": "Custom",
+              "name": {
+                "vaultId": "_",
+                "itemId": "_"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "List Vaults",
+      "version": "1.18.9",
+      "color": "#3690C5",
+      "icon": "shield",
+      "id": "Core.Vault.ListVaults",
+      "description": "Retrieves a list of all available vaults, returning their names and vault IDs for selection in other vault operations.",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outVaults": {
+                "type": "object",
+                "title": "Vaults",
+                "description": "Array of available vaults, each containing name and vault_id properties for use in vault operations.",
+                "variableType": "Array",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outVaults": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outVaults": {
+              "scope": "Message",
+              "name": "vaults"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,438 @@
+{
+  "name": "Programming",
+  "color": "#E6EE9C",
+  "icon": "braces",
+  "nodes": [
+    {
+      "name": "Debug",
+      "description": "Outputs debug information to console, logs, and visual debugging interface. Useful for inspecting message data and variable values during workflow execution.",
+      "color": "#E6EE9C",
+      "icon": "bug",
+      "id": "Core.Programming.Debug",
+      "inputs": 1,
+      "outputs": 0,
+      "properties": [
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optActive": {
+                "title": "Active",
+                "description": "When enabled, the debug node will output debug information. When disabled, the node will pass through messages without any debug output.",
+                "type": "boolean"
+              },
+              "optSysConsole": {
+                "title": "System Console",
+                "type": "boolean",
+                "description": "Writes the Debug dumps into the Command Prompt (Windows) or the Terminal (Mac / Linux) only if the robot is started from command line"
+              },
+              "optLogDebug": {
+                "title": "Log Debug",
+                "type": "boolean",
+                "description": "Writes the Debug dumps into the logs folder"
+              },
+              "optDebugData": {
+                "type": "object",
+                "title": "Debug Data",
+                "description": "The primary variable or message property to debug. This will be the main data displayed in the debug output.",
+                "variableType": "Any",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "optAdditionalFields": {
+                "title": "Additional Fields",
+                "description": "Extra variables or message properties to include in the debug output. Useful for debugging multiple values simultaneously.",
+                "type": "object",
+                "variableType": "Any",
+                "customScope": false,
+                "placeholder": "Additional Field",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optDebugData": {
+              "ui:field": "variable"
+            },
+            "optAdditionalFields": {
+              "ui:field": "array"
+            },
+            "ui:order": [
+              "optDebugData",
+              "optAdditionalFields",
+              "optActive",
+              "optSysConsole",
+              "optLogDebug"
+            ]
+          },
+          "formData": {
+            "optDebugData": {
+              "name": "",
+              "scope": "Message"
+            },
+            "optAdditionalFields": [],
+            "optActive": true,
+            "optLogDebug": false,
+            "optSysConsole": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sleep",
+      "description": "Pauses workflow execution for a specified duration in seconds. Supports both fixed delays and random delays within a range.",
+      "color": "#82B1FF",
+      "icon": "hourglass",
+      "id": "Core.Programming.Sleep",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optDuration": {
+                "type": "object",
+                "title": "Duration (sec)",
+                "description": "The number of seconds to pause execution. Used when Random is disabled. Supports decimal values for sub-second delays (e.g., 0.5 for 500ms).",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "optRandom": {
+                "title": "Random",
+                "description": "When enabled, uses a random delay between Random Min and Random Max values instead of the fixed Duration.",
+                "type": "boolean"
+              },
+              "optRandMin": {
+                "type": "object",
+                "title": "Random Min (sec)",
+                "description": "The minimum delay in seconds when Random is enabled. The actual delay will be randomly chosen between this value and Random Max.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "optRandMax": {
+                "type": "object",
+                "title": "Random Max (sec)",
+                "description": "The maximum delay in seconds when Random is enabled. Must be greater than Random Min to generate valid random delays.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optDuration": {
+              "ui:field": "variable"
+            },
+            "optRandMin": {
+              "ui:field": "variable"
+            },
+            "optRandMax": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "optDuration",
+              "optRandom",
+              "optRandMin",
+              "optRandMax"
+            ]
+          },
+          "formData": {
+            "optDuration": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "optRandMin": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "optRandMax": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "optRandom": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "Function",
+      "description": "Executes custom JavaScript code with access to message data, global/flow variables, and local variables. Supports multiple outputs and timeout handling.",
+      "color": "#F27925",
+      "icon": "square-function",
+      "id": "Core.Programming.Function",
+      "editor": "javascript",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "func": {
+                "title": "Function",
+                "description": "JavaScript code to execute. Use 'return msg;' for single output or return an array for multiple outputs. Access variables via global.get(), flow.get(), local.get().",
+                "type": "string"
+              },
+              "outputs": {
+                "title": "Outputs",
+                "description": "Number of output ports for this node (1-32). Return an array from your function with values for each output, or a single value for one output.",
+                "type": "number",
+                "minimum": 1,
+                "maximum": 32
+              },
+              "optTimeout": {
+                "title": "Script Timeout",
+                "description": "Maximum execution time in seconds before the script is terminated. Prevents infinite loops and long-running operations from blocking workflow execution.",
+                "type": "number",
+                "minimum": 1
+              }
+            }
+          },
+          "uiSchema": {
+            "outputs": {
+              "ui:field": "input"
+            },
+            "optTimeout": {
+              "ui:field": "input"
+            },
+            "func": {
+              "ui:widget": "hidden",
+              "ui:options": {
+                "rows": 6
+              }
+            }
+          },
+          "formData": {
+            "outputs": 1,
+            "func": "\nreturn msg;",
+            "optTimeout": 30
+          }
+        },
+        {
+          "schema": {
+            "title": "Local Variables",
+            "description": "Define variables that exist only within this function node's scope and persist between executions.",
+            "type": "object",
+            "properties": {
+              "variables": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "variableType": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "variables": {
+              "ui:field": "localVariable"
+            }
+          },
+          "formData": {
+            "variables": []
+          }
+        }
+      ]
+    },
+    {
+      "name": "Switch",
+      "description": "Evaluates JavaScript expressions and routes messages to corresponding output ports based on true/false results. Supports break functionality to stop on first match.",
+      "version": "23.1.0",
+      "color": "#1DE9B6",
+      "icon": "split",
+      "id": "Core.Programming.Switch",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optUseBreak": {
+                "title": "Break",
+                "description": "When enabled, stops evaluating remaining conditions after the first true condition is found. All subsequent outputs will be false.",
+                "type": "boolean"
+              },
+              "optConditions": {
+                "title": "Output Ports",
+                "description": "JavaScript expressions that evaluate to true or false. Each expression creates an output port. Use msg.property, global.get(), or flow.get() to access data.",
+                "type": "array",
+                "placeholder": "Enter a JS expression",
+                "minimum": 1,
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optConditions": {
+              "ui:field": "array"
+            }
+          },
+          "formData": {
+            "optConditions": [
+              {
+                "scope": "Custom",
+                "name": ""
+              }
+            ],
+            "optUseBreak": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "For Each",
+      "description": "Iterates through an array, executing the connected workflow for each item. Provides current item and index values for processing.",
+      "color": "#b9aeec",
+      "icon": "refresh-ccw",
+      "id": "Core.Programming.ForEach",
+      "version": "23.6.3",
+      "inputs": 1,
+      "outputs": 2,
+      "properties": [
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optInput": {
+                "type": "object",
+                "title": "Loop through object",
+                "description": "The array to iterate through. Each element will be processed one at a time in the connected workflow.",
+                "variableType": "Array",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "optOutput": {
+                "type": "object",
+                "title": "Current Item",
+                "description": "Variable name where the current array item will be stored in the message during each iteration.",
+                "variableType": "String",
+                "messageScope": true,
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "optIndex": {
+                "type": "object",
+                "title": "Current Index",
+                "description": "Variable name where the current array index (0-based) will be stored in the message during each iteration.",
+                "variableType": "String",
+                "messageScope": true,
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optInput": {
+              "ui:field": "variable"
+            },
+            "optOutput": {
+              "ui:field": "variable"
+            },
+            "optIndex": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "optInput": {
+              "scope": "Message",
+              "name": ""
+            },
+            "optOutput": {
+              "scope": "Message",
+              "name": ""
+            },
+            "optIndex": {
+              "scope": "Message",
+              "name": ""
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Break",
+      "description": "Exits from the current For Each loop immediately, skipping remaining iterations and continuing workflow execution after the loop.",
+      "color": "#b9aeec",
+      "icon": "x",
+      "id": "Core.Programming.Break",
+      "inputs": 1,
+      "outputs": 0,
+      "properties": []
+    }
+  ]
+}

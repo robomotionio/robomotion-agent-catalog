@@ -1,0 +1,830 @@
+{
+  "name": "Forms",
+  "color": "#325170",
+  "icon": "clipboard",
+  "nodes": [
+    {
+      "name": "Create Form",
+      "description": "Creates a dynamic web form with custom fields and validation rules. Forms can be linked to queues for automated processing of submissions and support customizable styling.",
+      "color": "#325170",
+      "icon": "file-document-outline",
+      "id": "Core.Forms.Create",
+      "editor": "json",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFormName": {
+                "type": "object",
+                "title": "Form Name",
+                "description": "The display name for the form. This will be shown to users when they access the form.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inDescription": {
+                "type": "object",
+                "title": "Description",
+                "description": "Optional description text that appears below the form title to explain the form's purpose to users.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inQueueName": {
+                "type": "object",
+                "title": "Queue Name",
+                "description": "Name of the queue where form submissions will be stored for processing. The queue must exist before form submissions can be processed.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "func": {
+                "title": "Form Schema",
+                "description": "JSON schema defining the form structure, fields, validation rules, and UI configuration.",
+                "type": "string"
+              }
+            }
+          },
+          "uiSchema": {
+            "inFormName": {
+              "ui:field": "variable"
+            },
+            "inDescription": {
+              "ui:field": "variable"
+            },
+            "inQueueName": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inFormName",
+              "inDescription",
+              "inQueueName",
+              "func"
+            ],
+            "func": {
+              "ui:widget": "hidden",
+              "ui:options": {
+                "rows": 6
+              }
+            }
+          },
+          "formData": {
+            "inFormName": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inDescription": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inQueueName": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "func": "{\n\"schema\":\n\t{\n\t\t\"type\": \"object\",\n\t\t\"properties\": {},\n\t\t\"required\": []\n\t},\n\"ui_schema\": {}\n}"
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outFormID": {
+                "type": "object",
+                "title": "Form ID",
+                "description": "Unique identifier for the created form. Use this ID to reference the form in other operations like creating instances or updates.",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outFormID": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outFormID": {
+              "scope": "Message",
+              "name": "form_id"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optCredentials": {
+                "type": "object",
+                "title": "Credentials",
+                "description": "RSA key pair credentials from vault for form security and encryption. Required for secure form operations.",
+                "subtitle": "Credentials",
+                "category": 8,
+                "messageScope": true,
+                "customScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "object",
+                    "properties": {
+                      "vaultId": {
+                        "type": "string"
+                      },
+                      "itemId": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "optColor": {
+                "type": "object",
+                "title": "Theme Color",
+                "description": "Primary color for form styling in hex format (e.g., #fb741a). This color is used for buttons, highlights, and branding elements.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "optLogoURL": {
+                "type": "object",
+                "title": "Logo URL",
+                "description": "URL of the logo image to display in the form header. Should be a publicly accessible image URL.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optCredentials": {
+              "ui:field": "vault"
+            },
+            "optColor": {
+              "ui:field": "variable"
+            },
+            "optLogoURL": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "optCredentials",
+              "optColor",
+              "optLogoURL"
+            ]
+          },
+          "formData": {
+            "optCredentials": {
+              "scope": "Custom",
+              "name": {
+                "vaultId": "_",
+                "itemId": "_"
+              }
+            },
+            "optColor": {
+              "scope": "Custom",
+              "name": "#fb741a"
+            },
+            "optLogoURL": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Create Form Instance",
+      "description": "Creates an instance of an existing form that can be accessed by users. Form instances can be disposable (single-use) or permanent (reusable) and generate unique URLs for form access.",
+      "color": "#325170",
+      "icon": "playlist-plus",
+      "id": "Core.Forms.CreateInstance",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFormID": {
+                "type": "object",
+                "title": "Form ID",
+                "description": "The unique identifier of the form to create an instance from. This must be a valid form ID from a previously created form.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFormID": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inFormID": {
+              "scope": "Message",
+              "name": "form_id"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outFormInstanceID": {
+                "type": "object",
+                "title": "Form Instance ID",
+                "description": "Unique identifier for the created form instance. Use this to manage or delete the instance later.",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "outFormURL": {
+                "type": "object",
+                "title": "Form URL",
+                "description": "The public URL where users can access the form. Share this URL to allow users to fill out and submit the form.",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outFormInstanceID": {
+              "ui:field": "variable"
+            },
+            "outFormURL": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "outFormInstanceID",
+              "outFormURL"
+            ]
+          },
+          "formData": {
+            "outFormInstanceID": {
+              "scope": "Message",
+              "name": "form_instance_id"
+            },
+            "outFormURL": {
+              "scope": "Message",
+              "name": "form_url"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optFormInstanceType": {
+                "type": "string",
+                "title": "Instance Type",
+                "description": "Disposable instances are deleted after first submission, while permanent instances remain available for multiple submissions.",
+                "enum": [
+                  "disposable",
+                  "permanent"
+                ],
+                "enumNames": [
+                  "Disposable",
+                  "Permanent"
+                ]
+              }
+            }
+          },
+          "uiSchema": {},
+          "formData": {
+            "optFormInstanceType": "disposable"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Update Form",
+      "description": "Updates an existing form's configuration including name, description, queue settings, and form schema. Allows modification of form structure and properties after creation.",
+      "color": "#325170",
+      "icon": "file-document-edit-outline",
+      "id": "Core.Forms.Update",
+      "editor": "javascript",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFormId": {
+                "type": "object",
+                "title": "Form ID",
+                "description": "The unique identifier of the form to update. Must be a valid existing form ID.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inFormName": {
+                "type": "object",
+                "title": "Form Name",
+                "description": "Updated display name for the form. This will replace the existing form name.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inDescription": {
+                "type": "object",
+                "title": "Description",
+                "description": "Updated description text for the form. This will replace the existing description.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inQueueName": {
+                "type": "object",
+                "title": "Queue Name",
+                "description": "Updated queue name where form submissions will be stored. The new queue must exist before submissions can be processed.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "func": {
+                "title": "Form Schema",
+                "description": "Updated JSON schema defining the form structure, fields, validation rules, and UI configuration.",
+                "type": "string"
+              }
+            }
+          },
+          "uiSchema": {
+            "inFormId": {
+              "ui:field": "variable"
+            },
+            "inFormName": {
+              "ui:field": "variable"
+            },
+            "inDescription": {
+              "ui:field": "variable"
+            },
+            "inQueueName": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inFormId",
+              "inFormName",
+              "inDescription",
+              "inQueueName",
+              "func"
+            ],
+            "func": {
+              "ui:widget": "hidden",
+              "ui:options": {
+                "rows": 6
+              }
+            }
+          },
+          "formData": {
+            "inFormId": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inFormName": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inDescription": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inQueueName": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "func": ""
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outFormId": {
+                "type": "object",
+                "title": "Form ID",
+                "description": "The ID of the updated form. This confirms the form was successfully modified.",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outFormId": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outFormId": {
+              "scope": "Message",
+              "name": "form_id"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optCredentials": {
+                "type": "object",
+                "title": "Credentials",
+                "description": "RSA key pair credentials from vault required for form update operations and security.",
+                "subtitle": "Credentials",
+                "category": 8,
+                "messageScope": true,
+                "customScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "object",
+                    "properties": {
+                      "vaultId": {
+                        "type": "string"
+                      },
+                      "itemId": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optCredentials": {
+              "ui:field": "vault"
+            },
+            "ui:order": [
+              "optCredentials"
+            ]
+          },
+          "formData": {
+            "optCredentials": {
+              "scope": "Custom",
+              "name": {
+                "vaultId": "_",
+                "itemId": "_"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Delete Form",
+      "description": "Permanently deletes a form and all its associated data. This operation cannot be undone and will also remove all form instances.",
+      "color": "#325170",
+      "icon": "text-box-remove-outline",
+      "id": "Core.Forms.Delete",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFormID": {
+                "type": "object",
+                "title": "Form ID",
+                "description": "The unique identifier of the form to permanently delete. All associated instances and data will be removed.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFormID": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inFormID": {
+              "scope": "Message",
+              "name": "form_id"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Delete Form Instance",
+      "description": "Removes a specific form instance, making it no longer accessible to users. The base form remains intact and other instances are unaffected.",
+      "color": "#325170",
+      "icon": "playlist-minus",
+      "id": "Core.Forms.DeleteInstance",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFormInstanceID": {
+                "type": "object",
+                "title": "Form Instance ID",
+                "description": "The unique identifier of the form instance to delete. This will disable the instance URL and prevent further access.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFormInstanceID": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inFormInstanceID": {
+              "scope": "Message",
+              "name": "form_instance_id"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get Form Instance",
+      "description": "Retrieves form submission data from a specific form instance. Returns the submitted form data and metadata for processing or analysis.",
+      "color": "#325170",
+      "icon": "file-download-outline",
+      "id": "Core.Forms.GetInstance",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFormInstanceID": {
+                "type": "object",
+                "title": "Form Instance ID",
+                "description": "The unique identifier of the form instance to retrieve submission data from.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFormInstanceID": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inFormInstanceID": {
+              "scope": "Message",
+              "name": "form_instance_id"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outForm": {
+                "type": "object",
+                "title": "Form Data",
+                "description": "The submitted form data including all field values, metadata, and submission timestamp.",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outForm": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outForm": {
+              "scope": "Message",
+              "name": "form"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "List Forms",
+      "description": "Retrieves a list of all available forms in the workspace. Returns form metadata including IDs, names, descriptions, and creation timestamps.",
+      "color": "#325170",
+      "icon": "notification-clear-all",
+      "id": "Core.Forms.List",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outForms": {
+                "type": "object",
+                "title": "Forms List",
+                "description": "Array of form objects containing form metadata, IDs, and configuration details for all available forms.",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outForms": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outForms": {
+              "scope": "Message",
+              "name": "forms"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

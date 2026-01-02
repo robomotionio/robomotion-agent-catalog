@@ -1,0 +1,3839 @@
+{
+  "name": "Browser",
+  "color": "#c9d9ff",
+  "icon": "globe",
+  "nodes": [
+    {
+      "name": "Open Browser",
+      "description": "Launches a new browser instance with configurable options including browser type, proxy settings, extensions, download directories, and window modes. Returns a browser ID for use with other browser nodes.",
+      "version": "23.1.0",
+      "color": "#c9d9ff",
+      "icon": "globe",
+      "id": "Core.Browser.Open",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outBrowserId": {
+                "type": "object",
+                "title": "Browser Id",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outBrowserId": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outBrowserId": {
+              "scope": "Message",
+              "name": "browser_id"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optBrowser": {
+                "type": "string",
+                "title": "Browser",
+                "description": "Select the browser type to launch.",
+                "enum": [
+                  "chrome",
+                  "firefox",
+                  "edge",
+                  "safari",
+                  "headlesschrome"
+                ],
+                "enumNames": [
+                  "Chrome",
+                  "Firefox",
+                  "Edge",
+                  "Safari",
+                  "Headless Chrome"
+                ]
+              },
+              "optMaximized": {
+                "title": "Maximized",
+                "description": "Start the browser window in maximized mode, taking up the full screen area.",
+                "type": "boolean"
+              },
+              "optFullScreen": {
+                "title": "Fullscreen",
+                "description": "Start the browser in fullscreen mode without window borders or title bars.",
+                "type": "boolean"
+              },
+              "optProxy": {
+                "title": "Proxy Settings",
+                "description": "Configure proxy settings for the browser. Use Manual Proxy for custom proxy servers or Robomotion Proxy for built-in gateway proxy.",
+                "type": "string",
+                "enum": [
+                  "no-proxy",
+                  "manual-proxy",
+                  "robomotion-proxy"
+                ],
+                "enumNames": [
+                  "No Proxy",
+                  "Manual Proxy",
+                  "Robomotion Proxy"
+                ]
+              },
+              "optProxyAddr": {
+                "type": "object",
+                "title": "Proxy Address",
+                "description": "The proxy server address in format host:port (e.g., 192.168.1.100:8080). Required when Manual Proxy is selected.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "optProxyAuth": {
+                "title": "Proxy Authentication",
+                "description": "Authentication method for the proxy server. Use Basic Authentication if your proxy requires username and password.",
+                "type": "string",
+                "enum": [
+                  "no-authentication",
+                  "basic-authentication"
+                ],
+                "enumNames": [
+                  "No Authentication",
+                  "Basic Authentication"
+                ]
+              },
+              "optProxyCredentials": {
+                "type": "object",
+                "title": "Proxy Credentials",
+                "description": "Username and password for proxy authentication. Required when Basic Authentication is selected.",
+                "subtitle": "",
+                "category": 1,
+                "messageScope": true,
+                "customScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "object",
+                    "properties": {
+                      "vaultId": {
+                        "type": "string"
+                      },
+                      "itemId": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "optUserDataDir": {
+                "type": "object",
+                "title": "User Data Dir",
+                "description": "If given, browser uses this directory for user data, if it is empty a temporary directory is created. Each browser session requires a unique directory and cannot share the same path.",
+                "variableType": "String",
+                "customScope": true,
+                "jsScope": true,
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "optDownloadDir": {
+                "type": "object",
+                "title": "Download Dir",
+                "description": "If given, browser uses this directory for downloads, if its empty uses default download directory (Chrome only)",
+                "variableType": "String",
+                "customScope": true,
+                "jsScope": true,
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "optBrowserOptions": {
+                "type": "object",
+                "title": "Browser Options",
+                "description": "Browser configuration object containing advanced options and settings. Example: {'window-size': '1920,1080', 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36', 'disable-images': true}",
+                "variableType": "Array",
+                "jsScope": true,
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "optCustomBrowserOptions": {
+                "title": "Custom Browser Options",
+                "description": "Individual browser command-line arguments added dynamically. Each argument is entered in a separate field with key=value format without quotes (e.g., 'window-size=1920,1080', 'disable-images').",
+                "type": "object",
+                "placeholder": "Browser Option",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "optExtensions": {
+                "type": "object",
+                "title": "Extensions",
+                "description": "Array of Chrome extension file paths or Chrome Web Store URLs to load into the browser. Only works with Chrome browsers.",
+                "variableType": "Array",
+                "jsScope": true,
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "optCustomExtensions": {
+                "title": "Custom Extensions",
+                "description": "List of Chrome extension file paths (.crx files) or Chrome Web Store URLs to install. Enter one extension path per field.",
+                "type": "object",
+                "placeholder": "Extension path",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "ui:order": [
+              "optBrowser",
+              "optMaximized",
+              "optFullScreen",
+              "optUserDataDir",
+              "optDownloadDir",
+              "optProxy",
+              "optProxyAddr",
+              "optProxyAuth",
+              "optProxyCredentials",
+              "optBrowserOptions",
+              "optCustomBrowserOptions",
+              "optExtensions",
+              "optCustomExtensions"
+            ],
+            "optProxyCredentials": {
+              "ui:field": "vault"
+            },
+            "optProxyAddr": {
+              "ui:field": "variable"
+            },
+            "optUserDataDir": {
+              "ui:field": "variable"
+            },
+            "optDownloadDir": {
+              "ui:field": "variable"
+            },
+            "optBrowserOptions": {
+              "ui:field": "variable"
+            },
+            "optCustomBrowserOptions": {
+              "ui:field": "array",
+              "ui:options": {
+                "orderable": false
+              }
+            },
+            "optExtensions": {
+              "ui:field": "variable"
+            },
+            "optCustomExtensions": {
+              "ui:field": "array",
+              "ui:options": {
+                "orderable": false
+              }
+            }
+          },
+          "formData": {
+            "optBrowser": "chrome",
+            "optMaximized": true,
+            "optFullScreen": false,
+            "optProxy": "no-proxy",
+            "optProxyAuth": "no-authentication",
+            "optProxyAddr": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "optUserDataDir": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "optDownloadDir": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "optProxyCredentials": {
+              "scope": "Custom",
+              "name": {
+                "vaultId": "_",
+                "itemId": "_"
+              }
+            },
+            "optBrowserOptions": {
+              "scope": "Message",
+              "name": "browser_options"
+            },
+            "optCustomBrowserOptions": [],
+            "optExtensions": {
+              "scope": "Message",
+              "name": "extensions"
+            },
+            "optCustomExtensions": []
+          }
+        }
+      ]
+    },
+    {
+      "name": "Close Browser",
+      "description": "Terminates a browser instance and closes all its windows and tabs. Cleans up browser resources and removes temporary directories created during browser session.",
+      "color": "#c9d9ff",
+      "icon": "x",
+      "id": "Core.Browser.Close",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inBrowserId": {
+                "type": "object",
+                "title": "Browser Id",
+                "description": "The unique identifier of the browser instance to close. This should be the browser ID output from the Open Browser node.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inBrowserId": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inBrowserId": {
+              "scope": "Message",
+              "name": "browser_id"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Open Link",
+      "description": "Navigates to a specified URL in a browser. Can open in a new tab or reuse an existing tab, with options for blocking images/CSS and stealth mode for bot detection avoidance.",
+      "color": "#c9d9ff",
+      "icon": "link",
+      "id": "Core.Browser.OpenLink",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inBrowserId": {
+                "type": "object",
+                "title": "Browser",
+                "description": "The browser instance identifier where the new page will be opened.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inPageId": {
+                "type": "object",
+                "title": "Page Id",
+                "description": "Optional page identifier. If provided and 'Open in the Same Tab' is enabled, the URL will be opened in this existing page instead of creating a new tab.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inUrl": {
+                "type": "object",
+                "title": "URL",
+                "description": "The web address to navigate to (e.g., 'https://example.com'). Protocol will be automatically added if not specified.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inBrowserId": {
+              "ui:field": "variable"
+            },
+            "inPageId": {
+              "ui:field": "variable"
+            },
+            "inUrl": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inBrowserId": {
+              "scope": "Message",
+              "name": "browser_id"
+            },
+            "inPageId": {
+              "scope": "Message",
+              "name": "page_id"
+            },
+            "inUrl": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outPageId": {
+                "type": "object",
+                "title": "Page Id",
+                "description": "The unique identifier of the newly opened page. Use this ID to interact with the page in subsequent browser nodes.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outPageId": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outPageId": {
+              "scope": "Message",
+              "name": "page_id"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optSameTab": {
+                "title": "Open in the Same Tab",
+                "description": "If enabled and a Page Id is provided, opens the URL in the existing tab instead of creating a new tab.",
+                "type": "boolean"
+              },
+              "optTimeout": {
+                "title": "Timeout",
+                "description": "Maximum time in seconds to wait for the page to load before timing out (default: 30 seconds).",
+                "type": "number"
+              },
+              "optBlockImages": {
+                "title": "Block Images",
+                "description": "Prevent loading of images (jpg, jpeg, png, gif, svg, webp) to improve page load speed and reduce bandwidth usage.",
+                "type": "boolean"
+              },
+              "optBlockCSS": {
+                "title": "Block CSS",
+                "description": "Prevent loading of CSS stylesheets to improve page load speed. Note: this may affect page layout and appearance.",
+                "type": "boolean"
+              },
+              "optStealthMode": {
+                "title": "Use Stealth Mode",
+                "description": "Enable stealth mode to make the browser less detectable as an automated browser by websites with anti-bot measures.",
+                "type": "boolean"
+              }
+            }
+          },
+          "uiSchema": {
+            "ui:order": [
+              "optTimeout",
+              "optSameTab",
+              "optBlockImages",
+              "optBlockCSS",
+              "optStealthMode"
+            ]
+          },
+          "formData": {
+            "optTimeout": 30
+          }
+        }
+      ]
+    },
+    {
+      "name": "Switch Window",
+      "description": "Switches browser focus between different windows or tabs. Can switch to next available window or find a window by matching its title using regular expressions.",
+      "color": "#c9d9ff",
+      "icon": "arrow-left-right",
+      "id": "Core.Browser.SwitchWindow",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inPageId": {
+                "type": "object",
+                "title": "Page Id",
+                "description": "The page identifier of the current browser window to switch from.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inWindowName": {
+                "type": "object",
+                "title": "Window Title",
+                "description": "Regular expression pattern to match the window title. Use .* to match any characters or specific text to match exact titles.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inPageId": {
+              "ui:field": "variable"
+            },
+            "inWindowName": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inPageId": {
+              "scope": "Message",
+              "name": "page_id"
+            },
+            "inWindowName": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optNextWindow": {
+                "title": "Next Window",
+                "description": "If enabled, switches to the next available window instead of searching by window title. Ignores the Window Title field when enabled.",
+                "type": "boolean"
+              }
+            }
+          },
+          "uiSchema": {
+            "ui:order": [
+              "optNextWindow"
+            ]
+          },
+          "formData": {
+            "optNextWindow": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "Close Window",
+      "description": "Closes the active browser window or tab and automatically switches focus to another available window. Useful for cleaning up tabs after completing tasks.",
+      "color": "#c9d9ff",
+      "icon": "x",
+      "id": "Core.Browser.CloseWindow",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inPageId": {
+                "type": "object",
+                "title": "Page Id",
+                "description": "The page identifier of the browser window to close.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inPageId": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inPageId": {
+              "scope": "Message",
+              "name": "page_id"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Send Keys",
+      "description": "Sends keyboard key combinations to a specific element. Supports special keys (Enter, Tab, F1-F12) and modifier keys (Ctrl, Alt, Shift) for keyboard shortcuts and navigation.",
+      "version": "1.18.0",
+      "color": "#c9d9ff",
+      "icon": "keyboard",
+      "id": "Core.Browser.SendKeys",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inPageId": {
+                "type": "object",
+                "title": "Page Id",
+                "description": "The page identifier where the element to send keys to is located.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inSelectorType": {
+                "type": "string",
+                "title": "Selector Type",
+                "description": "Choose how to locate the element: XPath uses XML path expressions, CSS uses CSS selectors.",
+                "multiple": true,
+                "enumNames": [
+                  "XPath",
+                  "CSS"
+                ],
+                "enum": [
+                  "xpath:position",
+                  "css"
+                ]
+              },
+              "inSelector": {
+                "type": "object",
+                "title": "Selector",
+                "description": "The XPath or CSS selector to locate the target element on the page (e.g., '//input[@name=\"username\"]' or '#username').",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inKey": {
+                "type": "object",
+                "title": "Key",
+                "description": "Single character to send to the element, combined with the selected modifier keys (e.g., 'a', '1', or leave empty to send only modifier keys).",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "image": {
+                "title": "Image",
+                "type": "string"
+              }
+            }
+          },
+          "uiSchema": {
+            "inPageId": {
+              "ui:field": "variable"
+            },
+            "inSelector": {
+              "ui:field": "variable"
+            },
+            "inKey": {
+              "ui:field": "variable"
+            },
+            "image": {
+              "ui:widget": "hidden"
+            },
+            "ui:order": [
+              "inPageId",
+              "inSelectorType",
+              "inSelector",
+              "image",
+              "inKey"
+            ]
+          },
+          "formData": {
+            "inPageId": {
+              "scope": "Message",
+              "name": "page_id"
+            },
+            "inSelectorType": "xpath:position",
+            "inSelector": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inKey": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "image": ""
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optWaitTimeout": {
+                "type": "object",
+                "title": "Wait Timeout (sec)",
+                "variableType": "Integer",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "optKeyType1": {
+                "type": "string",
+                "title": "Key Modifier 1",
+                "multiple": true,
+                "enum": [
+                  "enter",
+                  "tab",
+                  "home",
+                  "end",
+                  "shift",
+                  "control",
+                  "alt",
+                  "pause",
+                  "escape",
+                  "space",
+                  "page_up",
+                  "page_down",
+                  "left",
+                  "right",
+                  "up",
+                  "down",
+                  "cmd",
+                  "backspace",
+                  "delete",
+                  "insert",
+                  "win",
+                  "f1",
+                  "f2",
+                  "f3",
+                  "f4",
+                  "f5",
+                  "f6",
+                  "f7",
+                  "f8",
+                  "f9",
+                  "f10",
+                  "f11",
+                  "f12"
+                ],
+                "enumNames": [
+                  "Enter",
+                  "Tab",
+                  "Home",
+                  "End",
+                  "Shift",
+                  "Control",
+                  "Alt",
+                  "Pause",
+                  "Escape",
+                  "Space",
+                  "Page Up",
+                  "Page Down",
+                  "Left",
+                  "Right",
+                  "Up",
+                  "Down",
+                  "Command",
+                  "Backspace",
+                  "Delete",
+                  "Insert",
+                  "Win",
+                  "F1",
+                  "F2",
+                  "F3",
+                  "F4",
+                  "F5",
+                  "F6",
+                  "F7",
+                  "F8",
+                  "F9",
+                  "F10",
+                  "F11",
+                  "F12"
+                ]
+              },
+              "optKeyType2": {
+                "type": "string",
+                "title": "Key Modifier 2",
+                "multiple": true,
+                "enum": [
+                  "enter",
+                  "tab",
+                  "home",
+                  "end",
+                  "shift",
+                  "control",
+                  "alt",
+                  "pause",
+                  "escape",
+                  "space",
+                  "page_up",
+                  "page_down",
+                  "left",
+                  "right",
+                  "up",
+                  "down",
+                  "cmd",
+                  "backspace",
+                  "delete",
+                  "insert",
+                  "win",
+                  "f1",
+                  "f2",
+                  "f3",
+                  "f4",
+                  "f5",
+                  "f6",
+                  "f7",
+                  "f8",
+                  "f9",
+                  "f10",
+                  "f11",
+                  "f12"
+                ],
+                "enumNames": [
+                  "Enter",
+                  "Tab",
+                  "Home",
+                  "End",
+                  "Shift",
+                  "Control",
+                  "Alt",
+                  "Pause",
+                  "Escape",
+                  "Space",
+                  "Page Up",
+                  "Page Down",
+                  "Left",
+                  "Right",
+                  "Up",
+                  "Down",
+                  "Command",
+                  "Backspace",
+                  "Delete",
+                  "Insert",
+                  "Win",
+                  "F1",
+                  "F2",
+                  "F3",
+                  "F4",
+                  "F5",
+                  "F6",
+                  "F7",
+                  "F8",
+                  "F9",
+                  "F10",
+                  "F11",
+                  "F12"
+                ]
+              },
+              "optKeyType3": {
+                "type": "string",
+                "title": "Key Modifier 3",
+                "multiple": true,
+                "enum": [
+                  "enter",
+                  "tab",
+                  "home",
+                  "end",
+                  "shift",
+                  "control",
+                  "alt",
+                  "pause",
+                  "escape",
+                  "space",
+                  "page_up",
+                  "page_down",
+                  "left",
+                  "right",
+                  "up",
+                  "down",
+                  "cmd",
+                  "backspace",
+                  "delete",
+                  "insert",
+                  "win",
+                  "f1",
+                  "f2",
+                  "f3",
+                  "f4",
+                  "f5",
+                  "f6",
+                  "f7",
+                  "f8",
+                  "f9",
+                  "f10",
+                  "f11",
+                  "f12"
+                ],
+                "enumNames": [
+                  "Enter",
+                  "Tab",
+                  "Home",
+                  "End",
+                  "Shift",
+                  "Control",
+                  "Alt",
+                  "Pause",
+                  "Escape",
+                  "Space",
+                  "Page Up",
+                  "Page Down",
+                  "Left",
+                  "Right",
+                  "Up",
+                  "Down",
+                  "Command",
+                  "Backspace",
+                  "Delete",
+                  "Insert",
+                  "Win",
+                  "F1",
+                  "F2",
+                  "F3",
+                  "F4",
+                  "F5",
+                  "F6",
+                  "F7",
+                  "F8",
+                  "F9",
+                  "F10",
+                  "F11",
+                  "F12"
+                ]
+              }
+            }
+          },
+          "uiSchema": {
+            "optWaitTimeout": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "optKeyType1",
+              "optKeyType2",
+              "optKeyType3",
+              "optWaitTimeout"
+            ]
+          },
+          "formData": {
+            "optWaitTimeout": {
+              "scope": "Custom",
+              "name": "5"
+            },
+            "optKeyType1": "enter"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Upload File",
+      "description": "Uploads a file to a web form by interacting with file input elements. Validates file existence before upload and waits for the upload element to be available.",
+      "color": "#c9d9ff",
+      "icon": "upload",
+      "id": "Core.Browser.UploadFile",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inPageId": {
+                "type": "object",
+                "title": "Page Id",
+                "description": "The page identifier where the file upload element is located.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inSelectorType": {
+                "type": "string",
+                "title": "Selector Type",
+                "description": "Choose how to locate the file input element: XPath uses XML path expressions, CSS uses CSS selectors.",
+                "multiple": true,
+                "enumNames": [
+                  "XPath",
+                  "CSS"
+                ],
+                "enum": [
+                  "xpath:position",
+                  "css"
+                ]
+              },
+              "inSelector": {
+                "type": "object",
+                "title": "Selector",
+                "description": "The XPath or CSS selector to locate the file input element (e.g., '//input[@type=\"file\"]' or 'input[type=\"file\"]').",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inFilePath": {
+                "type": "object",
+                "title": "File Path",
+                "description": "The absolute path to the file to upload (e.g., 'C:\\Documents\\file.pdf' or '/home/user/documents/file.pdf').",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "image": {
+                "title": "Image",
+                "type": "string"
+              }
+            }
+          },
+          "uiSchema": {
+            "inPageId": {
+              "ui:field": "variable"
+            },
+            "inSelector": {
+              "ui:field": "variable"
+            },
+            "inFilePath": {
+              "ui:field": "variable"
+            },
+            "image": {
+              "ui:widget": "hidden"
+            },
+            "ui:order": [
+              "inPageId",
+              "inSelectorType",
+              "inSelector",
+              "inFilePath",
+              "image"
+            ]
+          },
+          "formData": {
+            "inPageId": {
+              "scope": "Message",
+              "name": "page_id"
+            },
+            "inSelectorType": "xpath:position",
+            "inSelector": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inFilePath": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "image": ""
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optWaitTimeout": {
+                "type": "object",
+                "title": "Wait Timeout (sec)",
+                "variableType": "Integer",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optWaitTimeout": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "optWaitTimeout"
+            ]
+          },
+          "formData": {
+            "optWaitTimeout": {
+              "scope": "Custom",
+              "name": "5"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Type Text",
+      "description": "Types text into input fields with options for human-like typing simulation. Can clear existing text, control typing speed, and automatically press Enter after typing.",
+      "version": "23.12.0",
+      "color": "#c9d9ff",
+      "icon": "type",
+      "id": "Core.Browser.TypeText",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inPageId": {
+                "type": "object",
+                "title": "Page Id",
+                "description": "The page identifier where the text input element is located.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inSelectorType": {
+                "type": "string",
+                "title": "Selector Type",
+                "description": "Choose how to locate the text input element: XPath uses XML path expressions, CSS uses CSS selectors.",
+                "multiple": true,
+                "enumNames": [
+                  "XPath",
+                  "CSS"
+                ],
+                "enum": [
+                  "xpath:position",
+                  "css"
+                ]
+              },
+              "inSelector": {
+                "type": "object",
+                "title": "Selector",
+                "description": "The XPath or CSS selector to locate the text input element (e.g., '//input[@name=\"username\"]' or '#username').",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "image": {
+                "title": "Image",
+                "type": "string"
+              },
+              "inText": {
+                "type": "object",
+                "title": "Text",
+                "description": "The text to type into the selected element. Can be any string value including passwords, URLs, or form data.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inPageId": {
+              "ui:field": "variable"
+            },
+            "inSelector": {
+              "ui:field": "variable"
+            },
+            "inText": {
+              "ui:field": "variable"
+            },
+            "image": {
+              "ui:widget": "hidden"
+            },
+            "ui:order": [
+              "inPageId",
+              "inSelectorType",
+              "inSelector",
+              "inText",
+              "image"
+            ]
+          },
+          "formData": {
+            "inPageId": {
+              "scope": "Message",
+              "name": "page_id"
+            },
+            "inSelectorType": "xpath:position",
+            "inSelector": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inText": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "image": ""
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optWaitTimeout": {
+                "type": "object",
+                "title": "Wait Timeout (sec)",
+                "description": "Maximum time in seconds to wait for the text input element to become available before timing out (default: 5 seconds).",
+                "variableType": "Integer",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "optKeysPerMinute": {
+                "type": "object",
+                "title": "Keys per Minute",
+                "description": "Typing speed when Simulate Human Typing is enabled. Lower values type slower, higher values type faster (default: 300 keys/minute).",
+                "variableType": "Integer",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "optEnter": {
+                "type": "boolean",
+                "title": "Press Enter",
+                "description": "Automatically press the Enter key after typing the text, useful for submitting forms or confirming input."
+              },
+              "optClearText": {
+                "type": "boolean",
+                "title": "Clear Before Typing",
+                "description": "Clear any existing text in the input field before typing the new text. Ensures the field contains only the new text."
+              },
+              "optSimulateHuman": {
+                "type": "boolean",
+                "title": "Simulate Human Typing",
+                "description": "Type text with realistic human-like timing and variations to avoid detection by anti-bot systems. Uses the Keys per Minute setting."
+              }
+            }
+          },
+          "uiSchema": {
+            "optWaitTimeout": {
+              "ui:field": "variable"
+            },
+            "optKeysPerMinute": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "optEnter",
+              "optClearText",
+              "optSimulateHuman",
+              "optKeysPerMinute",
+              "optWaitTimeout"
+            ]
+          },
+          "formData": {
+            "optKeysPerMinute": {
+              "scope": "Custom",
+              "name": "300"
+            },
+            "optWaitTimeout": {
+              "scope": "Custom",
+              "name": "5"
+            },
+            "optSimulateHuman": true,
+            "optClearText": true,
+            "optEnter": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "Move To Element",
+      "description": "Moves the mouse cursor to hover over a specified element. Useful for triggering hover effects, tooltips, or dropdown menus that appear on mouse hover.",
+      "color": "#c9d9ff",
+      "icon": "move-right",
+      "id": "Core.Browser.MoveToElement",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inPageId": {
+                "type": "object",
+                "title": "Page Id",
+                "description": "The page identifier where the element to move mouse cursor to is located.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inSelectorType": {
+                "type": "string",
+                "title": "Selector Type",
+                "description": "Choose how to locate the element: XPath uses XML path expressions, CSS uses CSS selectors.",
+                "multiple": true,
+                "enumNames": [
+                  "XPath",
+                  "CSS"
+                ],
+                "enum": [
+                  "xpath:position",
+                  "css"
+                ]
+              },
+              "inSelector": {
+                "type": "object",
+                "title": "Selector",
+                "description": "The XPath or CSS selector to locate the element to move mouse cursor to (e.g., '//div[@class=\"menu\"]' or '.menu').",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "image": {
+                "title": "Image",
+                "type": "string"
+              }
+            }
+          },
+          "uiSchema": {
+            "inPageId": {
+              "ui:field": "variable"
+            },
+            "inSelector": {
+              "ui:field": "variable"
+            },
+            "image": {
+              "ui:widget": "hidden"
+            },
+            "ui:order": [
+              "inPageId",
+              "inSelectorType",
+              "inSelector",
+              "image"
+            ]
+          },
+          "formData": {
+            "inPageId": {
+              "scope": "Message",
+              "name": "page_id"
+            },
+            "inSelectorType": "xpath:position",
+            "inSelector": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "image": ""
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optWaitTimeout": {
+                "type": "object",
+                "title": "Wait Timeout (sec)",
+                "description": "Maximum time in seconds to wait for the element to become available for mouse movement before timing out (default: 5 seconds).",
+                "variableType": "Integer",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optWaitTimeout": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "optWaitTimeout"
+            ]
+          },
+          "formData": {
+            "optWaitTimeout": {
+              "scope": "Custom",
+              "name": "5"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Alert",
+      "description": "Handles browser alert dialogs, confirmation prompts, and popup messages. Can accept, dismiss, or retrieve text from JavaScript alerts and confirm dialogs.",
+      "color": "#c9d9ff",
+      "icon": "alert-circle",
+      "id": "Core.Browser.Alert",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inPageId": {
+                "type": "object",
+                "title": "Page Id",
+                "description": "The page identifier where the alert dialog is displayed.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inPageId": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inPageId": {
+              "scope": "Message",
+              "name": "page_id"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outText": {
+                "type": "object",
+                "title": "Text",
+                "description": "The text content of the alert dialog when using 'Get Text' action.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outText": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outText": {
+              "scope": "Message",
+              "name": "text"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optAction": {
+                "type": "string",
+                "title": "Action",
+                "description": "Action to perform on the alert dialog: 'Confirm' accepts the alert, 'Cancel' dismisses it, 'Get Text' retrieves the alert message.",
+                "enum": [
+                  "confirm",
+                  "cancel",
+                  "getText"
+                ],
+                "enumNames": [
+                  "Confirm",
+                  "Cancel",
+                  "Get Text"
+                ]
+              }
+            }
+          },
+          "uiSchema": {
+            "ui:order": [
+              "optAction"
+            ]
+          },
+          "formData": {
+            "optAction": "confirm"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Save Image",
+      "description": "Downloads and saves images from web pages to local disk. Supports both base64 encoded images and images from URLs, extracting from the src attribute of image elements.",
+      "color": "#c9d9ff",
+      "icon": "target",
+      "id": "Core.Browser.SaveImage",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inPageId": {
+                "type": "object",
+                "title": "Page Id",
+                "description": "The page identifier where the image element is located.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inSelectorType": {
+                "type": "string",
+                "title": "Selector Type",
+                "description": "Choose how to locate the image element: XPath uses XML path expressions, CSS uses CSS selectors.",
+                "multiple": true,
+                "enumNames": [
+                  "XPath",
+                  "CSS"
+                ],
+                "enum": [
+                  "xpath:position",
+                  "css"
+                ]
+              },
+              "inSelector": {
+                "type": "object",
+                "title": "Selector",
+                "description": "The XPath or CSS selector to locate the image element to save (e.g., '//img[@alt=\"logo\"]' or 'img.logo').",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "image": {
+                "title": "Image",
+                "type": "string"
+              },
+              "inSaveFilePath": {
+                "type": "object",
+                "title": "Save File Path",
+                "description": "The file path where the image will be saved (e.g., 'C:\\\\images\\\\logo.png'). The file extension determines the format.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inPageId": {
+              "ui:field": "variable"
+            },
+            "inSelector": {
+              "ui:field": "variable"
+            },
+            "inSaveFilePath": {
+              "ui:field": "variable"
+            },
+            "image": {
+              "ui:widget": "hidden"
+            },
+            "ui:order": [
+              "inPageId",
+              "inSelectorType",
+              "inSelector",
+              "inSaveFilePath",
+              "image"
+            ]
+          },
+          "formData": {
+            "inPageId": {
+              "scope": "Message",
+              "name": "page_id"
+            },
+            "inSelectorType": "xpath:position",
+            "inSelector": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inSaveFilePath": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "image": ""
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outPath": {
+                "type": "object",
+                "title": "Path",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outPath": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outPath": {
+              "scope": "Message",
+              "name": "path"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optWaitTimeout": {
+                "type": "object",
+                "title": "Wait Timeout (sec)",
+                "description": "Maximum time in seconds to wait for the image element to become available before timing out (default: 5 seconds).",
+                "variableType": "Integer",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optWaitTimeout": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "optWaitTimeout"
+            ]
+          },
+          "formData": {
+            "optWaitTimeout": {
+              "scope": "Custom",
+              "name": "5"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Click Element",
+      "description": "Performs various mouse click actions on web elements. Supports single click, double click, right click, middle click, and hold/release operations for complex interactions.",
+      "color": "#c9d9ff",
+      "icon": "mouse-pointer-click",
+      "id": "Core.Browser.ClickElement",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inPageId": {
+                "type": "object",
+                "title": "Page Id",
+                "description": "The page identifier where the element to click is located.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inSelectorType": {
+                "type": "string",
+                "title": "Selector Type",
+                "description": "Choose how to locate the element: XPath uses XML path expressions, CSS uses CSS selectors.",
+                "multiple": true,
+                "enumNames": [
+                  "XPath",
+                  "CSS"
+                ],
+                "enum": [
+                  "xpath:position",
+                  "css"
+                ]
+              },
+              "inSelector": {
+                "type": "object",
+                "title": "Selector",
+                "description": "The XPath or CSS selector to locate the element to click (e.g., '//button[@id=\"submit\"]' or '#submit').",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "image": {
+                "title": "Image",
+                "type": "string"
+              }
+            }
+          },
+          "uiSchema": {
+            "inPageId": {
+              "ui:field": "variable"
+            },
+            "inSelector": {
+              "ui:field": "variable"
+            },
+            "image": {
+              "ui:widget": "hidden"
+            },
+            "ui:order": [
+              "inPageId",
+              "inSelectorType",
+              "inSelector",
+              "image"
+            ]
+          },
+          "formData": {
+            "inPageId": {
+              "scope": "Message",
+              "name": "page_id"
+            },
+            "inSelectorType": "xpath:position",
+            "inSelector": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "image": ""
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optWaitTimeout": {
+                "type": "object",
+                "title": "Wait Timeout (sec)",
+                "description": "Maximum time in seconds to wait for the element to become clickable before timing out (default: 5 seconds).",
+                "variableType": "Integer",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "optClickType": {
+                "type": "string",
+                "title": "Click Type",
+                "description": "Type of mouse click to perform: Single (normal click), Double (double-click), Hold (press and hold), Release (release held click), Middle (scroll wheel click), Right (context menu click).",
+                "enum": [
+                  "singleClick",
+                  "doubleClick",
+                  "holdClick",
+                  "releaseClick",
+                  "middleClick",
+                  "rightClick"
+                ],
+                "enumNames": [
+                  "Single Click",
+                  "Double Click",
+                  "Hold Click",
+                  "Release Click",
+                  "Middle Click",
+                  "Right Click"
+                ]
+              }
+            }
+          },
+          "uiSchema": {
+            "optWaitTimeout": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "optClickType",
+              "optWaitTimeout"
+            ]
+          },
+          "formData": {
+            "optWaitTimeout": {
+              "scope": "Custom",
+              "name": "5"
+            },
+            "optClickType": "singleClick"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Wait Element",
+      "color": "#c9d9ff",
+      "icon": "hourglass",
+      "id": "Core.Browser.WaitElement",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inPageId": {
+                "type": "object",
+                "title": "Page Id",
+                "description": "The page identifier where the element to wait for is located.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inSelectorType": {
+                "type": "string",
+                "title": "Selector Type",
+                "description": "Choose how to locate the element: XPath uses XML path expressions, CSS uses CSS selectors.",
+                "multiple": true,
+                "enumNames": [
+                  "XPath",
+                  "CSS"
+                ],
+                "enum": [
+                  "xpath:position",
+                  "css"
+                ]
+              },
+              "inSelector": {
+                "type": "object",
+                "title": "Selector",
+                "description": "The XPath or CSS selector to locate the element to wait for (e.g., '//div[@class=\"loading\"]' or '.loading').",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "image": {
+                "title": "Image",
+                "type": "string"
+              }
+            }
+          },
+          "uiSchema": {
+            "inPageId": {
+              "ui:field": "variable"
+            },
+            "inSelector": {
+              "ui:field": "variable"
+            },
+            "image": {
+              "ui:widget": "hidden"
+            },
+            "ui:order": [
+              "inPageId",
+              "inSelectorType",
+              "inSelector",
+              "image"
+            ]
+          },
+          "formData": {
+            "inPageId": {
+              "scope": "Message",
+              "name": "page_id"
+            },
+            "inSelectorType": "xpath:position",
+            "inSelector": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "image": ""
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optCondition": {
+                "title": "Condition",
+                "description": "Wait condition: 'To Appear' waits for element to become visible, 'To Disappear' waits for element to be removed, 'Appear & Disappear' waits for element to appear then disappear.",
+                "type": "string",
+                "enum": [
+                  "to-appear",
+                  "to-disappear",
+                  "appear-and-disappear"
+                ],
+                "enumNames": [
+                  "To Appear",
+                  "To Disappear",
+                  "Appear & Disappear"
+                ]
+              },
+              "optTimeout": {
+                "type": "object",
+                "title": "Timeout (sec)",
+                "description": "Maximum time in seconds to wait for the condition to be met before timing out and failing the node (default: 30 seconds).",
+                "variableType": "Integer",
+                "customScope": true,
+                "jsScope": true,
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optTimeout": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "optCondition": "to-appear",
+            "optTimeout": {
+              "scope": "Custom",
+              "name": "30"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Select",
+      "color": "#c9d9ff",
+      "icon": "chevron-down",
+      "id": "Core.Browser.Select",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inPageId": {
+                "type": "object",
+                "title": "Page Id",
+                "description": "The page identifier where the dropdown element is located.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inSelectorType": {
+                "type": "string",
+                "title": "Selector Type",
+                "description": "Choose how to locate the dropdown element: XPath uses XML path expressions, CSS uses CSS selectors.",
+                "multiple": true,
+                "enumNames": [
+                  "XPath",
+                  "CSS"
+                ],
+                "enum": [
+                  "xpath:position",
+                  "css"
+                ]
+              },
+              "inSelector": {
+                "type": "object",
+                "title": "Selector",
+                "description": "The XPath or CSS selector to locate the dropdown element (e.g., '//select[@name=\"country\"]' or 'select[name=\"country\"]').",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "image": {
+                "title": "Image",
+                "type": "string"
+              },
+              "inValue": {
+                "type": "object",
+                "title": "Value",
+                "description": "The value or text of the option to select from the dropdown. Can be the option value attribute or visible text.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inPageId": {
+              "ui:field": "variable"
+            },
+            "inSelector": {
+              "ui:field": "variable"
+            },
+            "inValue": {
+              "ui:field": "variable"
+            },
+            "image": {
+              "ui:widget": "hidden"
+            },
+            "ui:order": [
+              "inPageId",
+              "inSelectorType",
+              "inSelector",
+              "inValue",
+              "image"
+            ]
+          },
+          "formData": {
+            "inPageId": {
+              "scope": "Message",
+              "name": "page_id"
+            },
+            "inSelectorType": "xpath:position",
+            "inSelector": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inValue": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "image": ""
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optWaitTimeout": {
+                "type": "object",
+                "title": "Wait Timeout (sec)",
+                "variableType": "Integer",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optWaitTimeout": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "optWaitTimeout"
+            ]
+          },
+          "formData": {
+            "optWaitTimeout": {
+              "scope": "Custom",
+              "name": "5"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get Cookies",
+      "version": "24.1.5",
+      "color": "#c9d9ff",
+      "icon": "cookie",
+      "id": "Core.Browser.GetCookies",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inPageId": {
+                "type": "object",
+                "title": "Page Id",
+                "description": "The page identifier from which to retrieve cookies.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inPageId": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inPageId"
+            ]
+          },
+          "formData": {
+            "inPageId": {
+              "scope": "Message",
+              "name": "page_id"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outCookies": {
+                "type": "object",
+                "title": "Cookies",
+                "description": "Array of cookie objects containing name, value, domain, path, and other cookie properties from the current page.",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outCookies": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outCookies": {
+              "scope": "Message",
+              "name": "cookies"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Set Cookies",
+      "version": "24.1.5",
+      "color": "#c9d9ff",
+      "icon": "cookie",
+      "id": "Core.Browser.SetCookies",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inPageId": {
+                "type": "object",
+                "title": "Page Id",
+                "description": "The page identifier where the cookies will be set.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inCookies": {
+                "type": "object",
+                "title": "Cookies",
+                "description": "JSON array of cookie objects to set. Each cookie should have 'name' and 'value' properties. Optional properties: 'domain', 'path', 'expires', 'maxAge', 'secure', 'httpOnly', 'sameSite'. Example: [{'name': 'sessionID', 'value': '12345', 'domain': 'example.com'}]",
+                "messageOnly": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inPageId": {
+              "ui:field": "variable"
+            },
+            "inCookies": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inPageId",
+              "inCookies"
+            ]
+          },
+          "formData": {
+            "inPageId": {
+              "scope": "Message",
+              "name": "page_id"
+            },
+            "inCookies": {
+              "scope": "Message",
+              "name": "cookies"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get Value",
+      "color": "#c9d9ff",
+      "icon": "globe",
+      "id": "Core.Browser.GetValue",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inPageId": {
+                "type": "object",
+                "title": "Page Id",
+                "description": "The page identifier where the element to get value from is located.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inSelectorType": {
+                "type": "string",
+                "title": "Selector Type",
+                "description": "Choose how to locate the element: XPath uses XML path expressions, CSS uses CSS selectors.",
+                "multiple": true,
+                "enumNames": [
+                  "XPath",
+                  "CSS"
+                ],
+                "enum": [
+                  "xpath:position",
+                  "css"
+                ]
+              },
+              "inSelector": {
+                "type": "object",
+                "title": "Selector",
+                "description": "The XPath or CSS selector to locate the element from which to retrieve the attribute value (e.g., '//input[@name=\"email\"]' or '#email').",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "image": {
+                "title": "Image",
+                "type": "string"
+              },
+              "inAttribute": {
+                "type": "object",
+                "title": "Attribute",
+                "description": "The attribute name to retrieve from the element. Common attributes: 'value', 'innerText', 'innerHTML', 'href', 'src', 'alt', 'title', 'class', 'id'.",
+                "variableType": "String",
+                "messageOnly": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inPageId": {
+              "ui:field": "variable"
+            },
+            "inSelector": {
+              "ui:field": "variable"
+            },
+            "inAttribute": {
+              "ui:field": "variable"
+            },
+            "image": {
+              "ui:widget": "hidden"
+            },
+            "ui:order": [
+              "inPageId",
+              "inSelectorType",
+              "inSelector",
+              "inAttribute",
+              "image"
+            ]
+          },
+          "formData": {
+            "inPageId": {
+              "scope": "Message",
+              "name": "page_id"
+            },
+            "inSelectorType": "xpath:position",
+            "inSelector": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inAttribute": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "image": ""
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outValue": {
+                "type": "object",
+                "title": "Value",
+                "description": "The retrieved attribute value from the selected element.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outValue": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "outValue"
+            ]
+          },
+          "formData": {
+            "outValue": {
+              "scope": "Message",
+              "name": "value"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optWaitTimeout": {
+                "type": "object",
+                "title": "Wait Timeout (sec)",
+                "variableType": "Integer",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optWaitTimeout": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "optWaitTimeout"
+            ]
+          },
+          "formData": {
+            "optWaitTimeout": {
+              "scope": "Custom",
+              "name": "5"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Set Value",
+      "color": "#c9d9ff",
+      "icon": "globe",
+      "id": "Core.Browser.SetValue",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inPageId": {
+                "type": "object",
+                "title": "Page Id",
+                "description": "The page identifier where the element to set value on is located.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inSelectorType": {
+                "type": "string",
+                "title": "Selector Type",
+                "description": "Choose how to locate the element: XPath uses XML path expressions, CSS uses CSS selectors.",
+                "multiple": true,
+                "enumNames": [
+                  "XPath",
+                  "CSS"
+                ],
+                "enum": [
+                  "xpath:position",
+                  "css"
+                ]
+              },
+              "inSelector": {
+                "type": "object",
+                "title": "Selector",
+                "description": "The XPath or CSS selector to locate the element to set the value on (e.g., '//input[@name=\"quantity\"]' or '#quantity').",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "image": {
+                "title": "Image",
+                "type": "string"
+              },
+              "inValue": {
+                "type": "object",
+                "title": "Value",
+                "description": "The value to set on the element. This directly sets the element's value property without simulating user typing.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inPageId": {
+              "ui:field": "variable"
+            },
+            "inSelector": {
+              "ui:field": "variable"
+            },
+            "inValue": {
+              "ui:field": "variable"
+            },
+            "image": {
+              "ui:widget": "hidden"
+            },
+            "ui:order": [
+              "inPageId",
+              "inSelectorType",
+              "inSelector",
+              "inValue",
+              "image"
+            ]
+          },
+          "formData": {
+            "inPageId": {
+              "scope": "Message",
+              "name": "page_id"
+            },
+            "inSelectorType": "xpath:position",
+            "inSelector": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inValue": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "image": ""
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optWaitTimeout": {
+                "type": "object",
+                "title": "Wait Timeout (sec)",
+                "variableType": "Integer",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optWaitTimeout": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "optWaitTimeout"
+            ]
+          },
+          "formData": {
+            "optWaitTimeout": {
+              "scope": "Custom",
+              "name": "5"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Switch Frame",
+      "color": "#c9d9ff",
+      "icon": "globe",
+      "id": "Core.Browser.SwitchFrame",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inSelector": {
+                "type": "object",
+                "title": "Selector",
+                "description": "The XPath or CSS selector to locate the iframe element to switch to (e.g., '//iframe[@name=\"content\"]' or 'iframe[name=\"content\"]').",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inSelectorType": {
+                "type": "string",
+                "title": "Selector Type",
+                "description": "Choose how to locate the iframe element: XPath uses XML path expressions, CSS uses CSS selectors.",
+                "multiple": true,
+                "enumNames": [
+                  "XPath",
+                  "CSS"
+                ],
+                "enum": [
+                  "xpath:position",
+                  "css"
+                ]
+              },
+              "image": {
+                "title": "Image",
+                "type": "string"
+              },
+              "inPageId": {
+                "type": "object",
+                "title": "Page Id",
+                "description": "The page identifier containing the iframe to switch to.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inRootFrame": {
+                "title": "Switch To Root",
+                "description": "If enabled, switches to the main document frame (root). If disabled, switches to the frame specified by the selector.",
+                "type": "boolean"
+              }
+            }
+          },
+          "uiSchema": {
+            "inPageId": {
+              "ui:field": "variable"
+            },
+            "inSelector": {
+              "ui:field": "variable"
+            },
+            "image": {
+              "ui:widget": "hidden"
+            },
+            "ui:order": [
+              "inPageId",
+              "inSelectorType",
+              "inSelector",
+              "inRootFrame",
+              "image"
+            ]
+          },
+          "formData": {
+            "inFrameId": {
+              "scope": "Message",
+              "name": ""
+            },
+            "inSelectorType": "xpath:position",
+            "inPageId": {
+              "scope": "Message",
+              "name": "page_id"
+            },
+            "inSelector": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "image": ""
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optWaitTimeout": {
+                "type": "object",
+                "title": "Wait Timeout (sec)",
+                "variableType": "Integer",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optWaitTimeout": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "optWaitTimeout"
+            ]
+          },
+          "formData": {
+            "optWaitTimeout": {
+              "scope": "Custom",
+              "name": "5"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Go Back",
+      "color": "#c9d9ff",
+      "icon": "arrow-left",
+      "id": "Core.Browser.GoBack",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inPageId": {
+                "type": "object",
+                "title": "Page Id",
+                "description": "The page identifier to navigate back in its browser history.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inTimes": {
+                "type": "object",
+                "title": "Times",
+                "description": "Number of steps to go back in the browser history (default: 1).",
+                "variableType": "Integer",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "ui:order": [
+              "inPageId",
+              "inTimes"
+            ],
+            "inTimes": {
+              "ui:field": "variable"
+            },
+            "inPageId": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inTimes": {
+              "scope": "Custom",
+              "name": "1"
+            },
+            "inPageId": {
+              "scope": "Message",
+              "name": "page_id"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Go Forward",
+      "color": "#c9d9ff",
+      "icon": "arrow-right",
+      "id": "Core.Browser.GoForward",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inPageId": {
+                "type": "object",
+                "title": "Page Id",
+                "description": "The page identifier to navigate forward in its browser history.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inTimes": {
+                "type": "object",
+                "title": "Times",
+                "description": "Number of steps to go forward in the browser history (default: 1).",
+                "variableType": "Integer",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "ui:order": [
+              "inPageId",
+              "inTimes"
+            ],
+            "inTimes": {
+              "ui:field": "variable"
+            },
+            "inPageId": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inTimes": {
+              "scope": "Custom",
+              "name": "1"
+            },
+            "inPageId": {
+              "scope": "Message",
+              "name": "page_id"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Refresh",
+      "color": "#c9d9ff",
+      "icon": "refresh-cw",
+      "id": "Core.Browser.Refresh",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inPageId": {
+                "type": "object",
+                "title": "Page Id",
+                "description": "The page identifier of the browser page to refresh.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inPageId": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inPageId": {
+              "scope": "Message",
+              "name": "page_id"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Screenshot",
+      "color": "#c9d9ff",
+      "icon": "camera",
+      "id": "Core.Browser.Screenshot",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inPageId": {
+                "type": "object",
+                "title": "Page Id",
+                "description": "The page identifier to take a screenshot of.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inSaveFilePath": {
+                "type": "object",
+                "title": "Save File Path",
+                "description": "The file path where the screenshot will be saved (e.g., 'C:\\screenshots\\page.png'). Supports PNG format.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inSaveFilePath": {
+              "ui:field": "variable"
+            },
+            "inPageId": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inSaveFilePath": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inPageId": {
+              "scope": "Message",
+              "name": "page_id"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outPath": {
+                "type": "object",
+                "title": "Path",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outPath": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outPath": {
+              "scope": "Message",
+              "name": "path"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Run Script",
+      "color": "#c9d9ff",
+      "icon": "braces",
+      "id": "Core.Browser.RunScript",
+      "editor": "javascript",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "func": {
+                "title": "Script",
+                "description": "JavaScript code to execute in the browser context. The script has access to the DOM and can return values. Use 'return' statement to output results.",
+                "type": "string"
+              },
+              "inPageId": {
+                "type": "object",
+                "title": "Page Id",
+                "description": "The page identifier where the JavaScript code will be executed.",
+                "variableType": "String",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inPageId": {
+              "ui:field": "variable"
+            },
+            "func": {
+              "ui:widget": "hidden"
+            }
+          },
+          "formData": {
+            "func": "",
+            "inPageId": {
+              "scope": "Message",
+              "name": "page_id"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outResult": {
+                "type": "object",
+                "title": "Result",
+                "description": "The return value from the executed JavaScript code, converted to string format.",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outResult": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outResult": {
+              "scope": "Message",
+              "name": "result"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Scrape Table",
+      "version": "23.8.1",
+      "color": "#c9d9ff",
+      "icon": "table",
+      "id": "Core.Browser.ScrapeTable",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inSelector": {
+                "type": "object",
+                "title": "Selector",
+                "description": "The XPath or CSS selector to locate the table element to scrape (e.g., '//table[@id=\"data\"]' or 'table.data-table').",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inSelectorType": {
+                "type": "string",
+                "title": "Selector Type",
+                "description": "Choose how to locate the table element: XPath uses XML path expressions, CSS uses CSS selectors.",
+                "multiple": true,
+                "enumNames": [
+                  "XPath",
+                  "CSS"
+                ],
+                "enum": [
+                  "xpath",
+                  "css"
+                ]
+              },
+              "image": {
+                "title": "Image",
+                "type": "string"
+              },
+              "inPageId": {
+                "type": "object",
+                "title": "Page Id",
+                "description": "The page identifier where the table to scrape is located.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inPageId": {
+              "ui:field": "variable"
+            },
+            "inSelector": {
+              "ui:field": "variable"
+            },
+            "image": {
+              "ui:widget": "hidden"
+            },
+            "ui:order": [
+              "inPageId",
+              "inSelectorType",
+              "inSelector",
+              "image"
+            ]
+          },
+          "formData": {
+            "inSelectorType": "xpath",
+            "inSelector": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inPageId": {
+              "scope": "Message",
+              "name": "page_id"
+            },
+            "image": ""
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outTable": {
+                "type": "object",
+                "title": "Table",
+                "description": "The extracted table data as a structured object with rows and columns.",
+                "variableType": "Object",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outTable": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "outTable"
+            ]
+          },
+          "formData": {
+            "outTable": {
+              "scope": "Message",
+              "name": "table"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optVertical": {
+                "title": "Vertical",
+                "description": "If enabled, treats the table as having vertical headers (first column contains headers). If disabled, treats first row as headers.",
+                "type": "boolean"
+              },
+              "optExcludedColumns": {
+                "type": "object",
+                "title": "Excluded Columns",
+                "description": "Array of column names or indices to exclude from the extracted table data.",
+                "variableType": "Array",
+                "jsScope": true,
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "optCustomExcludedColumns": {
+                "title": "Custom Excluded Columns",
+                "description": "List of column names to exclude from the table extraction. Enter one column name per field.",
+                "type": "object",
+                "placeholder": "Column Name",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "optWaitTimeout": {
+                "type": "object",
+                "title": "Wait Timeout (sec)",
+                "variableType": "Integer",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optWaitTimeout": {
+              "ui:field": "variable"
+            },
+            "optExcludedColumns": {
+              "ui:field": "variable"
+            },
+            "optCustomExcludedColumns": {
+              "ui:field": "array",
+              "ui:options": {
+                "orderable": false
+              }
+            },
+            "ui:order": [
+              "optVertical",
+              "optExcludedColumns",
+              "optCustomExcludedColumns",
+              "optWaitTimeout"
+            ]
+          },
+          "formData": {
+            "optVertical": false,
+            "optExcludedColumns": {
+              "scope": "Message",
+              "name": "columns"
+            },
+            "optCustomExcludedColumns": [],
+            "optWaitTimeout": {
+              "scope": "Custom",
+              "name": "5"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Scrape List",
+      "version": "23.8.1",
+      "color": "#c9d9ff",
+      "icon": "table",
+      "id": "Core.Browser.ScrapeList",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inSelector": {
+                "type": "object",
+                "title": "Selector",
+                "description": "The XPath or CSS selector to locate the list container element on the page.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inSelectorType": {
+                "type": "string",
+                "title": "Selector Type",
+                "description": "Choose how to locate the list element: XPath uses XML path expressions, CSS uses CSS selectors.",
+                "multiple": true,
+                "enumNames": [
+                  "XPath",
+                  "CSS"
+                ],
+                "enum": [
+                  "xpath",
+                  "css"
+                ]
+              },
+              "image": {
+                "title": "Image",
+                "type": "string"
+              },
+              "inPageId": {
+                "type": "object",
+                "title": "Page Id",
+                "description": "The page identifier where the list element is located.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inPageId": {
+              "ui:field": "variable"
+            },
+            "inSelector": {
+              "ui:field": "variable"
+            },
+            "image": {
+              "ui:widget": "hidden"
+            },
+            "ui:order": [
+              "inPageId",
+              "inSelectorType",
+              "inSelector",
+              "image"
+            ]
+          },
+          "formData": {
+            "inSelectorType": "xpath",
+            "inSelector": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inPageId": {
+              "scope": "Message",
+              "name": "page_id"
+            },
+            "image": ""
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outTable": {
+                "type": "object",
+                "title": "Table",
+                "description": "The extracted list data as a structured object with rows and columns based on the defined list items.",
+                "variableType": "Object",
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outTable": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "outTable"
+            ]
+          },
+          "formData": {
+            "outTable": {
+              "scope": "Message",
+              "name": "table"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optListItems": {
+                "type": "object",
+                "title": "List Items",
+                "description": "Array defining which data to extract from each list item. Each item should specify name, selector, and optional attribute.",
+                "variableType": "Array",
+                "jsScope": true,
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "optCustomListItems": {
+                "type": "array",
+                "title": "Custom List Items",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "scope": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "title": "Name"
+                        },
+                        "selector": {
+                          "type": "string",
+                          "title": "Selector"
+                        },
+                        "attribute": {
+                          "type": "string",
+                          "title": "Attribute"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "optWaitTimeout": {
+                "type": "object",
+                "title": "Wait Timeout (sec)",
+                "variableType": "Integer",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optWaitTimeout": {
+              "ui:field": "variable"
+            },
+            "optListItems": {
+              "ui:field": "variable"
+            },
+            "optCustomListItems": {
+              "ui:field": "array",
+              "ui:options": {
+                "orderable": false
+              }
+            },
+            "ui:order": [
+              "optListItems",
+              "optCustomListItems",
+              "optWaitTimeout"
+            ]
+          },
+          "formData": {
+            "optListItems": {
+              "scope": "Message",
+              "name": "items"
+            },
+            "optCustomListItems": [],
+            "optWaitTimeout": {
+              "scope": "Custom",
+              "name": "5"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

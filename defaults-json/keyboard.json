@@ -1,0 +1,392 @@
+{
+  "name": "Keyboard",
+  "color": "#0078DE",
+  "icon": "keyboard",
+  "nodes": [
+    {
+      "name": "Type Text",
+      "version": "24.1.5",
+      "description": "Types text into the active window or element, simulating keyboard input with customizable typing speed and optional Enter key press.",
+      "color": "#0078DE",
+      "icon": "keyboard",
+      "id": "Core.Keyboard.TypeText",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inText": {
+                "type": "object",
+                "title": "Text",
+                "description": "The text string to be typed into the active window or input field. Supports variables and can include special characters and line breaks.",
+                "variableType": "String",
+                "customScope": true,
+                "jsScope": true,
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inText": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inText": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optCpm": {
+                "type": "object",
+                "title": "Characters per Minute",
+                "description": "Typing speed in characters per minute (CPM). Must be between 0-1000. Set to 0 for instant typing without delay. Higher values result in faster typing.",
+                "variableType": "Number",
+                "customScope": true,
+                "jsScope": true,
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "optEnter": {
+                "type": "boolean",
+                "title": "Press Enter",
+                "description": "If enabled, automatically presses the Enter key after typing the text. Useful for submitting forms or executing commands."
+              }
+            }
+          },
+          "uiSchema": {
+            "optCpm": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "optCpm",
+              "optEnter"
+            ]
+          },
+          "formData": {
+            "optCpm": {
+              "scope": "Custom",
+              "name": "0"
+            },
+            "optEnter": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "Send Keys",
+      "description": "Sends keyboard key combinations and special keys, including modifier keys (Ctrl, Alt, Shift) and function keys. Supports up to 3 simultaneous key modifiers.",
+      "color": "#0078DE",
+      "icon": "keyboard",
+      "id": "Core.Keyboard.SendKeys",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inKey": {
+                "type": "object",
+                "title": "Key",
+                "description": "The primary key to press. Can be any letter, number, or special key name (e.g., 'a', '1', 'enter', 'escape'). Leave empty to press only modifier keys.",
+                "variableType": "String",
+                "customScope": true,
+                "jsScope": true,
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inKey": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inKey": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optMod1": {
+                "type": "string",
+                "title": "Key Modifier 1",
+                "description": "First modifier key to hold while pressing the main key. Common combinations: Ctrl+C (copy), Alt+Tab (switch windows), Shift+Arrow (select text).",
+                "multiple": true,
+                "enum": [
+                  "enter",
+                  "shift",
+                  "control",
+                  "win",
+                  "alt",
+                  "escape",
+                  "home",
+                  "delete",
+                  "insert",
+                  "end",
+                  "space",
+                  "tab",
+                  "page up",
+                  "page down",
+                  "left",
+                  "up",
+                  "right",
+                  "down",
+                  "backspace",
+                  "cmd",
+                  "printscreen",
+                  "f1",
+                  "f2",
+                  "f3",
+                  "f4",
+                  "f5",
+                  "f6",
+                  "f7",
+                  "f8",
+                  "f9",
+                  "f10",
+                  "f11",
+                  "f12"
+                ],
+                "enumNames": [
+                  "Enter",
+                  "Shift",
+                  "Ctrl",
+                  "Win",
+                  "Alt",
+                  "Escape",
+                  "Home",
+                  "Delete",
+                  "Insert",
+                  "End",
+                  "Space",
+                  "Tab",
+                  "Page up",
+                  "Page down",
+                  "Left",
+                  "Up",
+                  "Right",
+                  "Down",
+                  "Backspace",
+                  "Command",
+                  "Print Screen",
+                  "F1",
+                  "F2",
+                  "F3",
+                  "F4",
+                  "F5",
+                  "F6",
+                  "F7",
+                  "F8",
+                  "F9",
+                  "F10",
+                  "F11",
+                  "F12"
+                ]
+              },
+              "optMod2": {
+                "type": "string",
+                "title": "Key Modifier 2",
+                "description": "Second modifier key for complex key combinations. Used for triple-key shortcuts like Ctrl+Shift+T (reopen closed tab) or Ctrl+Alt+Delete. Combines with Key Modifier 1 if both are set.",
+                "multiple": true,
+                "enum": [
+                  "enter",
+                  "shift",
+                  "control",
+                  "win",
+                  "alt",
+                  "escape",
+                  "home",
+                  "delete",
+                  "insert",
+                  "end",
+                  "space",
+                  "tab",
+                  "page up",
+                  "page down",
+                  "left",
+                  "up",
+                  "right",
+                  "down",
+                  "backspace",
+                  "cmd",
+                  "printscreen",
+                  "f1",
+                  "f2",
+                  "f3",
+                  "f4",
+                  "f5",
+                  "f6",
+                  "f7",
+                  "f8",
+                  "f9",
+                  "f10",
+                  "f11",
+                  "f12"
+                ],
+                "enumNames": [
+                  "Enter",
+                  "Shift",
+                  "Ctrl",
+                  "Win",
+                  "Alt",
+                  "Escape",
+                  "Home",
+                  "Delete",
+                  "Insert",
+                  "End",
+                  "Space",
+                  "Tab",
+                  "Page up",
+                  "Page down",
+                  "Left",
+                  "Up",
+                  "Right",
+                  "Down",
+                  "Backspace",
+                  "Command",
+                  "Print Screen",
+                  "F1",
+                  "F2",
+                  "F3",
+                  "F4",
+                  "F5",
+                  "F6",
+                  "F7",
+                  "F8",
+                  "F9",
+                  "F10",
+                  "F11",
+                  "F12"
+                ]
+              },
+              "optMod3": {
+                "type": "string",
+                "title": "Key Modifier 3",
+                "description": "Third modifier key for advanced key combinations. Allows for complex shortcuts that require multiple simultaneous modifier keys. Combines with Key Modifier 1 and 2 if all are set.",
+                "multiple": true,
+                "enum": [
+                  "enter",
+                  "shift",
+                  "control",
+                  "win",
+                  "alt",
+                  "escape",
+                  "home",
+                  "delete",
+                  "insert",
+                  "end",
+                  "space",
+                  "tab",
+                  "page up",
+                  "page down",
+                  "left",
+                  "up",
+                  "right",
+                  "down",
+                  "backspace",
+                  "cmd",
+                  "printscreen",
+                  "f1",
+                  "f2",
+                  "f3",
+                  "f4",
+                  "f5",
+                  "f6",
+                  "f7",
+                  "f8",
+                  "f9",
+                  "f10",
+                  "f11",
+                  "f12"
+                ],
+                "enumNames": [
+                  "Enter",
+                  "Shift",
+                  "Ctrl",
+                  "Win",
+                  "Alt",
+                  "Escape",
+                  "Home",
+                  "Delete",
+                  "Insert",
+                  "End",
+                  "Space",
+                  "Tab",
+                  "Page up",
+                  "Page down",
+                  "Left",
+                  "Up",
+                  "Right",
+                  "Down",
+                  "Backspace",
+                  "Command",
+                  "Print Screen",
+                  "F1",
+                  "F2",
+                  "F3",
+                  "F4",
+                  "F5",
+                  "F6",
+                  "F7",
+                  "F8",
+                  "F9",
+                  "F10",
+                  "F11",
+                  "F12"
+                ]
+              }
+            }
+          },
+          "uiSchema": {
+            "ui:order": [
+              "optMod1",
+              "optMod2",
+              "optMod3"
+            ]
+          },
+          "formData": {}
+        }
+      ]
+    }
+  ]
+}

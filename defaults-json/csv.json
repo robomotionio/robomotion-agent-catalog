@@ -1,0 +1,717 @@
+{
+  "name": "CSV",
+  "color": "#0078DE",
+  "icon": "file",
+  "nodes": [
+    {
+      "name": "Read CSV",
+      "description": "Reads CSV files and converts them to table format with support for different encodings, separators, and header options. Can skip rows and jsonify the output.",
+      "color": "#0078DE",
+      "icon": "book-open-check",
+      "id": "Core.CSV.ReadCSV",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFilePath": {
+                "type": "object",
+                "title": "File Path",
+                "description": "The full path to the CSV file to read. Can be an absolute or relative path to the CSV file on the filesystem.",
+                "variableType": "String",
+                "customScope": true,
+                "jsScope": true,
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFilePath": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inFilePath": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outTable": {
+                "type": "object",
+                "title": "Table",
+                "description": "The parsed CSV data as a table structure. Contains rows and columns from the CSV file, optionally with headers.",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outTable": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outTable": {
+              "scope": "Message",
+              "name": "table"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optSeparator": {
+                "type": "string",
+                "title": "Separator",
+                "description": "The field separator character used in the CSV file. Choose the separator that matches your CSV file format.",
+                "enum": [
+                  "comma",
+                  "semicolon",
+                  "tab",
+                  "space"
+                ],
+                "enumNames": [
+                  "Comma (,)",
+                  "Semicolon (;)",
+                  "TAB",
+                  "Space"
+                ]
+              },
+              "optOffset": {
+                "type": "object",
+                "title": "Skip Rows",
+                "description": "Number of rows to skip from the beginning of the CSV file. Useful for skipping metadata or unwanted header rows.",
+                "variableType": "Integer",
+                "customScope": true,
+                "jsScope": true,
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "optEncoding": {
+                "type": "string",
+                "title": "Open with Encoding",
+                "description": "The character encoding of the CSV file. Choose the encoding that matches your file to ensure special characters are read correctly.",
+                "enum": [
+                  "utf8",
+                  "utf16",
+                  "windows1250",
+                  "windows1251",
+                  "windows1252",
+                  "windows1253",
+                  "windows1254",
+                  "windows1255",
+                  "windows1256",
+                  "windows1257",
+                  "windows1258",
+                  "iso88591",
+                  "iso88592",
+                  "iso88593",
+                  "iso88594",
+                  "iso88595",
+                  "iso88596",
+                  "iso88597",
+                  "iso88598",
+                  "iso88599",
+                  "iso885910",
+                  "iso885913",
+                  "iso885914",
+                  "iso885915",
+                  "iso885916",
+                  "macintosh",
+                  "koi8r"
+                ],
+                "enumNames": [
+                  "UTF-8",
+                  "UTF-16",
+                  "Windows 1250",
+                  "Windows 1251",
+                  "Windows 1252",
+                  "Windows 1253",
+                  "Windows 1254",
+                  "Windows 1255",
+                  "Windows 1256",
+                  "Windows 1257",
+                  "Windows 1258",
+                  "ISO 8859-1",
+                  "ISO 8859-2",
+                  "ISO 8859-3",
+                  "ISO 8859-4",
+                  "ISO 8859-5",
+                  "ISO 8859-6",
+                  "ISO 8859-7",
+                  "ISO 8859-8",
+                  "ISO 8859-9",
+                  "ISO 8859-10",
+                  "ISO 8859-13",
+                  "ISO 8859-14",
+                  "ISO 8859-15",
+                  "ISO 8859-16",
+                  "Macintosh",
+                  "KOI8-R"
+                ]
+              },
+              "optHeaders": {
+                "title": "Headers",
+                "description": "Whether the first row of the CSV file contains column headers. If enabled, the first row will be treated as column names.",
+                "type": "boolean"
+              },
+              "optJsonify": {
+                "title": "Jsonify",
+                "description": "Whether to convert the table data to JSON format. If enabled, the output will be structured as JSON objects instead of plain table format.",
+                "type": "boolean"
+              }
+            }
+          },
+          "uiSchema": {
+            "optOffset": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "optSeparator",
+              "optEncoding",
+              "optOffset",
+              "optHeaders",
+              "optJsonify"
+            ]
+          },
+          "formData": {
+            "optOffset": {
+              "scope": "Custom",
+              "name": "0"
+            },
+            "optEncoding": "utf8",
+            "optSeparator": "comma"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Write CSV",
+      "description": "Writes table data to CSV files with configurable separators, encoding options, and header inclusion. Creates new files or overwrites existing ones.",
+      "color": "#0078DE",
+      "icon": "notebook-pen",
+      "id": "Core.CSV.WriteCSV",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFilePath": {
+                "type": "object",
+                "title": "File Path",
+                "description": "The full path where the CSV file will be created or overwritten. Include the .csv extension in the filename.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inTable": {
+                "type": "object",
+                "title": "Table",
+                "description": "The table data to write to the CSV file. Should be in table format with rows and optionally column headers.",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inTable": {
+              "ui:field": "variable"
+            },
+            "inFilePath": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inFilePath",
+              "inTable"
+            ]
+          },
+          "formData": {
+            "inTable": {
+              "scope": "Message",
+              "name": "table"
+            },
+            "inFilePath": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optSeparator": {
+                "type": "string",
+                "title": "Separator",
+                "description": "The field separator character to use in the CSV file. Choose the separator appropriate for your target system or application.",
+                "enum": [
+                  "comma",
+                  "semicolon",
+                  "tab",
+                  "space"
+                ],
+                "enumNames": [
+                  "Comma (,)",
+                  "Semicolon (;)",
+                  "TAB",
+                  "Space"
+                ]
+              },
+              "optEncoding": {
+                "type": "string",
+                "title": "Save with Encoding",
+                "description": "The character encoding to use when saving the CSV file. Choose UTF-8 for modern systems or specific encodings for legacy applications.",
+                "enum": [
+                  "utf8",
+                  "utf16",
+                  "windows1250",
+                  "windows1251",
+                  "windows1252",
+                  "windows1253",
+                  "windows1254",
+                  "windows1255",
+                  "windows1256",
+                  "windows1257",
+                  "windows1258",
+                  "iso88591",
+                  "iso88592",
+                  "iso88593",
+                  "iso88594",
+                  "iso88595",
+                  "iso88596",
+                  "iso88597",
+                  "iso88598",
+                  "iso88599",
+                  "iso885910",
+                  "iso885913",
+                  "iso885914",
+                  "iso885915",
+                  "iso885916",
+                  "macintosh",
+                  "koi8r"
+                ],
+                "enumNames": [
+                  "UTF-8",
+                  "UTF-16",
+                  "Windows 1250",
+                  "Windows 1251",
+                  "Windows 1252",
+                  "Windows 1253",
+                  "Windows 1254",
+                  "Windows 1255",
+                  "Windows 1256",
+                  "Windows 1257",
+                  "Windows 1258",
+                  "ISO 8859-1",
+                  "ISO 8859-2",
+                  "ISO 8859-3",
+                  "ISO 8859-4",
+                  "ISO 8859-5",
+                  "ISO 8859-6",
+                  "ISO 8859-7",
+                  "ISO 8859-8",
+                  "ISO 8859-9",
+                  "ISO 8859-10",
+                  "ISO 8859-13",
+                  "ISO 8859-14",
+                  "ISO 8859-15",
+                  "ISO 8859-16",
+                  "Macintosh",
+                  "KOI8-R"
+                ]
+              },
+              "optHeaders": {
+                "title": "Headers",
+                "description": "Whether to include column headers as the first row in the CSV file. If enabled, column names will be written as the first row.",
+                "type": "boolean"
+              }
+            }
+          },
+          "uiSchema": {
+            "ui:order": [
+              "optSeparator",
+              "optEncoding",
+              "optHeaders"
+            ]
+          },
+          "formData": {
+            "optSeparator": "comma",
+            "optEncoding": "utf8"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Append CSV",
+      "description": "Appends table data to existing CSV files without overwriting the existing content. Supports different encodings and separator configurations.",
+      "color": "#0078DE",
+      "icon": "file-plus-2",
+      "id": "Core.CSV.AppendCSV",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFilePath": {
+                "type": "object",
+                "title": "File Path",
+                "description": "The full path to the existing CSV file where data will be appended. The file must already exist.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inTable": {
+                "type": "object",
+                "title": "Table",
+                "description": "The table data to append to the existing CSV file. New rows will be added at the end of the file.",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFilePath": {
+              "ui:field": "variable"
+            },
+            "inTable": {
+              "ui:field": "variable"
+            },
+            "ui:order": [
+              "inFilePath",
+              "inTable"
+            ]
+          },
+          "formData": {
+            "inFilePath": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inTable": {
+              "scope": "Message",
+              "name": "table"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optSeparator": {
+                "type": "string",
+                "title": "Separator",
+                "description": "The field separator character used in the existing CSV file. Must match the separator used in the target file.",
+                "enum": [
+                  "comma",
+                  "semicolon",
+                  "tab",
+                  "space"
+                ],
+                "enumNames": [
+                  "Comma (,)",
+                  "Semicolon (;)",
+                  "TAB",
+                  "Space"
+                ]
+              },
+              "optEncoding": {
+                "type": "string",
+                "title": "Append with Encoding",
+                "description": "The character encoding to use when appending to the CSV file. Should match the encoding of the existing file.",
+                "enum": [
+                  "utf8",
+                  "utf16",
+                  "windows1250",
+                  "windows1251",
+                  "windows1252",
+                  "windows1253",
+                  "windows1254",
+                  "windows1255",
+                  "windows1256",
+                  "windows1257",
+                  "windows1258",
+                  "iso88591",
+                  "iso88592",
+                  "iso88593",
+                  "iso88594",
+                  "iso88595",
+                  "iso88596",
+                  "iso88597",
+                  "iso88598",
+                  "iso88599",
+                  "iso885910",
+                  "iso885913",
+                  "iso885914",
+                  "iso885915",
+                  "iso885916",
+                  "macintosh",
+                  "koi8r"
+                ],
+                "enumNames": [
+                  "UTF-8",
+                  "UTF-16",
+                  "Windows 1250",
+                  "Windows 1251",
+                  "Windows 1252",
+                  "Windows 1253",
+                  "Windows 1254",
+                  "Windows 1255",
+                  "Windows 1256",
+                  "Windows 1257",
+                  "Windows 1258",
+                  "ISO 8859-1",
+                  "ISO 8859-2",
+                  "ISO 8859-3",
+                  "ISO 8859-4",
+                  "ISO 8859-5",
+                  "ISO 8859-6",
+                  "ISO 8859-7",
+                  "ISO 8859-8",
+                  "ISO 8859-9",
+                  "ISO 8859-10",
+                  "ISO 8859-13",
+                  "ISO 8859-14",
+                  "ISO 8859-15",
+                  "ISO 8859-16",
+                  "Macintosh",
+                  "KOI8-R"
+                ]
+              }
+            }
+          },
+          "uiSchema": {
+            "ui:order": [
+              "optEncoding",
+              "optSeparator"
+            ]
+          },
+          "formData": {
+            "optSeparator": "comma",
+            "optEncoding": "utf8"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Split CSV",
+      "description": "Splits large CSV files into smaller files based on maximum row count. Preserves headers across split files and maintains original formatting.",
+      "color": "#0078DE",
+      "icon": "square-split-horizontal",
+      "id": "Core.CSV.SplitCSV",
+      "inputs": 1,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inFilePath": {
+                "type": "object",
+                "title": "File Path",
+                "description": "The full path to the large CSV file that needs to be split into smaller files.",
+                "variableType": "String",
+                "customScope": true,
+                "jsScope": true,
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "inMaxRows": {
+                "type": "object",
+                "title": "Max Rows",
+                "description": "The maximum number of data rows per split file. Headers are not counted towards this limit.",
+                "variableType": "Integer",
+                "customScope": true,
+                "jsScope": true,
+                "messageScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inFilePath": {
+              "ui:field": "variable"
+            },
+            "inMaxRows": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inFilePath": {
+              "scope": "Custom",
+              "name": ""
+            },
+            "inMaxRows": {
+              "scope": "Custom",
+              "name": "100"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outDirPath": {
+                "type": "object",
+                "title": "Out Directory",
+                "description": "The directory path where the split CSV files will be created. All generated files will be saved in this location.",
+                "variableType": "String",
+                "messageScope": true,
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outDirPath": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outDirPath": {
+              "scope": "Custom",
+              "name": ""
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optSeparator": {
+                "type": "string",
+                "title": "Separator",
+                "description": "The field separator character used in the CSV file. Must match the separator used in the source file.",
+                "enum": [
+                  "comma",
+                  "semicolon",
+                  "tab",
+                  "space"
+                ],
+                "enumNames": [
+                  "Comma (,)",
+                  "Semicolon (;)",
+                  "TAB",
+                  "Space"
+                ]
+              },
+              "optHeaders": {
+                "title": "Headers",
+                "description": "Whether the first row contains column headers. If enabled, headers will be included in each split file.",
+                "type": "boolean"
+              }
+            }
+          },
+          "uiSchema": {
+            "ui:order": [
+              "optSeparator",
+              "optHeaders"
+            ]
+          },
+          "formData": {
+            "optSeparator": "comma"
+          }
+        }
+      ]
+    }
+  ]
+}

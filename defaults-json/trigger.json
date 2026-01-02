@@ -1,0 +1,745 @@
+{
+  "name": "Trigger",
+  "color": "#FDD835",
+  "icon": "arrow-big-right-dash",
+  "nodes": [
+    {
+      "name": "Inject",
+      "description": "Initiates workflow execution by injecting a payload at specified intervals or once. Acts as a starting point for automation flows.",
+      "color": "#FDD835",
+      "icon": "arrow-big-right-dash",
+      "id": "Core.Trigger.Inject",
+      "inputs": 0,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inPayload": {
+                "type": "object",
+                "title": "Payload",
+                "description": "The data to be injected into the workflow. This value will be passed as the initial payload for the automation flow.",
+                "variableType": "String",
+                "customScope": true,
+                "jsScope": true,
+                "argsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inPayload": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inPayload": {
+              "scope": "JS",
+              "name": "Date.now()"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outPayload": {
+                "type": "object",
+                "title": "Payload",
+                "description": "The injected payload data that will be passed to the next node in the workflow.",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outPayload": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outPayload": {
+              "scope": "Message",
+              "name": "payload"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optRepeat": {
+                "title": "Repeat Interval (sec)",
+                "description": "Time interval in seconds between repeated executions. Only applies when 'Once' is disabled. Minimum value is 0.001 seconds.",
+                "type": "number"
+              },
+              "optOnce": {
+                "title": "Once",
+                "description": "If true, the node executes only once after the specified delay. If false, it repeats at the specified interval.",
+                "type": "boolean"
+              },
+              "optOnceDelay": {
+                "title": "Once Delay (sec)",
+                "description": "Initial delay in seconds before the first execution. Used both for single execution and as the first delay for repeated executions. Minimum value is 0.001 seconds.",
+                "type": "number"
+              }
+            }
+          },
+          "uiSchema": {
+            "ui:order": [
+              "optRepeat",
+              "optOnceDelay",
+              "optOnce"
+            ]
+          },
+          "formData": {
+            "optRepeat": 1,
+            "optOnce": true,
+            "optOnceDelay": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "name": "Catch",
+      "description": "Catches and handles errors from specified nodes in the workflow. Subscribes to error events and triggers when errors occur in monitored nodes.",
+      "color": "#E64A19",
+      "icon": "octagon-alert",
+      "id": "Core.Trigger.Catch",
+      "inputs": 0,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "inputs": 1,
+            "outputs": 1,
+            "properties": {
+              "optNodes": {
+                "type": "object",
+                "title": "Target Nodes",
+                "description": "Configuration for which nodes to monitor for errors. Select specific nodes by ID or choose to catch errors from all nodes in the workflow.",
+                "properties": {
+                  "ids": {
+                    "title": "Node IDs",
+                    "description": "Array of specific node IDs to monitor for errors. Only errors from these nodes will trigger this catch node.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "all": {
+                    "title": "All Nodes",
+                    "description": "If true, monitors all nodes in the current workflow scope for errors. If false, only monitors the nodes specified in the IDs array.",
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "optNodes": {
+              "ui:field": "catch"
+            },
+            "ui:order": [
+              "optNodes"
+            ]
+          },
+          "formData": {
+            "optNodes": {
+              "type": "catch",
+              "ids": [],
+              "all": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Timer",
+      "description": "Executes workflow based on cron-like scheduling. Triggers at specific times defined by seconds, minutes, hours, days, months, and day of week settings.",
+      "color": "#FDD835",
+      "icon": "timer",
+      "id": "Core.Trigger.Timer",
+      "inputs": 0,
+      "outputs": 1,
+      "properties": [
+        {
+          "schema": {
+            "title": "Input",
+            "type": "object",
+            "properties": {
+              "inPayload": {
+                "type": "object",
+                "title": "Payload",
+                "description": "The data to be passed through the timer when it triggers. This payload will be forwarded to the next node when the scheduled time is reached.",
+                "variableType": "String",
+                "customScope": true,
+                "jsScope": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "inPayload": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "inPayload": {
+              "scope": "JS",
+              "name": "Date.now()"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Output",
+            "type": "object",
+            "properties": {
+              "outPayload": {
+                "type": "object",
+                "title": "Payload",
+                "description": "The payload data that was configured for this timer, passed to the next node when the timer triggers based on the schedule.",
+                "variableType": "String",
+                "messageOnly": true,
+                "properties": {
+                  "scope": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "uiSchema": {
+            "outPayload": {
+              "ui:field": "variable"
+            }
+          },
+          "formData": {
+            "outPayload": {
+              "scope": "Message",
+              "name": "payload"
+            }
+          }
+        },
+        {
+          "schema": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "optSecond": {
+                "title": "Seconds",
+                "description": "Specific second(s) when the timer should trigger (0-59). Select 'Every Second' to trigger every second, or specific seconds for precise timing.",
+                "type": "number",
+                "multiple": true,
+                "enum": [
+                  -1,
+                  0,
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7,
+                  8,
+                  9,
+                  10,
+                  11,
+                  12,
+                  13,
+                  14,
+                  15,
+                  16,
+                  17,
+                  18,
+                  19,
+                  20,
+                  21,
+                  22,
+                  23,
+                  24,
+                  25,
+                  26,
+                  27,
+                  28,
+                  29,
+                  30,
+                  31,
+                  32,
+                  33,
+                  34,
+                  35,
+                  36,
+                  37,
+                  38,
+                  39,
+                  40,
+                  41,
+                  42,
+                  43,
+                  44,
+                  45,
+                  46,
+                  47,
+                  48,
+                  49,
+                  50,
+                  51,
+                  52,
+                  53,
+                  54,
+                  55,
+                  56,
+                  57,
+                  58,
+                  59
+                ],
+                "enumNames": [
+                  "Every Second",
+                  "0",
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5",
+                  "6",
+                  "7",
+                  "8",
+                  "9",
+                  "10",
+                  "11",
+                  "12",
+                  "13",
+                  "14",
+                  "15",
+                  "16",
+                  "17",
+                  "18",
+                  "19",
+                  "20",
+                  "21",
+                  "22",
+                  "23",
+                  "24",
+                  "25",
+                  "26",
+                  "27",
+                  "28",
+                  "29",
+                  "30",
+                  "31",
+                  "32",
+                  "33",
+                  "34",
+                  "35",
+                  "36",
+                  "37",
+                  "38",
+                  "39",
+                  "40",
+                  "41",
+                  "42",
+                  "43",
+                  "44",
+                  "45",
+                  "46",
+                  "47",
+                  "48",
+                  "49",
+                  "50",
+                  "51",
+                  "52",
+                  "53",
+                  "54",
+                  "55",
+                  "56",
+                  "57",
+                  "58",
+                  "59"
+                ]
+              },
+              "optMinute": {
+                "title": "Minutes",
+                "description": "Specific minute(s) when the timer should trigger (0-59). Select 'Every Minute' to trigger every minute, or specific minutes for precise timing.",
+                "type": "number",
+                "multiple": true,
+                "enum": [
+                  -1,
+                  0,
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7,
+                  8,
+                  9,
+                  10,
+                  11,
+                  12,
+                  13,
+                  14,
+                  15,
+                  16,
+                  17,
+                  18,
+                  19,
+                  20,
+                  21,
+                  22,
+                  23,
+                  24,
+                  25,
+                  26,
+                  27,
+                  28,
+                  29,
+                  30,
+                  31,
+                  32,
+                  33,
+                  34,
+                  35,
+                  36,
+                  37,
+                  38,
+                  39,
+                  40,
+                  41,
+                  42,
+                  43,
+                  44,
+                  45,
+                  46,
+                  47,
+                  48,
+                  49,
+                  50,
+                  51,
+                  52,
+                  53,
+                  54,
+                  55,
+                  56,
+                  57,
+                  58,
+                  59
+                ],
+                "enumNames": [
+                  "Every Minute",
+                  "0",
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5",
+                  "6",
+                  "7",
+                  "8",
+                  "9",
+                  "10",
+                  "11",
+                  "12",
+                  "13",
+                  "14",
+                  "15",
+                  "16",
+                  "17",
+                  "18",
+                  "19",
+                  "20",
+                  "21",
+                  "22",
+                  "23",
+                  "24",
+                  "25",
+                  "26",
+                  "27",
+                  "28",
+                  "29",
+                  "30",
+                  "31",
+                  "32",
+                  "33",
+                  "34",
+                  "35",
+                  "36",
+                  "37",
+                  "38",
+                  "39",
+                  "40",
+                  "41",
+                  "42",
+                  "43",
+                  "44",
+                  "45",
+                  "46",
+                  "47",
+                  "48",
+                  "49",
+                  "50",
+                  "51",
+                  "52",
+                  "53",
+                  "54",
+                  "55",
+                  "56",
+                  "57",
+                  "58",
+                  "59"
+                ]
+              },
+              "optHour": {
+                "title": "Hours",
+                "description": "Specific hour(s) when the timer should trigger (0-23). Select 'Every Hour' to trigger every hour, or specific hours in 24-hour format.",
+                "type": "number",
+                "multiple": true,
+                "enum": [
+                  -1,
+                  0,
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7,
+                  8,
+                  9,
+                  10,
+                  11,
+                  12,
+                  13,
+                  14,
+                  15,
+                  16,
+                  17,
+                  18,
+                  19,
+                  20,
+                  21,
+                  22,
+                  23
+                ],
+                "enumNames": [
+                  "Every Hour",
+                  "00",
+                  "01",
+                  "02",
+                  "03",
+                  "04",
+                  "05",
+                  "06",
+                  "07",
+                  "08",
+                  "09",
+                  "10",
+                  "11",
+                  "12",
+                  "13",
+                  "14",
+                  "15",
+                  "16",
+                  "17",
+                  "18",
+                  "19",
+                  "20",
+                  "21",
+                  "22",
+                  "23"
+                ]
+              },
+              "optDay": {
+                "title": "Day of month",
+                "description": "Specific day(s) of the month when the timer should trigger (1-31). Select 'Every Day of Month' to trigger daily, or specific days.",
+                "type": "number",
+                "multiple": true,
+                "enum": [
+                  0,
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7,
+                  8,
+                  9,
+                  10,
+                  11,
+                  12,
+                  13,
+                  14,
+                  15,
+                  16,
+                  17,
+                  18,
+                  19,
+                  20,
+                  21,
+                  22,
+                  23,
+                  24,
+                  25,
+                  26,
+                  27,
+                  28,
+                  29,
+                  30,
+                  31
+                ],
+                "enumNames": [
+                  "Every Day of Month",
+                  "01",
+                  "02",
+                  "03",
+                  "04",
+                  "05",
+                  "06",
+                  "07",
+                  "08",
+                  "09",
+                  "10",
+                  "11",
+                  "12",
+                  "13",
+                  "14",
+                  "15",
+                  "16",
+                  "17",
+                  "18",
+                  "19",
+                  "20",
+                  "21",
+                  "22",
+                  "23",
+                  "24",
+                  "25",
+                  "26",
+                  "27",
+                  "28",
+                  "29",
+                  "30",
+                  "31"
+                ]
+              },
+              "optMonth": {
+                "title": "Month",
+                "description": "Specific month(s) when the timer should trigger (1-12). Select 'Every Month' to trigger monthly, or specific months.",
+                "type": "number",
+                "multiple": true,
+                "enum": [
+                  0,
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7,
+                  8,
+                  9,
+                  10,
+                  11,
+                  12
+                ],
+                "enumNames": [
+                  "Every Month",
+                  "01",
+                  "02",
+                  "03",
+                  "04",
+                  "05",
+                  "06",
+                  "07",
+                  "08",
+                  "09",
+                  "10",
+                  "11",
+                  "12"
+                ]
+              },
+              "optWeekDay": {
+                "title": "Day of week",
+                "description": "Specific day(s) of the week when the timer should trigger. Select 'Every Day of Week' to trigger daily, or specific weekdays (Sunday=0 to Saturday=6).",
+                "type": "number",
+                "multiple": true,
+                "enum": [
+                  -1,
+                  0,
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6
+                ],
+                "enumNames": [
+                  "Every Day of Week",
+                  "Sun",
+                  "Mon",
+                  "Tue",
+                  "Wed",
+                  "Thu",
+                  "Fri",
+                  "Sat"
+                ]
+              }
+            }
+          },
+          "uiSchema": {
+            "ui:order": [
+              "optWeekDay",
+              "optMonth",
+              "optDay",
+              "optHour",
+              "optMinute",
+              "optSecond"
+            ]
+          },
+          "formData": {
+            "optSecond": -1,
+            "optMinute": -1,
+            "optHour": -1,
+            "optDay": 0,
+            "optMonth": 0,
+            "optWeekDay": -1
+          }
+        }
+      ]
+    }
+  ]
+}
